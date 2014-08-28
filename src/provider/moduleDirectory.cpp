@@ -36,8 +36,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include "logger-v1.hpp"
-#include "module/moduleDirectory.hpp"
-#include "module/moduleLoader.hpp"
+#include "moduleDirectory.hpp"
+#include "moduleLoader.hpp"
 #include "utils/fileUtils.hpp"
 
 using namespace _Wolframe;

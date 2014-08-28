@@ -35,7 +35,7 @@
 //
 
 #include "logger-v1.hpp"
-#include "module/moduleDirectory.hpp"
+#include "moduleDirectory.hpp"
 #include "AAAAproviderImpl.hpp"
 #include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"

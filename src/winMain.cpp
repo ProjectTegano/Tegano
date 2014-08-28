@@ -54,7 +54,7 @@
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
 #include "appInfo.hpp"
-#include "module/moduleDirectory.hpp"
+#include "provider/moduleDirectory.hpp"
 #include "system/connectionHandler.hpp"
 
 #if !defined(_WIN32)
@@ -306,7 +306,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		conf.addModules( &modDir );
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
-				_Wolframe::config::ApplicationConfiguration::fileType( configFile, cmdLineCfg.cfgType );
+				_Wolframe::config::ApplicationConfiguration::fileType( configFile, _Wolframe::config::ApplicationConfiguration::configFileType( cmdLineCfg.cfgType) );
 		if ( cfgType == _Wolframe::config::ApplicationConfiguration::CONFIG_UNDEFINED )
 			return;
 		if ( !conf.parseModules( configFile, cfgType ))

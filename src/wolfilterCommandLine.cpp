@@ -304,7 +304,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 		throw std::runtime_error( "error in database provider configuration");
 	}
 
-	m_procProviderConfig.reset( new proc::ProcProviderConfig());
+	m_procProviderConfig.reset( new config::ProcProviderConfiguration());
 	types::PropertyTree::Node ppcfg;
 	if (hasConfig)
 	{

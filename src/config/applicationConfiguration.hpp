@@ -37,7 +37,6 @@
 #define _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
 
 #include "config/configurationBase.hpp"
-#include "config/bannerConfiguration.hpp"
 #include <cstddef>
 #include <string>
 #include <map>
@@ -62,6 +61,7 @@ class LoggerConfiguration;
 class BannerConfiguration;
 class HandlerConfiguration;
 class CmdLineConfiguration;
+class ProcProviderConfiguration;
 
 /// \brief Application configuration structure
 class ApplicationConfiguration
@@ -74,8 +74,8 @@ public:
 	LoggerConfiguration		*loggerCfg;	///< logger configuration
 	db::DBproviderConfig		*databaseCfg;	///< database configuration
 	AAAA::AAAAconfiguration		*aaaaCfg;	///< AAAA configuration
-	proc::ProcProviderConfig	*procCfg;	///< processor configuration
-	config::BannerConfiguration	*bannerCfg;	///< banner configuration
+	ProcProviderConfiguration	*procCfg;	///< processor configuration
+	BannerConfiguration		*bannerCfg;	///< banner configuration
 
 public:
 	enum ConfigFileType	{
@@ -83,6 +83,7 @@ public:
 		CONFIG_XML,
 		CONFIG_UNDEFINED
 	};
+	static ConfigFileType configFileType( const std::string& n);
 
 	ApplicationConfiguration();
 	~ApplicationConfiguration();

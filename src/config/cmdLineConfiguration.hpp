@@ -38,8 +38,6 @@
 #define _Wolframe_APPSERVER_COMMANDLINE_HPP_INCLUDED
 
 #include "logger/logLevel.hpp"
-#include "config/applicationConfiguration.hpp"
-
 #include <string>
 #include <boost/program_options.hpp>
 
@@ -71,7 +69,7 @@ public:
 #endif
 	log::LogLevel::Level				debugLevel;
 	std::string					cfgFile;
-	ApplicationConfiguration::ConfigFileType	cfgType;
+	std::string					cfgType;
 	bool						useLogConfig;
 private:
 	std::string					errMsg_;

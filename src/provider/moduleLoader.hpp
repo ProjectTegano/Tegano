@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file module/moduleLoader.hpp
+/// \file moduleLoader.hpp
 /// \brief Loader of the module entrypoint
 /// \note Implements the operating system specific handling of module loading
 

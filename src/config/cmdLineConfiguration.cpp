@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \brief cmdLineConfiguration.cpp
 
-#include "config/cmdLineConfiguration.hpp"
+#include "cmdLineConfiguration.hpp"
 
 #include <boost/program_options.hpp>
 #include <string>
@@ -87,7 +87,6 @@ CmdLineConfiguration::CmdLineConfiguration()
 #if !defined(_WIN32)
 	foreground = false;
 #endif
-	cfgType = ApplicationConfiguration::CONFIG_UNDEFINED;
 	useLogConfig = false;
 	debugLevel = DEFAULT_DEBUG_LEVEL;
 }
@@ -192,9 +191,8 @@ bool CmdLineConfiguration::parse( int argc, char* argv[] )
 			useLogConfig = true;
 
 		if ( clMap.count( "config-xml" ))	{
-			if ( cfgType == ApplicationConfiguration::CONFIG_UNDEFINED ||
-					cfgType == ApplicationConfiguration::CONFIG_XML )
-				cfgType = ApplicationConfiguration::CONFIG_XML;
+			if ( cfgType.empty() || cfgType == "XML")
+				cfgType = "XML";
 			else	{
 				errMsg_ = "configuration file cannot be forced to more than one type";
 				return false;
@@ -202,9 +200,8 @@ bool CmdLineConfiguration::parse( int argc, char* argv[] )
 		}
 
 		if ( clMap.count( "config-info" ))	{
-			if ( cfgType == ApplicationConfiguration::CONFIG_UNDEFINED ||
-					cfgType == ApplicationConfiguration::CONFIG_INFO )
-				cfgType = ApplicationConfiguration::CONFIG_INFO;
+			if ( cfgType.empty() || cfgType == "INFO" )
+				cfgType = "INFO";
 			else	{
 				errMsg_ = "configuration file cannot be forced to more than one type";
 				return false;

@@ -36,18 +36,17 @@
 
 #include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"
-#include "config/applicationConfiguration.hpp"
-#include "module/moduleDirectory.hpp"
 #include "utils/fileUtils.hpp"
-#include "config/loggerConfiguration.hpp"
-#include "config/serverConfiguration.hpp"
-#include "config/serviceConfiguration.hpp"
-#include "config/bannerConfiguration.hpp"
-#include "config/cmdLineConfiguration.hpp"
+#include "applicationConfiguration.hpp"
+#include "loggerConfiguration.hpp"
+#include "serverConfiguration.hpp"
+#include "serviceConfiguration.hpp"
+#include "bannerConfiguration.hpp"
+#include "cmdLineConfiguration.hpp"
+#include "procProviderConfiguration.hpp"
 #include "logger-v1.hpp"
 #include "database/DBprovider.hpp"
 #include "AAAA/AAAAprovider.hpp"
-#include "processor/procProvider.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -178,6 +177,23 @@ ApplicationConfiguration::ConfigFileType ApplicationConfiguration::fileType ( co
 	}
 }
 
+
+ApplicationConfiguration::ConfigFileType ApplicationConfiguration::configFileType( const std::string& nam)
+{
+	if (nam == "XML")
+	{
+		return _Wolframe::config::ApplicationConfiguration::CONFIG_XML;
+	}
+	else if (nam == "INFO")
+	{
+		return _Wolframe::config::ApplicationConfiguration::CONFIG_INFO;
+	}
+	else if (!nam.empty())
+	{
+		LOG_FATAL << "internal: unknown configuration file type";
+	}
+	return _Wolframe::config::ApplicationConfiguration::CONFIG_UNDEFINED;
+}
 
 bool ApplicationConfiguration::parseModules ( const char *filename, ConfigFileType type )
 {
@@ -429,7 +445,7 @@ ApplicationConfiguration::ApplicationConfiguration()
 	bannerCfg = new config::BannerConfiguration();
 	databaseCfg = new db::DBproviderConfig();
 	aaaaCfg = new AAAA::AAAAconfiguration();
-	procCfg = new proc::ProcProviderConfig();
+	procCfg = new ProcProviderConfiguration();
 
 	// add both sections, the parse function will select the
 	// appropriate action

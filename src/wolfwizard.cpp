@@ -35,8 +35,8 @@
 #include "wolframe.hpp"
 #include "wolfwizardCommandLine.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/moduleDirectory.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/moduleDirectory.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "types/variantStruct.hpp"
 #include "types/variantStructDescription.hpp"
 #include <fstream>
@@ -331,7 +331,7 @@ int main( int argc, char **argv )
 		}
 		if (doExit) return 0;
 
-		proc::ProcProviderConfig providerconf;
+		config::ProcProviderConfiguration providerconf;
 		if (!providerconf.parse( cmdline.providerconfig(), "", &cmdline.modulesDirectory()))
 		{
 			throw std::runtime_error( "Processor provider configuration could not be created from command line");

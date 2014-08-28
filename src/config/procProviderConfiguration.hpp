@@ -30,36 +30,52 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appProperties.hpp
-/// \brief application wide singleton for the application properties
+/// \brief Processor Provider configuration
+/// \file processor/procProviderConfig.hpp
 
-#ifndef _APP_PROPERTIES_HPP_INCLUDED
-#define _APP_PROPERTIES_HPP_INCLUDED
+#ifndef _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
+#define _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
+#include "config/configurationBase.hpp"
+#include "module/moduleDirectory.hpp"
+#include "types/keymap.hpp"
+#include <string>
+#include <vector>
 
-#include "version.hpp"
+namespace _Wolframe {
+namespace config {
 
-namespace _Wolframe	{
+/// \brief Processor provider configuration
+class ProcProviderConfiguration
+	:public config::ConfigurationBase
+{
+public:
+	/// constructor & destructor
+	ProcProviderConfiguration()
+		: ConfigurationBase( "Processor(s)", NULL, "Processor configuration" )	{}
+	~ProcProviderConfiguration();
 
-	const char*	applicationName();
-	const Version	applicationVersion();
+	/// methods
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModulesDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
+	void setCanonicalPathes( const std::string& referencePath );
+	const std::vector<std::string>& programFiles() const
+	{
+		return m_programFiles;
+	}
+	const std::string& referencePath() const
+	{
+		return m_referencePath;
+	}
 
-namespace config	{
+private:
+	std::string					m_dbLabel;
+	std::vector< config::NamedConfiguration* >	m_procConfig;
+	std::vector< std::string >			m_programFiles;
+	std::string					m_referencePath;
+};
 
-	const char*	defaultMainConfig();
-	const char*	defaultUserConfig();
-	const char*	defaultLocalConfig();
+}}//namespace
+#endif
 
-	const char*	defaultServiceName();
-#if defined( _WIN32 )
-	const char*	defaultServiceDisplayName();
-	const char*	defaultServiceDescription();
-#endif // defined( _WIN32 )
-} // namespace config
-
-namespace net	{
-	unsigned short	defaultTCPport();
-	unsigned short	defaultSSLport();
-} // namespace net
-} // namespace _Wolframe
-
-#endif // _APP_PROPERTIES_HPP_INCLUDED

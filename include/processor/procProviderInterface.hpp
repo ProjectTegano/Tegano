@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file processor/procProviderInterface.hpp
+/// \file processor/procProvider.hpp
 /// \brief Interface to processor provider for language bindings and database
 #ifndef _PROCESSOR_PROVIDER_INTERFACE_HPP_INCLUDED
 #define _PROCESSOR_PROVIDER_INTERFACE_HPP_INCLUDED
@@ -76,7 +76,7 @@ class AuditFunction;
 
 namespace proc {
 
-/// \class ProcessorProviderInterface
+/// \class ProcessorProvider
 /// \brief Abstract class as processor provider interface
 class ProcessorProviderInterface
 {

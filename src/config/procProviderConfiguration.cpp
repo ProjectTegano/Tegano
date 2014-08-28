@@ -34,7 +34,7 @@
 // Wolframe processor provider
 //
 
-#include "processor/procProviderConfig.hpp"
+#include "procProviderConfiguration.hpp"
 
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
@@ -49,10 +49,9 @@
 #include <string>
 
 using namespace _Wolframe;
-using namespace _Wolframe::proc;
 using namespace _Wolframe::config;
 
-bool ProcProviderConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
+bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 				const module::ModulesDirectory* modules )
 {
 	using namespace _Wolframe::config;
@@ -119,14 +118,14 @@ bool ProcProviderConfig::parse( const config::ConfigurationNode& pt, const std::
 	return retVal;
 }
 
-ProcProviderConfig::~ProcProviderConfig()
+ProcProviderConfiguration::~ProcProviderConfiguration()
 {
 	for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )
 		delete *it;
 }
 
-void ProcProviderConfig::print( std::ostream& os, size_t indent ) const
+void ProcProviderConfiguration::print( std::ostream& os, size_t indent ) const
 {
 	os << sectionName() << std::endl;
 	os << "   Database: " << (m_dbLabel.empty() ? "(none)" : m_dbLabel) << std::endl;
@@ -154,7 +153,7 @@ void ProcProviderConfig::print( std::ostream& os, size_t indent ) const
 
 
 /// Check if the configuration makes sense
-bool ProcProviderConfig::check() const
+bool ProcProviderConfiguration::check() const
 {
 	bool correct = true;
 
@@ -166,7 +165,7 @@ bool ProcProviderConfig::check() const
 	return correct;
 }
 
-void ProcProviderConfig::setCanonicalPathes( const std::string& refPath )
+void ProcProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
 	m_referencePath = refPath;
 	for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();

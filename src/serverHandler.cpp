@@ -36,7 +36,7 @@
 #include "serverConnectionHandler.hpp"
 #include "config/bannerConfiguration.hpp"
 #include "AAAA/AAAAprovider.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "logger-v1.hpp"
 #include <stdexcept>
@@ -53,7 +53,7 @@ net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR&
 	return new ServerConnectionHandler( this, local );
 }
 
-ServerHandler::ServerHandler( const proc::ProcProviderConfig* pconf,
+ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
 				const AAAA::AAAAconfiguration* aconf,
 				const db::DBproviderConfig* dconf,
 				const config::BannerConfiguration* bconf,

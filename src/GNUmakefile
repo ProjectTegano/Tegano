@@ -1,6 +1,14 @@
 TOPDIR = ..
 
-SUBDIRS = libwolframe libwfsingleton libwolframe_serialize libwolframe_database libwolframe_langbind modules
+SUBDIRS = \
+	libwolframe \
+	libwfsingleton \
+	libwolframe_serialize \
+	libwolframe_database \
+	libwolframe_langbind \
+	config \
+	provider \
+	modules
 
 -include $(TOPDIR)/makefiles/gmake/platform.mk
 
@@ -9,6 +17,7 @@ INCLUDE_CXXFLAGS =
 INCLUDE_DIRS = \
 	-I. \
 	-I$(TOPDIR)/include \
+	-I$(TOPDIR)/src/config \
 	-I$(BOOST_INCLUDE_DIR)
 
 INCLUDE_LDFLAGS = \
@@ -17,7 +26,9 @@ INCLUDE_LDFLAGS = \
 	-L$(TOPDIR)/src/libwolframe \
 	-L$(TOPDIR)/src/libwolframe_serialize \
 	-L$(TOPDIR)/src/libwolframe_database \
-	-L$(TOPDIR)/src/libwolframe_langbind
+	-L$(TOPDIR)/src/libwolframe_langbind \
+	-L$(TOPDIR)/src/config \
+	-L$(TOPDIR)/src/provider
 
 INCLUDE_LIBS = \
 	-lwfsingleton \
@@ -28,6 +39,8 @@ INCLUDE_LIBS = \
 	-lboost_thread$(BOOST_LIBRARY_TAG) -lboost_system \
 	-lboost_program_options \
 	-lboost_filesystem \
+	-lwfconfig \
+	-lwfprovider \
 	$(LIBS_DL) $(LIBS_LT) $(LIBS_NET)
 
 # openssl
@@ -44,45 +57,14 @@ INCLUDE_LDFLAGS += \
 
 INCLUDE_LIBS += \
 	$(OPENSSL_LIBS)
-
 endif
 
-PROVIDER_OBJS = \
-	provider/Authentication.o \
-	provider/Authorization.o \
-	provider/Audit.o \
-	provider/AAAAproviderImpl.o \
-	provider/AAAAproviderConfig.o \
-	provider/DBproviderImpl.o \
-	provider/DBproviderConfig.o \
-	provider/procProviderConfig.o \
-	provider/procProvider.o
-
-PROGRAM_OBJS = \
-	prgbind/normalizeProgram.o \
-	prgbind/ddlProgram.o \
-	prgbind/programLibrary.o
-
-CONFIG_OBJS = \
-	config/serviceConfiguration.o \
-	config/loggerConfiguration.o \
-	config/bannerConfiguration.o \
-	config/serverConfiguration.o \
-	config/cmdLineConfiguration.o \
-	config/applicationConfiguration.o
-
 CPP_OBJS = \
-	$(PROVIDER_OBJS) \
-	$(PROGRAM_OBJS) \
-	$(CONFIG_OBJS) \
-	appProperties.o \
 	wolfilterCommandLine.o \
 	wolfilterIostreamFilter.o \
 	wolfwizardCommandLine.o \
 	mainConnectionHandler.o \
 	contentOnlyProtocolHandler.o \
-	moduleDirectory.o \
-	moduleLoader.o \
 	jobScheduler.o \
 	acceptor.o \
 	serverEndpoint.o \

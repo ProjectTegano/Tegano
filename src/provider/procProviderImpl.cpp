@@ -34,7 +34,7 @@
 // Wolframe processor provider
 //
 
-#include "processor/procProvider.hpp"
+#include "procProviderImpl.hpp"
 #include "database/DBprovider.hpp"
 #include "appdevel/module/runtimeEnvironmentConstructor.hpp"
 #include "appdevel/module/filterBuilder.hpp"
@@ -45,7 +45,7 @@
 #include "appdevel/module/customDataTypeBuilder.hpp"
 #include "appdevel/module/doctypeDetectorBuilder.hpp"
 #include "logger-v1.hpp"
-#include "module/moduleDirectory.hpp"
+#include "moduleDirectory.hpp"
 #include "utils/fileUtils.hpp"
 
 #include <boost/filesystem.hpp>
@@ -165,21 +165,23 @@ private:
 };
 
 
-ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
-					const module::ModulesDirectory* modules,
-					prgbind::ProgramLibrary* programs_)
-	:m_db(0),m_dbProvider(0),m_programs(programs_),m_referencePath(conf->referencePath())
+ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
+					const std::vector<config::NamedConfiguration*>& procConfig_,
+					const std::vector<std::string>& programFiles_,
+					const std::string& referencePath_,
+					const module::ModulesDirectory* modules_)
+	:m_dbLabel(dbLabel_)
+	,m_db(0)
+	,m_dbProvider(0)
+	,m_programfiles(programFiles_)
+	,m_referencePath(referencePath_)
 {
-	if ( !conf->m_dbLabel.empty())
-	{
-		m_dbLabel = conf->m_dbLabel;
-	}
-	m_programfiles.insert( m_programfiles.end(), conf->programFiles().begin(), conf->programFiles().end());
+	m_programfiles.insert( m_programfiles.end(), programFiles_.begin(), programFiles_.end());
 
 	// Build the list of command handlers and runtime environments (configured objects)
-	for ( std::list< config::NamedConfiguration* >::const_iterator it = conf->m_procConfig.begin();
-									it != conf->m_procConfig.end(); it++ )	{
-		module::ConfiguredBuilder* builder = modules->getBuilder((*it)->className());
+	for ( std::vector< config::NamedConfiguration* >::const_iterator it = procConfig_.begin();
+									it != procConfig_.end(); it++ )	{
+		module::ConfiguredBuilder* builder = modules_->getBuilder((*it)->className());
 		if ( builder )
 		{
 			if (builder->objectType() == ObjectConstructorBase::CMD_HANDLER_OBJECT)
@@ -208,7 +210,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 				else
 				{
 					langbind::RuntimeEnvironmentR env( constructor->object( **it));
-					m_programs->defineRuntimeEnvironment( env);
+					m_programs.defineRuntimeEnvironment( env);
 
 					LOG_TRACE << "Registered runtime environment '" << env->name() << "'";
 				}
@@ -225,8 +227,8 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 	}
 
 	// Build the lists of objects without configuration
-	for ( module::ModulesDirectory::simpleBuilder_iterator it = modules->simpleBuilderObjectsBegin();
-								it != modules->simpleBuilderObjectsEnd(); it++ )	{
+	for ( module::ModulesDirectory::simpleBuilder_iterator it = modules_->simpleBuilderObjectsBegin();
+								it != modules_->simpleBuilderObjectsEnd(); it++ )	{
 		switch( (*it)->objectType() )	{
 			case ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT:
 			{
@@ -289,7 +291,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 					try
 					{
 						langbind::FilterTypeR filtertype( fltr->object());
-						m_programs->defineFilterType( fltr->name(), filtertype);
+						m_programs.defineFilterType( fltr->name(), filtertype);
 						LOG_TRACE << "registered filter '" << fltr->name() << "' (" << fltr->objectClassName() << ")";
 					}
 					catch (const std::runtime_error& e)
@@ -312,7 +314,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 					try
 					{
 						langbind::DDLCompilerR constructor( ffo->object());
-						m_programs->defineFormDDL( constructor);
+						m_programs.defineFormDDL( constructor);
 						LOG_TRACE << "registered '" << constructor->ddlname() << "' DDL compiler";
 					}
 					catch (const std::runtime_error& e)
@@ -335,7 +337,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 					try
 					{
 						prgbind::ProgramR prgtype( ffo->object());
-						m_programs->defineProgramType( prgtype);
+						m_programs.defineProgramType( prgtype);
 						LOG_TRACE << "registered '" << ffo->name() << "' program type";
 					}
 					catch (const std::runtime_error& e)
@@ -358,7 +360,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 				{
 					try
 					{
-						m_programs->defineCppFormFunction( ffo->identifier(), ffo->function());
+						m_programs.defineCppFormFunction( ffo->identifier(), ffo->function());
 						LOG_TRACE << "registered C++ form function '" << ffo->identifier() << "'";
 					}
 					catch (const std::runtime_error& e)
@@ -381,7 +383,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 				else
 				{
 					try {
-						m_programs->defineNormalizeFunctionType( constructor->identifier(), constructor->function());
+						m_programs.defineNormalizeFunctionType( constructor->identifier(), constructor->function());
 						LOG_TRACE << "registered '" << constructor->objectClassName() << "' normalize function '" << constructor->identifier() << "'";
 					}
 					catch (const std::runtime_error& e)
@@ -405,7 +407,7 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 				{
 					try {
 						types::CustomDataTypeR dt( constructor->object());
-						m_programs->defineCustomDataType( constructor->identifier(), dt);
+						m_programs.defineCustomDataType( constructor->identifier(), dt);
 						LOG_TRACE << "registered '" << constructor->objectClassName() << "' custom data type '" << constructor->identifier() << "'";
 					}
 					catch (const std::runtime_error& e)
@@ -438,15 +440,15 @@ ProcessorProvider::ProcessorProvider( const ProcProviderConfig* conf,
 }
 
 
-ProcessorProvider::~ProcessorProvider()
+ProcessorProviderImpl::~ProcessorProviderImpl()
 {}
 
-bool ProcessorProvider::loadPrograms()
+bool ProcessorProviderImpl::loadPrograms()
 {
 	try
 	{
 		// load all globally defined programs:
-		m_programs->loadPrograms( m_db, m_programfiles);
+		m_programs.loadPrograms( m_db, m_programfiles);
 
 		// load command handler programs and register commands 
 		std::vector<CommandHandlerDef>::const_iterator di = m_cmd.begin(), de = m_cmd.end();
@@ -483,7 +485,7 @@ bool ProcessorProvider::loadPrograms()
 	}
 }
 
-bool ProcessorProvider::resolveDB( const db::DatabaseProvider& db )
+bool ProcessorProviderImpl::resolveDB( const db::DatabaseProvider& db )
 {
 	bool rt = true;
 	if ( m_db == NULL && ! m_dbLabel.empty() )	{
@@ -500,56 +502,56 @@ bool ProcessorProvider::resolveDB( const db::DatabaseProvider& db )
 	return rt;
 }
 
-const langbind::AuthorizationFunction* ProcessorProvider::authorizationFunction( const std::string& name) const
+const langbind::AuthorizationFunction* ProcessorProviderImpl::authorizationFunction( const std::string& name) const
 {
-	return m_programs->getAuthorizationFunction( name);
+	return m_programs.getAuthorizationFunction( name);
 }
 
-const langbind::AuditFunction* ProcessorProvider::auditFunction( const std::string& name) const
+const langbind::AuditFunction* ProcessorProviderImpl::auditFunction( const std::string& name) const
 {
-	return m_programs->getAuditFunction( name);
+	return m_programs.getAuditFunction( name);
 }
 
-const types::NormalizeFunction* ProcessorProvider::normalizeFunction( const std::string& name) const
+const types::NormalizeFunction* ProcessorProviderImpl::normalizeFunction( const std::string& name) const
 {
-	return m_programs->getNormalizeFunction( name);
+	return m_programs.getNormalizeFunction( name);
 }
 
-const types::NormalizeFunctionType* ProcessorProvider::normalizeFunctionType( const std::string& name) const
+const types::NormalizeFunctionType* ProcessorProviderImpl::normalizeFunctionType( const std::string& name) const
 {
-	return m_programs->getNormalizeFunctionType( name);
+	return m_programs.getNormalizeFunctionType( name);
 }
 
-const langbind::FormFunction* ProcessorProvider::formFunction( const std::string& name) const
+const langbind::FormFunction* ProcessorProviderImpl::formFunction( const std::string& name) const
 {
 	LOG_TRACE << "[provider] get function '" << name << "'";
-	return m_programs->getFormFunction( name);
+	return m_programs.getFormFunction( name);
 }
 
-const types::FormDescription* ProcessorProvider::formDescription( const std::string& name) const
+const types::FormDescription* ProcessorProviderImpl::formDescription( const std::string& name) const
 {
 	LOG_TRACE << "[provider] get form description '" << name << "'";
-	return m_programs->getFormDescription( name);
+	return m_programs.getFormDescription( name);
 }
 
-const langbind::FilterType* ProcessorProvider::filterType( const std::string& name) const
+const langbind::FilterType* ProcessorProviderImpl::filterType( const std::string& name) const
 {
-	return m_programs->getFilterType( name);
+	return m_programs.getFilterType( name);
 }
 
-const types::CustomDataType* ProcessorProvider::customDataType( const std::string& name) const
+const types::CustomDataType* ProcessorProviderImpl::customDataType( const std::string& name) const
 {
 	LOG_TRACE << "[provider] get custom data type '" << name << "'";
-	return m_programs->getCustomDataType( name);
+	return m_programs.getCustomDataType( name);
 }
 
-cmdbind::DoctypeDetector* ProcessorProvider::doctypeDetector() const
+cmdbind::DoctypeDetector* ProcessorProviderImpl::doctypeDetector() const
 {
 	if (m_doctypes.empty()) return 0;
 	return new CombinedDoctypeDetector( m_doctypes);
 }
 
-cmdbind::CommandHandler* ProcessorProvider::cmdhandler( const std::string& command, const std::string& docformat) const
+cmdbind::CommandHandler* ProcessorProviderImpl::cmdhandler( const std::string& command, const std::string& docformat) const
 {
 	types::keymap<std::size_t>::const_iterator ci = m_cmdMap.find( command);
 	if (ci == m_cmdMap.end())
@@ -560,25 +562,25 @@ cmdbind::CommandHandler* ProcessorProvider::cmdhandler( const std::string& comma
 	return unit->createCommandHandler( command, docformat);
 }
 
-bool ProcessorProvider::hasCommand( const std::string& command) const
+bool ProcessorProviderImpl::hasCommand( const std::string& command) const
 {
 	return m_cmdMap.find( command) != m_cmdMap.end();
 }
 
-cmdbind::ProtocolHandler* ProcessorProvider::protocolHandler( const std::string& protocol) const
+cmdbind::ProtocolHandler* ProcessorProviderImpl::protocolHandler( const std::string& protocol) const
 {
 	types::keymap<cmdbind::ProtocolHandlerUnitR>::const_iterator pi = m_protocols.find( protocol);
 	if (pi == m_protocols.end()) return 0;
 	return pi->second->createProtocolHandler();
 }
 
-bool ProcessorProvider::hasProtocol( const std::string& protocol) const
+bool ProcessorProviderImpl::hasProtocol( const std::string& protocol) const
 {
 	return m_protocols.find( protocol) != m_protocols.end();
 }
 
 
-db::Database* ProcessorProvider::transactionDatabase() const
+db::Database* ProcessorProviderImpl::transactionDatabase() const
 {
 	if ( ! m_db )	{
 		LOG_ALERT << "No database defined for the processor provider";
@@ -586,7 +588,7 @@ db::Database* ProcessorProvider::transactionDatabase() const
 	return m_db;
 }
 
-db::Transaction* ProcessorProvider::transaction( const std::string& name ) const
+db::Transaction* ProcessorProviderImpl::transaction( const std::string& name ) const
 {
 	if ( m_db )
 	{
@@ -598,7 +600,7 @@ db::Transaction* ProcessorProvider::transaction( const std::string& name ) const
 	}
 }
 
-db::Transaction* ProcessorProvider::transaction( const std::string& dbname, const std::string& name) const
+db::Transaction* ProcessorProviderImpl::transaction( const std::string& dbname, const std::string& name) const
 {
 	db::Database* altdb = m_dbProvider->database( dbname);
 	if (!altdb)
@@ -610,7 +612,7 @@ db::Transaction* ProcessorProvider::transaction( const std::string& dbname, cons
 	return altdb->transaction( name);
 }
 
-const std::string& ProcessorProvider::referencePath() const
+const std::string& ProcessorProviderImpl::referencePath() const
 {
 	return m_referencePath;
 }

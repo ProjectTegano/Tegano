@@ -37,8 +37,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "module/moduleDirectory.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/moduleDirectory.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "types/propertyTree.hpp"
 
 namespace _Wolframe {

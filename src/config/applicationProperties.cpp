@@ -30,48 +30,45 @@
  Project Wolframe.
 
 ************************************************************************/
-///\brief Implementation of programs for definition of forms in a DDL
-///\file prgbind_ddlProgram.cpp
+//
+// application properties - implementation
+//
 
-#include "prgbind/ddlProgram.hpp"
-#include "prgbind/programLibrary.hpp"
-#include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
-#include <boost/algorithm/string.hpp>
+#include "applicationProperties.hpp"
+#include "wolframe.hpp"
+#include "version.hpp"
 
-using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+//\brief Macros to stringify compile options
+#define DO_STRINGIFY2(x) #x
+#define DO_STRINGIFY(x)  DO_STRINGIFY2(x)
 
+namespace _Wolframe	{
 
-bool DDLProgram::is_mine( const std::string& filename) const
-{
-	std::string ext = utils::getFileExtension( filename);
-	if (ext.empty()) return false;
-	if (boost::iequals( m_constructor->ddlname(), ext.c_str()+1))
-	{
-		LOG_WARNING << "Using deprecated file extension for program '" << ext << "' instead of '." << m_constructor->fileext() << "'";
-		return true;
+	const char*	applicationName()			{ return "Wolframe"; }
+	const Version	applicationVersion()			{ return Version( WOLFRAME_MAJOR_VERSION,
+										  WOLFRAME_MINOR_VERSION,
+										  WOLFRAME_REVISION,
+										  WOLFRAME_BUILD
+										  ); }
+
+	const char*	config::defaultMainConfig()		{
+#ifdef DEFAULT_MAIN_CONFIGURATION_FILE
+		return DO_STRINGIFY( DEFAULT_MAIN_CONFIGURATION_FILE );
+#else
+		return "/etc/wolframe/wolframe.conf";
+#endif
 	}
-	if (boost::iequals( m_constructor->fileext(), ext.c_str()+1)) return true;
-	return false;
-}
+	const char*	config::defaultUserConfig()		{ return "~/wolframe.conf"; }
+	const char*	config::defaultLocalConfig()		{ return "./wolframe.conf"; }
 
-void DDLProgram::loadProgram( ProgramLibrary& library, db::Database*, const std::string& filename)
-{
-	const types::NormalizeFunctionMap* typemap = library.formtypemap();
-	std::vector<types::FormDescriptionR> forms = m_constructor->compile( filename, typemap);
-	std::vector<types::FormDescriptionR>::const_iterator fi = forms.begin(), fe = forms.end();
-	for (; fi != fe; ++fi)
-	{
-		if ((*fi)->name().empty())
-		{
-			library.definePrivateForm( *fi);
-		}
-		else
-		{
-			library.defineForm( (*fi)->name(), *fi);
-		}
-	}
-}
+	unsigned short	net::defaultTCPport()			{ return 7661; }
+	unsigned short	net::defaultSSLport()			{ return 7961; }
 
+#if defined( _WIN32 )
+	const char*	config::defaultServiceName()		{ return "wolframe"; }
+	const char*	config::defaultServiceDisplayName()	{ return "Wolframe Daemon"; }
+	const char*	config::defaultServiceDescription()	{ return "a daemon for wolframeing"; }
+#endif // defined( _WIN32 )
+
+} // namespace _Wolframe
 

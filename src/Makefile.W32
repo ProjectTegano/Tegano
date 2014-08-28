@@ -6,6 +6,7 @@ SUBDIRS = \
 	libwolframe_serialize \
 	libwolframe_database \
 	libwolframe_langbind \
+	config \
 	modules
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
@@ -15,6 +16,7 @@ INCLUDE_CXXFLAGS = \
 
 INCLUDE_DIRS = \
 	/I. \
+	/I$(TOPDIR)\src\config \
 	/I$(TOPDIR)\include \
 	/I$(TOPDIR) \
 	/I"$(BOOST_INCLUDE_DIR)"
@@ -28,6 +30,8 @@ INCLUDE_LIBS = \
 	$(TOPDIR)\src\libwolframe_database\wolframe_database.lib \
 	$(TOPDIR)\src\libwolframe_langbind\wolframe_langbind.lib \
 	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib \
+	$(TOPDIR)\src\config\wfconfig.lib \
+	$(TOPDIR)\src\config\wfprovider.lib \
 	advapi32.lib \
 
 # openssl
@@ -47,46 +51,18 @@ INCLUDE_LIBS = \
 
 !ENDIF
 
-PROVIDER_OBJS = \
-	provider\Authentication.obj \
-	provider\Authorization.obj \
-	provider\Audit.obj \
-	provider\AAAAproviderImpl.obj \
-	provider\AAAAproviderConfig.obj \
-	provider\DBproviderImpl.obj \
-	provider\DBproviderConfig.obj \
-	provider\procProviderConfig.obj \
-	provider\procProvider.obj
-
-PROGRAM_OBJS = \
-	prgbind\normalizeProgram.obj \
-	prgbind\ddlProgram.obj \
-	prgbind\programLibrary.obj
-
-CONFIG_OBJS = \
-	config\serviceConfiguration.obj \
-	config\loggerConfiguration.obj \
-	config\bannerConfiguration.obj \
-	config\serverConfiguration.obj \
-	config\cmdLineConfiguration.obj \
-	config\applicationConfiguration.obj
-
 CPP_OBJS = \
 	$(PROVIDER_OBJS) \
 	$(PROGRAM_OBJS) \
-	$(CONFIG_OBJS) \
 	wolfilterCommandLine.obj \
 	wolfilterIostreamFilter.obj \
 	wolfwizardCommandLine.obj \
 	mainConnectionHandler.obj \
 	contentOnlyProtocolHandler.obj \
-	moduleDirectory.obj \
-	moduleLoader.obj \
 	jobScheduler.obj \
 	acceptor.obj \
 	connection.obj \
 	server.obj \
-	appProperties.obj \
 	serverConnectionHandler.obj \
 	serverHandler.obj \
 	winMain.obj
@@ -109,6 +85,8 @@ dependencies:
 	@cd libwolframe_serialize & $(MAKE) /nologo /f Makefile.w32 all
 	@cd libwolframe_database & $(MAKE) /nologo /f Makefile.w32 all
 	@cd libwolframe_langbind & $(MAKE) /nologo /f Makefile.w32 all
+	@cd config & $(MAKE) /nologo /f Makefile.w32 all
+	@cd provider & $(MAKE) /nologo /f Makefile.w32 all
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 

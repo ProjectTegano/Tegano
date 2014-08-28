@@ -33,8 +33,8 @@
 /// \brief Program library interface
 /// \file programLibrary.hpp
 
-#ifndef _PRGBIND_PROGRAM_LIBRARY_HPP_INCLUDED
-#define _PRGBIND_PROGRAM_LIBRARY_HPP_INCLUDED
+#ifndef _PRGBIND_PROGRAM_LIBRARY_INTERFACE_HPP_INCLUDED
+#define _PRGBIND_PROGRAM_LIBRARY_INTERFACE_HPP_INCLUDED
 #include "filter/filter.hpp"
 #include "database/database.hpp"
 #include "serialize/cppFormFunction.hpp"
@@ -50,79 +50,69 @@
 #include <string>
 #include <vector>
 
-
 namespace _Wolframe {
 namespace prgbind {
 
 /// \class ProgramLibrary
-/// \brief Class representing the program library with all programs loaded
+/// \brief Interface for the program library with all programs loaded
 class ProgramLibrary
 {
 public:
-	/// \brief Default constructor
-	ProgramLibrary();
-	/// \brief Copy constructor
-	ProgramLibrary( const ProgramLibrary& o);
-
 	/// \brief Destructor
-	virtual ~ProgramLibrary();
+	virtual ~ProgramLibrary(){}
 
 	/// \brief Define an authorization function
-	virtual void defineAuthorizationFunction( const std::string& name, const langbind::AuthorizationFunctionR& f);
+	virtual void defineAuthorizationFunction( const std::string& name, const langbind::AuthorizationFunctionR& f)=0;
 	/// \brief Define an audit function
-	virtual void defineAuditFunction( const std::string& name, const langbind::AuditFunctionR& f);
+	virtual void defineAuditFunction( const std::string& name, const langbind::AuditFunctionR& f)=0;
 	/// \brief Define a C++ form function
-	virtual void defineCppFormFunction( const std::string& name, const serialize::CppFormFunction& f);
+	virtual void defineCppFormFunction( const std::string& name, const serialize::CppFormFunction& f)=0;
 	/// \brief Define an ordinary form function
-	virtual void defineFormFunction( const std::string& name, const langbind::FormFunctionR& f);
+	virtual void defineFormFunction( const std::string& name, const langbind::FormFunctionR& f)=0;
 	/// \brief Define a runtime environment
-	virtual void defineRuntimeEnvironment( const langbind::RuntimeEnvironmentR& env);
+	virtual void defineRuntimeEnvironment( const langbind::RuntimeEnvironmentR& env)=0;
 	/// \brief Define a form structure that is referenced as unexpanded indirection
-	virtual void definePrivateForm( const types::FormDescriptionR& f);
+	virtual void definePrivateForm( const types::FormDescriptionR& f)=0;
 	/// \brief Define a form
-	virtual void defineForm( const std::string& name, const types::FormDescriptionR& f);
+	virtual void defineForm( const std::string& name, const types::FormDescriptionR& f)=0;
 	/// \brief Define a normalization function
-	virtual void defineNormalizeFunction( const std::string& name, const types::NormalizeFunctionR& f) const;
+	virtual void defineNormalizeFunction( const std::string& name, const types::NormalizeFunctionR& f)=0;
 	/// \brief Define a normalization function type
-	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionType& ftype);
+	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionType& ftype)=0;
 	/// \brief Define a custom data type
-	virtual void defineCustomDataType( const std::string& name, const types::CustomDataTypeR& t);
+	virtual void defineCustomDataType( const std::string& name, const types::CustomDataTypeR& t)=0;
 	/// \brief Define a data definition language
-	virtual void defineFormDDL( const langbind::DDLCompilerR& c);
+	virtual void defineFormDDL( const langbind::DDLCompilerR& c)=0;
 	/// \brief Define a filter type
-	virtual void defineFilterType( const std::string& name, const langbind::FilterTypeR& f);
+	virtual void defineFilterType( const std::string& name, const langbind::FilterTypeR& f)=0;
 	/// \brief Define a program type
-	virtual void defineProgramType( const ProgramR& prg);
+	virtual void defineProgramType( const ProgramR& prg)=0;
 
 	/// \brief Get the map for DDLs to map types to normalizer call sequences
-	virtual const types::NormalizeFunctionMap* formtypemap() const;
+	virtual const types::NormalizeFunctionMap* formtypemap() const=0;
 	/// \brief Get a custom data type defined by name
-	virtual const types::CustomDataType* getCustomDataType( const std::string& name) const;
+	virtual const types::CustomDataType* getCustomDataType( const std::string& name) const=0;
 	/// \brief Get a normalization function type defined by name
-	virtual const types::NormalizeFunctionType* getNormalizeFunctionType( const std::string& name) const;
+	virtual const types::NormalizeFunctionType* getNormalizeFunctionType( const std::string& name) const=0;
 
 	/// \brief Get a form description
-	virtual const types::FormDescription* getFormDescription( const std::string& name) const;
+	virtual const types::FormDescription* getFormDescription( const std::string& name) const=0;
 	/// \brief Get the list of all forms defined
-	virtual std::vector<std::string> getFormNames() const;
+	virtual std::vector<std::string> getFormNames() const=0;
 
 	/// \brief Get an authorization function by name
-	virtual const langbind::AuthorizationFunction* getAuthorizationFunction( const std::string& name) const;
+	virtual const langbind::AuthorizationFunction* getAuthorizationFunction( const std::string& name) const=0;
 	/// \brief Get an audit function by name
-	virtual const langbind::AuditFunction* getAuditFunction( const std::string& name) const;
+	virtual const langbind::AuditFunction* getAuditFunction( const std::string& name) const=0;
 	/// \brief Get a form function by name
-	virtual const langbind::FormFunction* getFormFunction( const std::string& name) const;
+	virtual const langbind::FormFunction* getFormFunction( const std::string& name) const=0;
 	/// \brief Get a normalizer function by name
-	virtual const types::NormalizeFunction* getNormalizeFunction( const std::string& name) const;
+	virtual const types::NormalizeFunction* getNormalizeFunction( const std::string& name) const=0;
 	/// \brief Get a filter type by name
-	virtual const langbind::FilterType* getFilterType( const std::string& name) const;
+	virtual const langbind::FilterType* getFilterType( const std::string& name) const=0;
 
 	/// \brief Load all programs passed in 'filenames'
-	virtual void loadPrograms( db::Database* transactionDB, const std::vector<std::string>& filenames);
-
-private:
-	class Impl;
-	Impl* m_impl;
+	virtual void loadPrograms( db::Database* transactionDB, const std::vector<std::string>& filenames)=0;
 };
 
 }} //namespace

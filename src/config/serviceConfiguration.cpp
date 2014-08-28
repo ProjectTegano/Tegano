@@ -37,7 +37,6 @@
 #include "serviceConfiguration.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
-#include "appProperties.hpp"
 #include "utils/fileUtils.hpp"
 #include "logger-v1.hpp"
 #include <boost/filesystem.hpp>

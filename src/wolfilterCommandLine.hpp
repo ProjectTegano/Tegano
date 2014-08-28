@@ -38,8 +38,9 @@
 #include <vector>
 #include <iostream>
 #include "logger-v1.hpp"
-#include "module/moduleDirectory.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/moduleDirectory.hpp"
+#include "provider/procProviderImpl.hpp"
+#include "config/procProviderConfiguration.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "types/propertyTree.hpp"
 #include <boost/shared_ptr.hpp>
@@ -66,7 +67,7 @@ public:
 	const std::string& protocol() const				{return m_protocol;}
 	const AAAA::AAAAconfiguration& aaaaProviderConfig() const	{return *m_aaaaProviderConfig;}
 	const db::DBproviderConfig& dbProviderConfig() const		{return *m_dbProviderConfig;}
-	const proc::ProcProviderConfig& procProviderConfig() const	{return *m_procProviderConfig;}
+	const config::ProcProviderConfiguration& procProviderConfig() const {return *m_procProviderConfig;}
 	const module::ModulesDirectory& modulesDirectory() const	{return *m_modulesDirectory;}
 	const std::string& configurationPath() const			{return m_configurationPath;}
 
@@ -92,7 +93,7 @@ private:
 	std::string m_outputfilter;
 	std::string m_protocol;
 	boost::shared_ptr<AAAA::AAAAconfiguration> m_aaaaProviderConfig;
-	boost::shared_ptr<proc::ProcProviderConfig> m_procProviderConfig;
+	boost::shared_ptr<config::ProcProviderConfiguration> m_procProviderConfig;
 	boost::shared_ptr<db::DBproviderConfig> m_dbProviderConfig;
 	module::ModulesDirectory* m_modulesDirectory;
 	std::string m_configurationPath;

@@ -30,22 +30,20 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file processor/procProvider.hpp
-/// \brief Processor provider for language bindings and database
-//
+/// \file procProviderImpl.hpp
+/// \brief Processor provider implementation for language bindings
 
-#ifndef _PROCESSOR_PROVIDER_HPP_INCLUDED
-#define _PROCESSOR_PROVIDER_HPP_INCLUDED
-
+#ifndef _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
+#define _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #include "processor/procProviderInterface.hpp"
-#include "processor/procProviderConfig.hpp"
+#include "programLibraryImpl.hpp"
 #include "database/database.hpp"
 #include "cmdbind/commandHandler.hpp"
 #include "cmdbind/doctypeDetector.hpp"
 #include "cmdbind/protocolHandler.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "types/keymap.hpp"
-#include <list>
+#include <vector>
 #include <map>
 #include <boost/noncopyable.hpp>
 
@@ -56,19 +54,21 @@ class DatabaseProvider;
 }
 namespace proc {
 
-/// \class ProcessorProvider
+/// \class ProcessorProviderImpl
 /// \brief Processor provider, the class that provides access to configured global objects to processors
-class ProcessorProvider
+class ProcessorProviderImpl
 	:public ProcessorProviderInterface
 	,private boost::noncopyable
 {
 public:
 	/// \brief Constructor
-	ProcessorProvider( const ProcProviderConfig* conf,
-			   const module::ModulesDirectory* modules,
-			   prgbind::ProgramLibrary* programs_);
+	ProcessorProviderImpl( const std::string& dbLabel_,
+				const std::vector<config::NamedConfiguration*>& procConfig_,
+				const std::vector<std::string>& programFiles_,
+				const std::string& referencePath_,
+				const module::ModulesDirectory* modules_);
 	/// \brief Destructor
-	virtual ~ProcessorProvider();
+	virtual ~ProcessorProviderImpl();
 
 	/// \brief Pass the references to the built database interfaces and let the provider find its transaction database
 	bool resolveDB( const db::DatabaseProvider& db );
@@ -158,7 +158,7 @@ private:
 	types::keymap<cmdbind::ProtocolHandlerUnitR> m_protocols;	///< map protocol identifiers to handler units
 	std::vector<cmdbind::DoctypeDetectorType> m_doctypes;		///< list of document type detectors loaded from modules
 	std::vector<std::string> m_programfiles;			///< list of all programs to load
-	prgbind::ProgramLibrary* m_programs;				///< program library
+	prgbind::ProgramLibraryImpl m_programs;				///< program library
 	std::string m_referencePath;					///< application reference path
 };
 

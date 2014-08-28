@@ -30,52 +30,36 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \brief Processor Provider configuration
-/// \file processor/procProviderConfig.hpp
+/// \file applicationProperties.hpp
+/// \brief Application wide singleton for the application properties
 
-#ifndef _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
-#define _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
-#include "config/configurationBase.hpp"
-#include "module/moduleDirectory.hpp"
-#include "types/keymap.hpp"
-#include <string>
-#include <list>
+#ifndef _Wolframe_APPLICATION_PROPERTIES_HPP_INCLUDED
+#define _Wolframe_APPLICATION_PROPERTIES_HPP_INCLUDED
 
-namespace _Wolframe {
-namespace proc {
+#include "version.hpp"
 
-/// \brief Processor provider configuration
-class ProcProviderConfig : public config::ConfigurationBase
-{
-	friend class ProcessorProvider;
-public:
-	/// constructor & destructor
-	ProcProviderConfig()
-		: ConfigurationBase( "Processor(s)", NULL, "Processor configuration" )	{}
-	~ProcProviderConfig();
+namespace _Wolframe	{
 
-	/// methods
-	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-		    const module::ModulesDirectory* modules );
-	bool check() const;
-	void print( std::ostream& os, size_t indent ) const;
-	void setCanonicalPathes( const std::string& referencePath );
-	const std::list<std::string>& programFiles() const
-	{
-		return m_programFiles;
-	}
-	const std::string& referencePath() const
-	{
-		return m_referencePath;
-	}
+	const char*	applicationName();
+	const Version	applicationVersion();
 
-private:
-	std::string					m_dbLabel;
-	std::list< config::NamedConfiguration* >	m_procConfig;
-	std::list< std::string >			m_programFiles;
-	std::string					m_referencePath;
-};
+namespace config	{
 
-}}//namespace
+	const char*	defaultMainConfig();
+	const char*	defaultUserConfig();
+	const char*	defaultLocalConfig();
+
+	const char*	defaultServiceName();
+#if defined( _WIN32 )
+	const char*	defaultServiceDisplayName();
+	const char*	defaultServiceDescription();
+#endif // defined( _WIN32 )
+} // namespace config
+
+namespace net	{
+	unsigned short	defaultTCPport();
+	unsigned short	defaultSSLport();
+} // namespace net
+} // namespace _Wolframe
+
 #endif
-

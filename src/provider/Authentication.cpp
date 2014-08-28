@@ -40,7 +40,7 @@
 #include "AAAAproviderImpl.hpp"
 #include "logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
-#include "module/moduleDirectory.hpp"
+#include "moduleDirectory.hpp"
 
 namespace _Wolframe {
 namespace AAAA {

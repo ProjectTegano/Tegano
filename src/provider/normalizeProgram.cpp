@@ -32,7 +32,7 @@
 ************************************************************************/
 //\brief Implementation of loading programs for token normalization
 //\file prgbind_normalizeProgram.cpp
-#include "prgbind/normalizeProgram.hpp"
+#include "normalizeProgram.hpp"
 #include "types/customDataNormalizer.hpp"
 #include "types/normalizeFunction.hpp"
 #include "types/variant.hpp"
@@ -40,7 +40,7 @@
 #include "utils/parseUtils.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/fileLineInfo.hpp"
-#include "processor/procProvider.hpp"
+#include "processor/procProviderInterface.hpp"
 #include "logger-v1.hpp"
 #include <string>
 

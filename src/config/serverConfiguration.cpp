@@ -35,9 +35,8 @@
 //
 
 #include "serverConfiguration.hpp"
-#include "server.hpp"
+#include "applicationProperties.hpp"
 #include "config/valueParser.hpp"
-#include "appProperties.hpp"
 #include "logger-v1.hpp"
 #include "types/addressRestriction.hpp"
 #include <boost/algorithm/string.hpp>

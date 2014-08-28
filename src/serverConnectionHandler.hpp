@@ -40,7 +40,7 @@
 #include "cmdbind/protocolHandler.hpp"
 #include "database/database.hpp"
 #include "AAAA/AAAAprovider.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "processor/execContext.hpp"
 
 namespace _Wolframe {

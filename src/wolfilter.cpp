@@ -34,9 +34,9 @@
 #include "wolfilterCommandLine.hpp"
 #include "wolfilterIostreamFilter.hpp"
 #include "wolframe.hpp"
-#include "prgbind/programLibrary.hpp"
 #include "module/moduleInterface.hpp"
-#include "processor/procProvider.hpp"
+#include "prgbind/programLibrary.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include <fstream>
 #include <iostream>

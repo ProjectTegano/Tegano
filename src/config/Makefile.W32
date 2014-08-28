@@ -1,0 +1,62 @@
+TOPDIR = ..\..
+
+SUBDIRS =
+
+!INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
+
+INCLUDE_CXXFLAGS = \
+	/D_WIN32_WINNT=0x504
+
+INCLUDE_DIRS = \
+	/I. \
+	/I$(TOPDIR)\include \
+	/I$(TOPDIR) \
+	/I"$(BOOST_INCLUDE_DIR)"
+
+INCLUDE_LDFLAGS = \
+	$(BOOST_LDFLAGS)
+
+INCLUDE_LIBS = \
+	$(TOPDIR)\src\libwolframe\wolframe.lib \
+	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib \
+	advapi32.lib \
+
+# openssl
+!IFDEF WITH_SSL
+INCLUDE_CXXFLAGS = \
+	$(INCLUDE_CXXFLAGS) /DWITH_SSL
+!ENDIF
+
+
+LOCAL_STATIC_LIB = \
+	wfconfig.lib
+
+LOCAL_STATIC_LIB_OBJS = \
+	serviceConfiguration.obj \
+	loggerConfiguration.obj \
+	bannerConfiguration.obj \
+	serverConfiguration.obj \
+	cmdLineConfiguration.obj \
+	procProviderConfiguration.obj \
+	applicationConfiguration.obj \
+	applicationProperties.obj
+
+CPP_OBJS = \
+	$(LOCAL_STATIC_LIB_OBJS) \
+
+CPP_BINS =
+
+all: $(CPP_OBJS) $(LOCAL_STATIC_LIB)
+
+!INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
+
+$(LOCAL_STATIC_LIB): $(LOCAL_STATIC_LIB_OBJS)
+	$(LINK) /lib /nologo /out:$@ $(STATIC_LDFLAGS) $?
+
+local_all: $(LOCAL_STATIC_LIB)
+
+local_clean:
+
+local_distclean:
+
+local_test:

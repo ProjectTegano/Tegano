@@ -33,7 +33,7 @@
 /// \file moduleLoader.cpp
 
 #include "logger-v1.hpp"
-#include "module/moduleLoader.hpp"
+#include "moduleLoader.hpp"
 #include "utils/fileUtils.hpp"
 
 #if !defined(_WIN32)	// POSIX module loader
