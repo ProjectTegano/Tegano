@@ -24,14 +24,13 @@ INCLUDE_LIBS = \
 DYNAMIC_MODULE = \
 	mod_example_normalize1.dll
 
-CPP_OBJS = \
-	mod_example_normalize1.obj
+CPP_OBJS =
 
 all: $(DYNAMIC_MODULE)
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-$(DYNAMIC_MODULE): $(CPP_OBJS)
+$(DYNAMIC_MODULE): $(CPP_OBJS) mod_example_normalize1.obj
 	$(LINK) /dll /def:ModExampleNormalize1.def /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:

@@ -157,29 +157,5 @@ public:
 	virtual void setPeer( const RemoteEndpointR& remote ) = 0;
 };
 
-} // namespace net
-
-
-struct	HandlerConfiguration;
-namespace module { class ModulesDirectory; }
-
-/// \brief The server main handler
-/// All it should do is to provide connection handlers
-class ServerHandler : private boost::noncopyable
-{
-public:
-	ServerHandler( const HandlerConfiguration* conf,
-		       const module::ModulesDirectory* modules );
-	~ServerHandler();
-
-	/// Create a new connection handler and return a pointer to it
-	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );
-
-private:
-	class ServerHandlerImpl;
-	ServerHandlerImpl *m_impl;
-};
-
-} // namespace _Wolframe
-
-#endif // _CONNECTION_HANDLER_HPP_INCLUDED
+}}// namespace
+#endif

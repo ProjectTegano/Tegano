@@ -38,7 +38,6 @@
 #include "escDlfProtocolHandler.hpp"
 #include "processor/execContext.hpp"
 #include "interfaceProtocolHandler.hpp"
-#include "handlerConfig.hpp"
 #include "logger-v1.hpp"
 #include <stdexcept>
 #include <algorithm>

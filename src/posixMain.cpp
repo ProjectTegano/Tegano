@@ -43,9 +43,11 @@
 #include "appProperties.hpp"
 
 #include "version.hpp"
-#include "wolframedCommandLine.hpp"
-#include "appConfig.hpp"
-#include "standardConfigs.hpp"
+#include "config/cmdLineConfiguration.hpp"
+#include "config/applicationConfiguration.hpp"
+#include "config/loggerConfiguration.hpp"
+#include "config/serviceConfiguration.hpp"
+#include "config/serverConfiguration.hpp"
 #include "server.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
@@ -138,7 +140,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		_Wolframe::ApplicationInfo& appInfo = _Wolframe::ApplicationInfo::instance();
 		appInfo.version( _Wolframe::Version( _Wolframe::applicationVersion() ));
 
-		_Wolframe::config::CmdLineConfig   cmdLineCfg;
+		_Wolframe::config::CmdLineConfiguration   cmdLineCfg;
 		const char *configFile;
 
 		if ( !cmdLineCfg.parse( argc, argv ))	{	// there was an error parsing the command line
@@ -159,12 +161,12 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		}
 
 // if we have to print the version or the help do it and exit
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_VERSION )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_VERSION )	{
 			std::cout << std::endl << _Wolframe::applicationName() << gettext( " version " )
 				  << appInfo.version().toString() << std::endl << std::endl;
 			return _Wolframe::ErrorCode::OK;
 		}
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_HELP )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_HELP )	{
 			std::cout << std::endl << _Wolframe::applicationName() << gettext( " version " )
 				  << appInfo.version().toString() << std::endl;
 			cmdLineCfg.usage( std::cout );
@@ -213,7 +215,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		_Wolframe::log::LogBackend::instance().setConsoleLevel( conf.loggerCfg->stderrLogLevel );
 
 // Check the configuration
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::CHECK_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::CHECK_CONFIG )	{
 			std::cout << _Wolframe::applicationName() << gettext( " version " )
 				  << appInfo.version().toString() << std::endl;
 			if ( conf.check() )	{
@@ -225,7 +227,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 			}
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_CONFIG )	{
 			std::cout << std::endl << _Wolframe::applicationName() << gettext( " version " )
 				  << appInfo.version().toString() << std::endl;
 			conf.print( std::cout );
@@ -233,7 +235,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 			return _Wolframe::ErrorCode::OK;
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::TEST_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::TEST_CONFIG )	{
 			std::cout << "Not implemented yet" << std::endl << std::endl;
 			return _Wolframe::ErrorCode::OK;
 		}
@@ -322,7 +324,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		LOG_NOTICE << "Starting server";
 
 		// Run server in background thread(s).
-		_Wolframe::ServerHandler handler( conf.handlerCfg, &modDir );
+		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &modDir );
 		_Wolframe::net::server s( conf.serverCfg, handler );
 		boost::thread t( boost::bind( &_Wolframe::net::server::run, &s ));
 

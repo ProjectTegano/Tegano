@@ -31,10 +31,10 @@
 
 ************************************************************************/
 //
-// serviceBanner.cpp
+/// \file config/bannerConfiguration.cpp
 //
 
-#include "standardConfigs.hpp"
+#include "bannerConfiguration.hpp"
 #include "config/valueParser.hpp"
 #include "logger-v1.hpp"
 #include "appInfo.hpp"
@@ -48,38 +48,38 @@ namespace _Wolframe {
 namespace config {
 
 
-static ServiceBanner::SignatureTokens strToToken( std::string& str )
+static BannerConfiguration::SignatureTokens strToToken( std::string& str )
 {
 	if ( boost::algorithm::iequals( str, "ProductOnly" ))
-		return ServiceBanner::PRODUCT_NAME;
+		return BannerConfiguration::PRODUCT_NAME;
 	else if ( boost::algorithm::iequals( str, "Major" ))
-		return ServiceBanner::VERSION_MAJOR;
+		return BannerConfiguration::VERSION_MAJOR;
 	else if ( boost::algorithm::iequals( str, "Minor" ))
-		return ServiceBanner::VERSION_MINOR;
+		return BannerConfiguration::VERSION_MINOR;
 	else if ( boost::algorithm::iequals( str, "Revision" ))
-		return ServiceBanner::VERSION_REVISION;
+		return BannerConfiguration::VERSION_REVISION;
 	else if ( boost::algorithm::iequals( str, "Build" ))
-		return ServiceBanner::VERSION_BUILD;
+		return BannerConfiguration::VERSION_BUILD;
 	else if ( boost::algorithm::iequals( str, "OS" ))
-		return ServiceBanner::PRODUCT_OS;
+		return BannerConfiguration::PRODUCT_OS;
 	else if ( boost::algorithm::iequals( str, "None" ))
-		return ServiceBanner::NONE;
-	return ServiceBanner::UNDEFINED;
+		return BannerConfiguration::NONE;
+	return BannerConfiguration::UNDEFINED;
 }
 
 
 /// Service signature parser
-bool ServiceBanner::parse( const config::ConfigurationNode& pt, const std::string& node,
+bool BannerConfiguration::parse( const config::ConfigurationNode& pt, const std::string& node,
 			   const module::ModulesDirectory* /*modules*/ )
 {
 	if ( boost::algorithm::iequals( node, "ServerTokens" ))	{
-		bool tokensDefined = ( m_tokens != ServiceBanner::UNDEFINED );
+		bool tokensDefined = ( m_tokens != BannerConfiguration::UNDEFINED );
 		std::string	val;
 		if ( !Parser::getValue( logPrefix().c_str(), node.c_str(), pt.data(),
 					val, &tokensDefined ))
 			return false;
 		m_tokens = strToToken( val );
-		if ( m_tokens == ServiceBanner::UNDEFINED )	{
+		if ( m_tokens == BannerConfiguration::UNDEFINED )	{
 			LOG_ERROR << logPrefix() << "Unknown option '" << val << "' for " << node;
 			return false;
 		}
@@ -100,7 +100,7 @@ bool ServiceBanner::parse( const config::ConfigurationNode& pt, const std::strin
 }
 
 
-bool ServiceBanner::check() const
+bool BannerConfiguration::check() const
 {
 	switch ( m_tokens )	{
 	case PRODUCT_NAME:
@@ -113,14 +113,14 @@ bool ServiceBanner::check() const
 	case UNDEFINED:
 		return true;
 	default:
-		LOG_ERROR << "Unknown value for ServiceBanner::tokens: " << (int)m_tokens;
+		LOG_ERROR << "Unknown value for BannerConfiguration::tokens: " << (int)m_tokens;
 		return false;
 	}
 	// for stupid compilers
 }
 
 
-void ServiceBanner::print( std::ostream& os, size_t /* indent */ ) const
+void BannerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
 	os << sectionName() << std::endl;
 	os << "   Service banner: ";
@@ -140,7 +140,7 @@ void ServiceBanner::print( std::ostream& os, size_t /* indent */ ) const
 }
 
 
-std::string ServiceBanner::toString() const
+std::string BannerConfiguration::toString() const
 {
 	std::string	banner;
 

@@ -30,63 +30,54 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// server.hpp
-//
+/// \file config/serviceConfiguration.hpp
+/// \brief Service configuration structure
 
-#ifndef _NETWORK_SERVER_HPP_INCLUDED
-#define _NETWORK_SERVER_HPP_INCLUDED
-
-#include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
-
-#include <list>
-
-#include "system/serverEndpoint.hpp"
-#include "acceptor.hpp"
-#include "system/connectionHandler.hpp"	// for server handler
+#ifndef _Wolframe_CONFIG_SERVICE_HPP_INCLUDED
+#define _Wolframe_CONFIG_SERVICE_HPP_INCLUDED
 #include "config/configurationBase.hpp"
+#include "config/configurationTree.hpp"
+#include <string>
 
 namespace _Wolframe {
 namespace config {
-class ServerConfiguration;
-}
-namespace net	{
 
-class server: private boost::noncopyable
+/// \class ServiceConfiguration
+/// \brief Daemon / service configuration
+class ServiceConfiguration : public _Wolframe::config::ConfigurationBase
 {
-	/// public interface
 public:
-	/// Construct the server
-	explicit server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler );
+#if !defined( _WIN32 )
+	// daemon configuration
+	std::string		user;
+	std::string		group;
+	std::string		pidFile;
+#endif
+#if defined( _WIN32 )
+	// Windows service configuration
+	std::string		serviceName;
+	std::string		serviceDisplayName;
+	std::string		serviceDescription;
+#endif // !defined( _WIN32 )
 
-	/// Destruct the server
-	~server();
+	/// constructor
+	ServiceConfiguration();
 
-	/// Run the server's io_service loop.
-	void run();
+	/// methods
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModulesDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
 
-	/// Stop the server. Outstanding asynchronous operations will be completed.
-	void stop();
+//	Not implemented yet, inherited from base for the time being
+//	bool test() const;
 
-	/// Abort the server. Outstanding asynchronous operations will be aborted.
-	void abort();
-
-private:
-	/// The number of threads that will call io_service::run().
-	std::size_t		m_threadPoolSize;
-
-	/// The io_service(s) used to perform asynchronous operations.
-	boost::asio::io_service	m_IOservice;
-
-	/// The list(s) of connection acceptors.
-	std::list< acceptor* >	m_acceptors;
-#ifdef WITH_SSL
-	std::list< SSLacceptor* > m_SSLacceptors;
-#endif // WITH_SSL
-	GlobalConnectionList	m_globalList;
+#if !defined( _WIN32 )
+	void setCanonicalPathes( const std::string& referencePath );
+	void override( const std::string& user, const std::string& group, const std::string& pidFile );
+#endif // !defined( _WIN32 )
 };
 
-}} // namespace _Wolframe::net
+}}//namespace
+#endif
 
-#endif // _NETWORK_SERVER_HPP_INCLUDED

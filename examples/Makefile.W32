@@ -1,14 +1,17 @@
 TOPDIR = ..
 
-SUBDIRS = echo pecho tproc modules
+SUBDIRS = modules
+# DISABLED echo pecho tproc 
 
 !IFDEF WITH_TEXTWOLF
 SUBDIRS = \
-	$(SUBDIRS) iproc
+	$(SUBDIRS)
+# DISABLED iproc
 !ENDIF
 !IFDEF WITH_LUA
 SUBDIRS = \
-	$(SUBDIRS) lua
+	$(SUBDIRS)
+# DISABLED lua
 !ENDIF
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk

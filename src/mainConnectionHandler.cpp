@@ -33,7 +33,7 @@
 ///\file mainConnectionHandler.cpp
 #include "mainConnectionHandler.hpp"
 #include "processor/execContext.hpp"
-#include "handlerConfig.hpp"
+#include "serverHandler.hpp"
 #include "logger-v1.hpp"
 #include <stdexcept>
 #include <algorithm>

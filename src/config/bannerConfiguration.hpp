@@ -30,63 +30,55 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// server.hpp
-//
+/// \file config/bannerConfiguration.hpp
+/// \brief Banner configuration structure
 
-#ifndef _NETWORK_SERVER_HPP_INCLUDED
-#define _NETWORK_SERVER_HPP_INCLUDED
+#ifndef _Wolframe_CONFIG_BANNER_HPP_INCLUDED
+#define _Wolframe_CONFIG_BANNER_HPP_INCLUDED
 
-#include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
-
-#include <list>
-
-#include "system/serverEndpoint.hpp"
-#include "acceptor.hpp"
-#include "system/connectionHandler.hpp"	// for server handler
 #include "config/configurationBase.hpp"
+#include "config/configurationTree.hpp"
+#include <string>
 
-namespace _Wolframe {
-namespace config {
-class ServerConfiguration;
-}
-namespace net	{
+namespace _Wolframe	{
+namespace config	{
 
-class server: private boost::noncopyable
+/// \class BannerConfiguration
+/// \brief Service signature configuration
+class BannerConfiguration : public _Wolframe::config::ConfigurationBase
 {
-	/// public interface
+	friend class ConfigurationParser;
 public:
-	/// Construct the server
-	explicit server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler );
+	enum SignatureTokens	{
+		PRODUCT_NAME,
+		VERSION_MAJOR,
+		VERSION_MINOR,
+		VERSION_REVISION,
+		VERSION_BUILD,
+		PRODUCT_OS,
+		NONE,
+		UNDEFINED
+	};
 
-	/// Destruct the server
-	~server();
+	/// \brief Constructor
+	BannerConfiguration() : ConfigurationBase( "Service Banner", NULL, "Service banner" ),
+		m_tokens( UNDEFINED )	{}
+	/// \brief Get the banner as string
+	std::string toString() const;
 
-	/// Run the server's io_service loop.
-	void run();
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModulesDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
 
-	/// Stop the server. Outstanding asynchronous operations will be completed.
-	void stop();
-
-	/// Abort the server. Outstanding asynchronous operations will be aborted.
-	void abort();
-
-private:
-	/// The number of threads that will call io_service::run().
-	std::size_t		m_threadPoolSize;
-
-	/// The io_service(s) used to perform asynchronous operations.
-	boost::asio::io_service	m_IOservice;
-
-	/// The list(s) of connection acceptors.
-	std::list< acceptor* >	m_acceptors;
-#ifdef WITH_SSL
-	std::list< SSLacceptor* > m_SSLacceptors;
-#endif // WITH_SSL
-	GlobalConnectionList	m_globalList;
+//	Not implemented yet, inherited from base for the time being
+//	bool test() const;
+protected:
+	/// data members
+	SignatureTokens	m_tokens;
+	std::string	m_serverSignature;
 };
 
-}} // namespace _Wolframe::net
+}}//namespace
+#endif
 
-#endif // _NETWORK_SERVER_HPP_INCLUDED

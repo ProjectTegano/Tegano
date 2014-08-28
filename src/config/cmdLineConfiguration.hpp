@@ -31,62 +31,58 @@
 
 ************************************************************************/
 //
-// server.hpp
+// cmdLineConfiguration.hpp
 //
 
-#ifndef _NETWORK_SERVER_HPP_INCLUDED
-#define _NETWORK_SERVER_HPP_INCLUDED
+#ifndef _Wolframe_APPSERVER_COMMANDLINE_HPP_INCLUDED
+#define _Wolframe_APPSERVER_COMMANDLINE_HPP_INCLUDED
 
-#include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
+#include "logger/logLevel.hpp"
+#include "config/applicationConfiguration.hpp"
 
-#include <list>
+#include <string>
+#include <boost/program_options.hpp>
 
-#include "system/serverEndpoint.hpp"
-#include "acceptor.hpp"
-#include "system/connectionHandler.hpp"	// for server handler
-#include "config/configurationBase.hpp"
+namespace _Wolframe	{
+namespace config	{
 
-namespace _Wolframe {
-namespace config {
-class ServerConfiguration;
-}
-namespace net	{
-
-class server: private boost::noncopyable
-{
-	/// public interface
+class CmdLineConfiguration {
 public:
-	/// Construct the server
-	explicit server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler );
+	enum Command_t	{
+		PRINT_HELP,
+		PRINT_VERSION,
+		CHECK_CONFIG,
+		TEST_CONFIG,
+		PRINT_CONFIG,
+#if defined(_WIN32)
+		INSTALL_SERVICE,
+		REMOVE_SERVICE,
+		RUN_SERVICE,
+#endif
+		DEFAULT
+	};
 
-	/// Destruct the server
-	~server();
-
-	/// Run the server's io_service loop.
-	void run();
-
-	/// Stop the server. Outstanding asynchronous operations will be completed.
-	void stop();
-
-	/// Abort the server. Outstanding asynchronous operations will be aborted.
-	void abort();
-
+	Command_t	command;
+#if !defined(_WIN32)
+	bool		foreground;
+	std::string	user;
+	std::string	group;
+	std::string	pidFile;
+#endif
+	log::LogLevel::Level				debugLevel;
+	std::string					cfgFile;
+	ApplicationConfiguration::ConfigFileType	cfgType;
+	bool						useLogConfig;
 private:
-	/// The number of threads that will call io_service::run().
-	std::size_t		m_threadPoolSize;
+	std::string					errMsg_;
+	boost::program_options::options_description	options_;
 
-	/// The io_service(s) used to perform asynchronous operations.
-	boost::asio::io_service	m_IOservice;
-
-	/// The list(s) of connection acceptors.
-	std::list< acceptor* >	m_acceptors;
-#ifdef WITH_SSL
-	std::list< SSLacceptor* > m_SSLacceptors;
-#endif // WITH_SSL
-	GlobalConnectionList	m_globalList;
+public:
+	CmdLineConfiguration();
+	bool parse( int argc, char* argv[] );
+	std::string errMsg( void )		{ return errMsg_; }
+	void usage( std::ostream& os ) const	{ options_.print( os ); }
 };
 
-}} // namespace _Wolframe::net
-
-#endif // _NETWORK_SERVER_HPP_INCLUDED
+}}//namespace
+#endif

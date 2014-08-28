@@ -30,59 +30,49 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// wolframedCommandLine.hpp
-//
+/// \file serverHandler.hpp
 
-#ifndef _WOLFRAMED_COMMANDLINE_HPP_INCLUDED
-#define _WOLFRAMED_COMMANDLINE_HPP_INCLUDED
+#ifndef _Wolframe_SERVER_HANDLER_HPP_INCLUDED
+#define _Wolframe_SERVER_HANDLER_HPP_INCLUDED
 
-#include "logger/logLevel.hpp"
-#include "appConfig.hpp"
+#include "serverConnectionHandler.hpp"
+#include "system/connectionHandler.hpp"
+#include "processor/execContext.hpp"
+#include "cmdbind/protocolHandler.hpp"
+#include "database/database.hpp"
+#include "processor/execContext.hpp"
+#include "mainConnectionHandler.hpp"
+#include "config/bannerConfiguration.hpp"
+#include "AAAA/AAAAprovider.hpp"
+#include "processor/procProvider.hpp"
 
-#include <string>
-#include <boost/program_options.hpp>
+namespace _Wolframe {
 
-namespace _Wolframe	{
-namespace config	{
-
-struct CmdLineConfig	{
-	enum Command_t	{
-		PRINT_HELP,
-		PRINT_VERSION,
-		CHECK_CONFIG,
-		TEST_CONFIG,
-		PRINT_CONFIG,
-#if defined(_WIN32)
-		INSTALL_SERVICE,
-		REMOVE_SERVICE,
-		RUN_SERVICE,
-#endif
-		DEFAULT
-	};
-
-	Command_t	command;
-#if !defined(_WIN32)
-	bool		foreground;
-	std::string	user;
-	std::string	group;
-	std::string	pidFile;
-#endif
-	log::LogLevel::Level				debugLevel;
-	std::string					cfgFile;
-	ApplicationConfiguration::ConfigFileType	cfgType;
-	bool						useLogConfig;
-private:
-	std::string					errMsg_;
-	boost::program_options::options_description	options_;
-
+/// \brief The server handler container
+class ServerHandler
+{
 public:
-	CmdLineConfig();
-	bool parse( int argc, char* argv[] );
-	std::string errMsg( void )		{ return errMsg_; }
-	void usage( std::ostream& os ) const	{ options_.print( os ); }
+	ServerHandler( const proc::ProcProviderConfig* pconf,
+			const AAAA::AAAAconfiguration* aconf,
+			const db::DBproviderConfig* dconf,
+			const config::BannerConfiguration* bconf,
+			const module::ModulesDirectory* modules);
+	~ServerHandler();
+	
+	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );
+
+	const std::string& banner() const			{ return m_banner; }
+	const db::DatabaseProvider* dbProvider() const		{ return &m_db; }
+	const AAAA::AAAAprovider* aaaaProvider() const		{ return &m_aaaa; }
+	const proc::ProcessorProvider* procProvider() const	{ return &m_proc; }
+
+private:
+	const std::string		m_banner;
+	db::DatabaseProvider		m_db;
+	AAAA::AAAAprovider		m_aaaa;
+	prgbind::ProgramLibrary		m_prglib;
+	proc::ProcessorProvider		m_proc;
 };
 
-}} // namespace _Wolframe::config
-
-#endif // _COMMANDLINE_HPP_INCLUDED
+} // namespace _Wolframe
+#endif

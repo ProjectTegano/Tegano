@@ -30,12 +30,10 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// wolframeHandler.hpp - wolframe main handler
-//
+/// \file serverConnectionHandler.hpp
 
-#ifndef _Wolframe_HANDLER_HPP_INCLUDED
-#define _Wolframe_HANDLER_HPP_INCLUDED
+#ifndef _Wolframe_SERVER_CONNECTION_HANDLER_HPP_INCLUDED
+#define _Wolframe_SERVER_CONNECTION_HANDLER_HPP_INCLUDED
 
 #include "system/connectionHandler.hpp"
 #include "processor/execContext.hpp"
@@ -44,38 +42,17 @@
 #include "AAAA/AAAAprovider.hpp"
 #include "processor/procProvider.hpp"
 #include "processor/execContext.hpp"
-#include "mainConnectionHandler.hpp"
 
 namespace _Wolframe {
 
-/// The global server handler structure (global context)
-class WolframeHandler
-{
-public:
-	WolframeHandler( const HandlerConfiguration* conf,
-			 const module::ModulesDirectory* modules );
-	~WolframeHandler();
-
-	const std::string& banner() const		{ return m_banner; }
-	const db::DatabaseProvider& db() const		{ return m_db; }
-	const AAAA::AAAAprovider& aaaa() const		{ return m_aaaa; }
-	const proc::ProcessorProvider& proc() const	{ return m_proc; }
-
-private:
-	const std::string		m_banner;
-	db::DatabaseProvider		m_db;
-	AAAA::AAAAprovider		m_aaaa;
-	prgbind::ProgramLibrary		m_prglib;
-	proc::ProcessorProvider		m_proc;
-};
-
+class ServerHandler;
 
 /// The connection handler
-class wolframeConnection : public net::ConnectionHandler
+class ServerConnectionHandler : public net::ConnectionHandler
 {
 public:
-	wolframeConnection( const WolframeHandler& context, const net::LocalEndpointR& local );
-	~wolframeConnection();
+	ServerConnectionHandler( const ServerHandler* context, const net::LocalEndpointR& local );
+	~ServerConnectionHandler();
 
 	void setPeer( const net::RemoteEndpointR& remote );
 
@@ -112,7 +89,7 @@ private:
 	}
 
 	/// Back link to global context
-	const WolframeHandler&		m_globalCtx;
+	const ServerHandler*		m_globalCtx;
 
 	AAAA::Authenticator*		m_authentication;
 	AAAA::Authorizer*		m_authorization;
@@ -139,18 +116,5 @@ private:
 	cmdbind::ProtocolHandlerR	m_protocolHandler;	///< protocol handler
 };
 
-/// The server handler container
-class ServerHandler::ServerHandlerImpl
-{
-public:
-	ServerHandlerImpl( const HandlerConfiguration* conf,
-			   const module::ModulesDirectory* modules );
-	~ServerHandlerImpl();
-	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );
-private:
-	WolframeHandler	m_globalContext;
-};
-
 } // namespace _Wolframe
-
-#endif // _Wolframe_HANDLER_HPP_INCLUDED
+#endif

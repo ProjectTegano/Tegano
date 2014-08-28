@@ -34,7 +34,7 @@
 // daemon / service configuration
 //
 
-#include "standardConfigs.hpp"
+#include "serviceConfiguration.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
 #include "appProperties.hpp"

@@ -34,23 +34,19 @@
 // server configuration
 //
 
-#include "standardConfigs.hpp"
+#include "serverConfiguration.hpp"
 #include "server.hpp"
-#include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"
 #include "appProperties.hpp"
 #include "logger-v1.hpp"
 #include "types/addressRestriction.hpp"
-#define BOOST_FILESYSTEM_VERSION 3
-#include <boost/filesystem.hpp>
-#include "utils/fileUtils.hpp"
 #include <boost/algorithm/string.hpp>
 
 #include <string>
 #include <ostream>
 
-namespace _Wolframe {
-namespace net {
+using namespace _Wolframe;
+using namespace _Wolframe::config;
 
 static const unsigned short DEFAULT_NOF_THREADS = 4;
 
@@ -212,7 +208,7 @@ struct ConnectionProperties
 
 
 /// Parse the configuration
-bool Configuration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
+bool ServerConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 			   const module::ModulesDirectory* /*modules*/ )
 {
 	bool retVal = true;
@@ -342,7 +338,7 @@ bool Configuration::parse( const config::ConfigurationNode& pt, const std::strin
 
 
 // Constructor
-Configuration::Configuration()
+ServerConfiguration::ServerConfiguration()
 	: ConfigurationBase( "Network Server", NULL, "Network server configuration" )
 {
 	threads = 0;
@@ -351,7 +347,7 @@ Configuration::Configuration()
 
 
 // Server configuration functions
-void Configuration::print( std::ostream& os, size_t /* indent */ ) const
+void ServerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
 	os<< sectionName() << std::endl;
 	os << "   Number of client threads: " << threads << std::endl;
@@ -401,7 +397,7 @@ void Configuration::print( std::ostream& os, size_t /* indent */ ) const
 }
 
 /// Check if the server configuration makes sense
-bool Configuration::check() const
+bool ServerConfiguration::check() const
 {
 	bool correct = true;
 
@@ -442,15 +438,14 @@ bool Configuration::check() const
 
 
 #ifdef WITH_SSL
-void Configuration::setCanonicalPathes( const std::string& refPath )
+void ServerConfiguration::setCanonicalPathes( const std::string& refPath )
 {
 	for ( std::list<net::ServerSSLendpoint>::iterator it = SSLaddress.begin(); it != SSLaddress.end(); ++it )
 		it->setAbsolutePath( refPath );
 }
 #else
-void Configuration::setCanonicalPathes( const std::string& /* refPath */ )
+void ServerConfiguration::setCanonicalPathes( const std::string& /* refPath */ )
 {
 }
 #endif // WITH_SSL
 
-}} // namespace _Wolframe::net

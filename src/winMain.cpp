@@ -45,7 +45,11 @@
 #include "version.hpp"
 #include "wolframedCommandLine.hpp"
 #include "appconfig.hpp"
-#include "standardConfigs.hpp"
+#include "config/cmdLineConfiguration.hpp"
+#include "config/applicationConfiguration.hpp"
+#include "config/loggerConfiguration.hpp"
+#include "config/serviceConfiguration.hpp"
+#include "config/serverConfiguration.hpp"
 #include "server.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
@@ -292,8 +296,8 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		_Wolframe::log::LogBackend::instance().setWinDebugLevel( winDbgLevel );
 
 // read configuration (from the location passed in the command line arguments of the main, not the service_main)
-		_Wolframe::config::CmdLineConfig cmdLineCfg; // empty for a service with --service
-		cmdLineCfg.command = _Wolframe::config::CmdLineConfig::RUN_SERVICE;
+		_Wolframe::config::CmdLineConfiguration cmdLineCfg; // empty for a service with --service
+		cmdLineCfg.command = _Wolframe::config::CmdLineConfiguration::RUN_SERVICE;
 		const char *configFile = serviceConfig.c_str( ); // configuration comes from main thread
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
@@ -348,7 +352,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		LOG_NOTICE << "Starting service";
 
 // run server in background thread(s).
-		_Wolframe::ServerHandler handler( conf.handlerCfg, &modDir );
+		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &modDir );
 		_Wolframe::net::server s( conf.serverCfg, handler );
 		boost::thread t( boost::bind( &_Wolframe::net::server::run, &s ));
 
@@ -405,7 +409,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 		_Wolframe::ApplicationInfo& appInfo = _Wolframe::ApplicationInfo::instance();
 		appInfo.version( _Wolframe::Version( _Wolframe::applicationVersion() ));
 
-		_Wolframe::config::CmdLineConfig	cmdLineCfg;
+		_Wolframe::config::CmdLineConfiguration	cmdLineCfg;
 		const char		*configFile = NULL;
 
 		if ( !cmdLineCfg.parse( argc, argv ))	{	// there was an error parsing the command line
@@ -429,12 +433,12 @@ int _Wolframe_winMain( int argc, char* argv[] )
 			LOG_WARNING << cmdLineCfg.errMsg();
 
 // if we have to print the version or the help do it and exit
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_VERSION )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_VERSION )	{
 			std::cout << _Wolframe::applicationName() << " version "
 				  << appInfo.version().toString() << std::endl << std::endl;
 			return _Wolframe::ErrorCode::OK;
 		}
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_HELP )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_HELP )	{
 			cmdLineCfg.usage( std::cout );
 			std::cout << std::endl;
 			return _Wolframe::ErrorCode::OK;
@@ -470,7 +474,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 		conf.finalize( cmdLineCfg );
 
 // Check the configuration
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::CHECK_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::CHECK_CONFIG )	{
 			if ( conf.check() )	{
 				std::cout << "Configuration OK" << std::endl << std::endl;
 				return _Wolframe::ErrorCode::OK;
@@ -480,32 +484,32 @@ int _Wolframe_winMain( int argc, char* argv[] )
 			}
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::PRINT_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::PRINT_CONFIG )	{
 			conf.print( std::cout );
 			std::cout << std::endl;
 			return _Wolframe::ErrorCode::OK;
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::TEST_CONFIG )	{
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::TEST_CONFIG )	{
 			std::cout << "Not implemented yet" << std::endl << std::endl;
 			return _Wolframe::ErrorCode::OK;
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::INSTALL_SERVICE ) {
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::INSTALL_SERVICE ) {
 			if( !registerEventlog( conf ) ) return _Wolframe::ErrorCode::FAILURE;
 			if( !installAsService( conf ) ) return _Wolframe::ErrorCode::FAILURE;
 			LOG_INFO << "Installed as Windows service '" << conf.serviceCfg->serviceName.c_str( ) << "'";
 			return _Wolframe::ErrorCode::OK;
 		}
 
-		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::REMOVE_SERVICE ) {
+		if ( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::REMOVE_SERVICE ) {
 			if( !removeAsService( conf ) ) return _Wolframe::ErrorCode::FAILURE;
 			(void)deregisterEventlog( conf );
 			LOG_INFO << "Removed as Windows service '" << conf.serviceCfg->serviceName.c_str( ) << "'";
 			return _Wolframe::ErrorCode::OK;
 		}
 
-		if( cmdLineCfg.command == _Wolframe::config::CmdLineConfig::RUN_SERVICE ) {
+		if( cmdLineCfg.command == _Wolframe::config::CmdLineConfiguration::RUN_SERVICE ) {
 			// if started as service we dispatch the service thread now
 			SERVICE_TABLE_ENTRY dispatch_table[2] =
 				{ { const_cast<char *>( conf.serviceCfg->serviceName.c_str( ) ), service_main },

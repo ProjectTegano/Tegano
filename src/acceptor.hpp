@@ -47,6 +47,7 @@
 #include <string>
 
 #include "connection.hpp"
+#include "serverHandler.hpp"
 #include "system/connectionHandler.hpp"
 #include "types/addressRestriction.hpp"
 
@@ -64,7 +65,7 @@ public:
 			   const net::LocalEndpointConfig& localEndpointConfig_,
 			   const types::AddressRestriction& addressRestriction_,
 			   GlobalConnectionList& globalList,
-			   _Wolframe::ServerHandler& srvHandler );
+			   ServerHandler& srvHandler );
 
 	/// Destructor
 	~acceptor();

@@ -47,9 +47,6 @@ INCLUDE_LIBS += \
 
 endif
 
-LOCAL_STATIC_LIB = \
-	libwolframed.a
-
 PROVIDER_OBJS = \
 	provider/Authentication.o \
 	provider/Authorization.o \
@@ -66,10 +63,19 @@ PROGRAM_OBJS = \
 	prgbind/ddlProgram.o \
 	prgbind/programLibrary.o
 
-LOCAL_STATIC_LIB_OBJS = \
+CONFIG_OBJS = \
+	config/serviceConfiguration.o \
+	config/loggerConfiguration.o \
+	config/bannerConfiguration.o \
+	config/serverConfiguration.o \
+	config/cmdLineConfiguration.o \
+	config/applicationConfiguration.o
+
+CPP_OBJS = \
 	$(PROVIDER_OBJS) \
 	$(PROGRAM_OBJS) \
-	wolframedCommandLine.o \
+	$(CONFIG_OBJS) \
+	appProperties.o \
 	wolfilterCommandLine.o \
 	wolfilterIostreamFilter.o \
 	wolfwizardCommandLine.o \
@@ -77,30 +83,20 @@ LOCAL_STATIC_LIB_OBJS = \
 	contentOnlyProtocolHandler.o \
 	moduleDirectory.o \
 	moduleLoader.o \
-	serviceConfig.o \
-	serviceBanner.o \
-	appConfig.o \
 	jobScheduler.o \
 	acceptor.o \
 	serverEndpoint.o \
 	connection.o \
-	serverConfig.o \
-	loggerConfig.o \
-	server.o
+	server.o \
+	serverConnectionHandler.o \
+	serverHandler.o \
+	posixMain.o
 
 #SSL
 ifeq ($(WITH_SSL),1)
-LOCAL_STATIC_LIB_OBJS += \
+CPP_OBJS += \
 	SSLcertificateInfo.o
 endif
-
-
-CPP_OBJS = \
-	appProperties.o \
-	appConfigDefinition.o \
-	$(LOCAL_STATIC_LIB_OBJS) \
-	wolframeHandler.o \
-	posixMain.o
 
 CPP_BINS = \
 	wolframed$(EXE) \

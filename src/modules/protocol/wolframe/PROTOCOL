@@ -1,0 +1,26 @@
+State		Client				Server
+-----------------------------------------------------------------------------------
+						<----	Greeting
+						<----	OK
+		AUTH				---->
+						<----	MECHS &lt;list of mechs&gt;
+[CONN]
+		MECH &lt;mech&gt;		---->
+						<----	OK
+		[Authentication with mech]
+						<----   OK/ERR
+		if ERR goto [CONN]
+[AUTH]
+		[Password change subprotocol if enabled]
+[REQ]
+		REQUEST &lt;command prefix&gt;	---->
+		&lt;request content&gt;
+					<----	ANSWER/ERR
+if ERR goto [REQ]
+					<----	&lt;answer content&gt;
+					<----	OK/ERR
+goto [REQ]
+
+
+
+

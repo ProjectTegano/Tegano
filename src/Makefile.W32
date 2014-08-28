@@ -47,10 +47,6 @@ INCLUDE_LIBS = \
 
 !ENDIF
 
-
-LOCAL_STATIC_LIB = \
-	wolframe.lib
-
 PROVIDER_OBJS = \
 	provider\Authentication.obj \
 	provider\Authorization.obj \
@@ -67,10 +63,18 @@ PROGRAM_OBJS = \
 	prgbind\ddlProgram.obj \
 	prgbind\programLibrary.obj
 
-LOCAL_STATIC_LIB_OBJS = \
+CONFIG_OBJS = \
+	config\serviceConfiguration.obj \
+	config\loggerConfiguration.obj \
+	config\bannerConfiguration.obj \
+	config\serverConfiguration.obj \
+	config\cmdLineConfiguration.obj \
+	config\applicationConfiguration.obj
+
+CPP_OBJS = \
 	$(PROVIDER_OBJS) \
 	$(PROGRAM_OBJS) \
-	wolframedCommandLine.obj \
+	$(CONFIG_OBJS) \
 	wolfilterCommandLine.obj \
 	wolfilterIostreamFilter.obj \
 	wolfwizardCommandLine.obj \
@@ -78,27 +82,19 @@ LOCAL_STATIC_LIB_OBJS = \
 	contentOnlyProtocolHandler.obj \
 	moduleDirectory.obj \
 	moduleLoader.obj \
-	serviceConfig.obj \
-	serviceBanner.obj \
-	appConfig.obj \
 	jobScheduler.obj \
 	acceptor.obj \
 	connection.obj \
-	serverConfig.obj \
-	loggerConfig.obj \
-	server.obj
+	server.obj \
+	appProperties.obj \
+	serverConnectionHandler.obj \
+	serverHandler.obj \
+	winMain.obj
 
 !IFDEF WITH_SSL
-LOCAL_STATIC_LIB_OBJS = \
-	$(LOCAL_STATIC_LIB_OBJS) serverEndpoint.obj SSLcertificateInfo.obj
-!ENDIF
-
 CPP_OBJS = \
-	appProperties.obj \
-	appConfigDefinition.obj \
-	$(LOCAL_STATIC_LIB_OBJS) \
-	wolframeHandler.obj \
-	winMain.obj
+	$(CPP_OBJS) serverEndpoint.obj SSLcertificateInfo.obj
+!ENDIF
 
 CPP_BINS = \
 	wolframed.exe \

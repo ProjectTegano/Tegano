@@ -30,63 +30,63 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// server.hpp
-//
+/// \file config/loggerConfiguration.hpp
+/// \brief Logger configuration structure
 
-#ifndef _NETWORK_SERVER_HPP_INCLUDED
-#define _NETWORK_SERVER_HPP_INCLUDED
+#ifndef _Wolframe_CONFIG_LOGGER_HPP_INCLUDED
+#define _Wolframe_CONFIG_LOGGER_HPP_INCLUDED
 
-#include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
-
-#include <list>
-
-#include "system/serverEndpoint.hpp"
-#include "acceptor.hpp"
-#include "system/connectionHandler.hpp"	// for server handler
 #include "config/configurationBase.hpp"
+#include "config/configurationTree.hpp"
+#include "logger/logLevel.hpp"
+#include "logger/logSyslogFacility.hpp"
+
+#include <string>
+#include <list>
 
 namespace _Wolframe {
 namespace config {
-class ServerConfiguration;
-}
-namespace net	{
 
-class server: private boost::noncopyable
+/// \class LoggerConfiguration
+/// \brief Logger configuration
+class LoggerConfiguration : public _Wolframe::config::ConfigurationBase
 {
-	/// public interface
 public:
-	/// Construct the server
-	explicit server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler );
+	bool			logToStderr;
+	log::LogLevel::Level	stderrLogLevel;
 
-	/// Destruct the server
-	~server();
+	bool			logToFile;
+	std::string		logFile;
+	log::LogLevel::Level	logFileLogLevel;
+	std::string		logFileIdent;
+	bool			logToSyslog;
+	log::SyslogFacility::Facility syslogFacility;
+	log::LogLevel::Level	syslogLogLevel;
+	std::string		syslogIdent;
+#if defined( _WIN32 )
+	bool			logToEventlog;
+	std::string		eventlogLogName;
+	std::string		eventlogSource;
+	log::LogLevel::Level eventlogLogLevel;
+#endif // defined( _WIN32 )
 
-	/// Run the server's io_service loop.
-	void run();
+	/// constructor
+	LoggerConfiguration();
 
-	/// Stop the server. Outstanding asynchronous operations will be completed.
-	void stop();
+	/// methods
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModulesDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
 
-	/// Abort the server. Outstanding asynchronous operations will be aborted.
-	void abort();
+	void setCanonicalPathes( const std::string& referencePath );
 
-private:
-	/// The number of threads that will call io_service::run().
-	std::size_t		m_threadPoolSize;
+//	Not implemented yet, inherited from base for the time being
+//	bool test() const;
 
-	/// The io_service(s) used to perform asynchronous operations.
-	boost::asio::io_service	m_IOservice;
-
-	/// The list(s) of connection acceptors.
-	std::list< acceptor* >	m_acceptors;
-#ifdef WITH_SSL
-	std::list< SSLacceptor* > m_SSLacceptors;
-#endif // WITH_SSL
-	GlobalConnectionList	m_globalList;
+	void foreground( log::LogLevel::Level debugLevel, bool useConfig );
 };
 
-}} // namespace _Wolframe::net
+}}//namespace
+#endif
 
-#endif // _NETWORK_SERVER_HPP_INCLUDED

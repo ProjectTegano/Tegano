@@ -30,11 +30,9 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// wolframedCommandLine.cpp
-//
+/// \brief cmdLineConfiguration.cpp
 
-#include "wolframedCommandLine.hpp"
+#include "config/cmdLineConfiguration.hpp"
 
 #include <boost/program_options.hpp>
 #include <string>
@@ -43,14 +41,14 @@
 
 namespace prgOpts = boost::program_options;
 
-namespace _Wolframe {
-namespace config {
+using namespace _Wolframe;
+using namespace _Wolframe::config;
 
 // Aba: if we set the default level INFO, we can't react later in the code..
 // The console logger has a default level, which is overwritten by the config
 static const log::LogLevel::Level DEFAULT_DEBUG_LEVEL = log::LogLevel::LOGLEVEL_UNDEFINED;
 
-CmdLineConfig::CmdLineConfig()
+CmdLineConfiguration::CmdLineConfiguration()
 {
 	options_.add_options()
 			// Commands
@@ -94,7 +92,7 @@ CmdLineConfig::CmdLineConfig()
 	debugLevel = DEFAULT_DEBUG_LEVEL;
 }
 
-bool CmdLineConfig::parse( int argc, char* argv[] )
+bool CmdLineConfiguration::parse( int argc, char* argv[] )
 {
 	try	{
 		prgOpts::variables_map	clMap;
@@ -246,5 +244,4 @@ bool CmdLineConfig::parse( int argc, char* argv[] )
 	}
 }
 
-}} // namespace _Wolframe::config
 

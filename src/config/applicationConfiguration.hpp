@@ -30,46 +30,52 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appConfig.hpp
+/// \file applicationConfiguration.hpp
 /// \brief Application configuration
 
-#ifndef _APP_CONFIG_HPP_INCLUDED
-#define _APP_CONFIG_HPP_INCLUDED
+#ifndef _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
+#define _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
 
 #include "config/configurationBase.hpp"
+#include "config/bannerConfiguration.hpp"
 #include <cstddef>
 #include <string>
 #include <map>
 #include <vector>
 
 namespace _Wolframe {
+namespace db {
+class DBproviderConfig;
+}
+namespace AAAA {
+class AAAAconfiguration;
+}
+namespace proc {
+class ProcProviderConfig;
+}
+namespace config {
 
 // forward declarations for configuration elements
-namespace net { struct Configuration;	}
-namespace log { struct LoggerConfiguration;	}
-struct HandlerConfiguration;
+class ServerConfiguration;
+class ServiceConfiguration;
+class LoggerConfiguration;
+class BannerConfiguration;
+class HandlerConfiguration;
+class CmdLineConfiguration;
 
-
-namespace config	{
-
-struct ServiceConfiguration;
-struct LoggerConfiguration;
-struct CmdLineConfig;		// forward declaration for the command line structure
-
-/// application configuration structure
-struct ApplicationConfiguration	{
-	std::string			configFile;
-	// from command line
-	bool				foreground;
-
-	// daemon / service configuration
-	ServiceConfiguration		*serviceCfg;
-	// network server configuration
-	net::Configuration		*serverCfg;
-	// logger configuration
-	log::LoggerConfiguration	*loggerCfg;
-	// the thing that does the job
-	HandlerConfiguration		*handlerCfg;
+/// \brief Application configuration structure
+class ApplicationConfiguration
+{
+public:
+	std::string			configFile;	///< configuration file
+	bool				foreground;	///< true, if running in foregroud (from command line)
+	ServiceConfiguration		*serviceCfg;	///< daemon / service configuration
+	ServerConfiguration		*serverCfg;	///< network server configuration
+	LoggerConfiguration		*loggerCfg;	///< logger configuration
+	db::DBproviderConfig		*databaseCfg;	///< database configuration
+	AAAA::AAAAconfiguration		*aaaaCfg;	///< AAAA configuration
+	proc::ProcProviderConfig	*procCfg;	///< processor configuration
+	config::BannerConfiguration	*bannerCfg;	///< banner configuration
 
 public:
 	enum ConfigFileType	{
@@ -92,7 +98,7 @@ public:
 						{ m_modDir = modules; }
 	bool parse( const char *filename, ConfigFileType type );
 	///\brief Finalize configuration for daemon
-	void finalize( const CmdLineConfig& cmdLine );
+	void finalize( const CmdLineConfiguration& cmdLine );
 	///\brief Finalize configuration for simple program (tests, wolfilter) running in foreground
 	void finalize();
 
@@ -115,7 +121,5 @@ public:
 	bool addConfig( const std::string& nodeName, ConfigurationBase* conf );
 };
 
-} // namespace config
-} // namespace _Wolframe
-
-#endif // _APP_CONFIG_HPP_INCLUDED
+}} // namespace
+#endif

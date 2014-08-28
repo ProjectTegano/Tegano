@@ -30,47 +30,5 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// handlerConfig.hpp
-//
+#error DEPRECATED
 
-#ifndef _HANDLERCONFIG_HPP_INCLUDED
-#define _HANDLERCONFIG_HPP_INCLUDED
-
-#include "standardConfigs.hpp"
-#include "database/DBprovider.hpp"
-#include "AAAA/AAAAprovider.hpp"
-#include "processor/procProvider.hpp"
-
-namespace _Wolframe {
-
-	/// Wolframe handler configuration structure
-	struct HandlerConfiguration
-	{
-	public:
-		db::DBproviderConfig		*databaseCfg;
-		config::ServiceBanner		*bannerCfg;
-		AAAA::AAAAconfiguration		*aaaaCfg;
-		proc::ProcProviderConfig	*procCfg;
-
-		/// constructor
-		HandlerConfiguration()
-		{
-			bannerCfg = new config::ServiceBanner();
-			databaseCfg = new db::DBproviderConfig();
-			aaaaCfg = new AAAA::AAAAconfiguration();
-			procCfg = new proc::ProcProviderConfig();
-		}
-
-		~HandlerConfiguration()
-		{
-			if ( bannerCfg ) delete bannerCfg;
-			if ( databaseCfg ) delete databaseCfg;
-			if ( aaaaCfg ) delete aaaaCfg;
-			if ( procCfg ) delete procCfg;
-		}
-	};
-
-} // namespace _Wolframe
-
-#endif // _HANDLERCONFIG_HPP_INCLUDED

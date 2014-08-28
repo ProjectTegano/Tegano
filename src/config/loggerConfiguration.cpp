@@ -34,7 +34,7 @@
 // logger configuration functions
 //
 
-#include "standardConfigs.hpp"
+#include "loggerConfiguration.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
 #include "types/propertyTree.hpp"
@@ -47,13 +47,9 @@
 #include <string>
 #include <ostream>
 
-using namespace _Wolframe::utils;
-
-namespace _Wolframe {
-namespace log {
-
-//unused
-//static const unsigned short DEFAULT_NOF_THREADS = 4;
+using namespace _Wolframe;
+using namespace _Wolframe::config;
+using namespace _Wolframe::log;
 
 /// Parse the configuration
 bool LoggerConfiguration::parse( const types::PropertyTree::Node& pt, const std::string& /*node*/,
@@ -331,4 +327,3 @@ void LoggerConfiguration::setCanonicalPathes( const std::string& refPath )
 	}
 }
 
-}} // namespace _Wolframe::log

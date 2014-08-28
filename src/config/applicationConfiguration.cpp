@@ -31,17 +31,23 @@
 
 ************************************************************************/
 //
-// appConfig.cpp
+/// \file applicationConfiguration.cpp
 //
 
 #include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"
-#include "appConfig.hpp"
+#include "config/applicationConfiguration.hpp"
 #include "module/moduleDirectory.hpp"
 #include "utils/fileUtils.hpp"
-#include "wolframedCommandLine.hpp"
-#include "standardConfigs.hpp"		// fuck-up - idiotic interaction with ...
+#include "config/loggerConfiguration.hpp"
+#include "config/serverConfiguration.hpp"
+#include "config/serviceConfiguration.hpp"
+#include "config/bannerConfiguration.hpp"
+#include "config/cmdLineConfiguration.hpp"
 #include "logger-v1.hpp"
+#include "database/DBprovider.hpp"
+#include "AAAA/AAAAprovider.hpp"
+#include "processor/procProvider.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -61,8 +67,8 @@ using namespace boost::filesystem;
 const char* MODULE_SECTION = "LoadModules";
 const char* MODULE_SECTION_MSG = "Module list:";
 
-namespace _Wolframe {
-namespace config {
+using namespace _Wolframe;
+using namespace _Wolframe::config;
 
 const char* ApplicationConfiguration::chooseFile( const char *globalFile, const char *userFile, const char *localFile )
 {
@@ -327,7 +333,7 @@ bool ApplicationConfiguration::parse ( const char *filename, ConfigFileType type
 	}
 }
 
-void ApplicationConfiguration::finalize( const CmdLineConfig& cmdLine )
+void ApplicationConfiguration::finalize( const CmdLineConfiguration& cmdLine )
 {
 #if defined(_WIN32)
 	// on Windows the user should either use -f or start in the console
@@ -408,4 +414,45 @@ bool ApplicationConfiguration::check() const
 	return retVal;
 }
 
-}} // namespace _Wolframe::config
+ApplicationConfiguration::ApplicationConfiguration()
+	: m_modDir( NULL )
+{
+	// daemon / service configuration
+	serviceCfg = new _Wolframe::config::ServiceConfiguration();
+	// network server
+	serverCfg = new _Wolframe::config::ServerConfiguration();
+	// job scheduler configuration
+//	jobSchedulerCfg = new _Wolframe::JobSchedulerConfiguration();
+	// logging
+	loggerCfg = new _Wolframe::config::LoggerConfiguration();
+
+	bannerCfg = new config::BannerConfiguration();
+	databaseCfg = new db::DBproviderConfig();
+	aaaaCfg = new AAAA::AAAAconfiguration();
+	procCfg = new proc::ProcProviderConfig();
+
+	// add both sections, the parse function will select the
+	// appropriate action
+	addConfig( "service", serviceCfg );
+	addConfig( "daemon", serviceCfg );
+	addConfig( "ServerSignature", bannerCfg );
+	addConfig( "Server", serverCfg );
+//	addConfig( "JobScheduler", jobSchedulerCfg );
+	addConfig( "logging", loggerCfg );
+	addConfig( "database", databaseCfg );
+	addConfig( "aaaa", aaaaCfg );
+	addConfig( "Processor", procCfg );
+
+}
+
+ApplicationConfiguration::~ApplicationConfiguration()
+{
+	if ( serviceCfg )	delete serviceCfg;
+	if ( serverCfg )	delete serverCfg;
+	if ( loggerCfg )	delete loggerCfg;
+	if ( bannerCfg )	delete bannerCfg;
+	if ( databaseCfg )	delete databaseCfg;
+	if ( aaaaCfg )		delete aaaaCfg;
+	if ( procCfg )		delete procCfg;
+}
+

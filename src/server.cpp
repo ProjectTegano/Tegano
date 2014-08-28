@@ -43,11 +43,12 @@
 #include "logger-v1.hpp"
 #include "system/serverEndpoint.hpp"
 #include "system/connectionHandler.hpp"
+#include "config/serverConfiguration.hpp"
 
 namespace _Wolframe {
 namespace net	{
 
-server::server( const Configuration* conf, _Wolframe::ServerHandler& serverHandler )
+server::server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler )
 	: m_threadPoolSize( conf->threads ),
 	  m_globalList( conf->maxConnections )
 {

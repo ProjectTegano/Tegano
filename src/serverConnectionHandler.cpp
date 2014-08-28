@@ -30,15 +30,11 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// connectionHandler.cpp
-//
+/// \file serverHandler.cpp
 
-#include "wolframeHandler.hpp"
+#include "serverHandler.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "logger-v1.hpp"
-#include "standardConfigs.hpp"
-#include "handlerConfig.hpp"
 #include <stdexcept>
 
 #ifdef WITH_SSL
@@ -51,12 +47,12 @@
 
 #include "boost/date_time/posix_time/posix_time.hpp"		// to print time_t structures
 
-namespace _Wolframe	{
+using namespace _Wolframe;
 
-wolframeConnection::wolframeConnection( const WolframeHandler& context,
-					const net::LocalEndpointR& local )
+ServerConnectionHandler::ServerConnectionHandler( const ServerHandler* context,
+						const net::LocalEndpointR& local )
 	: m_globalCtx( context ),
-	  m_input(0), m_inputsize(16536), /*m_inputpos(0),*/ m_output(0), m_outputsize( 4096 ), m_execContext( &context.proc(), &context.aaaa())
+	  m_input(0), m_inputsize(16536), /*m_inputpos(0),*/ m_output(0), m_outputsize( 4096 ), m_execContext( context->procProvider(), context->aaaaProvider())
 {
 	m_input = std::malloc( m_inputsize);
 	m_output = std::malloc( m_outputsize);
@@ -121,7 +117,7 @@ wolframeConnection::wolframeConnection( const WolframeHandler& context,
 }
 
 
-wolframeConnection::~wolframeConnection()
+ServerConnectionHandler::~ServerConnectionHandler()
 {
 	if ( m_authorization )	{
 		m_authorization->close();
@@ -142,7 +138,7 @@ wolframeConnection::~wolframeConnection()
 }
 
 
-void wolframeConnection::setPeer( const net::RemoteEndpointR& remote )
+void ServerConnectionHandler::setPeer( const net::RemoteEndpointR& remote )
 {
 	net::ConnectionEndpoint::ConnectionType type = remote->type();
 
@@ -184,7 +180,7 @@ void wolframeConnection::setPeer( const net::RemoteEndpointR& remote )
 	m_protocolHandler->setPeer( m_remoteEP);
 
 	// Check if the connection is allowed
-	if (( m_authorization = m_globalCtx.aaaa().authorizer()))	{
+	if (( m_authorization = m_globalCtx->aaaaProvider()->authorizer()))	{
 		if ( m_authorization->allowed( AAAA::ConnectInfo( *m_localEP, *m_remoteEP )))	{
 			LOG_DEBUG << "Connection from " << m_remoteEP->toString()
 				  << " to " << m_localEP->toString() << " authorized";
@@ -274,18 +270,18 @@ static void logNetwork( const char* title, const void* ptr, std::size_t size)
 }
 
 /// Handle a request and produce a reply.
-const net::NetworkOperation wolframeConnection::nextOperation()
+const net::NetworkOperation ServerConnectionHandler::nextOperation()
 {
 	for ( ;; )	{
 		if (m_state != COMMAND_HANDLER)
 		{
-			LOG_TRACE << "STATE wolframeConnection handler " << stateName( m_state );
+			LOG_TRACE << "STATE ServerConnectionHandler handler " << stateName( m_state );
 		}
 		switch( m_state )	{
 			case NEW_CONNECTION:	{
 				m_state = SEND_HELLO;
-				if ( ! m_globalCtx.banner().empty() )
-					m_outMsg = m_globalCtx.banner() + "\nOK\n";
+				if ( ! m_globalCtx->banner().empty() )
+					m_outMsg = m_globalCtx->banner() + "\nOK\n";
 				else
 					m_outMsg = "OK\n";
 				return net::NetworkOperation( net::SendString( m_outMsg ));
@@ -358,7 +354,7 @@ const net::NetworkOperation wolframeConnection::nextOperation()
 
 
 /// Parse incoming data..
-void wolframeConnection::networkInput( const void* begin, std::size_t bytesTransferred )
+void ServerConnectionHandler::networkInput( const void* begin, std::size_t bytesTransferred )
 {
 	LOG_DATA << "network input got " << bytesTransferred << " bytes";
 	if ( _Wolframe::log::LogBackend::instance().minLogLevel() <= _Wolframe::log::LogLevel::LOGLEVEL_DATA)
@@ -374,7 +370,7 @@ void wolframeConnection::networkInput( const void* begin, std::size_t bytesTrans
 }
 
 
-void wolframeConnection::signalOccured( NetworkSignal signal )
+void ServerConnectionHandler::signalOccured( NetworkSignal signal )
 {
 	switch( signal )	{
 		case TERMINATE:
@@ -433,62 +429,3 @@ void wolframeConnection::signalOccured( NetworkSignal signal )
 	}
 }
 
-
-/// The server handler global context
-WolframeHandler::WolframeHandler( const HandlerConfiguration* conf,
-				  const module::ModulesDirectory* modules )
-	: m_banner( conf->bannerCfg->toString() ),
-	  m_db( conf->databaseCfg, modules ),
-	  m_aaaa( conf->aaaaCfg, modules ),
-	  m_proc( conf->procCfg, modules, &m_prglib)
-{
-	LOG_TRACE << "Global context: banner: <" << m_banner << ">";
-	if ( ! m_aaaa.resolveDB( m_db ) )	{
-		LOG_FATAL << "Cannot resolve database references for AAAA services";
-		throw( std::invalid_argument( "WolframeHandler AAAA: unresolved database reference" ));
-	}
-	LOG_TRACE << "AAAA database references resolved";
-	if ( ! m_proc.resolveDB( m_db ) )	{
-		LOG_FATAL << "Cannot resolve database reference for processor group";
-		throw( std::invalid_argument( "WolframeHandler processor: unresolved database reference" ));
-	}
-	LOG_TRACE << "Processor group database reference resolved";
-
-	if (!m_proc.loadPrograms())
-	{
-		LOG_FATAL << "Not all programs could be loaded";
-		throw std::runtime_error( "Not all programs could be loaded" );
-	}
-}
-
-WolframeHandler::~WolframeHandler()
-{
-	LOG_TRACE << "Global Wolframe handler / context destroyed";
-}
-
-
-/// ServerHandler PIMPL
-net::ConnectionHandler* ServerHandler::ServerHandlerImpl::newConnection( const net::LocalEndpointR& local )
-{
-	return new wolframeConnection( m_globalContext, local );
-}
-
-ServerHandler::ServerHandlerImpl::ServerHandlerImpl( const HandlerConfiguration* conf,
-						     const module::ModulesDirectory* modules )
-	: m_globalContext( conf, modules )			{}
-
-ServerHandler::ServerHandlerImpl::~ServerHandlerImpl()	{}
-
-/// Outside face of the PIMPL
-ServerHandler::ServerHandler( const HandlerConfiguration* conf,
-			      const module::ModulesDirectory* modules )
-	: m_impl( new ServerHandlerImpl( conf, modules ) )	{}
-
-ServerHandler::~ServerHandler()	{ delete m_impl; }
-
-net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR& local )
-{
-	return m_impl->newConnection( local );
-}
-
-} // namespace _Wolframe

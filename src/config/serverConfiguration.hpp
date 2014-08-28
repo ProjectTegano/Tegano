@@ -30,63 +30,50 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// server.hpp
-//
+/// \file config/serverConfiguration.hpp
+/// \brief Server configuration structure
 
-#ifndef _NETWORK_SERVER_HPP_INCLUDED
-#define _NETWORK_SERVER_HPP_INCLUDED
+#ifndef _Wolframe_CONFIG_SERVER_HPP_INCLUDED
+#define _Wolframe_CONFIG_SERVER_HPP_INCLUDED
 
-#include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
-
+#include "config/configurationBase.hpp"
+#include "config/configurationTree.hpp"
+#include "system/serverEndpoint.hpp"
 #include <list>
 
-#include "system/serverEndpoint.hpp"
-#include "acceptor.hpp"
-#include "system/connectionHandler.hpp"	// for server handler
-#include "config/configurationBase.hpp"
 
 namespace _Wolframe {
 namespace config {
-class ServerConfiguration;
-}
-namespace net	{
 
-class server: private boost::noncopyable
+/// \class ServerConfiguration
+/// \brief Server configuration (listeners and dimensions)
+class ServerConfiguration : public _Wolframe::config::ConfigurationBase
 {
-	/// public interface
 public:
-	/// Construct the server
-	explicit server( const config::ServerConfiguration* conf, _Wolframe::ServerHandler& serverHandler );
+	unsigned short		threads;
+	unsigned short		maxConnections;
 
-	/// Destruct the server
-	~server();
-
-	/// Run the server's io_service loop.
-	void run();
-
-	/// Stop the server. Outstanding asynchronous operations will be completed.
-	void stop();
-
-	/// Abort the server. Outstanding asynchronous operations will be aborted.
-	void abort();
-
-private:
-	/// The number of threads that will call io_service::run().
-	std::size_t		m_threadPoolSize;
-
-	/// The io_service(s) used to perform asynchronous operations.
-	boost::asio::io_service	m_IOservice;
-
-	/// The list(s) of connection acceptors.
-	std::list< acceptor* >	m_acceptors;
+	// listen on
+	std::list<net::ServerTCPendpoint> address;
 #ifdef WITH_SSL
-	std::list< SSLacceptor* > m_SSLacceptors;
+	std::list<net::ServerSSLendpoint> SSLaddress;
 #endif // WITH_SSL
-	GlobalConnectionList	m_globalList;
+
+	/// constructor
+	ServerConfiguration();
+
+	/// methods
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModulesDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
+
+	void setCanonicalPathes( const std::string& referencePath );
+
+//	Not implemented yet, inherited from base for the time being
+//	bool test() const;
 };
 
-}} // namespace _Wolframe::net
+}}//namespace
+#endif
 
-#endif // _NETWORK_SERVER_HPP_INCLUDED

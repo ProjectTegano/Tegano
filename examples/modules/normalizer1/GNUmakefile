@@ -19,8 +19,7 @@ INCLUDE_LIBS = \
 
 DYNAMIC_MODULE = mod_example_normalize1.so
 
-CPP_OBJS = \
-	mod_example_normalize1.o
+CPP_OBJS =
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
