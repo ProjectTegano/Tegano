@@ -43,7 +43,7 @@ bool foo( int a, int b ) {
 	return ( a == b );
 }
 
-static _Wolframe::module::BuilderBase* (*containers[])() = {
+static const _Wolframe::module::BuilderBase* (*containers[])() = {
 	NULL
 };
 

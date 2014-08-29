@@ -42,9 +42,9 @@
 {\
 	struct Builder \
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			static _Wolframe::module::ConfiguredBuilderDescription<\
+			static const _Wolframe::module::ConfiguredBuilderDescription<\
 					_Wolframe::module::AuthenticationConstructor<UNITCLASS, CONFIGCLASS>,\
 					CONFIGCLASS >\
 				mod( "Authentication " #NAME, "Authentication", #NAME, #NAME "Authentication");\

@@ -125,24 +125,24 @@ bool TestUnitImpl2::resolveDB( const db::DatabaseProvider& /* db */ )
 	return true;
 }
 
-static BuilderBase* createModule1( void )
+static const BuilderBase* getModule1( void )
 {
-	static module::ConfiguredBuilderDescription< test_containers::TestModuleContainer1,
+	static const module::ConfiguredBuilderDescription< test_containers::TestModuleContainer1,
 		test_containers::TestModuleConfig > mod( "Test Module 1", "Test 1", "test1", "TestObject1" );
 	return &mod;
 }
 
-static BuilderBase* createModule2( void )
+static const BuilderBase* getModule2( void )
 {
-	static module::ConfiguredBuilderDescription< test_containers::TestModuleContainer2,
+	static const module::ConfiguredBuilderDescription< test_containers::TestModuleContainer2,
 		test_containers::TestModuleConfig > mod( "Test Module 2", "Test 2", "test 2", "TestObject2" );
 	return &mod;
 }
 
 
-static BuilderBase* (*containers[])() = {
-	createModule1,
-	createModule2,
+static const BuilderBase* (*containers[])() = {
+	getModule1,
+	getModule2,
 	NULL
 };
 
