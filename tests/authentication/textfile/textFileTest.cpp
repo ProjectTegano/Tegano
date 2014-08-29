@@ -38,7 +38,7 @@
 #include "gtest/gtest.h"
 
 #include "TextFileAuth.hpp"
-#include "passwdFile.hpp"		// for USERNAME_DEFAULT_CASE_SENSIVE
+#include "platform.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
 #include "system/globalRngGen.hpp"
@@ -215,7 +215,7 @@ TEST_F( AuthenticationFixture, nonexistentFile )
 
 
 static std::string usernameHash( const std::string& username,
-				 bool caseSensitive = USERNAME_DEFAULT_CASE_SENSIVE )
+				 bool caseSensitive = Platform::Properties::username_default_casesensitive())
 {
 	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance();
 	unsigned char salt[ PASSWORD_SALT_SIZE ];
