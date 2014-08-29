@@ -147,4 +147,14 @@ Platform Platform::runtimePlatform( )
 	return p;
 }
 
+bool _Wolframe::Platform::Properties::username_default_casesensitive()
+{
+#ifndef _WIN32
+	return true;
+#else
+	return false;
+#endif
+}
+
 } // namespace _Wolframe
+

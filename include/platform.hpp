@@ -51,7 +51,12 @@ private:
 	std::string	m_distro;		///< Name of the Linux distribution
 	bool		m_hasDistroVersion;	///< Distribution has a version?
 	unsigned short	m_distro_major;		///< Linux distribution major version.
-	unsigned short	m_distro_minor;		///< Linux distribution minor version.	
+	unsigned short	m_distro_minor;		///< Linux distribution minor version.
+
+	struct Properties
+	{
+		static bool username_default_casesensitive();
+	};
 
 public:
 	/// \brief Empty Version constructor.
