@@ -53,6 +53,7 @@ private:
 	unsigned short	m_distro_major;		///< Linux distribution major version.
 	unsigned short	m_distro_minor;		///< Linux distribution minor version.
 
+public:
 	struct Properties
 	{
 		static bool username_default_casesensitive();
