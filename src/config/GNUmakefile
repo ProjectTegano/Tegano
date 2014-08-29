@@ -33,6 +33,8 @@ LOCAL_STATIC_LIB = \
 	libwfconfig.a
 
 LOCAL_STATIC_LIB_OBJS = \
+	moduleDirectoryImpl.o \
+	moduleLoader.o \
 	serviceConfiguration.o \
 	loggerConfiguration.o \
 	bannerConfiguration.o \

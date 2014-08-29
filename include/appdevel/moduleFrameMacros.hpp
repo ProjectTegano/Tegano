@@ -44,14 +44,14 @@
 	struct CreateBuilderArray\
 	{\
 		enum {MaxNofBuilders=64};\
-		_Wolframe::module::createBuilderFunc ar[ MaxNofBuilders];\
+		_Wolframe::module::getBuilderFunc ar[ MaxNofBuilders];\
 		std::size_t size;\
 		CreateBuilderArray()\
 			:size(0)\
 		{\
 			ar[0] = 0;\
 		}\
-		CreateBuilderArray operator()( _Wolframe::module::createBuilderFunc func)\
+		CreateBuilderArray operator()( _Wolframe::module::getBuilderFunc func)\
 		{\
 			if (size +1 >= MaxNofBuilders) throw std::logic_error("too many builder objects defined in module '" #NAME "' (maximum of 64 objects)");\
 			ar[ size] = func;\

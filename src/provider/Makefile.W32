@@ -32,8 +32,6 @@ LOCAL_STATIC_LIB = \
 	wfprovider.lib
 
 LOCAL_STATIC_LIB_OBJS = \
-	moduleDirectory.obj \
-	moduleLoader.obj \
 	AAAAproviderConfig.obj \
 	AAAAproviderImpl.obj \
 	Audit.obj \

@@ -39,9 +39,10 @@
 	{\
 		struct Constructor\
 		{\
-			static _Wolframe::module::BuilderBase* impl()\
+			static const _Wolframe::module::BuilderBase* impl()\
 			{\
-				return new _Wolframe::module::CustomDataTypeBuilder( "CustomDataType_" #NAME, NAME, CONSTRUCTOR);\
+				static const _Wolframe::module::CustomDataTypeBuilder rt( "CustomDataType_" #NAME, NAME, CONSTRUCTOR);\
+				return &rt;\
 			}\
 		};\
 		(*this)(&Constructor ::impl);\

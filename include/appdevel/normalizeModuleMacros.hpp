@@ -60,9 +60,10 @@ struct macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS\
 		{\
 			return new NORMALIZERCLASS( arg);\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::NormalizeFunctionBuilder( "NormalizeFunction_" #NAME, NAME, create);\
+			static const _Wolframe::module::NormalizeFunctionBuilder rt( "NormalizeFunction_" #NAME, NAME, create);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
@@ -77,9 +78,10 @@ struct macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS\
 		{\
 			return new NORMALIZERCLASS( reshnd, arg);\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::NormalizeFunctionBuilder( "NormalizeFunction_" #NAME, NAME, create, macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS::get());\
+			static const _Wolframe::module::NormalizeFunctionBuilder rt( "NormalizeFunction_" #NAME, NAME, create, macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS::get());\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

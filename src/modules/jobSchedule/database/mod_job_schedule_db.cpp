@@ -41,16 +41,16 @@
 namespace _Wolframe {
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getBuilder( void )
 {
-	static module::ConfiguredBuilderDescription< processor::JobScheduleDBconstructor,
+	static const module::ConfiguredBuilderDescription< processor::JobScheduleDBconstructor,
 			processor::JobScheduleDBconfig > mod( "Schedule database", "JobSchedule",
 						   "database", "JobScheduleDB" );
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule, NULL
+static const BuilderBase* (*containers[])() = {
+	getBuilder, NULL
 };
 
 ModuleEntryPoint entryPoint( 0, "Job schedule database", containers );

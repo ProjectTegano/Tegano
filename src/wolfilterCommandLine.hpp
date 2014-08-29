@@ -34,16 +34,16 @@
 ///\brief Interface for the wolfilter call command line
 #ifndef _Wolframe_WOLFILTER_COMMANDLINE_HPP_INCLUDED
 #define _Wolframe_WOLFILTER_COMMANDLINE_HPP_INCLUDED
-#include <string>
-#include <vector>
-#include <iostream>
-#include "logger-v1.hpp"
-#include "provider/moduleDirectory.hpp"
+#include "config/moduleDirectoryImpl.hpp"
 #include "provider/procProviderImpl.hpp"
 #include "config/procProviderConfiguration.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "types/propertyTree.hpp"
+#include "logger-v1.hpp"
 #include <boost/shared_ptr.hpp>
+#include <string>
+#include <vector>
+#include <iostream>
 
 namespace _Wolframe {
 namespace config {
@@ -95,7 +95,7 @@ private:
 	boost::shared_ptr<AAAA::AAAAconfiguration> m_aaaaProviderConfig;
 	boost::shared_ptr<config::ProcProviderConfiguration> m_procProviderConfig;
 	boost::shared_ptr<db::DBproviderConfig> m_dbProviderConfig;
-	module::ModulesDirectory* m_modulesDirectory;
+	module::ModulesDirectoryImpl* m_modulesDirectory;
 	std::string m_configurationPath;
 };
 

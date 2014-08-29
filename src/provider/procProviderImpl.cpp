@@ -45,8 +45,8 @@
 #include "appdevel/module/customDataTypeBuilder.hpp"
 #include "appdevel/module/doctypeDetectorBuilder.hpp"
 #include "logger-v1.hpp"
-#include "moduleDirectory.hpp"
 #include "utils/fileUtils.hpp"
+#include "module/moduleDirectory.hpp"
 
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
@@ -181,15 +181,16 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 	// Build the list of command handlers and runtime environments (configured objects)
 	for ( std::vector< config::NamedConfiguration* >::const_iterator it = procConfig_.begin();
 									it != procConfig_.end(); it++ )	{
-		module::ConfiguredBuilder* builder = modules_->getBuilder((*it)->className());
+		const module::ConfiguredBuilder* builder = modules_->getConfiguredBuilder((*it)->className());
 		if ( builder )
 		{
 			if (builder->objectType() == ObjectConstructorBase::CMD_HANDLER_OBJECT)
 			{
+				ObjectConstructorBaseR constructorRef( builder->constructor());
 				typedef ConfiguredObjectConstructor<cmdbind::CommandHandlerUnit> ThisConstructor;
-				boost::shared_ptr<ThisConstructor> constructor( dynamic_cast<ThisConstructor*>( builder->constructor()));
+				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
 
-				if (!constructor.get())	{
+				if (!constructor)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << builder->objectClassName()
 						  << "' is not a command handler";
 					throw std::logic_error( "Object is not a commandHandler. See log." );
@@ -200,8 +201,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 			}
 			else if (builder->objectType() == ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT)
 			{
-				module::RuntimeEnvironmentConstructorR constructor( dynamic_cast<module::RuntimeEnvironmentConstructor*>( builder->constructor()));
-				if (!constructor.get())
+				ObjectConstructorBaseR constructorRef( builder->constructor());
+				module::RuntimeEnvironmentConstructor* constructor = dynamic_cast<module::RuntimeEnvironmentConstructor*>( constructorRef.get());
+				if (!constructor)
 				{
 					LOG_ALERT << "Wolframe Processor Provider: '" << builder->objectClassName()
 						  << "' is not a runtime environment constructor";
@@ -227,15 +229,17 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 	}
 
 	// Build the lists of objects without configuration
-	for ( module::ModulesDirectory::simpleBuilder_iterator it = modules_->simpleBuilderObjectsBegin();
-								it != modules_->simpleBuilderObjectsEnd(); it++ )	{
+	std::vector<const module::SimpleBuilder*> simpleBuilderList = modules_->getSimpleBuilderList();
+	for ( std::vector<const module::SimpleBuilder*>::const_iterator it = simpleBuilderList.begin();
+								it != simpleBuilderList.end(); it++ )	{
 		switch( (*it)->objectType() )	{
 			case ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT:
 			{
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				typedef SimpleObjectConstructor<cmdbind::ProtocolHandlerUnit> ThisConstructor;
-				boost::shared_ptr<ThisConstructor> constructor( dynamic_cast<ThisConstructor*>( (*it)->constructor()));
+				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
 
-				if (!constructor.get())	{
+				if (!constructor)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a protocol handler";
 					throw std::logic_error( "Object is not a protocolHandler. See log." );
@@ -251,15 +255,10 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 			case ObjectConstructorBase::DOCTYPE_DETECTOR_OBJECT:
 			{
 				// object defines a document type/format detector
-				const module::DoctypeDetectorBuilder* bld = dynamic_cast<const module::DoctypeDetectorBuilder*>( *it);
-				if (!bld)
-				{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a document type/format detector";
-					throw std::logic_error( "Object is not a document type/format detector. See log." );
-				}
-				module::DoctypeDetectorConstructorR dtcr( dynamic_cast<module::DoctypeDetectorConstructor*>((*it)->constructor()));
-				if (!dtcr.get())
+				const module::DoctypeDetectorBuilder* bld = dynamic_cast<const module::DoctypeDetectorBuilder*>( (*it));
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::DoctypeDetectorConstructor* dtcr = dynamic_cast<module::DoctypeDetectorConstructor*>(constructorRef.get());
+				if (!dtcr || !bld)
 				{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a document type/format detector";
@@ -281,8 +280,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 			case ObjectConstructorBase::FILTER_OBJECT:	{	// object is a filter
-				module::FilterConstructorR fltr( dynamic_cast< module::FilterConstructor* >((*it)->constructor()));
-				if (!fltr.get())	{
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::FilterConstructor* fltr = dynamic_cast< module::FilterConstructor* >(constructorRef.get());
+				if (!fltr)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a filter";
 					throw std::logic_error( "Object is not a filter. See log." );
@@ -304,8 +304,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 
 			case ObjectConstructorBase::DDL_COMPILER_OBJECT:
 			{	// object is a DDL compiler
-				module::DDLCompilerConstructorR ffo( dynamic_cast< module::DDLCompilerConstructor* >((*it)->constructor()));
-				if (!ffo.get())	{
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::DDLCompilerConstructor* ffo = dynamic_cast< module::DDLCompilerConstructor* >(constructorRef.get());
+				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a DDL compiler";
 					throw std::logic_error( "Object is not a form function. See log." );
@@ -327,8 +328,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 
 			case ObjectConstructorBase::PROGRAM_TYPE_OBJECT:
 			{	// object is a form function program type
-				module::ProgramTypeConstructorR ffo( dynamic_cast< module::ProgramTypeConstructor* >((*it)->constructor()));
-				if (!ffo.get())	{
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ProgramTypeConstructor* ffo = dynamic_cast< module::ProgramTypeConstructor* >( constructorRef.get());
+				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a program type";
 					throw std::logic_error( "Object is not a program type. See log." );
@@ -350,8 +352,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 
 			case ObjectConstructorBase::FORM_FUNCTION_OBJECT:
 			{	// object is a form function
-				module::CppFormFunctionConstructorR ffo( dynamic_cast< module::CppFormFunctionConstructor* >((*it)->constructor()));
-				if (!ffo.get())	{
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::CppFormFunctionConstructor* ffo = dynamic_cast< module::CppFormFunctionConstructor* >(constructorRef.get());
+				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a form function";
 					throw std::logic_error( "Object is not a form function. See log." );
@@ -373,8 +376,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 
 			case ObjectConstructorBase::NORMALIZE_FUNCTION_OBJECT:
 			{	// object is a normalize function constructor
-				module::NormalizeFunctionConstructorR constructor( dynamic_cast< module::NormalizeFunctionConstructor* >((*it)->constructor()));
-				if ( !constructor.get() )
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::NormalizeFunctionConstructor* constructor = dynamic_cast< module::NormalizeFunctionConstructor* >(constructorRef.get());
+				if (!constructor)
 				{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a normalize function constructor";
@@ -396,8 +400,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 
 			case ObjectConstructorBase::CUSTOM_DATA_TYPE_OBJECT:
 			{
-				module::CustomDataTypeConstructorR constructor( dynamic_cast< module::CustomDataTypeConstructor* >((*it)->constructor()));
-				if ( !constructor.get() )
+				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::CustomDataTypeConstructor* constructor = dynamic_cast< module::CustomDataTypeConstructor* >(constructorRef.get());
+				if (!constructor)
 				{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
 						  << "' is not a custom data type constructor";

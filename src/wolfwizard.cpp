@@ -35,7 +35,8 @@
 #include "wolframe.hpp"
 #include "wolfwizardCommandLine.hpp"
 #include "module/moduleInterface.hpp"
-#include "provider/moduleDirectory.hpp"
+#include "config/moduleDirectoryImpl.hpp"
+#include "config/procProviderConfiguration.hpp"
 #include "provider/procProviderImpl.hpp"
 #include "types/variantStruct.hpp"
 #include "types/variantStructDescription.hpp"
@@ -342,8 +343,8 @@ int main( int argc, char **argv )
 			throw std::runtime_error( "error in command line. failed to setup a valid processor provider configuration");
 		}
 
-		prgbind::ProgramLibrary* programLibrary = new prgbind::ProgramLibrary();
-		proc::ProcessorProvider* processorProvider = new proc::ProcessorProvider( &providerconf, &cmdline.modulesDirectory(), programLibrary);
+		prgbind::ProgramLibraryImpl* programLibrary = new prgbind::ProgramLibraryImpl();
+		proc::ProcessorProviderImpl* processorProvider = new proc::ProcessorProviderImpl( providerconf.dbLabel(), providerconf.procConfig(), providerconf.programFiles(), providerconf.referencePath(), &cmdline.modulesDirectory());
 
 		if (!processorProvider->loadPrograms())
 		{

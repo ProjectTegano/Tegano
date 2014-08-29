@@ -41,16 +41,16 @@
 namespace _Wolframe {
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getModule( void )
 {
-	static module::ConfiguredBuilderDescription< AAAA::DBauthzConstructor,
+	static const module::ConfiguredBuilderDescription< AAAA::DBauthzConstructor,
 			AAAA::DatabaseAuthzConfig > mod( "Authorization database", "authorization",
 							 "database", "DatabaseAuthorization" );
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule, NULL
+static const BuilderBase* (*containers[])() = {
+	getModule, NULL
 };
 
 ModuleEntryPoint entryPoint( 0, "Database authorization", containers);

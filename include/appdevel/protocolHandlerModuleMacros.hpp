@@ -71,16 +71,17 @@
 		{\
 			return _Wolframe::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT;\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor()\
+		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\
 			return new ProtocolHandlerConstructor();\
 		}\
 	};\
 	struct Constructor\
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new ProtocolHandlerBuilder();\
+			static const ProtocolHandlerBuilder rt;\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

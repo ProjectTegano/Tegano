@@ -27,8 +27,6 @@ LOCAL_STATIC_LIB = \
 	libwfprovider.a
 
 LOCAL_STATIC_LIB_OBJS = \
-	moduleDirectory.o \
-	moduleLoader.o \
 	AAAAproviderConfig.o \
 	AAAAproviderImpl.o \
 	Audit.o \

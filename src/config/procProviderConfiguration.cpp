@@ -75,7 +75,7 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
 									  L2it != L1it->second.end(); L2it++ )	{
 				if ( modules )	{
-					module::ConfiguredBuilder* builder = modules->getBuilder( L1it->first, L2it->first );
+					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( L1it->first, L2it->first );
 					if ( builder )	{
 						config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
 						if ( conf->parse( L2it->second, L2it->first, modules ))
@@ -96,7 +96,7 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 		}
 		else	{
 			if ( modules )	{
-				module::ConfiguredBuilder* builder = modules->getBuilder( "processor", L1it->first );
+				const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "processor", L1it->first );
 				if ( builder )	{
 					config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
 					if ( conf->parse( L1it->second, L1it->first, modules ))
@@ -120,7 +120,7 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 
 ProcProviderConfiguration::~ProcProviderConfiguration()
 {
-	for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )
 		delete *it;
 }
@@ -130,7 +130,7 @@ void ProcProviderConfiguration::print( std::ostream& os, size_t indent ) const
 	os << sectionName() << std::endl;
 	os << "   Database: " << (m_dbLabel.empty() ? "(none)" : m_dbLabel) << std::endl;
 	if ( m_procConfig.size() > 0 )	{
-		for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+		for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 			(*it)->print( os, 3 );
 		}
@@ -144,7 +144,7 @@ void ProcProviderConfiguration::print( std::ostream& os, size_t indent ) const
 	else if ( m_programFiles.size() == 1 )
 		os << "   Program file: " << m_programFiles.front() << std::endl;
 	else	{
-		std::list< std::string >::const_iterator it = m_programFiles.begin();
+		std::vector< std::string >::const_iterator it = m_programFiles.begin();
 		os << "   Program files: " << *it++ << std::endl;
 		while ( it != m_programFiles.end() )
 			os << "                  " << *it++ << std::endl;
@@ -157,7 +157,7 @@ bool ProcProviderConfiguration::check() const
 {
 	bool correct = true;
 
-	for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
@@ -168,11 +168,11 @@ bool ProcProviderConfiguration::check() const
 void ProcProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
 	m_referencePath = refPath;
-	for ( std::list< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 		(*it)->setCanonicalPathes( refPath );
 	}
-	for ( std::list< std::string >::iterator it = m_programFiles.begin();
+	for ( std::vector< std::string >::iterator it = m_programFiles.begin();
 						it != m_programFiles.end(); it++ )	{
 		std::string oldPath = *it;
 		*it = utils::getCanonicalPath( *it, refPath );

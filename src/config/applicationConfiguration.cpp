@@ -238,7 +238,7 @@ bool ApplicationConfiguration::parseModules ( const char *filename, ConfigFileTy
 						else	{
 							// check for duplicates
 							bool isDuplicate = false;
-							for ( std::list< std::string >::const_iterator Vit = m_modFiles.begin();
+							for ( std::vector< std::string >::const_iterator Vit = m_modFiles.begin();
 													Vit != m_modFiles.end(); Vit++ )	{
 								if ( boost::algorithm::iequals( *Vit, modFile ))	{
 									LOG_WARNING << MODULE_SECTION_MSG << "duplicate module file: '"
@@ -262,7 +262,7 @@ bool ApplicationConfiguration::parseModules ( const char *filename, ConfigFileTy
 				}
 				// Resolve relative module pathes:
 				if (!m_modDir) throw std::runtime_error( "Module directory structure not defined");
-				std::list< std::string >::iterator pi = m_modFiles.begin(), pe = m_modFiles.end();
+				std::vector< std::string >::iterator pi = m_modFiles.begin(), pe = m_modFiles.end();
 				for (; pi != pe; ++pi)
 				{
 					if (pi->empty())
@@ -393,7 +393,7 @@ void ApplicationConfiguration::print( std::ostream& os ) const
 	if ( ! m_modFiles.empty() )	{
 		os << "Default module directory: " << (m_modFolder.empty() ? "(none)" : m_modFolder) << std::endl;
 		os << "Module files to load:" << std::endl;
-		for ( std::list< std::string >::const_iterator it = m_modFiles.begin();
+		for ( std::vector< std::string >::const_iterator it = m_modFiles.begin();
 								it != m_modFiles.end(); it++ )
 			os << "   " << *it << std::endl;
 	}
@@ -409,9 +409,9 @@ bool ApplicationConfiguration::check() const
 {
 	bool retVal = true;
 	// check the list of modules
-	for ( std::list< std::string >::const_iterator it1 = m_modFiles.begin();
+	for ( std::vector< std::string >::const_iterator it1 = m_modFiles.begin();
 						      it1 != m_modFiles.end(); it1++ )	{
-		std::list< std::string >::const_iterator it2 = it1;
+		std::vector< std::string >::const_iterator it2 = it1;
 		it2++;
 		for ( ; it2 != m_modFiles.end(); it2++ )	{
 			if ( boost::algorithm::iequals( *it1, *it2 ))	{

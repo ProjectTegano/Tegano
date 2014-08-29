@@ -39,16 +39,14 @@
 namespace _Wolframe {
 namespace module {
 
-typedef ConfiguredBuilder* (*CreateBuilderFunc)();
-
-static BuilderBase* createTesttraceDatabaseModule()
+static const BuilderBase* createTesttraceDatabaseModule()
 {
-	static module::ConfiguredBuilderDescription< db::TesttraceDatabaseConstructor,
+	static const module::ConfiguredBuilderDescription< db::TesttraceDatabaseConstructor,
 		db::TesttraceDatabaseConfig > mod( "testtrace database", "database", "test", TESTTRACE_DATABASE_CLASSNAME);
 	return &mod;
 }
 
-static createBuilderFunc containers[] =
+static getBuilderFunc containers[] =
 {
 	createTesttraceDatabaseModule,
 	NULL

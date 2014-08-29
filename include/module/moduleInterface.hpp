@@ -55,7 +55,7 @@ public:
 
 	virtual const char* objectClassName() const = 0;
 	virtual ObjectConstructorBase::ObjectType objectType() const = 0;
-	virtual ObjectConstructorBase* constructor() = 0;
+	virtual ObjectConstructorBase* constructor() const = 0;
 };
 
 /// \class SimpleBuilder
@@ -63,18 +63,20 @@ public:
 class SimpleBuilder
 	:public BuilderBase
 {
-	friend class ModulesDirectory;
 public:
-	SimpleBuilder( const char* builderID )
-		: m_className( builderID )		{}
+	SimpleBuilder( const char* className_ )
+		: m_className( className_ )		{}
 
 	virtual ~SimpleBuilder()			{}
 
 	virtual const char* objectClassName() const	{ return m_className; }
 
 	virtual ObjectConstructorBase::ObjectType objectType() const = 0;
-	virtual ObjectConstructorBase* constructor() = 0;
-protected:
+	virtual ObjectConstructorBase* constructor() const = 0;
+
+	const char* className() const	{return m_className;}
+
+private:
 	const char* m_className;
 };
 
@@ -83,7 +85,6 @@ protected:
 class ConfiguredBuilder
 	:public BuilderBase
 {
-	friend class ModulesDirectory;
 public:
 	/// \brief Constructor
 	/// \param title	string used for printing purposes, usually logging.
@@ -91,10 +92,10 @@ public:
 	/// \param keyword	keyword in the configuration section. The object configuration
 	///			is bind to the section, keyword pair
 	/// \param className	the name of the class that the built constructor will build
-	ConfiguredBuilder( const char* title, const char* section, const char* keyword,
-			   const char* className )
-		: m_title( title ), m_section( section ), m_keyword( keyword ),
-		  m_className( className )		{}
+	ConfiguredBuilder( const char* title_, const char* section_, const char* keyword_,
+			   const char* className_ )
+		: m_title( title_ ), m_section( section_ ), m_keyword( keyword_ ),
+		  m_className( className_ )		{}
 
 	virtual ~ConfiguredBuilder()			{}
 
@@ -107,17 +108,22 @@ public:
 	/// \brief Get the configuration for the object
 	/// \param logPrefix	string to print before the log messages generated inside this object.
 	///			Same as for any confiuration object.
-	virtual config::NamedConfiguration* configuration( const char* logPrefix ) = 0;
+	virtual config::NamedConfiguration* configuration( const char* logPrefix ) const = 0;
 
 	/// \brief get the virtual constructor for the object
-	virtual ObjectConstructorBase* constructor() = 0;
+	virtual ObjectConstructorBase* constructor() const = 0;
 
-protected:
+	const char* title() const	{return m_title;}
+	const char* section() const	{return m_section;}
+	const char* keyword() const	{return m_keyword;}
+	const char* className() const	{return m_className;}
+
+private:
 	const char* m_title;		///< used for printing (logging etc.)
 	const char* m_section;		///< configuration section to which the
 					/// configuration parser reacts
-	const char* m_keyword;		//< configuration keyword (element)
-	const char* m_className;	//< class name of the object
+	const char* m_keyword;		///< configuration keyword (element)
+	const char* m_className;	///< class name of the object
 };
 
 
@@ -129,23 +135,23 @@ template < class Tconstructor, class Tconf >
 class ConfiguredBuilderDescription : public ConfiguredBuilder
 {
 public:
-	ConfiguredBuilderDescription( const char* title, const char* section,
-				      const char* keyword, const char* className )
-		: ConfiguredBuilder( title, section, keyword, className )	{}
+	ConfiguredBuilderDescription( const char* title_, const char* section_,
+				      const char* keyword_, const char* className_ )
+		: ConfiguredBuilder( title_, section_, keyword_, className_ )	{}
 
 	virtual ~ConfiguredBuilderDescription()		{}
 
-	virtual config::NamedConfiguration* configuration( const char* logPrefix )	{
-		return new Tconf( m_title, logPrefix, m_keyword );
+	virtual config::NamedConfiguration* configuration( const char* logPrefix ) const {
+		return new Tconf( title(), logPrefix, keyword() );
 	}
 	virtual ObjectConstructorBase::ObjectType objectType() const	{
 		return m_constructor.objectType();
 	}
-	virtual ObjectConstructorBase* constructor()	{
-		return &m_constructor;
+	virtual ObjectConstructorBase* constructor() const	{
+		return new Tconstructor();
 	}
 private:
-	Tconstructor	m_constructor;
+	Tconstructor m_constructor;
 };
 
 
@@ -153,7 +159,7 @@ private:
 
 /// \brief Function that constructs a builder.
 ///	This function is specific for each of the configured builders in the module.
-typedef BuilderBase* (*createBuilderFunc)();
+typedef const BuilderBase* (*getBuilderFunc)();
 
 
 /// \class ModuleEntryPoint
@@ -167,10 +173,11 @@ struct ModuleEntryPoint
 	char signature[ MODULE_SIGN_SIZE];		///< module entry point signature
 	unsigned short ifaceVersion;			///< version of the module loader interface
 	const char* name;				///< name of the module
-	createBuilderFunc* createBuilder;		///< NULL terminated array of functions that create the builders
+	getBuilderFunc* getBuilder;			///< NULL terminated array of functions that return the builders
+
 public:
-	ModuleEntryPoint( unsigned short iVer, const char* modName, createBuilderFunc* createBuilder_)
-		: ifaceVersion( iVer ), name( modName ), createBuilder( createBuilder_ )
+	ModuleEntryPoint( unsigned short iVer, const char* modName, getBuilderFunc* getBuilder_)
+		: ifaceVersion( iVer ), name( modName ), getBuilder( getBuilder_ )
 	{
 		std::memset ( signature, 0, MODULE_SIGN_SIZE);
 		std::memcpy ( signature, "Wolframe Module", std::strlen("Wolframe Module"));

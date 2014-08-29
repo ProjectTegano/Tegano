@@ -34,12 +34,12 @@
 ///\brief Interface for the wolfwizard call command line
 #ifndef _Wolframe_WOLFWIZARD_COMMANDLINE_HPP_INCLUDED
 #define _Wolframe_WOLFWIZARD_COMMANDLINE_HPP_INCLUDED
+#include "config/moduleDirectoryImpl.hpp"
+#include "provider/procProviderImpl.hpp"
+#include "types/propertyTree.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
-#include "provider/moduleDirectory.hpp"
-#include "provider/procProviderImpl.hpp"
-#include "types/propertyTree.hpp"
 
 namespace _Wolframe {
 namespace config {
@@ -60,7 +60,7 @@ public:
 	const module::ModulesDirectory& modulesDirectory() const	{return *m_modulesDirectory;}
 
 private:
-	std::list<std::string> configModules() const;
+	std::vector<std::string> configModules() const;
 	config::ConfigurationNode getConfigNode( const std::string& name) const;
 
 private:
@@ -69,9 +69,9 @@ private:
 	std::string m_configfile;
 	config::ConfigurationTree m_config;
 	config::ConfigurationNode m_providerconfig;
-	module::ModulesDirectory* m_modulesDirectory;
+	module::ModulesDirectoryImpl* m_modulesDirectory;
 	std::string m_configurationPath;
-	std::list<std::string> m_modules;
+	std::vector<std::string> m_modules;
 };
 
 }}//namespace

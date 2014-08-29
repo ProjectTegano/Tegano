@@ -70,9 +70,9 @@ config::ConfigurationNode WolfwizardCommandLine::getConfigNode( const std::strin
 	return m_config.root().getChildrenJoined( name);
 }
 
-std::list<std::string> WolfwizardCommandLine::configModules() const
+std::vector<std::string> WolfwizardCommandLine::configModules() const
 {
-	std::list<std::string> rt;
+	std::vector<std::string> rt;
 	config::ConfigurationNode module_section = getConfigNode( "LoadModules");
 	std::string directory;
 
@@ -127,7 +127,7 @@ WolfwizardCommandLine::WolfwizardCommandLine( int argc, char** argv, const std::
 		m_configfile = utils::getCanonicalPath( m_configfile, m_configurationPath);
 		m_configurationPath = boost::filesystem::path( m_configfile ).branch_path().string();
 		m_config = utils::readPropertyTreeFile( m_configfile);
-		m_modulesDirectory = new module::ModulesDirectory( m_configurationPath);
+		m_modulesDirectory = new module::ModulesDirectoryImpl( m_configurationPath);
 		m_modules = configModules();
 
 		if (!m_modulesDirectory->loadModules( m_modules))

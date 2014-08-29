@@ -120,9 +120,9 @@ public:
 		return ObjectConstructorBase::NORMALIZE_FUNCTION_OBJECT;
 	}
 
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
-		return new NormalizeFunctionConstructor( m_className, m_identifier, m_function);
+		return new NormalizeFunctionConstructor( className(), m_identifier, m_function);
 	}
 
 private:

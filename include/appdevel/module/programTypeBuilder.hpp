@@ -100,9 +100,9 @@ public:
 	{
 		return ObjectConstructorBase::PROGRAM_TYPE_OBJECT;
 	}
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
-		return new ProgramTypeConstructor( m_className, m_name, m_createFunc);
+		return new ProgramTypeConstructor( className(), m_name, m_createFunc);
 	}
 	const char* name() const
 	{

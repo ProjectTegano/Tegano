@@ -41,16 +41,16 @@
 namespace _Wolframe {
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getModule( void )
 {
-	static module::ConfiguredBuilderDescription< AAAA::PAMAuthConstructor,
+	static const module::ConfiguredBuilderDescription< AAAA::PAMAuthConstructor,
 			AAAA::PAMAuthConfig > mod( "PAM authentication", "Authentication",
 							"PAM", "PAMAuth" );
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule
+static const BuilderBase* (*containers[])() = {
+	getModule
 };
 
 ModuleEntryPoint entryPoint( 0, "PAM authentication", containers );

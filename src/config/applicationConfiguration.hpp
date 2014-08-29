@@ -37,6 +37,7 @@
 #define _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
 
 #include "config/configurationBase.hpp"
+#include "moduleDirectoryImpl.hpp"
 #include <cstddef>
 #include <string>
 #include <map>
@@ -91,7 +92,7 @@ public:
 	static ConfigFileType fileType( const char *filename, ConfigFileType type );
 
 	bool parseModules( const char *filename, ConfigFileType type );
-	const std::list< std::string >& moduleList() const
+	const std::vector< std::string >& moduleList() const
 						{ return m_modFiles; }
 	const std::string& moduleFolder() const	{ return m_modFolder; }
 
@@ -115,7 +116,7 @@ private:
 	std::vector< ConfigurationBase* >	m_conf;
 	std::map< std::string, std::size_t >	m_section;
 	std::string				m_modFolder;
-	std::list< std::string >		m_modFiles;
+	std::vector< std::string >		m_modFiles;
 
 	const module::ModulesDirectory*		m_modDir;
 public:

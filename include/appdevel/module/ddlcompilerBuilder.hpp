@@ -100,9 +100,9 @@ public:
 	{
 		return ObjectConstructorBase::DDL_COMPILER_OBJECT;
 	}
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
-		return new DDLCompilerConstructor( m_className, m_name, m_createFunc);
+		return new DDLCompilerConstructor( className(), m_name, m_createFunc);
 	}
 	const char* name() const
 	{

@@ -61,7 +61,7 @@ ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
 	:m_banner( bconf->toString() )
 	,m_db( dconf, modules )
 	,m_aaaa( aconf, modules )
-	,m_proc( pconf, modules, &m_prglib){}
+	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules){}
 
 ServerHandler::~ServerHandler()	{}
 

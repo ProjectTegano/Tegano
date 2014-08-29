@@ -49,14 +49,14 @@ struct PdfPrinter
 	{
 		return new prnt::SimplePdfPrintProgram( prnt::createTestTraceDocument);
 	}
-	static BuilderBase* constructor()
+	static const BuilderBase* constructor()
 	{
 		return new ProgramTypeBuilder( "TestPdfPrintFunction", "simplepdf", &PdfPrinter::createProgram);
 	}
 };
 }//anonymous namespace
 
-static createBuilderFunc objdef[] =
+static getBuilderFunc objdef[] =
 {
 	PdfPrinter::constructor, NULL
 };

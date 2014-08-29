@@ -40,7 +40,7 @@
 #include "AAAAproviderImpl.hpp"
 #include "logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
-#include "moduleDirectory.hpp"
+#include "module/moduleDirectory.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -50,10 +50,11 @@ AuthenticationFactory::AuthenticationFactory( const std::list< config::NamedConf
 {
 	for ( std::list<config::NamedConfiguration*>::const_iterator it = confs.begin();
 							it != confs.end(); it++ )	{
-		module::ConfiguredBuilder* builder = modules->getBuilder((*it)->className());
+		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
+			ObjectConstructorBaseR constructorRef( builder->constructor());
 			ConfiguredObjectConstructor< AuthenticationUnit >* auth =
-					dynamic_cast< ConfiguredObjectConstructor< AuthenticationUnit >* >( builder->constructor());
+					dynamic_cast< ConfiguredObjectConstructor< AuthenticationUnit >* >( constructorRef.get());
 			if ( auth == NULL )	{
 				LOG_ALERT << "AuthenticationFactory: '" << builder->objectClassName()
 					  << "' is not an Authentication Unit builder";

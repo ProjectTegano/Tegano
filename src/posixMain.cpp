@@ -30,9 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// posixMain.cpp
-//
+/// \file posixMain.cpp
 
 #include <iostream>
 #include <string>
@@ -51,7 +49,7 @@
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
 #include "appInfo.hpp"
-#include "provider/moduleDirectory.hpp"
+#include "config/moduleDirectoryImpl.hpp"
 
 #include "system/connectionHandler.hpp"
 
@@ -191,7 +189,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModulesDirectory modDir( configurationPath);
+		_Wolframe::module::ModulesDirectoryImpl modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
 

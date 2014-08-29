@@ -34,6 +34,7 @@
 /// \brief Base classes for virtual constructors to build objects loaded from modules
 
 #include "config/configurationBase.hpp"
+#include <boost/shared_ptr.hpp>
 
 #ifndef _CONSTRUCTOR_HPP_INCLUDED
 #define _CONSTRUCTOR_HPP_INCLUDED
@@ -100,6 +101,10 @@ public:
 	/// The type of the object. Filter, DDL compiler, authentication etc.
 	virtual ObjectType objectType() const = 0;
 };
+
+/// \brief Reference for exception save memory handling
+typedef boost::shared_ptr<ObjectConstructorBase> ObjectConstructorBaseR;
+
 
 // Templates of specialized constructors
 /// Constructor of a configured object

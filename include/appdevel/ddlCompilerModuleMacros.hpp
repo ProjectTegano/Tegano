@@ -44,9 +44,10 @@
 		{\
 			return new COMPILERCLASS();\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::DDLCompilerBuilder( "DDLCompiler_" #LANGUAGE, #LANGUAGE, create);\
+			static const _Wolframe::module::DDLCompilerBuilder rt( "DDLCompiler_" #LANGUAGE, #LANGUAGE, create);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

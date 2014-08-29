@@ -236,7 +236,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	{
 		LOG_DEBUG << "Running without configuration";
 	}
-	m_modulesDirectory = new module::ModulesDirectory( m_configurationPath);
+	m_modulesDirectory = new module::ModulesDirectoryImpl( m_configurationPath);
 
 	if (vmap.count( "input"))
 	{
@@ -266,7 +266,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 			LOG_DEBUG << "Defined additional module to load '" << absmodpath << "'";
 		}
 	}
-	std::list<std::string> modfiles;
+	std::vector<std::string> modfiles;
 	std::copy( m_modules.begin(), m_modules.end(), std::back_inserter( modfiles));
 
 	if (!m_modulesDirectory->loadModules( modfiles))

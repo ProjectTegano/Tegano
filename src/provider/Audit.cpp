@@ -37,7 +37,7 @@
 #include <stdexcept>
 
 #include "AAAAproviderImpl.hpp"
-#include "moduleDirectory.hpp"
+#include "module/moduleDirectory.hpp"
 #include "logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 
@@ -49,7 +49,7 @@ AuditProvider::AuditProvider( const std::list< config::NamedConfiguration* >& co
 {
 	for ( std::list<config::NamedConfiguration*>::const_iterator it = confs.begin();
 								it != confs.end(); it++ )	{
-		module::ConfiguredBuilder* builder = modules->getBuilder((*it)->className());
+		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
 			ConfiguredObjectConstructor< AuditUnit >* audit =
 					dynamic_cast< ConfiguredObjectConstructor< AuditUnit >* >( builder->constructor());

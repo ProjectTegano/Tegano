@@ -44,16 +44,16 @@ namespace AAAA {
 
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getModule( void )
 {
-	static module::ConfiguredBuilderDescription< AAAA::DBauthConstructor,
+	static const module::ConfiguredBuilderDescription< AAAA::DBauthConstructor,
 			AAAA::DBAuthConfig > mod( "Authentication database", "Authentication",
 						  "database", "DBAuth" );
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule, NULL
+static const BuilderBase* (*containers[])() = {
+	getModule, NULL
 };
 
 ModuleEntryPoint entryPoint( 0, "Database authentification", containers );

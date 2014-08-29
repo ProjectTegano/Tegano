@@ -114,9 +114,9 @@ public:
 	{
 		return ObjectConstructorBase::FORM_FUNCTION_OBJECT;
 	}
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
-		return new CppFormFunctionConstructor( m_className, m_name, m_function);
+		return new CppFormFunctionConstructor( className(), m_name, m_function);
 	}
 private:
 	std::string m_name;

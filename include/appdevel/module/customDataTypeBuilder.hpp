@@ -104,7 +104,7 @@ public:
 		return ObjectConstructorBase::CUSTOM_DATA_TYPE_OBJECT;
 	}
 
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
 		return new CustomDataTypeConstructor( objectClassName(), m_identifier, m_createFunc);
 	}

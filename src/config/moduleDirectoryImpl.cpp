@@ -30,108 +30,73 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// moduleDirectory.cpp
-//
+/// \file moduleDirectoryImpl.cpp
 
-#include <boost/algorithm/string.hpp>
-#include "logger-v1.hpp"
-#include "moduleDirectory.hpp"
+#include "moduleDirectoryImpl.hpp"
 #include "moduleLoader.hpp"
 #include "utils/fileUtils.hpp"
+#include <boost/algorithm/string.hpp>
+#include "logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::module;
 
-ModulesDirectory::~ModulesDirectory()
+bool ModulesDirectoryImpl::addBuilder( const ConfiguredBuilder* builder )
 {
-	while ( ! m_simpleBuilder.empty() )	{
-		assert( m_simpleBuilder.front() != NULL );
-		delete m_simpleBuilder.front();
-		m_simpleBuilder.pop_front();
-	}
-// Most of the builder creation functions do not allocate an object.
-// The objects are static variables in those functions so we don't delete them.
-//
-//	while ( ! m_cfgdBuilder.empty() )	{
-//		assert( m_cfgdBuilder.front() != NULL );
-//		LOG_ALERT << "Destroying builder " << m_cfgdBuilder.front()->identifier();
-//		delete m_cfgdBuilder.front();
-//		LOG_ALERT << "Builder for '" << m_cfgdBuilder.front()->identifier() << "' destroyed";
-//		m_cfgdBuilder.pop_front();
-//	}
-}
-
-std::vector<std::pair<std::string,std::string> > ModulesDirectory::getConfigurableSectionKeywords( ObjectConstructorBase::ObjectType objtype) const
-{
-	std::vector< std::pair<std::string,std::string> > rt;
-	std::list< ConfiguredBuilder* >::const_iterator ii = m_cfgdBuilder.begin(), ee = m_cfgdBuilder.end();
-	for (; ii != ee; ++ii)
-	{
-		if ((*ii)->objectType() == objtype)
-		{
-			rt.push_back( std::pair<std::string,std::string>( (*ii)->m_section, (*ii)->m_keyword));
-		}
-	}
-	return rt;
-}
-
-bool ModulesDirectory::addBuilder( ConfiguredBuilder* builder )
-{
-	for ( std::list< ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
+	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
 							it != m_cfgdBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->m_section, builder->m_section ) &&
-				boost::algorithm::iequals( (*it)->m_keyword, builder->m_keyword ))	{
-			LOG_ALERT << "A configuration module for section '" << builder->m_section
-				  << "' keyword '" << builder->m_keyword << "' already exists";
+		if ( boost::algorithm::iequals( (*it)->section(), builder->section() ) &&
+				boost::algorithm::iequals( (*it)->keyword(), builder->keyword() ))	{
+			LOG_ALERT << "A configuration module for section '" << builder->section()
+				  << "' keyword '" << builder->keyword() << "' already exists";
 			return false;
 		}
-		if ( boost::algorithm::iequals( (*it)->m_className, builder->m_className ))	{
-			LOG_ALERT << "A module container named '" << builder->m_className
+		if ( boost::algorithm::iequals( (*it)->className(), builder->className() ))	{
+			LOG_ALERT << "A module container named '" << builder->className()
 				  << "' already exists";
 			return false;
 		}
 	}
 	m_cfgdBuilder.push_back( builder );
-	LOG_DEBUG << "Module '" << builder->m_className << "' registered for section '"
-		  << builder->m_section << "' keyword '" << builder->m_keyword << "'";
+	LOG_DEBUG << "Module '" << builder->className() << "' registered for section '"
+		  << builder->section() << "' keyword '" << builder->keyword() << "'";
 	return true;
 }
 
-bool ModulesDirectory::addBuilder( SimpleBuilder* builder )
+bool ModulesDirectoryImpl::addBuilder( const SimpleBuilder* builder )
 {
-	for ( std::list< SimpleBuilder* >::const_iterator it = m_simpleBuilder.begin();
+	for ( std::vector< const SimpleBuilder* >::const_iterator it = m_simpleBuilder.begin();
 							it != m_simpleBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->m_className, builder->m_className ))	{
-			LOG_ALERT << "A module object named '" << builder->m_className
+		if ( boost::algorithm::iequals( (*it)->className(), builder->className() ))	{
+			LOG_ALERT << "A module object named '" << builder->className()
 				  << "' already exists";
 			return false;
 		}
 	}
 	m_simpleBuilder.push_back( builder );
-	LOG_DEBUG << "Module object '" << builder->m_className << "' registered";
+	LOG_DEBUG << "Module object '" << builder->className() << "' registered";
 	return true;
 }
 
-ConfiguredBuilder* ModulesDirectory::getBuilder( const std::string& section,
+const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::string& section,
 						 const std::string& keyword ) const
 {
-	for ( std::list< ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
+	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
 							it != m_cfgdBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->m_keyword, keyword ) &&
-				boost::algorithm::iequals( (*it)->m_section, section ))
+		if ( boost::algorithm::iequals( (*it)->keyword(), keyword ) &&
+				boost::algorithm::iequals( (*it)->section(), section ))
 			return *it;
 	}
 	return NULL;
 }
 
-ConfiguredBuilder* ModulesDirectory::getBuilder( const std::string& objectClassName ) const
+const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::string& objectClassName ) const
 {
-	for ( std::list< ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
+	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
 							it != m_cfgdBuilder.end(); it++ )
 	{
-		LOG_DATA << "Get builder of '" << objectClassName << "' test '" << (*it)->m_className << "'";
-		if ( boost::algorithm::iequals( (*it)->m_className, objectClassName ))
+		LOG_DATA << "Get builder of '" << objectClassName << "' test '" << (*it)->className() << "'";
+		if ( boost::algorithm::iequals( (*it)->className(), objectClassName ))
 		{
 			return *it;
 		}
@@ -139,14 +104,18 @@ ConfiguredBuilder* ModulesDirectory::getBuilder( const std::string& objectClassN
 	return NULL;
 }
 
+const std::vector<const SimpleBuilder*>& ModulesDirectoryImpl::getSimpleBuilderList() const
+{
+	return m_simpleBuilder;
+}
 
 #define DO_STRINGIFY(x)	#x
 #define STRINGIFY(x)	DO_STRINGIFY(x)
 
 #if defined( DEFAULT_MODULE_LOAD_DIR )
-std::string ModulesDirectory::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool useDefaultModuleDir) const
+std::string ModulesDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool useDefaultModuleDir) const
 #else
-std::string ModulesDirectory::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool) const
+std::string ModulesDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool) const
 #endif
 {
 	// Add the module extension, if not defined
@@ -192,11 +161,11 @@ std::string ModulesDirectory::getAbsoluteModulePath( const std::string& moduleNa
 	return std::string();
 }
 
-bool module::ModulesDirectory::loadModules( const std::list< std::string >& modFiles)
+bool module::ModulesDirectoryImpl::loadModules( const std::vector< std::string >& modFiles)
 {
 	bool retVal = true;
 
-	for ( std::list< std::string >::const_iterator it = modFiles.begin();
+	for ( std::vector< std::string >::const_iterator it = modFiles.begin();
 							it != modFiles.end(); it++ )
 	{
 		ModuleEntryPoint* entry = loadModuleEntryPoint( *it);
@@ -206,11 +175,11 @@ bool module::ModulesDirectory::loadModules( const std::list< std::string >& modF
 			retVal = false;
 			break;
 		}
-		for ( unsigned short i = 0; entry->createBuilder[ i ]; i++ )
+		for ( unsigned short i = 0; entry->getBuilder[ i ]; i++ )
 		{
-			BuilderBase* builder = entry->createBuilder[ i ]();
-			SimpleBuilder* simpleBuilder = dynamic_cast<SimpleBuilder*>(builder);
-			ConfiguredBuilder* configuredBuilder = dynamic_cast<ConfiguredBuilder*>(builder);
+			const BuilderBase* builder = entry->getBuilder[ i ]();
+			const SimpleBuilder* simpleBuilder = dynamic_cast<const SimpleBuilder*>(builder);
+			const ConfiguredBuilder* configuredBuilder = dynamic_cast<const ConfiguredBuilder*>(builder);
 			if (configuredBuilder)
 			{
 				addBuilder( configuredBuilder);

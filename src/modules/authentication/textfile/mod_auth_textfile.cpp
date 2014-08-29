@@ -41,16 +41,16 @@
 namespace _Wolframe {
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getModule( void )
 {
-	static module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
+	static const module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
 			AAAA::TextFileAuthConfig > mod( "Authentication file", "Authentication",
 							"TextFile", "TextFileAuth" );
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule, NULL
+static const BuilderBase* (*containers[])() = {
+	getModule, NULL
 };
 
 ModuleEntryPoint entryPoint( 0, "Text File authentication", containers);

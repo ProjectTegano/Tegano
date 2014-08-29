@@ -46,9 +46,10 @@
 		{\
 			return new PROGRAMCLASS();\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::ProgramTypeBuilder( LANGNAME "ProgramType", LANGNAME "Language", create);\
+			static const _Wolframe::module::ProgramTypeBuilder rt( LANGNAME "ProgramType", LANGNAME "Language", create);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

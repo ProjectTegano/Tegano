@@ -67,7 +67,7 @@
 		virtual ~Constructor(){}\
 		_Wolframe::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return DATABASE_OBJECT;\
+			return _Wolframe::ObjectConstructorBase::DATABASE_OBJECT;\
 		}\
 		const char* objectClassName() const\
 		{\
@@ -82,31 +82,29 @@
 	class BuilderDescription : public _Wolframe::module::ConfiguredBuilder\
 	{\
 	public:\
-		BuilderDescription( const char* title, const char* section,\
-					const char* keyword, const char* className )\
-			:_Wolframe::module::ConfiguredBuilder( title, section, keyword, className ){}\
+		BuilderDescription( const char* title_, const char* section_,\
+					const char* keyword_, const char* className_ )\
+			:_Wolframe::module::ConfiguredBuilder( title_, section_, keyword_, className_ ){}\
 		virtual ~BuilderDescription()\
 		{}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix )\
+		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix ) const\
 		{\
-			return new CONFIGCLASS( m_title, logPrefix);\
+			return new CONFIGCLASS( title(), logPrefix);\
 		}\
 		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return m_constructor.objectType();\
+			return _Wolframe::ObjectConstructorBase::DATABASE_OBJECT;\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor()\
+		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\
-			return &m_constructor;\
+			return new Constructor();\
 		}\
-	private:\
-		Constructor m_constructor;\
 	};\
 	struct Builder \
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			static BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
+			static const BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
 			return &mod;\
 		}\
 	};\
@@ -166,24 +164,22 @@
 		{}\
 		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix )\
 		{\
-			return new CONFIGCLASS( m_title, logPrefix);\
+			return new CONFIGCLASS( title(), logPrefix);\
 		}\
 		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return m_constructor.objectType();\
+			return DATABASE_OBJECT;\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor()\
+		virtual _Wolframe::ObjectConstructorBase* constructor() const \
 		{\
-			return &m_constructor;\
+			return new Constructor();\
 		}\
-	private:\
-		Constructor m_constructor;\
 	};\
 	struct Builder \
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			static BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
+			static const BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
 			return &mod;\
 		}\
 	};\

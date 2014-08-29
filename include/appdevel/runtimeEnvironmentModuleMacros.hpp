@@ -77,20 +77,21 @@
 		{\
 			return _Wolframe::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT;\
 		}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix)\
+		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
 		{\
 			return new CONFIGDEF( CONFIG_TITLE "RuntimeEnvironment", m_title, logPrefix, m_keyword);\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor()\
+		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\
 			return new RuntimeEnvConstructor();\
 		}\
 	};\
 	struct Constructor\
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new RuntimeEnvBuilder();\
+			static const RuntimeEnvBuilder rt;\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

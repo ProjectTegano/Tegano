@@ -35,7 +35,7 @@
 //
 
 #include "logger-v1.hpp"
-#include "moduleDirectory.hpp"
+#include "module/moduleDirectory.hpp"
 #include "AAAAproviderImpl.hpp"
 #include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"
@@ -87,7 +87,7 @@ bool AAAAconfiguration::parse( const config::ConfigurationNode& pt, const std::s
 						retVal = false;
 				}
 				else if ( modules )	{
-					module::ConfiguredBuilder* builder = modules->getBuilder( "Authentication", L2it->first );
+					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Authentication", L2it->first );
 					if ( builder )	{
 						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
 						if ( conf->parse( L2it->second, L2it->first, modules ))
@@ -116,7 +116,7 @@ bool AAAAconfiguration::parse( const config::ConfigurationNode& pt, const std::s
 						retVal = false;
 				}
 				else if ( modules )	{
-					module::ConfiguredBuilder* builder = modules->getBuilder( "Authorization", L2it->first );
+					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Authorization", L2it->first );
 					if ( builder )	{
 						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
 						if ( conf->parse( L2it->second, L2it->first, modules ))
@@ -145,7 +145,7 @@ bool AAAAconfiguration::parse( const config::ConfigurationNode& pt, const std::s
 						retVal = false;
 				}
 				else if ( modules )	{
-					module::ConfiguredBuilder* builder = modules->getBuilder( "Audit", L2it->first );
+					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Audit", L2it->first );
 					if ( builder )	{
 						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
 						if ( conf->parse( L2it->second, L2it->first, modules ))

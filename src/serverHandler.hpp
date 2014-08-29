@@ -34,7 +34,7 @@
 
 #ifndef _Wolframe_SERVER_HANDLER_HPP_INCLUDED
 #define _Wolframe_SERVER_HANDLER_HPP_INCLUDED
-
+#include "module/moduleDirectory.hpp"
 #include "serverConnectionHandler.hpp"
 #include "system/connectionHandler.hpp"
 #include "processor/execContext.hpp"
@@ -43,6 +43,7 @@
 #include "processor/execContext.hpp"
 #include "mainConnectionHandler.hpp"
 #include "config/bannerConfiguration.hpp"
+#include "config/procProviderConfiguration.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "provider/procProviderImpl.hpp"
 
@@ -52,7 +53,7 @@ namespace _Wolframe {
 class ServerHandler
 {
 public:
-	ServerHandler( const proc::ProcProviderConfig* pconf,
+	ServerHandler( const config::ProcProviderConfiguration* pconf,
 			const AAAA::AAAAconfiguration* aconf,
 			const db::DBproviderConfig* dconf,
 			const config::BannerConfiguration* bconf,
@@ -61,17 +62,17 @@ public:
 	
 	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );
 
-	const std::string& banner() const			{ return m_banner; }
-	const db::DatabaseProvider* dbProvider() const		{ return &m_db; }
-	const AAAA::AAAAprovider* aaaaProvider() const		{ return &m_aaaa; }
-	const proc::ProcessorProvider* procProvider() const	{ return &m_proc; }
+	const std::string& banner() const				{ return m_banner; }
+	const db::DatabaseProvider* dbProvider() const			{ return &m_db; }
+	const AAAA::AAAAprovider* aaaaProvider() const			{ return &m_aaaa; }
+	const proc::ProcessorProviderInterface* procProvider() const	{ return &m_proc; }
 
 private:
 	const std::string		m_banner;
 	db::DatabaseProvider		m_db;
 	AAAA::AAAAprovider		m_aaaa;
-	prgbind::ProgramLibrary		m_prglib;
-	proc::ProcessorProvider		m_proc;
+	prgbind::ProgramLibraryImpl	m_prglib;
+	proc::ProcessorProviderImpl	m_proc;
 };
 
 } // namespace _Wolframe

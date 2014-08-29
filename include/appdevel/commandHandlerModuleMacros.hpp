@@ -74,20 +74,20 @@
 		{\
 			return _Wolframe::ObjectConstructorBase::CMD_HANDLER_OBJECT;\
 		}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix)\
+		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
 		{\
-			return new CONFIGDEF( CONFIG_TITLE, m_title, logPrefix, m_keyword);\
+			return new CONFIGDEF( CONFIG_TITLE, title(), logPrefix, keyword());\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor()\
+		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\
 			return new CommandHandlerConstructor();\
 		}\
 	};\
 	struct Constructor\
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			static CommandHandlerBuilder rt;\
+			static const CommandHandlerBuilder rt;\
 			return &rt;\
 		}\
 	};\

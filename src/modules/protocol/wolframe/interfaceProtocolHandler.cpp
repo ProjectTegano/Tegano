@@ -33,7 +33,7 @@
 ///\file interfaceProtocolHandler.cpp
 #include "interfaceProtocolHandler.hpp"
 #include "logger-v1.hpp"
-#include "processor/procProvider.hpp"
+#include "processor/procProviderInterface.hpp"
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 

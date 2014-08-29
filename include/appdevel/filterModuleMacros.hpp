@@ -45,9 +45,10 @@
 		{\
 			return new FILTERTYPECLASS();\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::FilterBuilder( FILTERNAME "Filter", FILTERNAME, create);\
+			static const _Wolframe::module::FilterBuilder rt( FILTERNAME "Filter", FILTERNAME, create);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

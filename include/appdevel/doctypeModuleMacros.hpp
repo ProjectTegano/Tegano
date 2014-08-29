@@ -44,9 +44,10 @@
 		{\
 			return new DETECTORCLASS();\
 		}\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			return new _Wolframe::module::DoctypeDetectorBuilder( DOCFORMATNAME "Detector", DOCFORMATNAME, create);\
+			static const _Wolframe::module::DoctypeDetectorBuilder rt( DOCFORMATNAME "Detector", DOCFORMATNAME, create);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

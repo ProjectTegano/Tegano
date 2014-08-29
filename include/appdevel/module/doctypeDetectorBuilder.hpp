@@ -109,7 +109,7 @@ public:
 		return ObjectConstructorBase::DOCTYPE_DETECTOR_OBJECT;
 	}
 	/// \brief Create an object constructor
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
 		return new DoctypeDetectorConstructor( objectClassName(), m_createDoctypeDetector);
 	}

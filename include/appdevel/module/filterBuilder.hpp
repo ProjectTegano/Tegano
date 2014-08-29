@@ -95,7 +95,7 @@ public:
 	{
 		return ObjectConstructorBase::FILTER_OBJECT;
 	}
-	virtual ObjectConstructorBase* constructor()
+	virtual ObjectConstructorBase* constructor() const
 	{
 		return new FilterConstructor( m_name, m_createFilterType);
 	}

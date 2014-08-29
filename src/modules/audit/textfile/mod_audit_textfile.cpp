@@ -41,7 +41,7 @@
 namespace _Wolframe {
 namespace module {
 
-static BuilderBase* createModule( void )
+static const BuilderBase* getModule( void )
 {
 	static module::ConfiguredBuilderDescription< AAAA::TextFileAuditConstructor,
 			AAAA::TextFileAuditConfig > mod( "Audit - text file", "audit",
@@ -49,8 +49,8 @@ static BuilderBase* createModule( void )
 	return &mod;
 }
 
-static BuilderBase* (*containers[])() = {
-	createModule, NULL
+static const BuilderBase* (*containers[])() = {
+	getModule, NULL
 };
 
 ModuleEntryPoint entryPoint( 0, "Text file audit", containers );

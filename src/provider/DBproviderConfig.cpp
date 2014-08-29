@@ -38,7 +38,7 @@
 
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
-#include "moduleDirectory.hpp"
+#include "module/moduleDirectory.hpp"
 #include "logger-v1.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -61,7 +61,7 @@ bool DBproviderConfig::parse( const config::ConfigurationNode& pt,
 
 	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )	{
 		if ( modules )	{
-			module::ConfiguredBuilder* builder = modules->getBuilder( "database", L1it->first );
+			const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "database", L1it->first );
 			if ( builder )	{
 				config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
 				if ( conf->parse( L1it->second, L1it->first, modules ))	{
