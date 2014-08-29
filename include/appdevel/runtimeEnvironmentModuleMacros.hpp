@@ -79,7 +79,7 @@
 		}\
 		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
 		{\
-			return new CONFIGDEF( CONFIG_TITLE "RuntimeEnvironment", m_title, logPrefix, m_keyword);\
+			return new CONFIGDEF( CONFIG_TITLE "RuntimeEnvironment", title(), logPrefix, keyword());\
 		}\
 		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\

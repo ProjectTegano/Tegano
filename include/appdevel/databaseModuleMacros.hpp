@@ -142,7 +142,7 @@
 		virtual ~Constructor(){}\
 		_Wolframe::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return DATABASE_OBJECT;\
+			return _Wolframe::ObjectConstructorBase::DATABASE_OBJECT;\
 		}\
 		const char* objectClassName() const\
 		{\
@@ -157,20 +157,20 @@
 	class BuilderDescription : public _Wolframe::module::ConfiguredBuilder\
 	{\
 	public:\
-		BuilderDescription( const char* title, const char* section,\
-					const char* keyword, const char* className )\
-			:_Wolframe::module::ConfiguredBuilder( title, section, keyword, className ){}\
+		BuilderDescription( const char* title_, const char* section_,\
+					const char* keyword_, const char* className_ )\
+			:_Wolframe::module::ConfiguredBuilder( title_, section_, keyword_, className_ ){}\
 		virtual ~BuilderDescription()\
 		{}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix )\
+		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix ) const\
 		{\
 			return new CONFIGCLASS( title(), logPrefix);\
 		}\
 		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return DATABASE_OBJECT;\
+			return _Wolframe::ObjectConstructorBase::DATABASE_OBJECT;\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor() const \
+		virtual _Wolframe::ObjectConstructorBase* constructor() const\
 		{\
 			return new Constructor();\
 		}\

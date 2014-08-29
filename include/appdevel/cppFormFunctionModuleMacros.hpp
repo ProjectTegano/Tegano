@@ -42,10 +42,11 @@
 {\
 	struct Constructor\
 	{\
-		static _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			_Wolframe::serialize::CppFormFunction func = _Wolframe::appdevel::CppFormFunction<OUTPUT,INPUT,FUNCTION>::declaration();\
-			return new _Wolframe::module::CppFormFunctionBuilder( "CppFormFunction_" NAME, NAME, func);\
+			static _Wolframe::serialize::CppFormFunction func = _Wolframe::appdevel::CppFormFunction<OUTPUT,INPUT,FUNCTION>::declaration();\
+			static const _Wolframe::module::CppFormFunctionBuilder rt( "CppFormFunction_" NAME, NAME, func);\
+			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\

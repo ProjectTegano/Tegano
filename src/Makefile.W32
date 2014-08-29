@@ -7,6 +7,7 @@ SUBDIRS = \
 	libwolframe_database \
 	libwolframe_langbind \
 	config \
+	provider \
 	modules
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk

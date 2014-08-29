@@ -35,7 +35,6 @@
 #include "logger-v1.hpp"
 #include "wolfilterIostreamFilter.hpp"
 #include "wolfilterCommandLine.hpp"
-#include "prgbind/programLibrary.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testDescription.hpp"
 #include "wtest/testReport.hpp"
@@ -43,7 +42,8 @@
 #include "utils/parseUtils.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include "processor/procProvider.hpp"
+#include "provider/programLibraryImpl.hpp"
+#include "provider/procProviderImpl.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
