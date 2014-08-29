@@ -68,7 +68,7 @@ AAAAconfiguration::~AAAAconfiguration()
 
 /// methods
 bool AAAAconfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
-			       const module::ModulesDirectory* modules )
+			       const module::ModuleDirectory* modules )
 {
 	using namespace _Wolframe::config;
 	bool retVal = true;

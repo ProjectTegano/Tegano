@@ -224,7 +224,7 @@ net::ConnectionHandler* ServerHandler::ServerHandlerImpl::newConnection( const n
 
 /// Outside face of the PIMPL
 ServerHandler::ServerHandler( const HandlerConfiguration *conf,
-			      const module::ModulesDirectory* /*modules*/ )
+			      const module::ModuleDirectory* /*modules*/ )
 	: m_impl( new ServerHandlerImpl( conf ) )	{}
 
 ServerHandler::~ServerHandler()	{ delete m_impl; }

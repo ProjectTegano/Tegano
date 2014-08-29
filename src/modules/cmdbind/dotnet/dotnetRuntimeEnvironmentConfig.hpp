@@ -69,7 +69,7 @@ public:
 	///\brief Parse the configuration
 	///\param[in] pt configuration tree
 	///\param[in] modules module directory
-	virtual bool parse( const config::ConfigurationNode& pt, const std::string&, const ModulesDirectory* modules);
+	virtual bool parse( const config::ConfigurationNode& pt, const std::string&, const ModuleDirectory* modules);
 
 	///\brief Set canonical path for files referenced as relative path in configuration
 	///\param[in] referencePath reference path

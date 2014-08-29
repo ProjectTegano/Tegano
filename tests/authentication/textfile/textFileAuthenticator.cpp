@@ -75,7 +75,7 @@ protected:
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 
 		// Build the modules directory
-		ModulesDirectory modDir( g_execdir);
+		ModuleDirectory modDir( g_execdir);
 		static module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
 				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );

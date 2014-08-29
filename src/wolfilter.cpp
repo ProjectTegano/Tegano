@@ -77,11 +77,11 @@ int main( int argc, char **argv )
 		if (doExit) return 0;
 
 		// Load the modules, scripts, etc. defined in the command line into the global context:
-		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.modulesDirectory());
+		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.moduleDirectory());
 
-		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.modulesDirectory());
+		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.moduleDirectory());
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
-		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.modulesDirectory());
+		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);
 
 		if (!processorProvider.resolveDB( databaseProvider))

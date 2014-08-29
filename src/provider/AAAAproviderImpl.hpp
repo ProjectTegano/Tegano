@@ -95,7 +95,7 @@ class AuthenticationFactory
 {
 public:
 	AuthenticationFactory( const std::list< config::NamedConfiguration* >& confs,
-			       const module::ModulesDirectory* modules );
+			       const module::ModuleDirectory* modules );
 	~AuthenticationFactory();
 	bool resolveDB( const db::DatabaseProvider& db );
 
@@ -127,7 +127,7 @@ class AuthorizationProvider
 public:
 	AuthorizationProvider( const std::list< config::NamedConfiguration* >& confs,
 			       bool authzDefault,
-			       const module::ModulesDirectory* modules );
+			       const module::ModuleDirectory* modules );
 	~AuthorizationProvider();
 	bool resolveDB( const db::DatabaseProvider& db );
 
@@ -156,7 +156,7 @@ class AuditProvider
 {
 public:
 	AuditProvider( const std::list< config::NamedConfiguration* >& confs,
-		       const module::ModulesDirectory* modules );
+		       const module::ModuleDirectory* modules );
 	~AuditProvider();
 	bool resolveDB( const db::DatabaseProvider& db );
 
@@ -172,7 +172,7 @@ class AAAAprovider::AAAAprovider_Impl
 {
 public:
 	AAAAprovider_Impl( const AAAAconfiguration* conf,
-			   const module::ModulesDirectory* modules );
+			   const module::ModuleDirectory* modules );
 	~AAAAprovider_Impl()			{}
 	bool resolveDB( const db::DatabaseProvider& db );
 

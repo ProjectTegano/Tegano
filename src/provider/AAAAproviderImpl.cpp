@@ -46,7 +46,7 @@ namespace AAAA {
 
 /// AAAAprovider PIMPL
 AAAAprovider::AAAAprovider( const AAAAconfiguration* conf,
-			    const module::ModulesDirectory* modules )
+			    const module::ModuleDirectory* modules )
 	: m_impl( new AAAAprovider_Impl( conf, modules ))	{}
 
 AAAAprovider::~AAAAprovider()
@@ -82,7 +82,7 @@ Auditor* AAAAprovider::auditor() const
 
 /// AAAAprovider PIMPL implementation
 AAAAprovider::AAAAprovider_Impl::AAAAprovider_Impl( const AAAAconfiguration* conf,
-						    const module::ModulesDirectory* modules )
+						    const module::ModuleDirectory* modules )
 	: m_authenticator( conf->m_authConfig, modules ),
 	  m_authorizer( conf->m_authzConfig, conf->m_authzDefault, modules ),
 	  m_auditor( conf->m_auditConfig, modules )

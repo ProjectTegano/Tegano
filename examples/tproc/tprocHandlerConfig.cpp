@@ -68,7 +68,7 @@ const serialize::StructDescriptionBase* ConfigurationStruct::getStructDescriptio
 	return &rt;
 }
 
-bool Configuration::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory*)
+bool Configuration::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory*)
 {
 	try
 	{

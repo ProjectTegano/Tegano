@@ -42,7 +42,7 @@ class ModuleFixture : public ::testing::Test
 
 TEST_F( ModuleFixture, LoadingModuleFromDir )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -72,7 +72,7 @@ TEST_F( ModuleFixture, LoadingModuleFromDir )
 
 TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -116,7 +116,7 @@ TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 TEST_F( ModuleFixture, ModuleLogging )
 {
 	std::stringstream buffer;
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -157,7 +157,7 @@ TEST_F( ModuleFixture, ModuleLogging )
 
 TEST_F( ModuleFixture, LoadingMissingModuleFile )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -171,7 +171,7 @@ TEST_F( ModuleFixture, LoadingMissingModuleFile )
 
 TEST_F( ModuleFixture, LoadingNotAWolframeModule )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -185,7 +185,7 @@ TEST_F( ModuleFixture, LoadingNotAWolframeModule )
 
 TEST_F( ModuleFixture, LoadingModuleWithoutExtension )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -199,7 +199,7 @@ TEST_F( ModuleFixture, LoadingModuleWithoutExtension )
 
 TEST_F( ModuleFixture, LoadingModuleLackingASymbol )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifndef _WIN32
@@ -213,7 +213,7 @@ TEST_F( ModuleFixture, LoadingModuleLackingASymbol )
 
 TEST_F( ModuleFixture, LoadingModuleResolvableSymbol )
 {
-	ModulesDirectory modDir( g_execdir);
+	ModuleDirectory modDir( g_execdir);
 	list<string> modFiles;
 
 #ifdef _WIN32

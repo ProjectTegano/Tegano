@@ -46,7 +46,7 @@ namespace _Wolframe {
 namespace AAAA {
 
 bool PAMAuthConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
-				const module::ModulesDirectory* /*modules*/ )
+				const module::ModuleDirectory* /*modules*/ )
 {
 	using namespace _Wolframe::config;
 	bool retVal = true;

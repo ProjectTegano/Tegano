@@ -43,12 +43,12 @@
 namespace _Wolframe {
 namespace module {
 
-/// \class ModulesDirectory
+/// \class ModuleDirectory
 /// \brief Interface to the modules directory used by the constructors of the providers to build themselves.
-class ModulesDirectory
+class ModuleDirectory
 {
 public:
-	virtual ~ModulesDirectory(){}
+	virtual ~ModuleDirectory(){}
 	/// \brief Get the configured builder for the configuration section, keyword pair.
 	/// \param[in] section	the section (parent) of the configuration
 	/// \param[in] keyword	the keyword in the section

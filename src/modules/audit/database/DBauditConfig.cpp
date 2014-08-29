@@ -43,7 +43,7 @@ namespace _Wolframe {
 namespace AAAA {
 
 bool DBauditConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
-			   const module::ModulesDirectory* /*modules*/ )
+			   const module::ModuleDirectory* /*modules*/ )
 {
 	using namespace config;
 

@@ -91,7 +91,7 @@ std::vector<std::string> WolfwizardCommandLine::configModules() const
 	{
 		if (boost::algorithm::iequals( mi->first, "module"))
 		{
-			std::string absmodpath = m_modulesDirectory->getAbsoluteModulePath( mi->second.data(), directory);
+			std::string absmodpath = m_moduleDirectory->getAbsoluteModulePath( mi->second.data(), directory);
 			if (absmodpath.empty())
 			{
 				throw std::runtime_error( std::string("could not resolve configured module path '") + mi->second.data() + "'");
@@ -105,7 +105,7 @@ std::vector<std::string> WolfwizardCommandLine::configModules() const
 WolfwizardCommandLine::WolfwizardCommandLine( int argc, char** argv, const std::string& referencePath_)
 	:m_printhelp(false)
 	,m_printversion(false)
-	,m_modulesDirectory(0)
+	,m_moduleDirectory(0)
 	,m_configurationPath(referencePath_)
 {
 	static const WolfwizardOptionStruct ost;
@@ -127,10 +127,10 @@ WolfwizardCommandLine::WolfwizardCommandLine( int argc, char** argv, const std::
 		m_configfile = utils::getCanonicalPath( m_configfile, m_configurationPath);
 		m_configurationPath = boost::filesystem::path( m_configfile ).branch_path().string();
 		m_config = utils::readPropertyTreeFile( m_configfile);
-		m_modulesDirectory = new module::ModulesDirectoryImpl( m_configurationPath);
+		m_moduleDirectory = new module::ModuleDirectoryImpl( m_configurationPath);
 		m_modules = configModules();
 
-		if (!m_modulesDirectory->loadModules( m_modules))
+		if (!m_moduleDirectory->loadModules( m_modules))
 		{
 			throw std::runtime_error( "Modules could not be loaded");
 		}

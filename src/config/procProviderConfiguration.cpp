@@ -52,7 +52,7 @@ using namespace _Wolframe;
 using namespace _Wolframe::config;
 
 bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
-				const module::ModulesDirectory* modules )
+				const module::ModuleDirectory* modules )
 {
 	using namespace _Wolframe::config;
 	bool retVal = true;

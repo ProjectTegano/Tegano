@@ -66,7 +66,7 @@ public:
 				const std::vector<config::NamedConfiguration*>& procConfig_,
 				const std::vector<std::string>& programFiles_,
 				const std::string& referencePath_,
-				const module::ModulesDirectory* modules_);
+				const module::ModuleDirectory* modules_);
 	/// \brief Destructor
 	virtual ~ProcessorProviderImpl();
 

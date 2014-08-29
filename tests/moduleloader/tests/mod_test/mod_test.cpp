@@ -54,7 +54,7 @@ TestModuleConfig::~TestModuleConfig()
 }
 
 bool TestModuleConfig::parse( const config::ConfigurationNode& /*pt*/, const std::string& /*node*/,
-    const module::ModulesDirectory* /*modules*/ )
+    const module::ModuleDirectory* /*modules*/ )
 {
 	return true;
 }

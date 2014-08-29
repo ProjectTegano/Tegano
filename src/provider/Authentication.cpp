@@ -46,7 +46,7 @@ namespace _Wolframe {
 namespace AAAA {
 
 AuthenticationFactory::AuthenticationFactory( const std::list< config::NamedConfiguration* >& confs,
-					      const module::ModulesDirectory* modules )
+					      const module::ModuleDirectory* modules )
 {
 	for ( std::list<config::NamedConfiguration*>::const_iterator it = confs.begin();
 							it != confs.end(); it++ )	{

@@ -57,7 +57,7 @@ public:
 			const AAAA::AAAAconfiguration* aconf,
 			const db::DBproviderConfig* dconf,
 			const config::BannerConfiguration* bconf,
-			const module::ModulesDirectory* modules);
+			const module::ModuleDirectory* modules);
 	~ServerHandler();
 	
 	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );

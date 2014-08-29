@@ -317,7 +317,7 @@ net::ConnectionHandler* ServerHandler::ServerHandlerImpl::newConnection( const n
 }
 
 ServerHandler::ServerHandler( const HandlerConfiguration* cfg,
-			      const module::ModulesDirectory* /*modules*/)
+			      const module::ModuleDirectory* /*modules*/)
 	: m_impl( new ServerHandlerImpl( cfg)) {}
 
 ServerHandler::~ServerHandler()

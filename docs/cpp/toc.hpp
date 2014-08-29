@@ -1003,7 +1003,7 @@ public:
 	}
 
 	virtual bool parse( const _Wolframe::config::ConfigurationNode& cfgTree, const std::string& node,
-				const _Wolframe::module::ModulesDirectory* modules )
+				const _Wolframe::module::ModuleDirectory* modules )
 	{
 		// ... if your structure has some more initializations than the pure structure mapping you can overload this method
 		if (_Wolframe::serialize::DescriptiveConfiguration::parse(cfgTree,node,modules))

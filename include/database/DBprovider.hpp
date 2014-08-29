@@ -43,7 +43,7 @@
 namespace _Wolframe {
 
 namespace module {
-	class ModulesDirectory;
+	class ModuleDirectory;
 }
 namespace db {
 
@@ -58,7 +58,7 @@ public:
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-		    const module::ModulesDirectory* modules );
+		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	virtual void setCanonicalPathes( const std::string& referencePath );
@@ -71,7 +71,7 @@ class DatabaseProvider : private boost::noncopyable
 {
 public:
 	DatabaseProvider( const DBproviderConfig* conf,
-			  const module::ModulesDirectory* modules );
+			  const module::ModuleDirectory* modules );
 	~DatabaseProvider();
 
 	Database* database( const std::string& ID ) const;

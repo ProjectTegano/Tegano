@@ -48,7 +48,7 @@ DotnetRuntimeEnvironmentConfig::AssemblyDescription::AssemblyDescription( const 
 	name.append( boost::algorithm::trim_copy( std::string( description.c_str(), ee - description.c_str())));
 }
 
-bool DotnetRuntimeEnvironmentConfig::parse( const config::ConfigurationNode& pt, const std::string&, const ModulesDirectory*)
+bool DotnetRuntimeEnvironmentConfig::parse( const config::ConfigurationNode& pt, const std::string&, const ModuleDirectory*)
 {
 	m_config_pos = pt.position().logtext();
 	config::ConfigurationNode::const_iterator pi = pt.begin(), pe = pt.end();

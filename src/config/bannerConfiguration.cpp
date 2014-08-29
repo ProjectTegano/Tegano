@@ -70,7 +70,7 @@ static BannerConfiguration::SignatureTokens strToToken( std::string& str )
 
 /// Service signature parser
 bool BannerConfiguration::parse( const config::ConfigurationNode& pt, const std::string& node,
-			   const module::ModulesDirectory* /*modules*/ )
+			   const module::ModuleDirectory* /*modules*/ )
 {
 	if ( boost::algorithm::iequals( node, "ServerTokens" ))	{
 		bool tokensDefined = ( m_tokens != BannerConfiguration::UNDEFINED );

@@ -301,7 +301,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		const char *configFile = serviceConfig.c_str( ); // configuration comes from main thread
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModulesDirectory modDir( configurationPath);
+		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
 
@@ -454,7 +454,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModulesDirectory modDir( configurationPath);
+		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =

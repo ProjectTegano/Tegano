@@ -96,7 +96,7 @@ public:
 		,m_statementTimeout(statementTimeout_){}
 
 	virtual bool parse( const config::ConfigurationNode& cfgTree, const std::string& node,
-			    const module::ModulesDirectory* modules );
+			    const module::ModuleDirectory* modules );
 	virtual bool check() const;
 	virtual void print( std::ostream& os, size_t indent ) const;
 	virtual void setCanonicalPathes( const std::string& referencePath );

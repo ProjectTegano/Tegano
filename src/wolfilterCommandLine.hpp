@@ -54,7 +54,7 @@ public:
 	WolfilterCommandLine( int argc, char **argv, const std::string& referencePath, bool useDefaultModuleDir, bool useDefaultConfigIfNotDefined);
 	~WolfilterCommandLine()
 	{
-		delete m_modulesDirectory;
+		delete m_moduleDirectory;
 	}
 
 	bool printhelp() const						{return m_printhelp;}
@@ -68,7 +68,7 @@ public:
 	const AAAA::AAAAconfiguration& aaaaProviderConfig() const	{return *m_aaaaProviderConfig;}
 	const db::DBproviderConfig& dbProviderConfig() const		{return *m_dbProviderConfig;}
 	const config::ProcProviderConfiguration& procProviderConfig() const {return *m_procProviderConfig;}
-	const module::ModulesDirectory& modulesDirectory() const	{return *m_modulesDirectory;}
+	const module::ModuleDirectory& moduleDirectory() const		{return *m_moduleDirectory;}
 	const std::string& configurationPath() const			{return m_configurationPath;}
 
 	static void print( std::ostream &);
@@ -95,7 +95,7 @@ private:
 	boost::shared_ptr<AAAA::AAAAconfiguration> m_aaaaProviderConfig;
 	boost::shared_ptr<config::ProcProviderConfiguration> m_procProviderConfig;
 	boost::shared_ptr<db::DBproviderConfig> m_dbProviderConfig;
-	module::ModulesDirectoryImpl* m_modulesDirectory;
+	module::ModuleDirectoryImpl* m_moduleDirectory;
 	std::string m_configurationPath;
 };
 

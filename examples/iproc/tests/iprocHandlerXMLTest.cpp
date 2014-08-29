@@ -58,7 +58,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::iproc;
 
-static module::ModulesDirectory* g_modulesDirectory;
+static module::ModuleDirectory* g_moduleDirectory;
 static boost::filesystem::path g_referencePath;
 
 static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const boost::filesystem::path& script)
@@ -67,7 +67,7 @@ static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const 
 
 	config::ConfigurationNode proccfg;
 	std::vector<std::pair<std::string,std::string> >
-		cmdhl = g_modulesDirectory->getConfigurableSectionKeywords( ObjectConstructorBase::CMD_HANDLER_OBJECT);
+		cmdhl = g_moduleDirectory->getConfigurableSectionKeywords( ObjectConstructorBase::CMD_HANDLER_OBJECT);
 
 	std::string extension = utils::getFileExtension( script.string());
 	if (extension.empty())
@@ -100,7 +100,7 @@ static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const 
 	cmdhlcfg.add_child( cfgid.second, programcfg);
 	proccfg.add_child( cfgid.first, cmdhlcfg);
 
-	if (!rt->parse( proccfg, std::string(""), g_modulesDirectory))
+	if (!rt->parse( proccfg, std::string(""), g_moduleDirectory))
 	{
 		throw std::runtime_error( "error in test configuration");
 	}
@@ -110,7 +110,7 @@ static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const 
 
 static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const boost::shared_ptr<proc::ProcProviderConfig>& cfg, prgbind::ProgramLibrary* prglib)
 {
-	boost::shared_ptr<proc::ProcessorProvider> rt( new proc::ProcessorProvider( cfg.get(), g_modulesDirectory, prglib));
+	boost::shared_ptr<proc::ProcessorProvider> rt( new proc::ProcessorProvider( cfg.get(), g_moduleDirectory, prglib));
 	rt->loadPrograms();
 	return rt;
 }
@@ -185,7 +185,7 @@ public:
 	IProcTestConfiguration( const boost::filesystem::path& scriptpath, std::size_t ib, std::size_t ob)
 	{
 		m_providerConfig = getProcProviderConfig( scriptpath);
-		m_appConfig.addModules( g_modulesDirectory);
+		m_appConfig.addModules( g_moduleDirectory);
 		m_appConfig.addConfig( "proc", this);
 
 		boost::filesystem::path configFile( g_testdir / "temp" / "test.cfg");
@@ -279,9 +279,9 @@ int main( int argc, char **argv )
 	g_testdir = boost::filesystem::system_complete( utils::resolvePath( argv[0])).parent_path();
 	g_referencePath = g_testdir / "temp";
 	std::string topdir = g_testdir.parent_path().parent_path().parent_path().string();
-	g_modulesDirectory = new module::ModulesDirectory( g_testdir.string());
+	g_moduleDirectory = new module::ModuleDirectory( g_testdir.string());
 
-	if (!g_modulesDirectory->loadModules( wtest::getTestModuleList( topdir)))
+	if (!g_moduleDirectory->loadModules( wtest::getTestModuleList( topdir)))
 	{
 		std::cerr << "failed to load modules" << std::endl;
 		return 2;
@@ -296,7 +296,7 @@ int main( int argc, char **argv )
 	WOLFRAME_GTEST_REPORT( argv[0], refpath.string());
 	::testing::InitGoogleTest( &g_gtest_ARGC, g_gtest_ARGV );
 	return RUN_ALL_TESTS();
-	delete g_modulesDirectory;
+	delete g_moduleDirectory;
 }
 
 

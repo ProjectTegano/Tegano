@@ -57,7 +57,7 @@ public:
 	static void print( std::ostream& out);
 	const config::ConfigurationNode& providerconfig() const		{return m_providerconfig;}
 	const std::string& configurationPath() const			{return m_configurationPath;}
-	const module::ModulesDirectory& modulesDirectory() const	{return *m_modulesDirectory;}
+	const module::ModuleDirectory& moduleDirectory() const		{return *m_moduleDirectory;}
 
 private:
 	std::vector<std::string> configModules() const;
@@ -69,7 +69,7 @@ private:
 	std::string m_configfile;
 	config::ConfigurationTree m_config;
 	config::ConfigurationNode m_providerconfig;
-	module::ModulesDirectoryImpl* m_modulesDirectory;
+	module::ModuleDirectoryImpl* m_moduleDirectory;
 	std::string m_configurationPath;
 	std::vector<std::string> m_modules;
 };

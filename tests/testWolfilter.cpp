@@ -142,11 +142,11 @@ TEST_P( WolfilterTest, tests)
 
 		LOG_DATA2 << "wolfilter creates its execution context";
 
-		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.modulesDirectory());
+		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.moduleDirectory());
 		prgbind::ProgramLibrary prglib;
 
-		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.modulesDirectory());
-		proc::ProcessorProvider processorProvider( &cmdline.procProviderConfig(), &cmdline.modulesDirectory(), &prglib);
+		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.moduleDirectory());
+		proc::ProcessorProvider processorProvider( &cmdline.procProviderConfig(), &cmdline.moduleDirectory(), &prglib);
 
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);
 		AAAA::User* fakeuser = new AAAA::User( "WolfilterAuth", "NONE", "wolfilter", "Wolfilter");

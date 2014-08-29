@@ -68,12 +68,12 @@ static int g_gtest_ARGC = 0;
 static char* g_gtest_ARGV[2] = {0, 0};
 static boost::filesystem::path g_testdir;
 
-static module::ModulesDirectory* g_modulesDirectory = 0;
+static module::ModuleDirectory* g_moduleDirectory = 0;
 static boost::filesystem::path g_referencePath;
 
 static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const proc::ProcProviderConfig* cfg, prgbind::ProgramLibrary* prglib)
 {
-	boost::shared_ptr<proc::ProcessorProvider>  rt( new proc::ProcessorProvider( cfg, g_modulesDirectory, prglib));
+	boost::shared_ptr<proc::ProcessorProvider>  rt( new proc::ProcessorProvider( cfg, g_moduleDirectory, prglib));
 	rt->loadPrograms();
 	return rt;
 }
@@ -88,7 +88,7 @@ public:
 
 	TestConfiguration()
 	{
-		m_appConfig.addModules( g_modulesDirectory);
+		m_appConfig.addModules( g_moduleDirectory);
 		m_appConfig.addConfig( "proc", this);
 		m_appConfig.addConfig( "provider", &m_procConfig);
 
@@ -267,7 +267,7 @@ int main( int argc, char **argv )
 	g_gtest_ARGV[0] = argv[0];
 	g_testdir = boost::filesystem::system_complete( argv[0]).parent_path();
 	std::string topdir = g_testdir.parent_path().parent_path().parent_path().string();
-	g_modulesDirectory = new module::ModulesDirectory( g_testdir.string());
+	g_moduleDirectory = new module::ModuleDirectory( g_testdir.string());
 	int argstart = 1;
 	int tracelevel = 0;
 
@@ -312,7 +312,7 @@ int main( int argc, char **argv )
 			return 6;
 		}
 	}
-	if (!g_modulesDirectory->loadModules( wtest::getTestModuleList( topdir)))
+	if (!g_moduleDirectory->loadModules( wtest::getTestModuleList( topdir)))
 	{
 		std::cerr << "failed to load modules" << std::endl;
 		return 2;
@@ -374,6 +374,6 @@ int main( int argc, char **argv )
 	WOLFRAME_GTEST_REPORT( argv[0], refpath.string());
 	::testing::InitGoogleTest( &g_gtest_ARGC, g_gtest_ARGV);
 	return RUN_ALL_TESTS();
-	delete g_modulesDirectory;
+	delete g_moduleDirectory;
 }
 

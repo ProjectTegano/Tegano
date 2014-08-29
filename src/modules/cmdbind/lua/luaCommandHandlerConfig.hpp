@@ -60,7 +60,7 @@ public:
 	///\brief Parse the configuration
 	///\param[in] pt configuration tree
 	///\param[in] modules module directory
-	virtual bool parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory* modules);
+	virtual bool parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory* modules);
 
 	///\brief Set canonical path for files referenced as relative path in configuration
 	///\param[in] referencePath reference path
@@ -88,7 +88,7 @@ public:
 private:
 	std::vector<std::string> m_programfiles;
 	types::keymap<std::string> m_filtermap;
-	const module::ModulesDirectory* m_modules;
+	const module::ModuleDirectory* m_modules;
 	const char* m_classname;
 };
 

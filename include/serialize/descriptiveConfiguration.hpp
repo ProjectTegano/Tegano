@@ -66,7 +66,7 @@ public:
 	}
 
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-			const module::ModulesDirectory*)
+			const module::ModuleDirectory*)
 	{
 		try
 		{

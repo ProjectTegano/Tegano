@@ -57,7 +57,7 @@ ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
 				const AAAA::AAAAconfiguration* aconf,
 				const db::DBproviderConfig* dconf,
 				const config::BannerConfiguration* bconf,
-				const module::ModulesDirectory* modules )
+				const module::ModuleDirectory* modules )
 	:m_banner( bconf->toString() )
 	,m_db( dconf, modules )
 	,m_aaaa( aconf, modules )

@@ -46,7 +46,7 @@ static const unsigned short DEFAULT_TIMEOUT = 180;
 namespace _Wolframe {
 
 bool EchoConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
-			       const module::ModulesDirectory* /*modules*/ )
+			       const module::ModuleDirectory* /*modules*/ )
 {
 	bool retVal = true;
 	bool isDefined = false;

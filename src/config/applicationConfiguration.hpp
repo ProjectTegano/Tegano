@@ -96,7 +96,7 @@ public:
 						{ return m_modFiles; }
 	const std::string& moduleFolder() const	{ return m_modFolder; }
 
-	void addModules( const module::ModulesDirectory* modules )
+	void addModules( const module::ModuleDirectory* modules )
 						{ m_modDir = modules; }
 	bool parse( const char *filename, ConfigFileType type );
 	///\brief Finalize configuration for daemon
@@ -118,7 +118,7 @@ private:
 	std::string				m_modFolder;
 	std::vector< std::string >		m_modFiles;
 
-	const module::ModulesDirectory*		m_modDir;
+	const module::ModuleDirectory*		m_modDir;
 public:
 	bool addConfig( const std::string& nodeName, ConfigurationBase* conf );
 };

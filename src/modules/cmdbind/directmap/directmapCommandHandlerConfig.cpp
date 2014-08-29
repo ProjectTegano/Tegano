@@ -40,7 +40,7 @@ Project Wolframe.
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;
 
-bool DirectmapCommandHandlerConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory*)
+bool DirectmapCommandHandlerConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory*)
 {
 	int filterDefied = 0;
 	try

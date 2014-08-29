@@ -52,7 +52,7 @@ public:
 	virtual ~PostgreSQLTestConfig(){}
 
 	virtual bool parse( const config::ConfigurationNode& pt, const std::string& node,
-			    const module::ModulesDirectory* modules )
+			    const module::ModuleDirectory* modules )
 	{
 		return PostgreSQLConfig::parse( extractMyNodes( pt), node, modules );
 	}

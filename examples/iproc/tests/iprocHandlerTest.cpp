@@ -61,7 +61,7 @@ static int g_gtest_ARGC = 0;
 static char* g_gtest_ARGV[2] = {0, 0};
 static boost::filesystem::path g_testdir;
 
-static module::ModulesDirectory* g_modulesDirectory;
+static module::ModuleDirectory* g_modulesDirectory;
 static boost::filesystem::path g_referencePath;
 
 static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const std::string& script)
@@ -400,7 +400,7 @@ int main( int argc, char **argv )
 	g_referencePath = g_testdir / "temp";
 	std::string topdir = g_testdir.parent_path().parent_path().parent_path().string();
 
-	g_modulesDirectory = new module::ModulesDirectory( g_testdir.string());
+	g_modulesDirectory = new module::ModuleDirectory( g_testdir.string());
 	if (!g_modulesDirectory->loadModules( wtest::getTestModuleList( topdir)))
 	{
 		std::cerr << "failed to load modules" << std::endl;

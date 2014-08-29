@@ -65,7 +65,7 @@ const serialize::StructDescriptionBase* TesttraceDatabaseConfig::Data::getStruct
 	return &rt;
 }
 
-bool TesttraceDatabaseConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory*)
+bool TesttraceDatabaseConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory*)
 {
 	try
 	{

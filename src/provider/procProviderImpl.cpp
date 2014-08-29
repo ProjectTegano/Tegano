@@ -169,7 +169,7 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 					const std::vector<config::NamedConfiguration*>& procConfig_,
 					const std::vector<std::string>& programFiles_,
 					const std::string& referencePath_,
-					const module::ModulesDirectory* modules_)
+					const module::ModuleDirectory* modules_)
 	:m_dbLabel(dbLabel_)
 	,m_db(0)
 	,m_dbProvider(0)

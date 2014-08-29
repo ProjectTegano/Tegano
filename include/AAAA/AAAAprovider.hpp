@@ -59,7 +59,7 @@ public:
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-		    const module::ModulesDirectory* modules );
+		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
@@ -78,7 +78,7 @@ class AAAAprovider
 {
 public:
 	AAAAprovider( const AAAAconfiguration* conf,
-		      const module::ModulesDirectory* modules );
+		      const module::ModuleDirectory* modules );
 	~AAAAprovider();
 
 	bool resolveDB( const db::DatabaseProvider& db );

@@ -121,7 +121,7 @@ bool PostgreSQLConfig::mapValueDomains()
 }
 
 bool PostgreSQLConfig::parse( const config::ConfigurationNode& pt, const std::string& node,
-			      const module::ModulesDirectory* modules )
+			      const module::ModuleDirectory* modules )
 {
 	bool rt;
 	rt = _Wolframe::serialize::DescriptiveConfiguration::parse( pt, node, modules);

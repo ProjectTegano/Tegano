@@ -43,17 +43,17 @@
 namespace _Wolframe {
 namespace module {
 
-/// \class ModulesDirectory
+/// \class ModuleDirectory
 /// \brief The modules directory used by the constructors of the providers to build themselves.
-class ModulesDirectoryImpl
-	:public module::ModulesDirectory
+class ModuleDirectoryImpl
+	:public module::ModuleDirectory
 {
 public:
 	/// \brief Constructor
 	/// \param[in] confDir_ Configuration directory that specifies the relative path where to load the modules from if not specified by the system or explicitely
-	explicit ModulesDirectoryImpl( const std::string& confDir_)
+	explicit ModuleDirectoryImpl( const std::string& confDir_)
 		:m_confDir(confDir_){}
-	virtual ~ModulesDirectoryImpl(){}
+	virtual ~ModuleDirectoryImpl(){}
 
 	/// \brief Add a configured builder to the directory.
 	bool addBuilder( const ConfiguredBuilder* builder );

@@ -66,7 +66,7 @@ void TestAuthenticationConfig::setCanonicalPathes( const std::string& refPath)
 	structure.m_filename = utils::getCanonicalPath( structure.m_filename, refPath);
 }
 
-bool TestAuthenticationConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory*)
+bool TestAuthenticationConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory*)
 {
 	try
 	{

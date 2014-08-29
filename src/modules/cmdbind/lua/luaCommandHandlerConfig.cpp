@@ -40,7 +40,7 @@ Project Wolframe.
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;
 
-bool LuaCommandHandlerConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModulesDirectory* modules)
+bool LuaCommandHandlerConfig::parse( const config::ConfigurationNode& pt, const std::string&, const module::ModuleDirectory* modules)
 {
 	m_modules = modules;
 	config::ConfigurationNode::const_iterator pi = pt.begin(), pe = pt.end();

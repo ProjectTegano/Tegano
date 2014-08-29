@@ -58,7 +58,7 @@ public:
 	virtual const char* className() const	
 		{return "TestAuthentication";}
 
-	bool parse( const config::ConfigurationNode& pt, const std::string& node, const module::ModulesDirectory* modules);
+	bool parse( const config::ConfigurationNode& pt, const std::string& node, const module::ModuleDirectory* modules);
 	bool check() const;
 	void print( std::ostream& os, size_t indent) const;
 	void setCanonicalPathes( const std::string& refPath);

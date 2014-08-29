@@ -46,7 +46,7 @@ namespace AAAA {
 
 AuthorizationProvider::AuthorizationProvider( const std::list< config::NamedConfiguration* >& confs,
 					      bool authzDefault,
-					      const module::ModulesDirectory* modules )
+					      const module::ModuleDirectory* modules )
 {
 	for ( std::list<config::NamedConfiguration*>::const_iterator it = confs.begin();
 								it != confs.end(); it++ )	{

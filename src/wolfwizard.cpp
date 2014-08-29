@@ -333,7 +333,7 @@ int main( int argc, char **argv )
 		if (doExit) return 0;
 
 		config::ProcProviderConfiguration providerconf;
-		if (!providerconf.parse( cmdline.providerconfig(), "", &cmdline.modulesDirectory()))
+		if (!providerconf.parse( cmdline.providerconfig(), "", &cmdline.moduleDirectory()))
 		{
 			throw std::runtime_error( "Processor provider configuration could not be created from command line");
 		}
@@ -344,7 +344,7 @@ int main( int argc, char **argv )
 		}
 
 		prgbind::ProgramLibraryImpl* programLibrary = new prgbind::ProgramLibraryImpl();
-		proc::ProcessorProviderImpl* processorProvider = new proc::ProcessorProviderImpl( providerconf.dbLabel(), providerconf.procConfig(), providerconf.programFiles(), providerconf.referencePath(), &cmdline.modulesDirectory());
+		proc::ProcessorProviderImpl* processorProvider = new proc::ProcessorProviderImpl( providerconf.dbLabel(), providerconf.procConfig(), providerconf.programFiles(), providerconf.referencePath(), &cmdline.moduleDirectory());
 
 		if (!processorProvider->loadPrograms())
 		{

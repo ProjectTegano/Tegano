@@ -44,7 +44,7 @@ namespace db	{
 
 /********  DatabaseProvider PIMPL  *****************************************/
 DatabaseProvider::DatabaseProvider( const DBproviderConfig* conf,
-				    const module::ModulesDirectory* modules ) :
+				    const module::ModuleDirectory* modules ) :
 	m_impl( new DatabaseProvider_Impl( conf, modules ))	{}
 
 DatabaseProvider::~DatabaseProvider()
@@ -60,7 +60,7 @@ Database* DatabaseProvider::database( const std::string& ID ) const
 
 /********  DatabaseProvider PIMPL implementation ***************************/
 DatabaseProvider::DatabaseProvider_Impl::DatabaseProvider_Impl( const DBproviderConfig* conf,
-								const module::ModulesDirectory* modules )
+								const module::ModuleDirectory* modules )
 {
 	for ( std::list< config::NamedConfiguration* >::const_iterator it = conf->m_config.begin();
 									it != conf->m_config.end(); it++ )	{

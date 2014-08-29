@@ -245,7 +245,7 @@ struct GlobalContext
 	}
 
 	explicit GlobalContext( const std::string& configfile)
-		:m_modulesDirectory( g_testdir.string())
+		:m_moduleDirectory( g_testdir.string())
 		,m_databaseProvider(0)
 		,m_processorProvider(0)
 		,m_execContext(0)
@@ -256,12 +256,12 @@ struct GlobalContext
 
 		std::list<std::string> modfiles;
 		std::copy( m_modules.begin(), m_modules.end(), std::back_inserter( modfiles));
-		if (!m_modulesDirectory.loadModules( modfiles))
+		if (!m_moduleDirectory.loadModules( modfiles))
 		{
 			throw std::runtime_error( "Modules could not be loaded");
 		}
 
-		if (!m_aaaaProviderConfig.parse( m_config.root().getChild( "AAAA"), "", &m_modulesDirectory))
+		if (!m_aaaaProviderConfig.parse( m_config.root().getChild( "AAAA"), "", &m_moduleDirectory))
 		{
 			throw std::runtime_error( "AAAA provider configuration could not be parsed");
 		}
@@ -271,7 +271,7 @@ struct GlobalContext
 			throw std::runtime_error( "error in AAAA provider configuration");
 		}
 
-		if (!m_dbProviderConfig.parse( m_config.root().getChild( "database"), "", &m_modulesDirectory))
+		if (!m_dbProviderConfig.parse( m_config.root().getChild( "database"), "", &m_moduleDirectory))
 		{
 			throw std::runtime_error( "database provider configuration could not be parsed");
 		}
@@ -281,7 +281,7 @@ struct GlobalContext
 			throw std::runtime_error( "error in database provider configuration");
 		}
 
-		if (!m_procProviderConfig.parse( m_config.root().getChild( "Processor"), "", &m_modulesDirectory))
+		if (!m_procProviderConfig.parse( m_config.root().getChild( "Processor"), "", &m_moduleDirectory))
 		{
 			throw std::runtime_error( "processor provider configuration could not be parsed");
 		}
@@ -292,9 +292,9 @@ struct GlobalContext
 		}
 
 		// Load the modules, scripts, etc. defined in the command line into the global context:
-		m_aaaaProvider = new AAAA::AAAAprovider( &m_aaaaProviderConfig, &m_modulesDirectory);
-		m_databaseProvider = new db::DatabaseProvider( &m_dbProviderConfig, &m_modulesDirectory);
-		m_processorProvider = new proc::ProcessorProvider( &m_procProviderConfig, &m_modulesDirectory, &m_programLibrary);
+		m_aaaaProvider = new AAAA::AAAAprovider( &m_aaaaProviderConfig, &m_moduleDirectory);
+		m_databaseProvider = new db::DatabaseProvider( &m_dbProviderConfig, &m_moduleDirectory);
+		m_processorProvider = new proc::ProcessorProvider( &m_procProviderConfig, &m_moduleDirectory, &m_programLibrary);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
 
 		m_processorProvider->resolveDB( *m_databaseProvider);
@@ -331,7 +331,7 @@ private:
 
 	std::string m_referencePath;
 	std::vector<std::string> m_modules;
-	module::ModulesDirectory m_modulesDirectory;
+	module::ModuleDirectory m_moduleDirectory;
 
 	prgbind::ProgramLibrary m_programLibrary;
 	AAAA::AAAAprovider* m_aaaaProvider;

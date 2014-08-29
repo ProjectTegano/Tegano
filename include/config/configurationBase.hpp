@@ -43,7 +43,7 @@
 
 // forward definition
 namespace _Wolframe { namespace module {
-	class ModulesDirectory;
+	class ModuleDirectory;
 }} // namespace _Wolframe::module
 
 namespace _Wolframe {
@@ -87,7 +87,7 @@ public:
 	/// \param[in]	node		the label of the node. It should be
 	///				the same (case insensitive) as it->first
 	virtual bool parse( const ConfigurationNode& cfgTree, const std::string& node,
-			    const module::ModulesDirectory* modules ) = 0;
+			    const module::ModuleDirectory* modules ) = 0;
 
 	/// Set the pathes in the configuration to absolute values
 	/// \param[in]	refPath	use this path as reference when computing

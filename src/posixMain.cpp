@@ -189,7 +189,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModulesDirectoryImpl modDir( configurationPath);
+		_Wolframe::module::ModuleDirectoryImpl modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
 

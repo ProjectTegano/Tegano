@@ -67,7 +67,7 @@ public:
 	std::string toString() const;
 
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-		    const module::ModulesDirectory* modules );
+		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 

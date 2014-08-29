@@ -110,7 +110,7 @@ std::vector<std::string> WolfilterCommandLine::configModules( bool useDefaultMod
 	{
 		if (boost::algorithm::iequals( mi->first, "module"))
 		{
-			std::string absmodpath = m_modulesDirectory->getAbsoluteModulePath( mi->second.data(), directory, useDefaultModuleDir);
+			std::string absmodpath = m_moduleDirectory->getAbsoluteModulePath( mi->second.data(), directory, useDefaultModuleDir);
 			if (absmodpath.empty())
 			{
 				throw std::runtime_error( std::string("could not resolve configured module path '") + mi->second.data() + "'");
@@ -157,7 +157,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	:m_printhelp(false)
 	,m_printversion(false)
 	,m_loglevel(_Wolframe::log::LogLevel::LOGLEVEL_WARNING)
-	,m_modulesDirectory(0)
+	,m_moduleDirectory(0)
 	,m_configurationPath(referencePath)
 {
 	static const WolfilterOptionStruct ost;
@@ -236,7 +236,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	{
 		LOG_DEBUG << "Running without configuration";
 	}
-	m_modulesDirectory = new module::ModulesDirectoryImpl( m_configurationPath);
+	m_moduleDirectory = new module::ModuleDirectoryImpl( m_configurationPath);
 
 	if (vmap.count( "input"))
 	{
@@ -257,7 +257,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 		std::vector<std::string>::iterator mi=mods.begin(), me=mods.end();
 		for (; mi != me; ++mi)
 		{
-			std::string absmodpath = m_modulesDirectory->getAbsoluteModulePath( *mi, m_configurationPath, useDefaultModuleDir);
+			std::string absmodpath = m_moduleDirectory->getAbsoluteModulePath( *mi, m_configurationPath, useDefaultModuleDir);
 			if (absmodpath.empty())
 			{
 				throw std::runtime_error( std::string("could not resolve command line module path '") + *mi + "'");
@@ -269,7 +269,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	std::vector<std::string> modfiles;
 	std::copy( m_modules.begin(), m_modules.end(), std::back_inserter( modfiles));
 
-	if (!m_modulesDirectory->loadModules( modfiles))
+	if (!m_moduleDirectory->loadModules( modfiles))
 	{
 		throw std::runtime_error( "Modules could not be loaded");
 	}
@@ -294,7 +294,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	LOG_DEBUG << "Database provider configuration:";
 	LOG_DEBUG << configurationTree_tostring( m_dbconfig);
 
-	if (!m_dbProviderConfig->parse( m_dbconfig, "", m_modulesDirectory))
+	if (!m_dbProviderConfig->parse( m_dbconfig, "", m_moduleDirectory))
 	{
 		throw std::runtime_error( "database provider configuration could not be parsed");
 	}
@@ -310,7 +310,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	{
 		ppcfg = getConfigNode( "Processor");
 	}
-	if (!m_procProviderConfig->parse( ppcfg, "", m_modulesDirectory))
+	if (!m_procProviderConfig->parse( ppcfg, "", m_moduleDirectory))
 	{
 		throw std::runtime_error( "processor provider configuration could not be parsed");
 	}
@@ -326,7 +326,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	{
 		aacfg = getConfigNode( "AAAA");
 	}
-	if (!m_aaaaProviderConfig->parse( aacfg, "", m_modulesDirectory))
+	if (!m_aaaaProviderConfig->parse( aacfg, "", m_moduleDirectory))
 	{
 		throw std::runtime_error( "AAAA provider configuration could not be parsed");
 	}

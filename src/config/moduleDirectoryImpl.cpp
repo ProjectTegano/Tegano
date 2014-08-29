@@ -41,7 +41,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::module;
 
-bool ModulesDirectoryImpl::addBuilder( const ConfiguredBuilder* builder )
+bool ModuleDirectoryImpl::addBuilder( const ConfiguredBuilder* builder )
 {
 	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
 							it != m_cfgdBuilder.end(); it++ )	{
@@ -63,7 +63,7 @@ bool ModulesDirectoryImpl::addBuilder( const ConfiguredBuilder* builder )
 	return true;
 }
 
-bool ModulesDirectoryImpl::addBuilder( const SimpleBuilder* builder )
+bool ModuleDirectoryImpl::addBuilder( const SimpleBuilder* builder )
 {
 	for ( std::vector< const SimpleBuilder* >::const_iterator it = m_simpleBuilder.begin();
 							it != m_simpleBuilder.end(); it++ )	{
@@ -78,7 +78,7 @@ bool ModulesDirectoryImpl::addBuilder( const SimpleBuilder* builder )
 	return true;
 }
 
-const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::string& section,
+const ConfiguredBuilder* ModuleDirectoryImpl::getConfiguredBuilder( const std::string& section,
 						 const std::string& keyword ) const
 {
 	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
@@ -90,7 +90,7 @@ const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::
 	return NULL;
 }
 
-const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::string& objectClassName ) const
+const ConfiguredBuilder* ModuleDirectoryImpl::getConfiguredBuilder( const std::string& objectClassName ) const
 {
 	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
 							it != m_cfgdBuilder.end(); it++ )
@@ -104,7 +104,7 @@ const ConfiguredBuilder* ModulesDirectoryImpl::getConfiguredBuilder( const std::
 	return NULL;
 }
 
-const std::vector<const SimpleBuilder*>& ModulesDirectoryImpl::getSimpleBuilderList() const
+const std::vector<const SimpleBuilder*>& ModuleDirectoryImpl::getSimpleBuilderList() const
 {
 	return m_simpleBuilder;
 }
@@ -113,9 +113,9 @@ const std::vector<const SimpleBuilder*>& ModulesDirectoryImpl::getSimpleBuilderL
 #define STRINGIFY(x)	DO_STRINGIFY(x)
 
 #if defined( DEFAULT_MODULE_LOAD_DIR )
-std::string ModulesDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool useDefaultModuleDir) const
+std::string ModuleDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool useDefaultModuleDir) const
 #else
-std::string ModulesDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool) const
+std::string ModuleDirectoryImpl::getAbsoluteModulePath( const std::string& moduleName, const std::string& configuredDirectory, bool) const
 #endif
 {
 	// Add the module extension, if not defined
@@ -161,7 +161,7 @@ std::string ModulesDirectoryImpl::getAbsoluteModulePath( const std::string& modu
 	return std::string();
 }
 
-bool module::ModulesDirectoryImpl::loadModules( const std::vector< std::string >& modFiles)
+bool module::ModuleDirectoryImpl::loadModules( const std::vector< std::string >& modFiles)
 {
 	bool retVal = true;
 

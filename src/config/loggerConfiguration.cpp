@@ -53,7 +53,7 @@ using namespace _Wolframe::log;
 
 /// Parse the configuration
 bool LoggerConfiguration::parse( const types::PropertyTree::Node& pt, const std::string& /*node*/,
-				 const module::ModulesDirectory* /*modules*/ )
+				 const module::ModuleDirectory* /*modules*/ )
 {
 	bool retVal = true;
 
