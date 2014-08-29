@@ -35,9 +35,9 @@
 #include "wolframe.hpp"
 #include "wolfwizardCommandLine.hpp"
 #include "module/moduleInterface.hpp"
-#include "config/moduleDirectoryImpl.hpp"
-#include "config/procProviderConfiguration.hpp"
-#include "provider/procProviderImpl.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
+#include "libconfig/procProviderConfiguration.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "types/variantStruct.hpp"
 #include "types/variantStructDescription.hpp"
 #include <fstream>

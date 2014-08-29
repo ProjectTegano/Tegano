@@ -1,6 +1,6 @@
 TOPDIR = ..\..
 
-SUBDIRS = modules
+SUBDIRS = modules src
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
@@ -11,3 +11,8 @@ local_clean:
 local_distclean:
 
 local_test:
+
+local_install:
+
+local_uninstall:
+

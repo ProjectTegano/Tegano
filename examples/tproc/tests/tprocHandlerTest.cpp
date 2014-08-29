@@ -198,7 +198,7 @@ TEST_P( TProcHandlerTest, tests)
 
 	std::string testname = boost::filesystem::basename(filename);
 	// Read test description:
-	wtest::TestDescription td( filename, g_gtest_ARGV[0]);
+	wtest::TestDescription td( filename, g_testdir.string());
 	if (td.requires.size())
 	{
 		// Skip tests when disabled:

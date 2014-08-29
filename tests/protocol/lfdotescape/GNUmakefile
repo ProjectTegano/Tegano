@@ -36,7 +36,7 @@ TEST_CPP_BINS = \
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-protocolLFdotEscaping$(EXE): protocolLFdotEscaping.o protocolLFdotEscapingFiles.o $(TOPDIR)/src/libwolframed.a
+protocolLFdotEscaping$(EXE): protocolLFdotEscaping.o protocolLFdotEscapingFiles.o
 
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(BOOST_LIB_DIR):$(TOPDIR)/src/libwfsingleton:$(TOPDIR)/src/libwolframe:$(TOPDIR)/wtest"
 

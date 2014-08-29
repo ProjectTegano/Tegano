@@ -48,7 +48,7 @@ struct TestDescription
 	std::string requires;
 	std::string exception;
 
-	TestDescription( const std::string& filename, const char* argv0);
+	TestDescription( const std::string& filename, const std::string& testdirstr);
 	TestDescription( const TestDescription& o)
 		:input(o.input)
 		,outputfile(o.outputfile)

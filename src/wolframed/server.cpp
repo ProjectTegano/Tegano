@@ -43,7 +43,7 @@
 #include "logger-v1.hpp"
 #include "system/serverEndpoint.hpp"
 #include "system/connectionHandler.hpp"
-#include "config/serverConfiguration.hpp"
+#include "libconfig/serverConfiguration.hpp"
 
 namespace _Wolframe {
 namespace net	{

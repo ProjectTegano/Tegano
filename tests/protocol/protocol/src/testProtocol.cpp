@@ -34,10 +34,11 @@
 ///\brief Test program for the wolframe main protocol
 #include "cmdbind/protocolHandler.hpp"
 #include "utils/fileUtils.hpp"
-#include "processor/procProvider.hpp"
+#include "libconfig/procProviderConfiguration.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "module/moduleDirectory.hpp"
-#include "mainConnectionHandler.hpp"
+#include "wolframed/mainConnectionHandler.hpp"
 #include "mainProtocolHandler.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
 #include "logger-v1.hpp"
@@ -254,7 +255,7 @@ struct GlobalContext
 		m_referencePath = boost::filesystem::path( configfile ).branch_path().string();
 		m_modules = configModules( m_config, m_referencePath);
 
-		std::list<std::string> modfiles;
+		std::vector<std::string> modfiles;
 		std::copy( m_modules.begin(), m_modules.end(), std::back_inserter( modfiles));
 		if (!m_moduleDirectory.loadModules( modfiles))
 		{
@@ -294,7 +295,7 @@ struct GlobalContext
 		// Load the modules, scripts, etc. defined in the command line into the global context:
 		m_aaaaProvider = new AAAA::AAAAprovider( &m_aaaaProviderConfig, &m_moduleDirectory);
 		m_databaseProvider = new db::DatabaseProvider( &m_dbProviderConfig, &m_moduleDirectory);
-		m_processorProvider = new proc::ProcessorProvider( &m_procProviderConfig, &m_moduleDirectory, &m_programLibrary);
+		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
 
 		m_processorProvider->resolveDB( *m_databaseProvider);
@@ -326,17 +327,17 @@ struct GlobalContext
 private:
 	types::PropertyTree m_config;
 	AAAA::AAAAconfiguration m_aaaaProviderConfig;
-	proc::ProcProviderConfig m_procProviderConfig;
+	config::ProcProviderConfiguration m_procProviderConfig;
 	db::DBproviderConfig m_dbProviderConfig;
 
 	std::string m_referencePath;
 	std::vector<std::string> m_modules;
-	module::ModuleDirectory m_moduleDirectory;
+	module::ModuleDirectoryImpl m_moduleDirectory;
 
-	prgbind::ProgramLibrary m_programLibrary;
+	prgbind::ProgramLibraryImpl m_programLibrary;
 	AAAA::AAAAprovider* m_aaaaProvider;
 	db::DatabaseProvider* m_databaseProvider;
-	proc::ProcessorProvider* m_processorProvider;
+	proc::ProcessorProviderImpl* m_processorProvider;
 	proc::ExecContext* m_execContext;
 };
 

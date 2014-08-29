@@ -41,7 +41,7 @@ TEST_CPP_BINS = \
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-testCompileTDL$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a
+testCompileTDL$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a
 
 LD_LIBRARY_PATH = "$(BOOST_LIB_DIR):$(TOPDIR)/src/libwfsingleton:$(TOPDIR)/src/libwolframe:$(TOPDIR)/src/libwolframe_database:$(TOPDIR)/src/libwolframe_langbind:$(TOPDIR)/wtest"
 

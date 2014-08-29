@@ -36,7 +36,7 @@
 #include "wolframe.hpp"
 #include "module/moduleInterface.hpp"
 #include "prgbind/programLibrary.hpp"
-#include "provider/procProviderImpl.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include <fstream>
 #include <iostream>

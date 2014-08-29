@@ -18,14 +18,13 @@ INCLUDE_LDFLAGS = \
 	-L$(TOPDIR)/wtest \
 	-L$(BOOST_LIB_DIR) \
 	-L$(TOPDIR)/src/libwfsingleton \
-	-L$(TOPDIR)/src/libwolframe
+	-L$(TOPDIR)/src/libwolframe \
+	-L$(TOPDIR)/src/libconfig
 
 INCLUDE_LIBS = \
 	$(TOPDIR)/3rdParty/gtest/gtest-all.o \
-	$(TOPDIR)/src/moduleDirectory.o \
-	$(TOPDIR)/src/moduleLoader.o \
-	$(TOPDIR)/src/libwolframed.a \
 	-lwolftest \
+	-lwfconfig \
 	-lwolframe -lwfsingleton \
 	-lboost_thread$(BOOST_LIBRARY_TAG) \
 	-lboost_filesystem -lboost_system \

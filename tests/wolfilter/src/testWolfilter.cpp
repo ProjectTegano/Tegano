@@ -42,8 +42,8 @@
 #include "utils/parseUtils.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include "provider/programLibraryImpl.hpp"
-#include "provider/procProviderImpl.hpp"
+#include "libprovider/programLibraryImpl.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -90,7 +90,7 @@ TEST_P( WolfilterTest, tests)
 	unsigned int used_random_seed = g_random.seed();
 
 	std::string testname = boost::filesystem::basename( filename);
-	wtest::TestDescription td( filename, g_gtest_ARGV[0]);
+	wtest::TestDescription td( filename, g_testdir.string());
 	if (td.requires.size())
 	{
 		// [2.2] Skip tests when disabled
@@ -143,10 +143,10 @@ TEST_P( WolfilterTest, tests)
 		LOG_DATA2 << "wolfilter creates its execution context";
 
 		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.moduleDirectory());
-		prgbind::ProgramLibrary prglib;
 
 		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.moduleDirectory());
-		proc::ProcessorProvider processorProvider( &cmdline.procProviderConfig(), &cmdline.moduleDirectory(), &prglib);
+		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
+		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);
 		AAAA::User* fakeuser = new AAAA::User( "WolfilterAuth", "NONE", "wolfilter", "Wolfilter");
@@ -270,7 +270,8 @@ int main( int argc, char **argv)
 {
 	g_gtest_ARGC = 1;
 	g_gtest_ARGV[0] = argv[0];
-	g_testdir = boost::filesystem::system_complete( argv[0]).parent_path();
+	std::string tdirstr = utils::getParentPath( argv[0], 3);
+	g_testdir = boost::filesystem::path( tdirstr);
 	int tracelevel = 0;
 	int argstart = 1;
 	const char* logfilename = 0;

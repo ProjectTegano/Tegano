@@ -176,8 +176,6 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 	,m_programfiles(programFiles_)
 	,m_referencePath(referencePath_)
 {
-	m_programfiles.insert( m_programfiles.end(), programFiles_.begin(), programFiles_.end());
-
 	// Build the list of command handlers and runtime environments (configured objects)
 	for ( std::vector< config::NamedConfiguration* >::const_iterator it = procConfig_.begin();
 									it != procConfig_.end(); it++ )	{

@@ -29,7 +29,6 @@ INCLUDE_LIBS = \
 	-lwfsingleton \
 	-lwolframe_database \
 	-lwolftest \
-	$(TOPDIR)/src/libwolframed.a \
 	$(TOPDIR)/3rdParty/gtest/gtest-all.o \
 	$(TOPDIR)/src/modules/database/sqlite3/mod_db_sqlite3_lib.a \
 	-lwolframe_serialize \

@@ -30,4 +30,38 @@
  Project Wolframe.
 
 ************************************************************************/
-#error DEPRECATED
+/// \file serverHandler.cpp
+
+#include "serverHandler.hpp"
+#include "serverConnectionHandler.hpp"
+#include "AAAA/AAAAprovider.hpp"
+#include "libconfig/bannerConfiguration.hpp"
+#include "libprovider/procProviderImpl.hpp"
+#include "prgbind/programLibrary.hpp"
+#include "logger-v1.hpp"
+#include <stdexcept>
+
+#include <string>
+#include <cstring>
+#include <stdexcept>
+
+using namespace _Wolframe;
+
+/// ServerHandler PIMPL
+net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR& local )
+{
+	return new ServerConnectionHandler( this, local );
+}
+
+ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
+				const AAAA::AAAAconfiguration* aconf,
+				const db::DBproviderConfig* dconf,
+				const config::BannerConfiguration* bconf,
+				const module::ModuleDirectory* modules )
+	:m_banner( bconf->toString() )
+	,m_db( dconf, modules )
+	,m_aaaa( aconf, modules )
+	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules){}
+
+ServerHandler::~ServerHandler()	{}
+

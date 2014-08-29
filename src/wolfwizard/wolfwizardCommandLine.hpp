@@ -34,8 +34,8 @@
 ///\brief Interface for the wolfwizard call command line
 #ifndef _Wolframe_WOLFWIZARD_COMMANDLINE_HPP_INCLUDED
 #define _Wolframe_WOLFWIZARD_COMMANDLINE_HPP_INCLUDED
-#include "config/moduleDirectoryImpl.hpp"
-#include "provider/procProviderImpl.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "types/propertyTree.hpp"
 #include <string>
 #include <vector>

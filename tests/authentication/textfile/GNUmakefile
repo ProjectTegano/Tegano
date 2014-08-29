@@ -19,7 +19,6 @@ INCLUDE_LDFLAGS = \
 
 INCLUDE_LIBS = \
 	$(TOPDIR)/3rdParty/gtest/gtest-all.o \
-	$(TOPDIR)/src/libwolframed.a \
 	$(TOPDIR)/src/libwolframe/libwolframe.a \
 	$(TOPDIR)/src/libwfsingleton/libwfsingleton.a \
 	-lboost_thread$(BOOST_LIBRARY_TAG) \

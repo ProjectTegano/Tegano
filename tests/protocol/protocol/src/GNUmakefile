@@ -14,6 +14,8 @@ INCLUDE_DIRS = \
 	-I$(BOOST_INCLUDE_DIR)
 
 INCLUDE_LDFLAGS = \
+	-L$(TOPDIR)/src/libconfig \
+	-L$(TOPDIR)/src/libprovider \
 	-L$(TOPDIR)/src/libwfsingleton \
 	-L$(TOPDIR)/src/libwolframe \
 	-L$(TOPDIR)/src/libwolframe_langbind \
@@ -24,6 +26,8 @@ INCLUDE_LDFLAGS = \
 
 INCLUDE_LIBS = \
 	$(TOPDIR)/3rdParty/gtest/gtest-all.o \
+	-lwfconfig \
+	-lwfprovider \
 	-lwfsingleton \
 	-lwolframe \
 	-lwolframe_langbind \
@@ -42,7 +46,7 @@ TEST_CPP_BINS = \
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-testProtocol$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a
+testProtocol$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a
 
 LD_LIBRARY_PATH = "$(BOOST_LIB_DIR):$(TOPDIR)/src/libwfsingleton:$(TOPDIR)/src/libwolframe:$(TOPDIR)/src/libwolframe_database:$(TOPDIR)/src/libwolframe_langbind:$(TOPDIR)/src/libwolframe_serialize:$(TOPDIR)/wtest"
 

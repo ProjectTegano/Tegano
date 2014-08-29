@@ -29,6 +29,7 @@ INCLUDE_LIBS = \
 	Advapi32.lib Ws2_32.lib \
 	$(TOPDIR)\3rdParty\gtest\gtest-all.obj \
 	$(TOPDIR)\wtest\wtest.lib \
+	$(TOPDIR)\src\libconfig\libwfconfig.lib \
 	$(TOPDIR)\src\libwolframe\wolframe.lib \
 	$(TOPDIR)\src\libwolframe_serialize\wolframe_serialize.lib \
 	$(TOPDIR)\src\libwolframe_database\wolframe_database.lib \
@@ -74,7 +75,6 @@ TEST_CPP_BINS = \
 	configValueParser.exe \
 	testRand.exe \
 	testTimestamp.exe \
-	testWolfilter.exe \
 	testVariantTypes.exe \
 	testIntegers.exe \
 	testArrayDoublingAllocator.exe
@@ -102,16 +102,15 @@ byte2hexTest.exe: byte2hexTest.obj $(TOPDIR)\src\libwolframe\wolframe.lib
 base64Test.exe: base64Test.obj $(TOPDIR)\src\libwolframe\wolframe.lib
 base64Utility.exe: base64Utility.obj $(TOPDIR)\src\libwolframe\wolframe.lib
 logTest.exe: logTest.obj
-testArrayDoublingAllocator.exe: testArrayDoublingAllocator.obj $(TOPDIR)\src\wolframe.lib
-testTestAllocator.exe: testTestAllocator.obj $(TOPDIR)\src\wolframe.lib
-configStructParser.exe: configStructParser.obj $(TOPDIR)\src\wolframe.lib
-configValueParser.exe: configValueParser.obj $(TOPDIR)\src\wolframe.lib
-testVariantStruct.exe: testVariantStruct.obj $(TOPDIR)\src\wolframe.lib
-testNumberBaseConversion.exe: testNumberBaseConversion.obj $(TOPDIR)\src\wolframe.lib
-testString.exe: testString.obj $(TOPDIR)\src\wolframe.lib
-testDateTime.exe: testDateTime.obj $(TOPDIR)\src\wolframe.lib
-testBigNumber.exe: testBigNumber.obj $(TOPDIR)\src\wolframe.lib
-testWolfilter.exe: testWolfilter.obj $(TOPDIR)\src\wolframe.lib
+testArrayDoublingAllocator.exe: testArrayDoublingAllocator.obj
+testTestAllocator.exe: testTestAllocator.obj
+configStructParser.exe: configStructParser.obj
+configValueParser.exe: configValueParser.obj
+testVariantStruct.exe: testVariantStruct.obj
+testNumberBaseConversion.exe: testNumberBaseConversion.obj
+testString.exe: testString.obj
+testDateTime.exe: testDateTime.obj
+testBigNumber.exe: testBigNumber.obj
 testRand.exe: testRand.obj
 testTimestamp.exe: testTimestamp.obj
 testVariantTypes.exe: testVariantTypes.obj $(TOPDIR)\src\wolframe.lib
@@ -175,7 +174,6 @@ local_test:
 	@-testBigNumber
 	@-testVariantTypes
 	@-testIntegers 
-	@-testWolfilter 
 
 local_longtest:
 	@-poolTest 

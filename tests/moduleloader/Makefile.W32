@@ -21,10 +21,9 @@ INCLUDE_LDFLAGS = \
 
 INCLUDE_LIBS = \
 	Advapi32.lib Ws2_32.lib \
-	$(TOPDIR)\src\moduleDirectory.obj \
-	$(TOPDIR)\src\moduleLoader.obj \
 	$(TOPDIR)\3rdParty\gtest\gtest-all.obj \
 	$(TOPDIR)\wtest\wtest.lib \
+	$(TOPDIR)\src\libconfig\wfconfig.lib \
 	$(TOPDIR)\src\libwolframe\wolframe.lib \
 	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib
 

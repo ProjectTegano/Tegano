@@ -30,38 +30,50 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file serverHandler.cpp
+/// \file serverHandler.hpp
 
-#include "serverHandler.hpp"
+#ifndef _Wolframe_SERVER_HANDLER_HPP_INCLUDED
+#define _Wolframe_SERVER_HANDLER_HPP_INCLUDED
+#include "module/moduleDirectory.hpp"
 #include "serverConnectionHandler.hpp"
-#include "config/bannerConfiguration.hpp"
+#include "system/connectionHandler.hpp"
+#include "processor/execContext.hpp"
+#include "cmdbind/protocolHandler.hpp"
+#include "database/database.hpp"
 #include "AAAA/AAAAprovider.hpp"
-#include "provider/procProviderImpl.hpp"
-#include "prgbind/programLibrary.hpp"
-#include "logger-v1.hpp"
-#include <stdexcept>
+#include "processor/execContext.hpp"
+#include "mainConnectionHandler.hpp"
+#include "libconfig/bannerConfiguration.hpp"
+#include "libconfig/procProviderConfiguration.hpp"
+#include "libprovider/procProviderImpl.hpp"
 
-#include <string>
-#include <cstring>
-#include <stdexcept>
+namespace _Wolframe {
 
-using namespace _Wolframe;
-
-/// ServerHandler PIMPL
-net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR& local )
+/// \brief The server handler container
+class ServerHandler
 {
-	return new ServerConnectionHandler( this, local );
-}
+public:
+	ServerHandler( const config::ProcProviderConfiguration* pconf,
+			const AAAA::AAAAconfiguration* aconf,
+			const db::DBproviderConfig* dconf,
+			const config::BannerConfiguration* bconf,
+			const module::ModuleDirectory* modules);
+	~ServerHandler();
+	
+	net::ConnectionHandler* newConnection( const net::LocalEndpointR& local );
 
-ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
-				const AAAA::AAAAconfiguration* aconf,
-				const db::DBproviderConfig* dconf,
-				const config::BannerConfiguration* bconf,
-				const module::ModuleDirectory* modules )
-	:m_banner( bconf->toString() )
-	,m_db( dconf, modules )
-	,m_aaaa( aconf, modules )
-	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules){}
+	const std::string& banner() const				{ return m_banner; }
+	const db::DatabaseProvider* dbProvider() const			{ return &m_db; }
+	const AAAA::AAAAprovider* aaaaProvider() const			{ return &m_aaaa; }
+	const proc::ProcessorProviderInterface* procProvider() const	{ return &m_proc; }
 
-ServerHandler::~ServerHandler()	{}
+private:
+	const std::string		m_banner;
+	db::DatabaseProvider		m_db;
+	AAAA::AAAAprovider		m_aaaa;
+	prgbind::ProgramLibraryImpl	m_prglib;
+	proc::ProcessorProviderImpl	m_proc;
+};
 
+} // namespace _Wolframe
+#endif

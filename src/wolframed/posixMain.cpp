@@ -38,18 +38,18 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-#include "config/applicationProperties.hpp"
-#include "config/applicationConfiguration.hpp"
-#include "config/cmdLineConfiguration.hpp"
-#include "config/loggerConfiguration.hpp"
-#include "config/serviceConfiguration.hpp"
-#include "config/serverConfiguration.hpp"
+#include "libconfig/applicationProperties.hpp"
+#include "libconfig/applicationConfiguration.hpp"
+#include "libconfig/cmdLineConfiguration.hpp"
+#include "libconfig/loggerConfiguration.hpp"
+#include "libconfig/serviceConfiguration.hpp"
+#include "libconfig/serverConfiguration.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
 
 #include "server.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
 #include "appInfo.hpp"
-#include "config/moduleDirectoryImpl.hpp"
 
 #include "system/connectionHandler.hpp"
 

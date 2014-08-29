@@ -29,6 +29,7 @@ INCLUDE_DIRS = \
 
 INCLUDE_LDFLAGS = \
 	-L$(TOPDIR)/src/libwfsingleton \
+	-L$(TOPDIR)/src/libconfig \
 	-L$(TOPDIR)/src/libwolframe \
 	-L$(TOPDIR)/src/libwolframe_serialize \
 	-L$(TOPDIR)/src/libwolframe_database \
@@ -39,7 +40,7 @@ INCLUDE_LDFLAGS = \
 
 INCLUDE_LIBS = \
 	-lwolftest \
-	$(TOPDIR)/src/libwolframed.a \
+	-lwfconfig \
 	-lwolframe_serialize \
 	-lwolframe_database \
 	-lwolframe_langbind \
@@ -133,7 +134,6 @@ TEST_CPP_BINS = \
 	configStructParser$(EXE) \
 	testRand$(EXE) \
 	testTimestamp$(EXE) \
-	testWolfilter$(EXE) \
 	testVariantTypes$(EXE) \
 	testIntegers$(EXE) \
 	testString$(EXE) \
@@ -144,20 +144,19 @@ TEST_CPP_BINS = \
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-logTest$(EXE): $(TOPDIR)/src/libwolframed.a
+logTest$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
 byte2hexTest$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
-testVariantStruct$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a
-testNumberBaseConversion$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a
-configValueParser$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a
-configStructParser$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a
-testWolfilter$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a
-testArrayDoublingAllocator$(EXE): $(TOPDIR)/src/libwolframed.a
-testTestAllocator$(EXE): $(TOPDIR)/src/libwolframed.a
-testVariantTypes$(EXE):  $(TOPDIR)/src/libwolframed.a
-testIntegers$(EXE):  $(TOPDIR)/src/libwolframed.a
-testString$(EXE):  $(TOPDIR)/src/libwolframed.a
-testDateTime$(EXE):  $(TOPDIR)/src/libwolframed.a
-testBigNumber$(EXE):  $(TOPDIR)/src/libwolframed.a
+testVariantStruct$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+testNumberBaseConversion$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+configValueParser$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+configStructParser$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+testArrayDoublingAllocator$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+testTestAllocator$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a
+testVariantTypes$(EXE):  $(TOPDIR)/src/libwolframe/libwolframe.a
+testIntegers$(EXE):  $(TOPDIR)/src/libwolframe/libwolframe.a
+testString$(EXE):  $(TOPDIR)/src/libwolframe/libwolframe.a
+testDateTime$(EXE):  $(TOPDIR)/src/libwolframe/libwolframe.a
+testBigNumber$(EXE):  $(TOPDIR)/src/libwolframe/libwolframe.a
 local_all:
 
 local_clean:
@@ -186,7 +185,6 @@ endif
 ifeq ($(WITH_ORACLE),1)
 LD_LIBRARY_PATH:= "$(LD_LIBRARY_PATH):$(ORACLE_LIB_DIR)"
 endif
-
 
 ifeq ($(WITH_LIBHPDF),1)
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(LIBHPDF_LIB_DIR)"
@@ -244,8 +242,6 @@ ifeq ($(RUN_TESTS),1)
 	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./testBigNumber
 	@echo
 	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./testIntegers
-	@echo
-	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./testWolfilter
 	@echo
 	@echo
 endif

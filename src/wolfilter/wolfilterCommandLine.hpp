@@ -34,9 +34,9 @@
 ///\brief Interface for the wolfilter call command line
 #ifndef _Wolframe_WOLFILTER_COMMANDLINE_HPP_INCLUDED
 #define _Wolframe_WOLFILTER_COMMANDLINE_HPP_INCLUDED
-#include "config/moduleDirectoryImpl.hpp"
-#include "provider/procProviderImpl.hpp"
-#include "config/procProviderConfiguration.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
+#include "libconfig/procProviderConfiguration.hpp"
+#include "libprovider/procProviderImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "types/propertyTree.hpp"
 #include "logger-v1.hpp"

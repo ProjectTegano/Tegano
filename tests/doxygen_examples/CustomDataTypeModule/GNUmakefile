@@ -35,7 +35,7 @@ TEST_CPP_BINS =
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-src$(EXE): $(TOPDIR)/src/libwolframed.a $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a $(TOPDIR)/src/libwolframe_langbind/libwolframe_langbind.a $(TOPDIR)/src/libwolframe_serialize/libwolframe_serialize.a
+src$(EXE): $(TOPDIR)/src/libwolframe/libwolframe.a $(TOPDIR)/src/libwolframe_database/libwolframe_database.a $(TOPDIR)/src/libwolframe_langbind/libwolframe_langbind.a $(TOPDIR)/src/libwolframe_serialize/libwolframe_serialize.a
 
 LD_LIBRARY_PATH = "$(BOOST_LIB_DIR):$(TOPDIR)/src/libwfsingleton:$(TOPDIR)/src/libwolframe:$(TOPDIR)/src/libwolframe_database:$(TOPDIR)/src/libwolframe_langbind:$(TOPDIR)/src/libwolframe_serialize"
 

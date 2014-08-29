@@ -36,7 +36,7 @@ TEST_CPP_BINS = \
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
-protocolArgumentParsing$(EXE): protocolArgumentParsing.o protocolArgumentParsingFiles.o $(TOPDIR)/src/libwolframed.a
+protocolArgumentParsing$(EXE): protocolArgumentParsing.o protocolArgumentParsingFiles.o
 
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(BOOST_LIB_DIR):$(TOPDIR)/src/libwfsingleton:$(TOPDIR)/src/libwolframe:$(TOPDIR)/wtest"
 

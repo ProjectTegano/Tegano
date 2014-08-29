@@ -44,7 +44,7 @@ test.bat
 *.RES
 simple_event_log.h
 wolframemsg.rc
-src/wolframed
+src/wolframed/wolframed
 tests/testNamedRetVal
 tests/singletonTest
 tests/testVirtualInheritance
@@ -143,8 +143,8 @@ examples/tproc/tests/temp/
 *.DIFF
 clients/cli/primary.db
 examples/iproc/tests/temp/
-src/wolfilter
-src/wolfwizard
+src/wolfilter/wolfilter
+src/wolfwizard/wolfwizard
 tests/AAAA/textFileCRAMtest
 tests/testRand
 tests/testTimestamp
@@ -153,7 +153,7 @@ tests/bignum/testbignum
 tests/temp/
 tests/testProtocolLFdotEscaping
 tests/testAddressRestriction
-tests/testWolfilter
+tests/wolfilter/src/testWolfilter
 tests/testWolfilter.sh
 tests/testDatabaseProcessorVM
 src/testCompileTDL

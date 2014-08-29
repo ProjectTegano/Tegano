@@ -37,7 +37,7 @@
 #include "logger-v1.hpp"
 #include "gtest/gtest.h"
 
-#include "module/moduleDirectory.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 
 
@@ -75,7 +75,7 @@ protected:
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 
 		// Build the modules directory
-		ModuleDirectory modDir( g_execdir);
+		ModuleDirectoryImpl modDir( g_execdir);
 		static module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
 				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );

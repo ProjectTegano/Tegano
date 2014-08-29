@@ -539,9 +539,9 @@ static void writeFile( const std::string& pt, const std::string& content)
 }
 
 
-TestDescription::TestDescription( const std::string& pt, const char* argv0)
+TestDescription::TestDescription( const std::string& pt, const std::string& testdirstr)
 {
-	static boost::filesystem::path testdir = boost::filesystem::system_complete( argv0).parent_path();
+	boost::filesystem::path testdir( testdirstr);
 
 	std::vector<std::string> header;
 	std::vector<std::string> content;

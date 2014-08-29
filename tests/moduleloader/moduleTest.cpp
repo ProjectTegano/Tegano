@@ -3,7 +3,7 @@
 //
 
 #include "logger-v1.hpp"
-#include "module/moduleDirectory.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 
@@ -13,7 +13,7 @@
 #include <boost/filesystem.hpp>
 
 #include <string>
-#include <list>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -42,8 +42,8 @@ class ModuleFixture : public ::testing::Test
 
 TEST_F( ModuleFixture, LoadingModuleFromDir )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/mod_test/mod_test.so" );
@@ -53,7 +53,7 @@ TEST_F( ModuleFixture, LoadingModuleFromDir )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	ConfiguredBuilder* builder = modDir.getBuilder( "TestObject" );
+	const ConfiguredBuilder* builder = modDir.getConfiguredBuilder( "TestObject" );
 	ASSERT_TRUE( builder != NULL );
 
 	config::NamedConfiguration* configuration = builder->configuration( "TestObject" );
@@ -72,8 +72,8 @@ TEST_F( ModuleFixture, LoadingModuleFromDir )
 
 TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/mod_test_containers/mod_test_containers.so" );
@@ -83,10 +83,10 @@ TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	ConfiguredBuilder* builder1 = modDir.getBuilder( "TestObject1" );
+	const ConfiguredBuilder* builder1 = modDir.getConfiguredBuilder( "TestObject1" );
 	ASSERT_TRUE( builder1 != NULL );
 
-	ConfiguredBuilder* builder2 = modDir.getBuilder( "TestObject2" );
+	const ConfiguredBuilder* builder2 = modDir.getConfiguredBuilder( "TestObject2" );
 	ASSERT_TRUE( builder2 != NULL );
 
 	config::NamedConfiguration* configuration1 = builder1->configuration( "TestObject1" );
@@ -116,8 +116,8 @@ TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 TEST_F( ModuleFixture, ModuleLogging )
 {
 	std::stringstream buffer;
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/mod_test/mod_test.so" );
@@ -127,7 +127,7 @@ TEST_F( ModuleFixture, ModuleLogging )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	ConfiguredBuilder* builder = modDir.getBuilder( "TestObject" );
+	const ConfiguredBuilder* builder = modDir.getConfiguredBuilder( "TestObject" );
 	ASSERT_TRUE( builder != NULL );
 
 	config::NamedConfiguration* configuration = builder->configuration( "TestObject" );
@@ -157,8 +157,8 @@ TEST_F( ModuleFixture, ModuleLogging )
 
 TEST_F( ModuleFixture, LoadingMissingModuleFile )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/not_there/not_there.so" );
@@ -171,8 +171,8 @@ TEST_F( ModuleFixture, LoadingMissingModuleFile )
 
 TEST_F( ModuleFixture, LoadingNotAWolframeModule )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/not_a_mod/not_a_mod.so" );
@@ -185,8 +185,8 @@ TEST_F( ModuleFixture, LoadingNotAWolframeModule )
 
 TEST_F( ModuleFixture, LoadingModuleWithoutExtension )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/mod_test/mod_test" );
@@ -199,8 +199,8 @@ TEST_F( ModuleFixture, LoadingModuleWithoutExtension )
 
 TEST_F( ModuleFixture, LoadingModuleLackingASymbol )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifndef _WIN32
 	modFiles.push_back( "./tests/missing_symbol/missing_symbol.so" );
@@ -213,8 +213,8 @@ TEST_F( ModuleFixture, LoadingModuleLackingASymbol )
 
 TEST_F( ModuleFixture, LoadingModuleResolvableSymbol )
 {
-	ModuleDirectory modDir( g_execdir);
-	list<string> modFiles;
+	ModuleDirectoryImpl modDir( g_execdir);
+	vector<string> modFiles;
 
 #ifdef _WIN32
 	SetDllDirectory( "tests\\libbla" );

@@ -1,6 +1,6 @@
 TOPDIR = ../..
 
-SUBDIRS = modules
+SUBDIRS = modules src
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 

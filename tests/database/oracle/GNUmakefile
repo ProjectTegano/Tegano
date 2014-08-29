@@ -28,7 +28,6 @@ INCLUDE_LIBS = \
 	-lwolframe \
 	-lwolframe_database \
 	-lwolftest \
-	$(TOPDIR)/src/libwolframed.a \
 	$(TOPDIR)/3rdParty/gtest/gtest-all.o \
 	$(TOPDIR)/src/modules/database/oracle/mod_db_oracle_lib.a \
 	-lwolframe_serialize \
