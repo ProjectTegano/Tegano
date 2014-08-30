@@ -38,6 +38,8 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
+#include "libconfig/version.hpp"
+#include "libconfig/applicationInfo.hpp"
 #include "libconfig/applicationProperties.hpp"
 #include "libconfig/applicationConfiguration.hpp"
 #include "libconfig/cmdLineConfiguration.hpp"
@@ -47,10 +49,8 @@
 #include "libconfig/moduleDirectoryImpl.hpp"
 
 #include "server.hpp"
-#include "version.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
-#include "appInfo.hpp"
 
 #include "system/connectionHandler.hpp"
 

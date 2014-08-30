@@ -39,19 +39,20 @@
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include "version.hpp"
 #include "wolframedCommandLine.hpp"
-#include "appconfig.hpp"
+
+#include "libconfig/version.hpp"
 #include "libconfig/appProperties.hpp"
-#include "libconfig/cmdLineConfiguration.hpp"
+#include "libconfig/applicationInfo.hpp"
 #include "libconfig/applicationConfiguration.hpp"
+#include "libconfig/cmdLineConfiguration.hpp"
 #include "libconfig/loggerConfiguration.hpp"
 #include "libconfig/serviceConfiguration.hpp"
 #include "libconfig/serverConfiguration.hpp"
+
 #include "server.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
-#include "appInfo.hpp"
 #include "libprovider/moduleDirectory.hpp"
 #include "system/connectionHandler.hpp"
 
