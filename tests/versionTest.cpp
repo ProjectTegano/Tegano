@@ -37,9 +37,10 @@
 #include <cstdio>
 #include <ctime>
 
-#include "version.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
+
+#include "libconfig/version.hpp"
 
 using namespace _Wolframe;
 
