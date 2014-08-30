@@ -37,7 +37,7 @@
 #include <string>
 #include <cassert>
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "TextFileAuth.hpp"
 #include "AAAA/CRAM.hpp"
 #include "AAAA/passwordHash.hpp"

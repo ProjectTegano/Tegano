@@ -40,7 +40,7 @@
 #include "langbind/formFunction.hpp"
 #include "langbind/auditFunction.hpp"
 #include "processor/procProviderInterface.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <string>
 #include <vector>
 #include <sstream>

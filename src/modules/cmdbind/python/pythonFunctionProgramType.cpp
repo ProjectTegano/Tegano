@@ -38,7 +38,7 @@ Project Wolframe.
 #include "langbind/formFunction.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "processor/procProviderInterface.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "types/variant.hpp"
 #include <vector>
 #include <string>

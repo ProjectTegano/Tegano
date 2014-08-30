@@ -32,7 +32,7 @@ Project Wolframe.
 ///\file dotnetRuntimeEnvironmentConfig.cpp
 ///\brief Implementation .NET runtime environment configuration
 #include "dotnetRuntimeEnvironmentConfig.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include <cstring>
 #include <boost/algorithm/string.hpp>

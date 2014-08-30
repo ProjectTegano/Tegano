@@ -35,7 +35,7 @@
 #include "SQLiteTransactionExecStatemachine.hpp"
 #include "SQLite.hpp"
 #include "SQLiteStatement.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <iostream>
 #include <sstream>
 #include <cstdlib>

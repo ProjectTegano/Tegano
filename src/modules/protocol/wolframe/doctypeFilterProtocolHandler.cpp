@@ -33,7 +33,7 @@
 ///\file cmdbind_doctypeFilterProtocolHandler.cpp
 #include "doctypeFilterProtocolHandler.hpp"
 #include "processor/execContext.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/parseUtils.hpp"
 #include "utils/fileUtils.hpp"
 #include <cstring>

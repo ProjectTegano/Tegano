@@ -36,7 +36,7 @@
 #include "utils/fileUtils.hpp"
 #include "utils/parseUtils.hpp"
 #include "filter/execContextInputFilter.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 

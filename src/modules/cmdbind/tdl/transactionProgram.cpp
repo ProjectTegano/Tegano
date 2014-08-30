@@ -39,7 +39,7 @@
 #include "database/databaseError.hpp"
 #include "database/database.hpp"
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::prgbind;

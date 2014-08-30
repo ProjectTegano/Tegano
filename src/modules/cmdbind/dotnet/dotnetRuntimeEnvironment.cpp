@@ -33,7 +33,7 @@ Project Wolframe.
 //\brief Implementation .NET runtime environment
 #include "dotnetRuntimeEnvironment.hpp"
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <algorithm>
 
 using namespace _Wolframe;

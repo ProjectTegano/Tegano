@@ -34,7 +34,7 @@ Project Wolframe.
 #include "luafilter.hpp"
 #include "luaObjectTemplate.hpp"
 #include "luaDebug.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/printFormats.hpp"
 #include <boost/lexical_cast.hpp>
 #include <stdexcept>

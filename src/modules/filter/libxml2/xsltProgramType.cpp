@@ -37,7 +37,7 @@ Project Wolframe.
 #include "outputfilterImpl.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/shared_ptr.hpp>
 #if WITH_LIBXSLT
 #include <libxslt/xslt.h>

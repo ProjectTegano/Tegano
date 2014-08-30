@@ -34,7 +34,7 @@ Project Wolframe.
 #include "outputfilterImpl.hpp"
 #include <boost/algorithm/string.hpp>
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;

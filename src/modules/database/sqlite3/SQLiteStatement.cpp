@@ -37,7 +37,7 @@ Project Wolframe.
 #include "types/customDataType.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 
 using namespace _Wolframe;

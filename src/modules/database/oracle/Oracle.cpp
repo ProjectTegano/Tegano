@@ -34,7 +34,7 @@
 // Wolframe Oracle client view implementation
 //
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "Oracle.hpp"
 #include "utils/fileUtils.hpp"
 #include "OracleTransactionExecStatemachine.hpp"

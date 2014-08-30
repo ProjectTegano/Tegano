@@ -33,7 +33,7 @@
 #include "lineProtocolHandler.hpp"
 #include "processor/execContext.hpp"
 #include "ioblocks.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 #undef _Wolframe_LOWLEVEL_DEBUG
 

@@ -33,7 +33,7 @@ Project Wolframe.
 ///\brief Implementation of the echo command handler for protocol tests
 #include "echoCommandHandler.hpp"
 #include "processor/execContext.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;

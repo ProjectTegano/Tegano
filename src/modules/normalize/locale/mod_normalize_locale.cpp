@@ -34,7 +34,7 @@
 ///\brief Module for normalization functions based on boost locale (ICU)
 #include "appdevel/normalizeModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "localeNormalize.hpp"
 
 using namespace _Wolframe::langbind;

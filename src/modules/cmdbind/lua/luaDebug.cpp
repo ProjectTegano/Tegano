@@ -37,7 +37,7 @@
 #include <cstddef>
 #include <string>
 #include <vector>
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/functional/hash.hpp>
 extern "C" {

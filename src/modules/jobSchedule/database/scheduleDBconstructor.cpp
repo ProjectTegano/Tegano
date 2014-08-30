@@ -34,7 +34,7 @@
 // database audit constructor
 //
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "scheduleDB.hpp"
 
 namespace _Wolframe {

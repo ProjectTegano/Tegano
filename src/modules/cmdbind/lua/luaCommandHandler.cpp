@@ -34,7 +34,7 @@ Project Wolframe.
 #include "luaCommandHandler.hpp"
 #include "luaDebug.hpp"
 #include "luaObjects.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 #include <cstddef>
 #include <boost/shared_ptr.hpp>

@@ -38,7 +38,7 @@ Project Wolframe.
 #include "filter/typingfilter.hpp"
 #include "filter/execContextInputFilter.hpp"
 #include "filter/joinfilter.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 #include <cstddef>
 #include <boost/algorithm/string.hpp>

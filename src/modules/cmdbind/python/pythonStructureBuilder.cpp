@@ -32,7 +32,7 @@ Project Wolframe.
 ///\file pythonStructureBuilder.cpp
 ///\brief Implementation of python data structure building
 #include "pythonStructureBuilder.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "pythonException.hpp"
 #include <Python.h>
 

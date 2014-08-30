@@ -30,7 +30,7 @@ Project Wolframe.
 
 ************************************************************************/
 ///\file pythonInterpreter.cpp
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include <stdexcept>
 #include <sstream>

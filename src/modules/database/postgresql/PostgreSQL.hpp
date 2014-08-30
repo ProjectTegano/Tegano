@@ -39,7 +39,7 @@
 
 #include "PostgreSQLTransactionExecStatemachine.hpp"
 #include "PostgreSQLConfig.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <libpq-fe.h>
 #include <list>
 #include <vector>

@@ -41,7 +41,7 @@
 #include "wolframed/mainConnectionHandler.hpp"
 #include "mainProtocolHandler.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>

@@ -36,7 +36,7 @@
 
 #include "PAMAuth.hpp"
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 #include <iostream>
 #include <string>

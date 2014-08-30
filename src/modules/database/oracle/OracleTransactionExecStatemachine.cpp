@@ -36,7 +36,7 @@
 #include "OracleTransactionExecStatemachine.hpp"
 #include "Oracle.hpp"
 #include "OracleStatement.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <iostream>
 #include <sstream>
 #include <cstdlib>

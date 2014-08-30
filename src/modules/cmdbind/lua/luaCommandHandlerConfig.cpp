@@ -32,7 +32,7 @@ Project Wolframe.
 ///\file luaCommandHandlerConfig.cpp
 ///\brief Implementation of the lua command handler configuration
 #include "luaCommandHandlerConfig.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"
 #include <boost/algorithm/string.hpp>

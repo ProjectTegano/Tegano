@@ -38,7 +38,7 @@
 #include "escDlfProtocolHandler.hpp"
 #include "processor/execContext.hpp"
 #include "interfaceProtocolHandler.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>

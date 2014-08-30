@@ -36,7 +36,7 @@
 
 #include "DBaudit.hpp"
 #include "module/moduleInterface.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
 namespace module {

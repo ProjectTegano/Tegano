@@ -43,7 +43,7 @@ Project Wolframe.
 #include "filter/joinfilter.hpp"
 #include "filter/execContextInputFilter.hpp"
 #include "filter/envelopefilter.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>

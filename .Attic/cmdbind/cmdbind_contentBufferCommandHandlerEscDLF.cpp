@@ -35,7 +35,7 @@
 #include "processor/execContext.hpp"
 #include "filter/outputfilter.hpp"
 #include "filter/inputfilter.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 #undef _Wolframe_LOWLEVEL_DEBUG
 

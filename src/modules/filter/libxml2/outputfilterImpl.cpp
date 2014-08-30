@@ -32,7 +32,7 @@ Project Wolframe.
 /// \file outputfilterImpl.cpp
 /// \brief Implementaion of output filter abstraction for the libxml2 library
 #include "outputfilterImpl.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;

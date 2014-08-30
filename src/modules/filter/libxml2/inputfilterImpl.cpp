@@ -33,7 +33,7 @@ Project Wolframe.
 ///\brief Implementation of input filter abstraction for the libxml2 library
 #include "inputfilterImpl.hpp"
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;

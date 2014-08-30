@@ -34,7 +34,7 @@ Project Wolframe.
 #include "luaCommandHandlerUnit.hpp"
 #include "luaCommandHandlerConfig.hpp"
 #include "utils/parseUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 
 using namespace _Wolframe;

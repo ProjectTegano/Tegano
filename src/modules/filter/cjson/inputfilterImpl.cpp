@@ -35,7 +35,7 @@ Project Wolframe.
 #include "utils/parseUtils.hpp"
 #include "utils/sourceLineInfo.hpp"
 #include "types/string.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 

@@ -43,7 +43,7 @@
 #include "PostgreSQLStatement.hpp"
 #define STATEMENT_CLASS PostgreSQLStatement
 #endif
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
