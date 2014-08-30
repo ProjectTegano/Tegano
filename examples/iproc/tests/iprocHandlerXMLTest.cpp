@@ -42,7 +42,7 @@
 #include "processor/procProvider.hpp"
 #include "wtest/testHandlerTemplates.hpp"
 #include "utils/fileUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "testUtils.hpp"
 #include "wtest/testModules.hpp"
 #include "wtest/testReport.hpp"

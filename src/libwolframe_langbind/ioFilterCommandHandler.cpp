@@ -33,7 +33,7 @@
 /// \file cmdbind/ioFilterCommandHandler.cpp
 /// \brief Command handler base class for processing content and writing output through filters
 #include "cmdbind/ioFilterCommandHandler.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;

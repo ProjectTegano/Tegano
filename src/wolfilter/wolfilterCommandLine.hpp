@@ -39,7 +39,7 @@
 #include "libprovider/procProviderImpl.hpp"
 #include "AAAA/AAAAprovider.hpp"
 #include "types/propertyTree.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/shared_ptr.hpp>
 #include <string>
 #include <vector>

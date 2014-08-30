@@ -33,7 +33,7 @@
 ///\file contentOnlyProtocolHandler.cpp
 #include "contentOnlyProtocolHandler.hpp"
 #include "processor/execContext.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>

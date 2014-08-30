@@ -33,7 +33,7 @@
 //
 // Wolframe Oracle test client implementation
 //
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "OracleTest.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"

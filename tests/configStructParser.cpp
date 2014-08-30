@@ -42,7 +42,7 @@ Project Wolframe.
 #pragma warning(disable:4127)
 #endif
 #include <iostream>
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace config;

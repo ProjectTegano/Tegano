@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #endif
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace std;
 

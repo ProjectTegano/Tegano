@@ -37,7 +37,7 @@
 #include "handlerConfig.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 #include <ostream>
 

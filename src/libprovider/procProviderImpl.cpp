@@ -44,7 +44,7 @@
 #include "appdevel/module/normalizeFunctionBuilder.hpp"
 #include "appdevel/module/customDataTypeBuilder.hpp"
 #include "appdevel/module/doctypeDetectorBuilder.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include "module/moduleDirectory.hpp"
 

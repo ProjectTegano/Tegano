@@ -37,7 +37,7 @@ Project Wolframe.
 #include "prgbind/programLibrary.hpp"
 #include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "types/variant.hpp"
 #include <vector>
 #include <string>

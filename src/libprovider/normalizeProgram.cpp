@@ -41,7 +41,7 @@
 #include "utils/fileUtils.hpp"
 #include "utils/fileLineInfo.hpp"
 #include "processor/procProviderInterface.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <string>
 
 using namespace _Wolframe;

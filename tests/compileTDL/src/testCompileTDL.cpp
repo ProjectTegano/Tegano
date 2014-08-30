@@ -41,7 +41,7 @@
 #include "utils/fileUtils.hpp"
 #include "types/propertyTree.hpp"
 #include "filter/ptreefilter.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 #define BOOST_FILESYSTEM_VERSION 3

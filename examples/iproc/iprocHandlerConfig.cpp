@@ -34,7 +34,7 @@
 ///\brief Implementation of the commands of the iproc connection handler
 #include "iprocHandlerConfig.hpp"
 #include "iprocProtocolFiles.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "serialize/configSerialize.hpp"
 #include "serialize/struct/structDescription.hpp"
 #include <sstream>

@@ -36,7 +36,7 @@ Project Wolframe.
 #include "serialize/struct/parseStack.hpp"
 #include "serialize/struct/parseValue.hpp"
 #include "serializationErrorException.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/printFormats.hpp"
 
 using namespace _Wolframe;

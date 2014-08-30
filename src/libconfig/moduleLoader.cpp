@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file moduleLoader.cpp
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "moduleLoader.hpp"
 #include "utils/fileUtils.hpp"
 

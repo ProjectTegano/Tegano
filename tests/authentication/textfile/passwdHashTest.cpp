@@ -34,7 +34,7 @@
 // paswword hash manipulation tests
 //
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include "system/globalRngGen.hpp"
 #include "AAAA/passwordHash.hpp"

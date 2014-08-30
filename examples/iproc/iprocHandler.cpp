@@ -36,7 +36,7 @@
 #include "processor/procProvider.hpp"
 #include "cmdbind/ioFilterCommandHandler.hpp"
 #include "iprocProtocolFiles.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 
 using namespace _Wolframe;

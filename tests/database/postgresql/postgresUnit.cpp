@@ -2,7 +2,7 @@
 // testing the Module Loader
 //
 
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "module/moduleDirectory.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"

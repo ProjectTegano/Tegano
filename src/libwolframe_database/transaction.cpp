@@ -35,7 +35,7 @@
 #include "database/transaction.hpp"
 #include "database/vm/programInstance.hpp"
 #include "database/vm/instructionSet.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <iostream>
 #include <sstream>
 

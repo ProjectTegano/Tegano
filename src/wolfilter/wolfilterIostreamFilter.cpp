@@ -45,7 +45,7 @@
 #include "filter/redirectFilterClosure.hpp"
 #include "langbind/formFunction.hpp"
 #include "utils/stringUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 #include <string>
 #include <fstream>

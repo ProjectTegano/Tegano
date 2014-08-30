@@ -37,7 +37,7 @@
 #include "appdevel/module/programTypeBuilder.hpp"
 #include "pdfPrinter.hpp"
 #include "pdfPrintProgramType.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::module;

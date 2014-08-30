@@ -38,7 +38,7 @@
 #include "cmdbind/protocolHandler.hpp"
 #include "tprocProtocolFiles.hpp"
 #include "system/connectionHandler.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <vector>
 #include <string>
 #include <boost/shared_ptr.hpp>

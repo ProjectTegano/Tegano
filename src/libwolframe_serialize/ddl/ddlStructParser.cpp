@@ -39,7 +39,7 @@ Project Wolframe.
 #include "types/variantStruct.hpp"
 #include "types/variantStructDescription.hpp"
 #include "serializationErrorException.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/printFormats.hpp"
 #include <cstring>
 #include <sstream>

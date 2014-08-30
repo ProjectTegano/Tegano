@@ -1,7 +1,7 @@
 #include "mylangInterpreter.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 
 using namespace _Wolframe;

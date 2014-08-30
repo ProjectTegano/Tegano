@@ -32,7 +32,7 @@
 ************************************************************************/
 ///\file testFiletypeRecognition.cpp
 ///\brief Test the recognition of configuration file types
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 #include "utils/fileUtils.hpp"

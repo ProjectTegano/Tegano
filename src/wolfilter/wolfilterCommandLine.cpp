@@ -43,7 +43,7 @@
 #include "serialize/configSerialize.hpp"
 #include "utils/fileUtils.hpp"
 #include "filter/redirectFilterClosure.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
 #include <sstream>

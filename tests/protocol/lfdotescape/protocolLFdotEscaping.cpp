@@ -34,7 +34,7 @@
 ///\brief Test program for testing the escaping of LF DOT sequences in both directions
 
 #include "ioblocks.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"

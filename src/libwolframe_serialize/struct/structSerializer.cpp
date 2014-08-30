@@ -38,7 +38,7 @@ Project Wolframe.
 #include "utils/printFormats.hpp"
 #include <cstring>
 #include <stdexcept>
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace serialize;

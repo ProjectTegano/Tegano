@@ -32,7 +32,7 @@ Project Wolframe.
 ///\file mylangStructureBuilder.cpp
 ///\brief Implementation of mylang data structure building
 #include "mylangStructureBuilder.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;

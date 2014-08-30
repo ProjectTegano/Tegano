@@ -38,7 +38,7 @@
 
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3

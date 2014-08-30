@@ -34,7 +34,7 @@
 ///\brief Module for a fake database implementation used for tests
 #include "testtraceDatabase.hpp"
 #include "module/moduleInterface.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
 namespace module {

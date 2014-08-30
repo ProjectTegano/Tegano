@@ -44,7 +44,7 @@
 #include "bannerConfiguration.hpp"
 #include "cmdLineConfiguration.hpp"
 #include "procProviderConfiguration.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "database/DBprovider.hpp"
 #include "AAAA/AAAAprovider.hpp"
 

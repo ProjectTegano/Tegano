@@ -38,7 +38,7 @@
 #include <cassert>
 
 #include "AAAAproviderImpl.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 #include "module/moduleDirectory.hpp"
 

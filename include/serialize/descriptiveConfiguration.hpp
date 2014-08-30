@@ -36,7 +36,7 @@ Project Wolframe.
 #include "config/configurationBase.hpp"
 #include "config/configurationTree.hpp"
 #include "serialize/configSerialize.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
 namespace serialize {

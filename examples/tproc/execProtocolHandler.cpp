@@ -33,7 +33,7 @@
 #include "execProtocolHandler.hpp"
 #include "processor/execContext.hpp"
 #include "tprocProtocolFiles.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 #undef _Wolframe_LOWLEVEL_DEBUG
 

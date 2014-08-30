@@ -36,7 +36,7 @@
 #include "moduleLoader.hpp"
 #include "utils/fileUtils.hpp"
 #include <boost/algorithm/string.hpp>
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::module;

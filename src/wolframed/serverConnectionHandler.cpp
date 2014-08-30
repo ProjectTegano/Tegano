@@ -34,7 +34,7 @@
 
 #include "serverHandler.hpp"
 #include "prgbind/programLibrary.hpp"
-#include "logger-v1.hpp"
+#include "logger/logger-v1.hpp"
 #include <stdexcept>
 
 #ifdef WITH_SSL
