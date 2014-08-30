@@ -35,6 +35,7 @@
 //
 
 #include "serviceConfiguration.hpp"
+#include "applicationProperties.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
 #include "utils/fileUtils.hpp"
@@ -130,11 +131,11 @@ bool ServiceConfiguration::parse( const config::ConfigurationNode& pt, const std
 			}
 		}
 		if ( serviceName.empty() )
-			serviceName = defaultServiceName();
+			serviceName = config::defaultServiceName();
 		if ( serviceDisplayName.empty() )
-			serviceDisplayName = defaultServiceDisplayName();
+			serviceDisplayName = config::defaultServiceDisplayName();
 		if ( serviceDescription.empty() )
-			serviceDescription = defaultServiceDescription();
+			serviceDescription = config::defaultServiceDescription();
 	}
 #endif
 	else	{

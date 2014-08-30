@@ -30,9 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// winMain.cpp
-//
+/// \file winMain.cpp
 
 #include <iostream>
 #include <string>
@@ -41,10 +39,10 @@
 #include <boost/function.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include "appProperties.hpp"
 #include "version.hpp"
 #include "wolframedCommandLine.hpp"
 #include "appconfig.hpp"
+#include "libconfig/appProperties.hpp"
 #include "libconfig/cmdLineConfiguration.hpp"
 #include "libconfig/applicationConfiguration.hpp"
 #include "libconfig/loggerConfiguration.hpp"
