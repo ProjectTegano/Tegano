@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=0.0.2
+VERSION=0.0.3
 PKGBUILD=$HOME/bsdbuild
 ORIG_ARCH=`uname -m`
 if test "x$ORIG_ARCH" = "xamd64"; then
@@ -37,7 +37,8 @@ gmake distclean
 mkdir /tmp/wolframe-$VERSION
 cp -a * /tmp/wolframe-$VERSION
 cd /tmp
-sed -i "s/^#define WOLFRAME_BUILD.*/#define WOLFRAME_BUILD $GIT_COMMIT_COUNT/g" wolframe-$VERSION/include/wolframe.hpp
+sed "s/^#define WOLFRAME_BUILD.*/#define WOLFRAME_BUILD $GIT_COMMIT_COUNT/g" wolframe-$VERSION/include/wolframe.hpp > _tmp
+mv -f _tmp wolframe-$VERSION/include/wolframe.hpp
 tar zcf wolframe-$VERSION.tar.gz wolframe-$VERSION
 cd -
 mv /tmp/wolframe-$VERSION.tar.gz .
