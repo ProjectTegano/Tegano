@@ -30,16 +30,17 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_employee_assignment_convert.cpp
-///\brief Module for testing form functions
-#include "appDevel.hpp"
+/// \file mod_employee_assignment_convert.cpp
+/// \brief Module for testing form functions
+#include "appdevel/cppFormFunctionModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "employee_assignment_convert_exec.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::test;
 
 WF_MODULE_BEGIN( "testFunction", "test form function employee_assignment_convert")
-WF_FORM_FUNCTION( "employee_assignment_convert", assignmentListConvert, AssignmentList, AssignmentList)
+ WF_FORM_FUNCTION( "employee_assignment_convert", assignmentListConvert, AssignmentList, AssignmentList)
 WF_MODULE_END
 
 

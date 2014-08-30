@@ -30,8 +30,8 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_graphix.cpp
-///\brief Fake implementation of module for graphic functions with FreeImage for testing
+/// \file mod_graphix.cpp
+/// \brief Fake implementation of module for graphic functions with FreeImage for testing
 #include "appdevel/cppFormFunctionModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "graphix.hpp"

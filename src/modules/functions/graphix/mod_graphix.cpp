@@ -30,9 +30,10 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_graphix.cpp
-///\brief Module for graphic functions with FreeImage
-#include "appDevel.hpp"
+/// \file mod_graphix.cpp
+/// \brief Module for graphic functions with FreeImage
+#include "appdevel/cppFormFunctionModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "graphix.hpp"
 
 using namespace _Wolframe;
