@@ -32,6 +32,7 @@ LOCAL_STATIC_LIB = \
 	wfconfig.lib
 
 LOCAL_STATIC_LIB_OBJS = \
+	version.obj \
 	moduleDirectoryImpl.obj \
 	moduleLoader.obj \
 	serviceConfiguration.obj \
@@ -40,6 +41,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	serverConfiguration.obj \
 	cmdLineConfiguration.obj \
 	procProviderConfiguration.obj \
+	applicationInfo.obj \
 	applicationConfiguration.obj \
 	applicationProperties.obj
 

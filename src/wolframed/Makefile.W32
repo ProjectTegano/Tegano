@@ -51,7 +51,8 @@ CPP_OBJS = \
 	server.obj \
 	serverEndpoint.obj \
 	serverHandler.obj \
-	winMain.obj
+	winMain.obj \
+	wolframedCommandLine.obj
 
 !IFDEF WITH_SSL
 CPP_OBJS = \

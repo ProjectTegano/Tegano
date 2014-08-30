@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file platform.hpp
+/// \file system/platform.hpp
 /// \brief Header file for the Platform class
 
 #ifndef _PLATFORM_HPP_INCLUDED

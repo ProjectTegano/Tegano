@@ -33,7 +33,7 @@
 /// \file  platform.cpp
 /// \brief Platform class implementation
 
-#include "platform.hpp"
+#include "system/platform.hpp"
 
 #include <sstream>
 

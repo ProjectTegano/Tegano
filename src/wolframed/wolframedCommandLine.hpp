@@ -30,43 +30,57 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Platform class unit tests ( using gTest)
-//
+/// \file wolframedCommandLine.hpp
 
-#include "system/platform.hpp"
-#include "gtest/gtest.h"
-#include "wtest/testReport.hpp"
+#ifndef _WOLFRAMED_COMMANDLINE_HPP_INCLUDED
+#define _WOLFRAMED_COMMANDLINE_HPP_INCLUDED
 
-#include <iostream>
+#include "logger/logLevel.hpp"
+#include "libconfig/applicationConfiguration.hpp"
 
-using namespace _Wolframe;
+#include <string>
+#include <boost/program_options.hpp>
 
-// The fixture for testing class Wolframe::Platform
-class PlatformFixture : public ::testing::Test	{
-protected:
-	// Set-up work for each test here.
-	PlatformFixture( ) {}
+namespace _Wolframe	{
+namespace config	{
+
+struct CmdLineConfig	{
+	enum Command_t	{
+		PRINT_HELP,
+		PRINT_VERSION,
+		CHECK_CONFIG,
+		TEST_CONFIG,
+		PRINT_CONFIG,
+#if defined(_WIN32)
+		INSTALL_SERVICE,
+		REMOVE_SERVICE,
+		RUN_SERVICE,
+#endif
+		DEFAULT
+	};
+
+	Command_t	command;
+#if !defined(_WIN32)
+	bool		foreground;
+	std::string	user;
+	std::string	group;
+	std::string	pidFile;
+#endif
+	log::LogLevel::Level				debugLevel;
+	std::string					cfgFile;
+	ApplicationConfiguration::ConfigFileType	cfgType;
+	bool						useLogConfig;
+private:
+	std::string					errMsg_;
+	boost::program_options::options_description	options_;
+
+public:
+	CmdLineConfig();
+	bool parse( int argc, char* argv[] );
+	std::string errMsg( void )		{ return errMsg_; }
+	void usage( std::ostream& os ) const	{ options_.print( os ); }
 };
 
+}} // namespace _Wolframe::config
 
-// Tests the string representation of the platform known to the
-// makefile system
-TEST_F( PlatformFixture, MakePlatform )	{
-	Platform p = Platform::makePlatform( );
-	
-	std::cout << "make platform is: " << p.toString( ) << std::endl;
-}
-
-TEST_F( PlatformFixture, RuntimePlatform )	{
-	Platform p = Platform::runtimePlatform( );
-	
-	std::cout << "runtime platform is: " << p.toString( ) << std::endl;
-}
-
-int main( int argc, char **argv )
-{
-	WOLFRAME_GTEST_REPORT( argv[0], refpath.string());
-	::testing::InitGoogleTest( &argc, argv );
-	return RUN_ALL_TESTS();
-}
+#endif // _COMMANDLINE_HPP_INCLUDED

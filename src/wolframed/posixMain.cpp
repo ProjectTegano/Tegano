@@ -47,6 +47,7 @@
 #include "libconfig/moduleDirectoryImpl.hpp"
 
 #include "server.hpp"
+#include "version.hpp"
 #include "system/errorCode.hpp"
 #include "logger-v1.hpp"
 #include "appInfo.hpp"

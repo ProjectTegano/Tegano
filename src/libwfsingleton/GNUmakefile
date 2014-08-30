@@ -37,7 +37,6 @@ LOGGER_OBJS = \
 
 CPP_OBJS = \
 	$(LOGGER_OBJS) \
-	appInfo.o \
 	globalRndGen.o
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk

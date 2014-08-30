@@ -37,7 +37,6 @@ LOGGER_OBJS = \
 
 CPP_OBJS = \
 	$(LOGGER_OBJS) \
-	appInfo.obj \
 	globalRndGen.obj
 
 OBJS =

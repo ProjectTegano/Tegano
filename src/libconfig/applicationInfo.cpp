@@ -30,46 +30,50 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appInfo.hpp
-/// \brief Application wide singleton for the application info
+//
+// Application Info is an application wide singleton
+//
 
-#ifndef _APP_INFO_HPP_INCLUDED
-#define _APP_INFO_HPP_INCLUDED
+#include "applicationInfo.hpp"
 
-#include "version.hpp"
+#include <boost/thread/mutex.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/thread/locks.hpp>
 
-#if defined( _MSC_VER )
-	#define WOLFRAME_EXPORT __declspec( dllexport )
-#else
-	#define WOLFRAME_EXPORT
-#endif
 
 namespace _Wolframe	{
 
-/// \class ApplicationInfo
-/// \brief Application wide singleton for the application info
-class ApplicationInfo
+ApplicationInfo& ApplicationInfo::instance()
 {
-public:
-	~ApplicationInfo();
+	static boost::scoped_ptr< ApplicationInfo >	m_t;
+	static boost::mutex				m_mutex;
+	static bool					m_initialized = false;
 
-	WOLFRAME_EXPORT static ApplicationInfo& instance();
+	if ( !m_initialized )	{
+		boost::lock_guard< boost::mutex > lock( m_mutex );
+		if ( !m_initialized )	{
+			m_t.reset( new ApplicationInfo() );
+			m_initialized = true;
+		}
+	}
+	return *m_t;
+}
 
-	WOLFRAME_EXPORT const Version& version() const;
-	WOLFRAME_EXPORT void version( const Version& ver );
+ApplicationInfo::ApplicationInfo()
+{}
 
-protected:
-	ApplicationInfo();
+ApplicationInfo::~ApplicationInfo()
+{}
 
-private:
-	// make it noncopyable
-	ApplicationInfo( const ApplicationInfo& );
-	const ApplicationInfo& operator= ( const ApplicationInfo& );
+const Version& ApplicationInfo::version() const
+{
+	return m_version;
+}
 
-	// Real object data
-	Version	m_version;
-};
+void ApplicationInfo::version( const Version& ver )
+{
+	m_version = ver;
+}
 
 } // namespace _Wolframe
 
-#endif // _APP_INFO_HPP_INCLUDED

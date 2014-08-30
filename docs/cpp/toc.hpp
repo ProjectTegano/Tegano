@@ -6,7 +6,7 @@
  * \section ModuleTypes Writing modules for Wolframe
  * \subsection ModuleTypeIntro Introduction
 
- * In Wolframe we can write modules for extending our application. Modules are units that export objects that can be used as components. The main source file of the module contains the following code block that declares the objects to be exported by the module. For using the macros shown in the following examples, we have to include the file \ref include/appDevel.hpp or the sub-include files needed.
+ * In Wolframe we can write modules for extending our application. Modules are units that export objects that can be used as components. The main source file of the module contains the following code block that declares the objects to be exported by the module. For using the macros shown in the following examples, we have to include the file \ref include/appdevel.hpp or the sub-include files needed.
  * \code
 WF_MODULE_BEGIN( "MyModule", "this text is a short, one line description of the module")
  // ... here we declare the components to export

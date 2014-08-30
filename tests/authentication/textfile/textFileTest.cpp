@@ -38,7 +38,7 @@
 #include "gtest/gtest.h"
 
 #include "TextFileAuth.hpp"
-#include "platform.hpp"
+#include "system/platform.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
 #include "system/globalRngGen.hpp"

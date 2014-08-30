@@ -30,9 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Version class unit tests ( using gTest)
-//
+/// \brief Version class unit tests ( using gTest)
 
 #include <climits>
 #include <cstdlib>

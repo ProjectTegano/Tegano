@@ -38,7 +38,7 @@
 #define _PASSWDFILE_HPP_INCLUDED
 
 #include <string>
-#include "platform.hpp"
+#include "system/platform.hpp"
 
 namespace _Wolframe {
 namespace AAAA {

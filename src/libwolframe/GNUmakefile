@@ -70,7 +70,6 @@ CPP_OBJS = \
 	$(TYP_OBJS) \
 	$(UTIL_OBJS) \
 	logError.o \
-	version.o \
 	platform.o \
 	execContext.o \
 	getPassword.o \

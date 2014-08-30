@@ -30,9 +30,8 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// application properties - implementation
-//
+/// \file applicationProperties.cpp
+/// \brief application properties - implementation
 
 #include "applicationProperties.hpp"
 #include "wolframe.hpp"

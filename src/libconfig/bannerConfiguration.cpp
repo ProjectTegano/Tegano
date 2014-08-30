@@ -37,8 +37,8 @@
 #include "bannerConfiguration.hpp"
 #include "config/valueParser.hpp"
 #include "logger-v1.hpp"
-#include "appInfo.hpp"
-#include "platform.hpp"
+#include "applicationInfo.hpp"
+#include "system/platform.hpp"
 
 #include <string>
 #include <stdexcept>

@@ -59,7 +59,8 @@ CPP_OBJS = \
 	server.o \
 	serverEndpoint.o \
 	serverHandler.o \
-	posixMain.o
+	posixMain.o \
+	wolframedCommandLine.o
 
 #SSL
 ifeq ($(WITH_SSL),1)
