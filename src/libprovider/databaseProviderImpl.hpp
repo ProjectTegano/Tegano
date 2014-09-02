@@ -30,38 +30,34 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \brief Authorization provider
-#ifndef _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
-#define _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
+/// \file databaseProviderImpl.hpp
 
-#include "AAAA/authorizer.hpp"
+#ifndef _DATABASE_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
+#define _DATABASE_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
+
+#include "config/configurationBase.hpp"
 #include "database/databaseProvider.hpp"
-
-#include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace db {
 
-class AuthorizationUnit;
-class StandardAuthorizer;
-
-class AuthorizationProvider
+/// \brief Database provider implementation
+class DatabaseProviderImpl
+	:public DatabaseProvider
+	,private boost::noncopyable
 {
 public:
-	AuthorizationProvider( const std::vector< config::NamedConfiguration* >& confs,
-			       bool authzDefault,
-			       const module::ModuleDirectory* modules );
-	~AuthorizationProvider();
-	bool resolveDB( const db::DatabaseProvider& db );
-
-	Authorizer* authorizer() const;
+	DatabaseProviderImpl( const std::vector<config::NamedConfiguration*>& config,
+				const module::ModuleDirectory* modules );
+	virtual ~DatabaseProviderImpl();
+	virtual Database* database( const std::string& ID ) const;
 
 private:
-	std::vector< AuthorizationUnit* >	m_authorizeUnits;
-	StandardAuthorizer*			m_authorizer;
+	std::vector< DatabaseUnit* > m_db;
 };
 
-}}//namespace
+}} // namespace _Wolframe::db
 #endif
+
 

@@ -38,7 +38,7 @@
 #define _AUTHORIZER_HPP_INCLUDED
 
 #include "system/connectionEndpoint.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include <string>
 
 namespace _Wolframe {

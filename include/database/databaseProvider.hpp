@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file database/DBprovider.hpp
+/// \file database/databaseProvider.hpp
 /// \brief Database provider interface
 
 #ifndef _DATABASE_PROVIDER_HPP_INCLUDED
@@ -41,46 +41,15 @@
 #include <boost/noncopyable.hpp>
 
 namespace _Wolframe {
-
-namespace module {
-	class ModuleDirectory;
-}
 namespace db {
 
-/// database configuration
-class DBproviderConfig : public config::ConfigurationBase, private boost::noncopyable
-{
-	friend class DatabaseProvider;
-public:
-	/// constructor & destructor
-	DBproviderConfig() : ConfigurationBase( "Database(s)", NULL, "Database configuration" )	{}
-	~DBproviderConfig();
-
-	/// methods
-	bool parse( const config::ConfigurationNode& pt, const std::string& node,
-		    const module::ModuleDirectory* modules );
-	bool check() const;
-	void print( std::ostream& os, size_t indent ) const;
-	virtual void setCanonicalPathes( const std::string& referencePath );
-private:
-	std::list< config::NamedConfiguration* >	m_config;
-};
-
 /// Database provider
-class DatabaseProvider : private boost::noncopyable
+class DatabaseProvider
 {
 public:
-	DatabaseProvider( const DBproviderConfig* conf,
-			  const module::ModuleDirectory* modules );
-	~DatabaseProvider();
-
-	Database* database( const std::string& ID ) const;
-
-private:
-	class DatabaseProvider_Impl;
-	DatabaseProvider_Impl *m_impl;
+	virtual ~DatabaseProvider(){}
+	virtual Database* database( const std::string& ID ) const=0;
 };
 
 }} // namespace _Wolframe::db
-
 #endif // _DATABASE_PROVIDER_HPP_INCLUDED

@@ -30,12 +30,10 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Wolframe processor provider
-//
+/// \brief Processor provider implementation
 
 #include "procProviderImpl.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include "appdevel/module/runtimeEnvironmentConstructor.hpp"
 #include "appdevel/module/filterBuilder.hpp"
 #include "appdevel/module/ddlcompilerBuilder.hpp"

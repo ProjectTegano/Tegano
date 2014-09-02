@@ -40,8 +40,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	standardAuthenticator.obj \
 	standardAuthorizer.obj \
 	AAAAproviderImpl.obj \
-	DBproviderConfig.obj \
-	DBproviderImpl.obj \
+	databaseProviderImpl.obj \
 	ddlProgram.obj \
 	normalizeProgram.obj \
 	procProviderImpl.obj \

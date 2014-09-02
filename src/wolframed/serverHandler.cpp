@@ -57,12 +57,12 @@ net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR&
 
 ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
 				const config::AAAAproviderConfiguration* aconf,
-				const db::DBproviderConfig* dconf,
+				const config::DatabaseProviderConfiguration* dconf,
 				const config::BannerConfiguration* bconf,
 				system::RandomGenerator* randomGenerator_,
 				const module::ModuleDirectory* modules )
 	:m_banner( bconf->toString() )
-	,m_db( dconf, modules )
+	,m_db( dconf->config(), modules )
 	,m_aaaa( randomGenerator_, aconf->authConfig(), aconf->authzConfig(), aconf->authzDefault(), aconf->auditConfig(), modules )
 	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules)
 	,m_randomGenerator(randomGenerator_)

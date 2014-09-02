@@ -35,7 +35,7 @@
 #include "standardAuthenticator.hpp"
 #include "AAAA/authenticator.hpp"
 #include "AAAA/passwordChanger.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;

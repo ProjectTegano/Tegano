@@ -298,7 +298,7 @@ struct GlobalContext
 		// Load the modules, scripts, etc. defined in the command line into the global context:
 		const config::AAAAproviderConfiguration* acfg = &m_aaaaProviderConfig;
 		m_aaaaProvider = new AAAA::AAAAproviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
-		m_databaseProvider = new db::DatabaseProvider( &m_dbProviderConfig, &m_moduleDirectory);
+		m_databaseProvider = new db::DatabaseProvider( m_dbProviderConfig.config(), &m_moduleDirectory);
 		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
 
@@ -332,7 +332,7 @@ private:
 	types::PropertyTree m_config;
 	config::AAAAproviderConfiguration m_aaaaProviderConfig;
 	config::ProcProviderConfiguration m_procProviderConfig;
-	db::DBproviderConfig m_dbProviderConfig;
+	config::databaseProviderConfig m_dbProviderConfig;
 
 	std::string m_referencePath;
 	std::vector<std::string> m_modules;

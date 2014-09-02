@@ -41,6 +41,8 @@ LOCAL_STATIC_LIB_OBJS = \
 	serverConfiguration.obj \
 	cmdLineConfiguration.obj \
 	procProviderConfiguration.obj \
+	AAAAproviderConfiguration.obj \
+	databaseProviderConfiguration.obj \
 	applicationInfo.obj \
 	applicationConfiguration.obj \
 	applicationProperties.obj

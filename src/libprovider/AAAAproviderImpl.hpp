@@ -41,7 +41,7 @@
 #include "auditProvider.hpp"
 #include "system/randomGenerator.hpp"
 #include "module/moduleDirectory.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 
 #include <string>
 #include <vector>

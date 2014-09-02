@@ -35,7 +35,6 @@
 
 #ifndef _AUDITOR_HPP_INCLUDED
 #define _AUDITOR_HPP_INCLUDED
-#include "database/DBprovider.hpp"
 
 namespace _Wolframe {
 namespace AAAA {

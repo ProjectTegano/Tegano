@@ -33,8 +33,7 @@
 //
 // database.cpp
 //
-
-#include "DBproviderImpl.hpp"
+#include "databaseProviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
@@ -42,28 +41,10 @@
 namespace _Wolframe	{
 namespace db	{
 
-/********  DatabaseProvider PIMPL  *****************************************/
-DatabaseProvider::DatabaseProvider( const DBproviderConfig* conf,
-				    const module::ModuleDirectory* modules ) :
-	m_impl( new DatabaseProvider_Impl( conf, modules ))	{}
-
-DatabaseProvider::~DatabaseProvider()
+DatabaseProviderImpl::DatabaseProviderImpl( const std::vector<config::NamedConfiguration*>& config,
+						const module::ModuleDirectory* modules )
 {
-	delete m_impl;
-}
-
-Database* DatabaseProvider::database( const std::string& ID ) const
-{
-	return m_impl->database( ID );
-}
-
-
-/********  DatabaseProvider PIMPL implementation ***************************/
-DatabaseProvider::DatabaseProvider_Impl::DatabaseProvider_Impl( const DBproviderConfig* conf,
-								const module::ModuleDirectory* modules )
-{
-	for ( std::list< config::NamedConfiguration* >::const_iterator it = conf->m_config.begin();
-									it != conf->m_config.end(); it++ )	{
+	for ( std::vector< config::NamedConfiguration* >::const_iterator it = config.begin(); it != config.end(); it++ )	{
 		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
 			ObjectConstructorBaseR constructorRef( builder->constructor());
@@ -84,16 +65,16 @@ DatabaseProvider::DatabaseProvider_Impl::DatabaseProvider_Impl( const DBprovider
 	}
 }
 
-DatabaseProvider::DatabaseProvider_Impl::~DatabaseProvider_Impl()
+DatabaseProviderImpl::~DatabaseProviderImpl()
 {
-	for ( std::list< db::DatabaseUnit* >::iterator it = m_db.begin();
+	for ( std::vector< db::DatabaseUnit* >::iterator it = m_db.begin();
 							it != m_db.end(); it++ )
 		delete *it;
 }
 
-Database* DatabaseProvider::DatabaseProvider_Impl::database( const std::string& id ) const
+Database* DatabaseProviderImpl::database( const std::string& id ) const
 {
-	for ( std::list<db::DatabaseUnit* >::const_iterator it = m_db.begin();
+	for ( std::vector<db::DatabaseUnit* >::const_iterator it = m_db.begin();
 							it != m_db.end(); it++ )	{
 		if ( (*it)->ID() == id )
 			return (*it)->database();

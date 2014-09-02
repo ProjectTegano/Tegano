@@ -30,34 +30,41 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// DBproviderImpl.hpp
-//
+/// \brief Database provider configuration
 
-#ifndef _DB_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
-#define _DB_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
+#ifndef _CONFIG_DATABASE_PROVIDER_CONFIGURATION_HPP_INCLUDED
+#define _CONFIG_DATABASE_PROVIDER_CONFIGURATION_HPP_INCLUDED
 
-#include <list>
 #include "config/configurationBase.hpp"
-#include "database/DBprovider.hpp"
+#include <string>
+#include <vector>
 
 namespace _Wolframe {
-namespace db {
+namespace config {
 
-/// DatabaseProvider PIMPL implementation
-class DatabaseProvider::DatabaseProvider_Impl
+/// \brief Database provider configuration
+class DatabaseProviderConfiguration
+	:public config::ConfigurationBase
 {
 public:
-	DatabaseProvider_Impl( const DBproviderConfig* conf,
-			       const module::ModuleDirectory* modules );
-	~DatabaseProvider_Impl();
+	DatabaseProviderConfiguration()
+		:ConfigurationBase( "Database(s)", NULL, "Database configuration"){}
+	~DatabaseProviderConfiguration();
 
-	Database* database( const std::string& ID ) const;
+	bool parse( const config::ConfigurationNode& pt, const std::string& node,
+		    const module::ModuleDirectory* modules );
+	bool check() const;
+	void print( std::ostream& os, size_t indent ) const;
+	virtual void setCanonicalPathes( const std::string& referencePath );
+
+	const std::vector<config::NamedConfiguration*>& config() const
+	{
+		return m_config;
+	}
 
 private:
-	std::list< DatabaseUnit* >	m_db;
+	std::vector<config::NamedConfiguration*>	m_config;
 };
 
-}} // namespace _Wolframe::db
-
-#endif // _DB_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
+}}//namespace
+#endif

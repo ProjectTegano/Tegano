@@ -33,7 +33,7 @@
 ///\file wolfilterCommandLine.cpp
 ///\brief Implementation of the options of a wolfilter call
 #include "wolfilterCommandLine.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include "filter/ptreefilter.hpp"
 #include "filter/tostringfilter.hpp"
 #include "module/moduleInterface.hpp"
@@ -289,7 +289,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 	m_dbconfig = getConfigNode( "database");
 
 	// Load, instantiate and check the configuration:
-	m_dbProviderConfig.reset( new db::DBproviderConfig());
+	m_dbProviderConfig.reset( new config::DatabaseProviderConfiguration());
 
 	LOG_DEBUG << "Database provider configuration:";
 	LOG_DEBUG << configurationTree_tostring( m_dbconfig);

@@ -41,7 +41,7 @@
 #include <string>
 
 #include "user.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include "system/connectionEndpoint.hpp"
 
 namespace _Wolframe {

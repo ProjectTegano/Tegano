@@ -36,7 +36,7 @@
 
 #include "processor/jobSchedule.hpp"
 #include "module/constructor.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 
 #ifndef _SCHEDULE_DATABASE_HPP_INCLUDED
 #define _SCHEDULE_DATABASE_HPP_INCLUDED

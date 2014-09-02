@@ -37,8 +37,7 @@
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libconfig/AAAAproviderConfiguration.hpp"
-#include "libprovider/procProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libconfig/databaseProviderConfiguration.hpp"
 #include "types/propertyTree.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/shared_ptr.hpp>
@@ -67,7 +66,7 @@ public:
 	const std::string& outputfilter() const				{return m_outputfilter;}
 	const std::string& protocol() const				{return m_protocol;}
 	const config::AAAAproviderConfiguration& aaaaProviderConfig() const {return *m_aaaaProviderConfig;}
-	const db::DBproviderConfig& dbProviderConfig() const		{return *m_dbProviderConfig;}
+	const config::DatabaseProviderConfiguration& dbProviderConfig() const	{return *m_dbProviderConfig;}
 	const config::ProcProviderConfiguration& procProviderConfig() const {return *m_procProviderConfig;}
 	const module::ModuleDirectory& moduleDirectory() const		{return *m_moduleDirectory;}
 	const std::string& configurationPath() const			{return m_configurationPath;}
@@ -95,7 +94,7 @@ private:
 	std::string m_protocol;
 	boost::shared_ptr<config::AAAAproviderConfiguration> m_aaaaProviderConfig;
 	boost::shared_ptr<config::ProcProviderConfiguration> m_procProviderConfig;
-	boost::shared_ptr<db::DBproviderConfig> m_dbProviderConfig;
+	boost::shared_ptr<config::DatabaseProviderConfiguration> m_dbProviderConfig;
 	module::ModuleDirectoryImpl* m_moduleDirectory;
 	std::string m_configurationPath;
 };

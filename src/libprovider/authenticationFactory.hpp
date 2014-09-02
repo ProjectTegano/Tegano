@@ -35,7 +35,7 @@
 #ifndef _AAAA_AUTHENTICATION_FACTORY_HPP_INCLUDED
 #define _AAAA_AUTHENTICATION_FACTORY_HPP_INCLUDED
 
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 #include "config/configurationBase.hpp"
 #include "system/connectionEndpoint.hpp"
 #include "system/randomGenerator.hpp"

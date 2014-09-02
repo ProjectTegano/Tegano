@@ -40,7 +40,7 @@
 #include <string>
 
 #include "authorizer.hpp"
-#include "database/DBprovider.hpp"
+#include "database/databaseProvider.hpp"
 
 namespace _Wolframe {
 namespace AAAA {

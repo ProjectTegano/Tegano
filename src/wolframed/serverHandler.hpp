@@ -45,8 +45,10 @@
 #include "libconfig/bannerConfiguration.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/databaseProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/databaseProviderImpl.hpp"
 
 namespace _Wolframe {
 
@@ -56,7 +58,7 @@ class ServerHandler
 public:
 	ServerHandler( const config::ProcProviderConfiguration* pconf,
 			const config::AAAAproviderConfiguration* aconf,
-			const db::DBproviderConfig* dconf,
+			const config::DatabaseProviderConfiguration* dconf,
 			const config::BannerConfiguration* bconf,
 			system::RandomGenerator* randomGenerator_,
 			const module::ModuleDirectory* modules);
@@ -71,7 +73,7 @@ public:
 
 private:
 	const std::string		m_banner;
-	db::DatabaseProvider		m_db;
+	db::DatabaseProviderImpl	m_db;
 	AAAA::AAAAproviderImpl		m_aaaa;
 	prgbind::ProgramLibraryImpl	m_prglib;
 	proc::ProcessorProviderImpl	m_proc;

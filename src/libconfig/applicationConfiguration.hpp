@@ -44,9 +44,6 @@
 #include <vector>
 
 namespace _Wolframe {
-namespace db {
-class DBproviderConfig;
-}
 namespace config {
 
 // forward declarations for configuration elements
@@ -58,20 +55,21 @@ class HandlerConfiguration;
 class CmdLineConfiguration;
 class ProcProviderConfiguration;
 class AAAAproviderConfiguration;
+class DatabaseProviderConfiguration;
 
 /// \brief Application configuration structure
 class ApplicationConfiguration
 {
 public:
-	std::string			configFile;	///< configuration file
-	bool				foreground;	///< true, if running in foregroud (from command line)
-	ServiceConfiguration		*serviceCfg;	///< daemon / service configuration
-	ServerConfiguration		*serverCfg;	///< network server configuration
-	LoggerConfiguration		*loggerCfg;	///< logger configuration
-	db::DBproviderConfig		*databaseCfg;	///< database configuration
-	config::AAAAproviderConfiguration *aaaaCfg;	///< AAAA configuration
-	ProcProviderConfiguration	*procCfg;	///< processor configuration
-	BannerConfiguration		*bannerCfg;	///< banner configuration
+	std::string configFile;					///< configuration file
+	bool foreground;					///< true, if running in foregroud (from command line)
+	ServiceConfiguration *serviceCfg;			///< daemon / service configuration
+	ServerConfiguration *serverCfg;				///< network server configuration
+	LoggerConfiguration *loggerCfg;				///< logger configuration
+	config::DatabaseProviderConfiguration *databaseCfg;	///< database provider configuration
+	config::AAAAproviderConfiguration *aaaaCfg;		///< AAAA provider configuration
+	ProcProviderConfiguration *procCfg;			///< processor configuration
+	BannerConfiguration *bannerCfg;				///< banner configuration
 
 public:
 	enum ConfigFileType	{
