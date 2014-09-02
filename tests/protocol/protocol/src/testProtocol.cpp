@@ -35,8 +35,10 @@
 #include "cmdbind/protocolHandler.hpp"
 #include "utils/fileUtils.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
+#include "libconfig/databaseProviderConfiguration.hpp"
 #include "libconfig/AAAAproviderConfiguration.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
+#include "libprovider/databaseProviderImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/AAAAproviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
@@ -298,7 +300,7 @@ struct GlobalContext
 		// Load the modules, scripts, etc. defined in the command line into the global context:
 		const config::AAAAproviderConfiguration* acfg = &m_aaaaProviderConfig;
 		m_aaaaProvider = new AAAA::AAAAproviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
-		m_databaseProvider = new db::DatabaseProvider( m_dbProviderConfig.config(), &m_moduleDirectory);
+		m_databaseProvider = new db::DatabaseProviderImpl( m_dbProviderConfig.config(), &m_moduleDirectory);
 		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
 
@@ -332,7 +334,7 @@ private:
 	types::PropertyTree m_config;
 	config::AAAAproviderConfiguration m_aaaaProviderConfig;
 	config::ProcProviderConfiguration m_procProviderConfig;
-	config::databaseProviderConfig m_dbProviderConfig;
+	config::DatabaseProviderConfiguration m_dbProviderConfig;
 
 	std::string m_referencePath;
 	std::vector<std::string> m_modules;
@@ -340,7 +342,7 @@ private:
 
 	prgbind::ProgramLibraryImpl m_programLibrary;
 	AAAA::AAAAproviderImpl* m_aaaaProvider;
-	db::DatabaseProvider* m_databaseProvider;
+	db::DatabaseProviderImpl* m_databaseProvider;
 	proc::ProcessorProviderImpl* m_processorProvider;
 	proc::ExecContext* m_execContext;
 };
@@ -390,6 +392,9 @@ TEST_F( MainProtocolTest, tests)
 			{
 				tests.push_back( filename);
 			}
+		}
+		else if (boost::iequals( boost::filesystem::extension( *ditr), ".res"))
+		{
 		}
 		else if (!boost::filesystem::is_directory( *ditr))
 		{
