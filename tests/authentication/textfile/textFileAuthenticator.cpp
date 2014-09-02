@@ -38,12 +38,12 @@
 #include "gtest/gtest.h"
 
 #include "libconfig/moduleDirectoryImpl.hpp"
-#include "AAAA/AAAAproviderInterface.hpp"
-
+#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
+#include "libprovider/AAAAproviderImpl.hpp"
 
 #include "TextFileAuth.hpp"
 #include "types/base64.hpp"
-#include "system/globalRngGen.hpp"
 #include "crypto/HMAC.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "AAAA/CRAM.hpp"
@@ -52,6 +52,7 @@
 #include <boost/filesystem.hpp>
 
 static std::string g_execdir;
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
 
 using namespace _Wolframe::AAAA;
 using namespace _Wolframe::log;
@@ -69,8 +70,6 @@ protected:
 	AuthenticatorFixture( ) :
 		logBack( LogBackend::instance( ) )
 	{
-		// Initialize the global random number generator
-		_Wolframe::GlobalRandomGenerator::instance( "" );
 		// Set the log level
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 
@@ -80,8 +79,8 @@ protected:
 				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );
 		modDir.addBuilder( &builder );
-		AAAAproviderConfiguration config;
-		AAAAprovider provider( &config, &modDir );
+		config::AAAAproviderConfiguration cfg;
+		AAAA::AAAAproviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
 	}
 };
 

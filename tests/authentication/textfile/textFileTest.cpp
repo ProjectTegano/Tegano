@@ -41,7 +41,7 @@
 #include "system/platform.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "AAAA/CRAM.hpp"
 
@@ -52,6 +52,7 @@ using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
 
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
 
 // The fixture for testing
 class AuthenticationFixture : public ::testing::Test
@@ -62,9 +63,6 @@ protected:
 	AuthenticationFixture( ) :
 		logBack( LogBackend::instance( ) )
 	{
-		// Initialize the global random number generator
-		_Wolframe::GlobalRandomGenerator::instance( "" );
-
 //		logBack.setConsoleLevel( LogLevel::LOGLEVEL_DATA );
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 	}
@@ -81,6 +79,7 @@ TEST_F( AuthenticationFixture, fileWithoutNewLine )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd-noNL" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "Admin", "Good Password" );
 	ASSERT_TRUE( user != NULL );
@@ -105,6 +104,7 @@ TEST_F( AuthenticationFixture, validUsers )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "Admin", "Good Password" );
 	ASSERT_TRUE( user != NULL );
@@ -130,6 +130,7 @@ TEST_F( AuthenticationFixture, DISABLED_caseInsensitive_Pass )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "AdMiN", "Good Password" );
 	ASSERT_TRUE( user != NULL );
@@ -154,6 +155,7 @@ TEST_F( AuthenticationFixture, caseInsensitive_Fail )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "AdMiN", "Good Password" );
 	EXPECT_EQ( NULL, user );
@@ -167,6 +169,7 @@ TEST_F( AuthenticationFixture, wrongPasswords )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "Admin", "Goood Password" );
 	EXPECT_EQ( NULL, user );
@@ -180,6 +183,7 @@ TEST_F( AuthenticationFixture, nonExistentUsers )
 {
 	User*	user;
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	user = authenticator.authenticatePlain( "adminn", "xx" );
 	EXPECT_EQ( NULL, user );
@@ -192,6 +196,7 @@ TEST_F( AuthenticationFixture, nonExistentUsers )
 TEST_F( AuthenticationFixture, invalidPasswordHashes )
 {
 	TextFileAuthUnit authenticator( "", "passwd" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	EXPECT_THROW( authenticator.authenticatePlain( "shortusr", "User Password" ),
 		      std::runtime_error );
@@ -204,6 +209,7 @@ TEST_F( AuthenticationFixture, invalidPasswordHashes )
 TEST_F( AuthenticationFixture, nonexistentFile )
 {
 	TextFileAuthUnit authenticator( "", "passwds" );
+	authenticator.setRandomGenerator( &g_randomGenerator);
 
 	EXPECT_THROW( authenticator.authenticatePlain( "admin", "xx" ),
 		      std::runtime_error );
@@ -217,10 +223,9 @@ TEST_F( AuthenticationFixture, nonexistentFile )
 static std::string usernameHash( const std::string& username,
 				 bool caseSensitive = Platform::Properties::username_default_casesensitive())
 {
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance();
 	unsigned char salt[ PASSWORD_SALT_SIZE ];
 
-	rnd.generate( salt, PASSWORD_SALT_SIZE );
+	g_randomGenerator.generate( salt, PASSWORD_SALT_SIZE );
 
 	std::string uname;
 	if ( caseSensitive )
@@ -240,6 +245,7 @@ TEST_F( AuthenticationFixture, AuthenticationSuccess )
 {
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
@@ -280,6 +286,7 @@ TEST_F( AuthenticationFixture, AuthenticationWrongPassword )
 {
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
@@ -309,6 +316,7 @@ TEST_F( AuthenticationFixture, AuthenticationWrongUser )
 {
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
@@ -331,6 +339,7 @@ TEST_F( AuthenticationFixture, AuthenticationLastSlice )
 {
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 	slice->lastSlice();
 

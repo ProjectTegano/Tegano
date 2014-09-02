@@ -43,7 +43,7 @@
 #include "passwdFile.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "types/base64.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 
@@ -128,7 +128,7 @@ int main( int argc, char* argv[] )
 	}
 	const std::vector<std::string>& args = vm["posArgs"].as< std::vector<std::string> >();
 
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance( "" );
+	_Wolframe::system::RandomGeneratorImpl rnd;
 
 	// display only
 	if ( displayOnly )	{

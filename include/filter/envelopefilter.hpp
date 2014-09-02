@@ -42,7 +42,7 @@ namespace _Wolframe {
 namespace langbind {
 
 /// \class EnvelopeInputFilter
-/// \brief Envelope for a input filter and its context
+/// \brief Envelope for a input filter and a context object hold with the filter and released with it
 template <class Context>
 class EnvelopeInputFilter
 	:public TypedInputFilter

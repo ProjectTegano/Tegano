@@ -44,6 +44,7 @@
 #include "utils/stringUtils.hpp"
 #include "libprovider/programLibraryImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -142,9 +143,12 @@ TEST_P( WolfilterTest, tests)
 
 		LOG_DATA2 << "wolfilter creates its execution context";
 
+		system::RandomGeneratorImpl randomGenerator;
 		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.moduleDirectory());
 
-		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.moduleDirectory());
+		const config::AAAAproviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
+		AAAA::AAAAproviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
+
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 

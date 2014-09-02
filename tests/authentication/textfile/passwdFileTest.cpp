@@ -37,7 +37,7 @@
 #include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 #include "passwdFile.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "crypto/HMAC.hpp"
 
@@ -45,14 +45,14 @@ using namespace _Wolframe::AAAA;
 using namespace _Wolframe::crypto;
 using namespace std;
 
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
+
 // The fixture for testing class _Wolframe::module
 class PasswdFileFixture : public ::testing::Test
 {
 protected:
 	PasswdFileFixture( )
-	{
-		_Wolframe::GlobalRandomGenerator::instance( "" );
-	}
+	{}
 };
 
 
@@ -94,9 +94,8 @@ TEST_F( PasswdFileFixture, getHMACuser_caseInsensitive )
 	PwdFileUser		user;
 	bool			result;
 
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance();
 	unsigned char saltData[ PASSWORD_SALT_SIZE ];
-	rnd.generate( saltData, PASSWORD_SALT_SIZE );
+	g_randomGenerator.generate( saltData, PASSWORD_SALT_SIZE );
 	PasswordHash::Salt	salt( saltData, PASSWORD_SALT_SIZE );
 
 	HMAC_SHA256	hmac0( salt.salt(), salt.size(), "admin" );
@@ -116,9 +115,8 @@ TEST_F( PasswdFileFixture, getHMACuser_caseSensitive )
 	PwdFileUser		user;
 	bool			result;
 
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance();
 	unsigned char saltData[ PASSWORD_SALT_SIZE ];
-	rnd.generate( saltData, PASSWORD_SALT_SIZE );
+	g_randomGenerator.generate( saltData, PASSWORD_SALT_SIZE );
 	PasswordHash::Salt	salt( saltData, PASSWORD_SALT_SIZE );
 
 	HMAC_SHA256	hmac0( salt.salt(), salt.size(), "admin" );

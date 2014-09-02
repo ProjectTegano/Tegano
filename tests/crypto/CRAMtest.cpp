@@ -37,13 +37,13 @@
 #include "wtest/testReport.hpp"
 #include <stdexcept>
 #include "AAAA/CRAM.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 
 using namespace _Wolframe::AAAA;
 
 TEST( CRAM, Challenge )
 {
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance( "" );
+	_Wolframe::system::RandomGeneratorImpl rnd;
 
 	CRAMchallenge challenge( rnd );
 	std::cout << "Challenge: " << challenge.toBCD() << std::endl;

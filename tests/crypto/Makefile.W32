@@ -9,6 +9,7 @@ INCLUDE_CXXFLAGS = \
 
 INCLUDE_DIRS = \
 	/I$(TOPDIR)\include \
+	/I$(TOPDIR)\src \
 	/I"$(BOOST_INCLUDE_DIR)" \
 	/I$(TOPDIR)\3rdParty\gtest\include \
 	/I$(TOPDIR)\wtest\include
@@ -22,6 +23,7 @@ INCLUDE_LIBS = \
 	$(TOPDIR)\3rdParty\gtest\gtest-all.obj \
 	$(TOPDIR)\wtest\wtest.lib \
 	$(TOPDIR)\src\libwolframe\wolframe.lib \
+	$(TOPDIR)\src\libprovider\wfprovider.lib \
 	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib
 
 TEST_CPP_BINS = \

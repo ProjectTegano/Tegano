@@ -26,8 +26,7 @@ INCLUDE_LIBS = \
 	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib
 
 CPP_OBJS = \
-	$(TOPDIR)\src\modules\authentication\textfile\TextFileAuth.obj \
-	$(TOPDIR)\src\modules\authentication\textfile\passwdFile.obj
+	textFileTestFiles.obj
 
 TEST_CPP_BINS = \
 	passwdHashTest.exe \

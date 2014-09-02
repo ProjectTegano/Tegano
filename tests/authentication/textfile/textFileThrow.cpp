@@ -40,7 +40,7 @@
 #include "TextFileAuth.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "AAAA/authenticationSlice.hpp"
 #include "AAAA/CRAM.hpp"
@@ -52,6 +52,8 @@ using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
 
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
+
 // The fixture for testing class _Wolframe::module
 class AuthenticationFixture : public ::testing::Test
 {
@@ -61,9 +63,6 @@ protected:
 	AuthenticationFixture( ) :
 		logBack( LogBackend::instance( ) )
 	{
-		// Initialize the global random number generator
-		_Wolframe::GlobalRandomGenerator::instance( "" );
-
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 	}
 };
@@ -78,10 +77,9 @@ TEST_F( AuthenticationFixture, typeName )
 
 static std::string usernameHash( const std::string& username )
 {
-	_Wolframe::GlobalRandomGenerator& rnd = _Wolframe::GlobalRandomGenerator::instance();
 	unsigned char salt[ PASSWORD_SALT_SIZE ];
 
-	rnd.generate( salt, PASSWORD_SALT_SIZE );
+	g_randomGenerator.generate( salt, PASSWORD_SALT_SIZE );
 
 	crypto::HMAC_SHA256 hmac0( salt, PASSWORD_SALT_SIZE, username );
 

@@ -8,6 +8,7 @@ INCLUDE_CXXFLAGS = \
 
 INCLUDE_DIRS = \
 	-I$(TOPDIR)/include \
+	-I$(TOPDIR)/src \
 	-I$(BOOST_INCLUDE_DIR) \
 	-I$(TOPDIR)/3rdParty/gtest/include \
 	-I$(TOPDIR)/wtest/include
@@ -15,9 +16,11 @@ INCLUDE_DIRS = \
 INCLUDE_LDFLAGS = \
 	-L$(TOPDIR)/src/libwfsingleton \
 	-L$(TOPDIR)/src/libwolframe \
+	-L$(TOPDIR)/src/libprovider \
 	-L$(BOOST_LIB_DIR)
 
 INCLUDE_LIBS = \
+	-lwfprovider \
 	-lwfsingleton \
 	-lwolframe \
 	-lboost_thread$(BOOST_LIBRARY_TAG) \

@@ -35,15 +35,13 @@
 
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 
 TEST( Random, Randomness )
 {
 	unsigned char buf[39];
 
-	_Wolframe::GlobalRandomGenerator::instance( "" );
-
-	_Wolframe::GlobalRandomGenerator& rng = _Wolframe::GlobalRandomGenerator::instance();
+	_Wolframe::system::RandomGeneratorImpl rng( "" );
 
 	rng.generate( buf, 39 );
 

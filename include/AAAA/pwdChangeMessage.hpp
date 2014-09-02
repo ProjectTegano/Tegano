@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file pwdChangeMessage.hpp
+/// \file passwordChangeMessage.hpp
 /// \brief Password changer data structure
 
 #ifndef _PASSWORD_CHANGE_MESSAGE_HPP_INCLUDED

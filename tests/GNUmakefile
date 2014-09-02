@@ -30,6 +30,7 @@ INCLUDE_DIRS = \
 INCLUDE_LDFLAGS = \
 	-L$(TOPDIR)/src/libwfsingleton \
 	-L$(TOPDIR)/src/libconfig \
+	-L$(TOPDIR)/src/libprovider \
 	-L$(TOPDIR)/src/libwolframe \
 	-L$(TOPDIR)/src/libwolframe_serialize \
 	-L$(TOPDIR)/src/libwolframe_database \
@@ -41,6 +42,7 @@ INCLUDE_LDFLAGS = \
 INCLUDE_LIBS = \
 	-lwolftest \
 	-lwfconfig \
+	-lwfprovider \
 	-lwolframe_serialize \
 	-lwolframe_database \
 	-lwolframe_langbind \

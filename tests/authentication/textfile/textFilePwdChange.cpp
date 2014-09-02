@@ -45,7 +45,7 @@
 #include "AAAA/passwordChanger.hpp"
 #include "AAAA/pwdChangeMessage.hpp"
 #include "AAAA/CRAM.hpp"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 
 #include <boost/algorithm/string.hpp>
 
@@ -53,6 +53,8 @@ using namespace _Wolframe::AAAA;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
+
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
 
 // The fixture for testing
 class PasswordChangerFixture : public ::testing::Test
@@ -63,10 +65,6 @@ protected:
 	PasswordChangerFixture( ) :
 		logBack( LogBackend::instance( ) )
 	{
-		// Initialize the global random number generator
-		_Wolframe::GlobalRandomGenerator::instance( "" );
-
-//		logBack.setConsoleLevel( LogLevel::LOGLEVEL_DATA );
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 	}
 };
@@ -168,6 +166,7 @@ TEST_F( PasswordChangerFixture, PasswordMessageBase64 )
 TEST_F( PasswordChangerFixture, GetPasswordChanger )
 {
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	User user0( "test", "WOLFRAME-CRAM", "blabla", "Bla bla test user ");
 	PasswordChanger* changer = authUnit.passwordChanger( user0, net::RemoteTCPendpoint( "localhost", 2222 ));
 	ASSERT_TRUE( changer != NULL );
@@ -189,6 +188,7 @@ TEST_F( PasswordChangerFixture, GetPasswordChanger )
 TEST_F( PasswordChangerFixture, PasswordChangeSuccess )
 {
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	User user( "test", "WOLFRAME-CRAM", "Admin", "");
 	PasswordChanger* changer = authUnit.passwordChanger( user, net::RemoteTCPendpoint( "localhost", 2222 ));
 	ASSERT_TRUE( changer != NULL );
@@ -219,6 +219,7 @@ TEST_F( PasswordChangerFixture, PasswordChangeSuccess )
 TEST_F( PasswordChangerFixture, PasswordChangeFailure )
 {
 	TextFileAuthUnit authUnit( "test", "passwd" );
+	authUnit.setRandomGenerator( &g_randomGenerator);
 	User user( "test", "WOLFRAME-CRAM", "Admin", "");
 	PasswordChanger* changer = authUnit.passwordChanger( user, net::RemoteTCPendpoint( "localhost", 2222 ));
 	ASSERT_TRUE( changer != NULL );

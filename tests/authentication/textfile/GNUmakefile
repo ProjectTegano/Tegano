@@ -25,8 +25,7 @@ INCLUDE_LIBS = \
 	-lboost_filesystem -lboost_system
 
 CPP_OBJS = \
-	$(TOPDIR)/src/modules/authentication/textfile/TextFileAuth.o \
-	$(TOPDIR)/src/modules/authentication/textfile/passwdFile.o
+	textFileTestFiles.o
 
 TEST_CPP_BINS = \
 	passwdHashTest$(EXE) \

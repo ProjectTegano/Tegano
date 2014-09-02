@@ -36,7 +36,7 @@
 
 #include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
-#include "system/globalRngGen.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "AAAA/passwordHash.hpp"
 #include "crypto/HMAC.hpp"
 
@@ -44,14 +44,14 @@ using namespace _Wolframe::AAAA;
 using namespace _Wolframe::crypto;
 using namespace std;
 
+_Wolframe::system::RandomGeneratorImpl g_randomGenerator;
+
 // The fixture for testing class _Wolframe::module
 class PasswdHashFixture : public ::testing::Test
 {
 protected:
 	PasswdHashFixture( )
-	{
-		_Wolframe::GlobalRandomGenerator::instance( "" );
-	}
+	{}
 };
 
 
