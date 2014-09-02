@@ -31,7 +31,7 @@
 
 ************************************************************************/
 /// \file randomGeneratorImpl.hpp
-/// \brief Global random generator 
+/// \brief Global random generator implementation
 
 #ifndef _Wolframe_RANDOM_GENERATOR_IMPLEMENTATION_HPP_INCLUDED
 #define _Wolframe_RANDOM_GENERATOR_IMPLEMENTATION_HPP_INCLUDED

@@ -303,7 +303,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
-		system::RandomGeneratorImpl randomGenerator;
+		_Wolframe::system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
 				_Wolframe::config::ApplicationConfiguration::fileType( configFile, _Wolframe::config::ApplicationConfiguration::configFileType( cmdLineCfg.cfgType) );
@@ -457,7 +457,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
-		system::RandomGeneratorImpl randomGenerator;
+		_Wolframe::system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
 				_Wolframe::config::ApplicationConfiguration::fileType( configFile, cmdLineCfg.cfgType );

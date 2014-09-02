@@ -39,6 +39,7 @@
 #include "libconfig/AAAAproviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include <fstream>
 #include <iostream>
 #include <cstring>
@@ -78,9 +79,10 @@ int main( int argc, char **argv )
 		if (doExit) return 0;
 
 		// Load the modules, scripts, etc. defined in the command line into the global context:
+		system::RandomGeneratorImpl randomGenerator;
 		db::DatabaseProvider databaseProvider( &cmdline.dbProviderConfig(), &cmdline.moduleDirectory());
-
-		AAAA::AAAAprovider aaaaProvider( &cmdline.aaaaProviderConfig(), &cmdline.moduleDirectory());
+		const config::AAAAproviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
+		AAAA::AAAAproviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);

@@ -83,3 +83,18 @@ Authorizer* AuthorizationProvider::authorizer() const
 	return m_authorizer;
 }
 
+bool AuthorizationProvider::resolveDB( const db::DatabaseProvider& db )
+{
+	bool rt = true;
+	for ( std::vector< AuthorizationUnit* >::iterator it = m_authorizeUnits.begin();
+								it != m_authorizeUnits.end(); it++ )
+	{
+		if (!(*it)->resolveDB( db))
+		{
+			LOG_ERROR << "failed to resolve database for authorization unit '" << (*it)->className() << "'";
+			rt = false;
+		}
+	}
+	return rt;
+}
+

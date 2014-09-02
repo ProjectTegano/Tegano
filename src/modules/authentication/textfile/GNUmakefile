@@ -4,8 +4,10 @@ SUBDIRS =
 
 -include $(TOPDIR)/makefiles/gmake/platform.mk
 
+# PF:HACK: Include src for global random generator
 INCLUDE_DIRS = \
 	-I. -I$(TOPDIR)/include \
+	-I$(TOPDIR)/src \
 	-I$(BOOST_INCLUDE_DIR) \
 	$(INCLUDE_FLAGS_LT)
 
@@ -22,7 +24,8 @@ INCLUDE_LIBS = \
 DYNAMIC_MODULE = mod_auth_textfile.so
 
 PASSWD_OBJS = \
-	passwdFile.o
+	passwdFile.o \
+	wolfpasswdFiles.o \
 
 CPP_OBJS = \
 	TextFileAuthConfig.o \

@@ -44,9 +44,9 @@
 #include "mainConnectionHandler.hpp"
 #include "libconfig/bannerConfiguration.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
-#include "libconfig/AAAAproviderConfiguration.cpp"
+#include "libconfig/AAAAproviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.cpp"
+#include "libprovider/AAAAproviderImpl.hpp"
 
 namespace _Wolframe {
 
