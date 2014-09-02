@@ -47,12 +47,6 @@ namespace _Wolframe {
 namespace db {
 class DBproviderConfig;
 }
-namespace AAAA {
-class AAAAconfiguration;
-}
-namespace proc {
-class ProcProviderConfig;
-}
 namespace config {
 
 // forward declarations for configuration elements
@@ -63,6 +57,7 @@ class BannerConfiguration;
 class HandlerConfiguration;
 class CmdLineConfiguration;
 class ProcProviderConfiguration;
+class AAAAproviderConfiguration;
 
 /// \brief Application configuration structure
 class ApplicationConfiguration
@@ -74,7 +69,7 @@ public:
 	ServerConfiguration		*serverCfg;	///< network server configuration
 	LoggerConfiguration		*loggerCfg;	///< logger configuration
 	db::DBproviderConfig		*databaseCfg;	///< database configuration
-	AAAA::AAAAconfiguration		*aaaaCfg;	///< AAAA configuration
+	config::AAAAproviderConfiguration *aaaaCfg;	///< AAAA configuration
 	ProcProviderConfiguration	*procCfg;	///< processor configuration
 	BannerConfiguration		*bannerCfg;	///< banner configuration
 
@@ -113,10 +108,10 @@ public:
 				       const char *localFile );
 private:
 	ConfigFileType				m_type;
-	std::vector< ConfigurationBase* >	m_conf;
-	std::map< std::string, std::size_t >	m_section;
+	std::vector<ConfigurationBase*>		m_conf;
+	std::map<std::string, std::size_t>	m_section;
 	std::string				m_modFolder;
-	std::vector< std::string >		m_modFiles;
+	std::vector<std::string>		m_modFiles;
 
 	const module::ModuleDirectory*		m_modDir;
 public:

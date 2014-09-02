@@ -1,7 +1,7 @@
 #include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
-#include "AAAA/authSlice.hpp"
+#include "AAAA/authenticationSlice.hpp"
 #include "AAAA/authenticator.hpp"
 #include <string>
 

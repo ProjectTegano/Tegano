@@ -30,19 +30,17 @@
  Project Wolframe.
 
 ************************************************************************/
-///
-/// \file audit.hpp
-/// \brief top-level header file for AAAA audit
-///
+/// \file auditor.hpp
+/// \brief Auditor
 
-#ifndef _AUDIT_HPP_INCLUDED
-#define _AUDIT_HPP_INCLUDED
-
-#include "AAAA/AAAAinformation.hpp"
+#ifndef _AUDITOR_HPP_INCLUDED
+#define _AUDITOR_HPP_INCLUDED
 #include "database/DBprovider.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
+
+class Information;
 
 /// Virtual base (interface) for auditor classes
 class Auditor {
@@ -55,23 +53,5 @@ public:
 	virtual bool audit( const Information& auditObject ) = 0;
 };
 
-
-/// Audit Unit
-/// This is the base class for audit unit implementations
-class AuditUnit
-{
-public:
-	virtual ~AuditUnit()				{}
-
-	virtual const char* className() const = 0;
-
-	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
-							{ return true; }
-	virtual bool required() = 0;
-
-	virtual bool audit( const Information& auditObject ) = 0;
-};
-
-}} // namespace _Wolframe::AAAA
-
-#endif // _AUDIT_HPP_INCLUDED
+}}//namespace
+#endif

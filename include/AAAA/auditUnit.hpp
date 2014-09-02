@@ -30,59 +30,34 @@
  Project Wolframe.
 
 ************************************************************************/
-///
-/// \file authUnit.hpp
-/// \brief top-level header file for authentication unit interface
-///
+/// \file auditUnit.hpp
+/// \brief Audit unit
 
-#ifndef _AUTHENTICATION_UNIT_HPP_INCLUDED
-#define _AUTHENTICATION_UNIT_HPP_INCLUDED
-
-#include <string>
-
-#include "user.hpp"
-#include "AAAA/authSlice.hpp"
-#include "AAAA/passwordChanger.hpp"
+#ifndef _AUDIT_UNIT_HPP_INCLUDED
+#define _AUDIT_UNIT_HPP_INCLUDED
 #include "database/DBprovider.hpp"
-#include "system/connectionEndpoint.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
 
-/// \class AuthenticationUnit
-/// \brief This is the base class for the authentication unit implementations
-class AuthenticationUnit
+class Information;
+
+/// \class AuditUnit
+/// \brief This is the base class for audit unit implementations
+class AuditUnit
 {
 public:
-	AuthenticationUnit( const std::string& id )
-		: m_identifier( id )		{}
+	virtual ~AuditUnit()				{}
 
-	virtual ~AuthenticationUnit()		{}
-
-	const std::string& identifier() const	{ return m_identifier; }
-
-	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
-						{ return true; }
 	virtual const char* className() const = 0;
 
-	/// \brief The list of mechs implemented by this unit
-	/// \note	The authentication unit returns the mechs as an
-	///		array of strings. The array ends with a NULL
-	///		Be aware that the other interfaces use a vector instead.
-	virtual const char** mechs() const = 0;
+	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
+							{ return true; }
+	virtual bool required() = 0;
 
-	/// \brief An AuthenticatorSlice for the required mech (or NULL)
-	virtual AuthenticatorSlice* slice( const std::string& mech,
-					   const net::RemoteEndpoint& client ) = 0;
-
-	/// \brief A PasswordChanger for the user (or NULL)
-	virtual PasswordChanger* passwordChanger( const User& /*user*/,
-						  const net::RemoteEndpoint& /*client*/ )
-						{ return NULL; }
-private:
-	const std::string	m_identifier;
+	virtual bool audit( const Information& auditObject ) = 0;
 };
 
-}} // namespace _Wolframe::AAAA
+}}//namespace
+#endif
 
-#endif // _AUTHENTICATION_UNIT_HPP_INCLUDED

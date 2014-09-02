@@ -73,7 +73,7 @@ static const size_t CRAM_SALT_BCD_SIZE = 2 * CRAM_SALT_SIZE + 1;
 static const size_t CRAM_SALT_BASE64_SIZE = (( CRAM_SALT_SIZE - 1 ) / 3 ) * 4 + 5;
 
 
-CRAMchallenge::CRAMchallenge( const crypto::RandomGenerator& rndGen )
+CRAMchallenge::CRAMchallenge( const system::RandomGenerator& rndGen )
 {
 	memset( m_challenge, 0, CRAM_CHALLENGE_SIZE );
 

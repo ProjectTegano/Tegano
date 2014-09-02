@@ -320,7 +320,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 		throw std::runtime_error( "error in processor provider configuration");
 	}
 
-	m_aaaaProviderConfig.reset( new AAAA::AAAAconfiguration());
+	m_aaaaProviderConfig.reset( new config::AAAAproviderConfiguration());
 	types::PropertyTree::Node aacfg;
 	if (hasConfig)
 	{

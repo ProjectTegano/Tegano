@@ -47,6 +47,7 @@
 #include "libconfig/serviceConfiguration.hpp"
 #include "libconfig/serverConfiguration.hpp"
 #include "libconfig/moduleDirectoryImpl.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 
 #include "server.hpp"
 #include "system/errorCode.hpp"
@@ -193,6 +194,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		_Wolframe::module::ModuleDirectoryImpl modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
+		system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
 				_Wolframe::config::ApplicationConfiguration::fileType( configFile, _Wolframe::config::ApplicationConfiguration::configFileType( cmdLineCfg.cfgType));
@@ -322,7 +324,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		LOG_NOTICE << "Starting server";
 
 		// Run server in background thread(s).
-		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &modDir );
+		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &randomGenerator, &modDir );
 		_Wolframe::net::server s( conf.serverCfg, handler );
 		boost::thread t( boost::bind( &_Wolframe::net::server::run, &s ));
 

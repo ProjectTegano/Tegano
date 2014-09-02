@@ -710,7 +710,7 @@ you will find an example at \ref ConfigDescription
 #include "appdevel/moduleFrameMacros.hpp"
 #include "config/configurationBase.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
-#include "AAAA/authSlice.hpp"
+#include "AAAA/authenticationSlice.hpp"
 #include "AAAA/authenticator.hpp"
 #include <string>
 

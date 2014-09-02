@@ -43,7 +43,7 @@
 #include "AAAA/passwordHash.hpp"
 #include "AAAA/pwdChangeMessage.hpp"
 #include "passwdFile.hpp"
-#include "system/globalRngGen.hpp"
+#include "system/randomGenerator.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -55,7 +55,7 @@ namespace AAAA {
 //***********************************************************************
 
 TextFileAuthUnit::TextFileAuthUnit( const std::string& Identifier,
-				    const std::string& filename )
+				    const std::string& filename)
 	: AuthenticationUnit( Identifier ), m_pwdFile( filename, false )
 {
 	LOG_DEBUG << "Text file authenticator '" << identifier()
@@ -271,7 +271,7 @@ std::string TextFileAuthSlice::messageOut()
 			break;
 		}
 		case SLICE_USER_FOUND:	{
-			GlobalRandomGenerator& rnd = GlobalRandomGenerator::instance( "" );
+			system::RandomGenerator& rnd = m_backend.randomGenerator();
 			m_challenge = new CRAMchallenge( rnd );
 			std::string challenge;
 			if ( m_fakeUser )	{
@@ -456,7 +456,7 @@ std::string TextFilePwdChanger::messageOut()
 {
 	switch ( m_state )	{
 		case CHANGER_INITIALIZED:	{
-			GlobalRandomGenerator& rnd = GlobalRandomGenerator::instance( "" );
+			system::RandomGenerator& rnd = m_backend.randomGenerator();
 			m_challenge = new CRAMchallenge( rnd );
 			PasswordHash hash( m_usr.hash );
 			std::string challenge = m_challenge->toString( hash.salt() );

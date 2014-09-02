@@ -68,7 +68,7 @@ PasswordHash::Salt::~Salt()
 	memset( m_salt, 0, PASSWORD_SALT_SIZE );
 }
 
-PasswordHash::Salt::Salt( const crypto::RandomGenerator& rndGen )
+PasswordHash::Salt::Salt( const system::RandomGenerator& rndGen )
 {
 	m_size = PASSWORD_SALT_SIZE;
 	rndGen.generate( m_salt, PASSWORD_SALT_SIZE );
@@ -204,7 +204,7 @@ static void hashPassword( const unsigned char* pwdSalt, size_t saltSize,
 	memcpy( hash, key.hash(), key.size() );
 }
 
-PasswordHash::PasswordHash( const crypto::RandomGenerator& rndGen, const std::string& password )
+PasswordHash::PasswordHash( const system::RandomGenerator& rndGen, const std::string& password )
 	: m_salt( rndGen )
 {
 	hashPassword( m_salt.salt(), m_salt.size(), password, m_hash.m_hash );

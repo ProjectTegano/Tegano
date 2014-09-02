@@ -30,10 +30,9 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Global random number generator implementation
-//
+/// \brief Random number generator implementation
 
+#include "randomGeneratorImpl.hpp"
 #include <stdexcept>
 #include <cstring>
 
@@ -46,15 +45,10 @@
 #include <windows.h>
 #include <wincrypt.h>
 #endif
-
 #include "logger/logger-v1.hpp"
-#include "system/globalRngGen.hpp"
 
-#include <boost/thread/mutex.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/thread/locks.hpp>
-
-namespace _Wolframe	{
+using namespace _Wolframe;
+using namespace _Wolframe::system;
 
 #ifdef _WIN32
 	#define	DEFAULT_RANDOM_DEVICE	(MS_DEF_PROV)
@@ -62,42 +56,7 @@ namespace _Wolframe	{
 	#define	DEFAULT_RANDOM_DEVICE	"/dev/urandom";
 #endif
 
-// We don't want an implicit initialized random device
-#define	NO_IMPLICIT_RANDOM_DEVICE	1
-
-static boost::scoped_ptr< GlobalRandomGenerator >	m_t;
-static boost::mutex				m_mutex;
-static bool					m_initialized = false;
-
-GlobalRandomGenerator& GlobalRandomGenerator::instance()
-{
-	if ( !m_initialized )	{
-		boost::lock_guard< boost::mutex > lock( m_mutex );
-		if ( !m_initialized )	{
-#ifdef NO_IMPLICIT_RANDOM_DEVICE
-			throw std::logic_error( "Uninitialized random generator instance called." );
-#else
-			m_t.reset( new RandomGenerator() );
-			m_initialized = true;
-#endif
-		}
-	}
-	return *m_t;
-}
-
-GlobalRandomGenerator& GlobalRandomGenerator::instance( const std::string &rndDev )
-{
-	if ( !m_initialized )	{
-		boost::lock_guard< boost::mutex > lock( m_mutex );
-		if ( !m_initialized )	{
-			m_t.reset( new GlobalRandomGenerator( rndDev ));
-			m_initialized = true;
-		}
-	}
-	return *m_t;
-}
-
-GlobalRandomGenerator::GlobalRandomGenerator( const std::string& rndDev )
+RandomGeneratorImpl::RandomGeneratorImpl( const std::string& rndDev )
 {
 	if ( rndDev.empty() )	{
 		LOG_INFO << "Empty random generator device. Using default device.";
@@ -108,33 +67,23 @@ GlobalRandomGenerator::GlobalRandomGenerator( const std::string& rndDev )
 	LOG_DEBUG << "Random generator initialized. Using device '" << m_device << "'";
 }
 
-GlobalRandomGenerator::GlobalRandomGenerator()
+RandomGeneratorImpl::RandomGeneratorImpl()
 {
 	m_device = DEFAULT_RANDOM_DEVICE;
 	LOG_DEBUG << "Random generator initialized with the default device (" << m_device << ")";
 }
 
-GlobalRandomGenerator::~GlobalRandomGenerator()
+RandomGeneratorImpl::~RandomGeneratorImpl()
 {}
 
-void GlobalRandomGenerator::device( const std::string &rndDev )
-{
-	m_device = rndDev;
-}
-
-const std::string& GlobalRandomGenerator::device() const
-{
-	return m_device;
-}
-
-unsigned GlobalRandomGenerator::random() const
+unsigned RandomGeneratorImpl::random() const
 {
 	unsigned ret;
 	generate((unsigned char*)(&ret), sizeof( ret ));
 	return ret;
 }
 
-void GlobalRandomGenerator::generate( unsigned char* buffer, size_t bytes ) const
+void RandomGeneratorImpl::generate( unsigned char* buffer, size_t bytes ) const
 {
 #ifndef _WIN32
 	int hndl = open( m_device.c_str(), O_RDONLY );
@@ -172,5 +121,4 @@ void GlobalRandomGenerator::generate( unsigned char* buffer, size_t bytes ) cons
 #endif
 }
 
-} // namespace _Wolframe
 

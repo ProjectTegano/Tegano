@@ -27,17 +27,13 @@ DYNAMIC_LIB_MAJOR = 0
 DYNAMIC_LIB_MINOR = 0
 DYNAMIC_LIB_PATCH = 0
 
-LOGGER_OBJS = \
+CPP_OBJS = \
 	logger/logLevel.o \
 	logger/logSyslogFacility.o \
 	logger/logBackendConsole.o \
 	logger/logBackendFile.o \
 	logger/logBackendSyslog.o \
 	logger/logBackendImpl.o
-
-CPP_OBJS = \
-	$(LOGGER_OBJS) \
-	globalRndGen.o
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 

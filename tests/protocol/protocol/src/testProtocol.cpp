@@ -35,8 +35,9 @@
 #include "cmdbind/protocolHandler.hpp"
 #include "utils/fileUtils.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
+#include "libconfig/AAAAproviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
-#include "AAAA/AAAAprovider.hpp"
+#include "libprovider/AAAAproviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
 #include "wolframed/mainConnectionHandler.hpp"
 #include "mainProtocolHandler.hpp"
@@ -326,7 +327,7 @@ struct GlobalContext
 
 private:
 	types::PropertyTree m_config;
-	AAAA::AAAAconfiguration m_aaaaProviderConfig;
+	AAAA::AAAAproviderConfiguration m_aaaaProviderConfig;
 	config::ProcProviderConfiguration m_procProviderConfig;
 	db::DBproviderConfig m_dbProviderConfig;
 

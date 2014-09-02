@@ -36,12 +36,13 @@
 #ifndef _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
 #define _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
 
-#include "authenticator.hpp"
-#include "passwordChanger.hpp"
-#include "authorization.hpp"
-#include "audit.hpp"
-#include "user.hpp"
+#include "AAAA/authenticator.hpp"
+#include "AAAA/passwordChanger.hpp"
+#include "AAAA/authorizer.hpp"
+#include "AAAA/auditor.hpp"
+#include "AAAA/user.hpp"
 #include "system/connectionEndpoint.hpp"
+#include "system/randomGenerator.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -63,6 +64,8 @@ public:
 	virtual Authorizer* authorizer() const=0;
 	/// \brief Create an return an auditor object
 	virtual Auditor* auditor() const=0;
+	/// \brief Get the global random number generator
+	virtual system::RandomGenerator* randomGenerator() const=0;
 };
 
 }}// namespace

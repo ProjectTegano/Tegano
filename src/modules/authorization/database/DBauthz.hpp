@@ -37,7 +37,7 @@
 #ifndef _DB_AUTHORIZATION_HPP_INCLUDED
 #define _DB_AUTHORIZATION_HPP_INCLUDED
 
-#include "AAAA/authorization.hpp"
+#include "AAAA/authorizationUnit.hpp"
 #include "module/constructor.hpp"
 
 namespace _Wolframe {

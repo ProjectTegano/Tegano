@@ -41,7 +41,7 @@
 #include "config/configurationTree.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
 #include "AAAA/authenticator.hpp"
-#include "AAAA/authUnit.hpp"
+#include "AAAA/authenticationUnit.hpp"
 #include <boost/lexical_cast.hpp>
 
 namespace _Wolframe {

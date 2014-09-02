@@ -38,6 +38,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "logger/logger-v1.hpp"
+#include "AAAA/AAAAinformation.hpp"
 #include "DBaudit.hpp"
 
 namespace _Wolframe {

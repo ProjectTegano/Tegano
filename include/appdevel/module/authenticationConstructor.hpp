@@ -37,7 +37,7 @@
 #include "module/constructor.hpp"
 #include "module/moduleInterface.hpp"
 #include "module/constructor.hpp"
-#include "AAAA/authUnit.hpp"
+#include "AAAA/authenticationUnit.hpp"
 #include <boost/lexical_cast.hpp>
 #include <string>
 

@@ -30,165 +30,53 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// AAAA provider implementation
-//
+/// \brief AAAA provider implementation
 
 #ifndef _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
-#include "AAAA/AAAAprovider.hpp"
-#include "config/configurationBase.hpp"
-#include "AAAA/authUnit.hpp"
-#include "AAAA/authorization.hpp"
-#include "AAAA/audit.hpp"
-
+#include "AAAA/AAAAproviderInterface.hpp"
+#include "authenticationFactory.hpp"
+#include "authorizationProvider.hpp"
+#include "auditProvider.hpp"
+#include "system/randomGenerator.hpp"
+#include "module/moduleDirectory.hpp"
 #include "database/DBprovider.hpp"
 
 #include <string>
-#include <list>
 #include <vector>
 
 namespace _Wolframe {
 namespace AAAA {
 
-// Standard authentication class and authentication provider
-class StandardAuthenticator : public Authenticator
+// AAAA provider implementation
+class AAAAproviderImpl
+	:public AAAAproviderInterface
 {
 public:
-	StandardAuthenticator( const std::vector<std::string>& mechs_,
-			       const std::list< AuthenticationUnit* >& units_,
-			       const net::RemoteEndpoint& client_ );
+	AAAAproviderImpl(
+		system::RandomGenerator* randomGenerator_,
+		const std::vector<config::NamedConfiguration*>& authConfig_,
+		const std::vector<config::NamedConfiguration*>& authzConfig_,
+		bool authzDefault_,
+		const std::vector<config::NamedConfiguration*>& auditConfig_,
+		const module::ModuleDirectory* modules);
 
-	~StandardAuthenticator();
-	void dispose();
-
-	/// Get the list of available mechs
-	virtual const std::vector<std::string>& mechs() const;
-
-	/// Set the authentication mech
-	virtual bool setMech( const std::string& mech );
-
-	/// The input message
-	virtual void messageIn( const std::string& message );
-
-	/// The output message
-	virtual std::string messageOut();
-
-	/// The current status of the authenticator
-	virtual Status status() const		{ return m_status; }
-
-	/// The authenticated user or NULL if not authenticated
-	virtual User* user();
-private:
-	const std::vector< std::string >&	m_mechs;
-	const std::list< AuthenticationUnit* >&	m_authUnits;
-	const net::RemoteEndpoint&		m_client;
-
-	Authenticator::Status			m_status;
-	std::vector< AuthenticatorSlice* >	m_slices;
-	int					m_currentSlice;
-	AAAA::User*				m_user;
-};
-
-class AuthenticationFactory
-{
-public:
-	AuthenticationFactory( const std::list< config::NamedConfiguration* >& confs,
-			       const module::ModuleDirectory* modules );
-	~AuthenticationFactory();
+	~AAAAproviderImpl(){}
 	bool resolveDB( const db::DatabaseProvider& db );
 
-	Authenticator* authenticator( const net::RemoteEndpoint& client );
-	PasswordChanger* passwordChanger( const User& user,
-					  const net::RemoteEndpoint& client );
+	virtual Authenticator* authenticator( const net::RemoteEndpoint& client ) const;
+	virtual PasswordChanger* passwordChanger( const User& user, const net::RemoteEndpoint& client) const;
+	virtual Authorizer* authorizer() const;
+	virtual Auditor* auditor() const;
+	virtual system::RandomGenerator* randomGenerator() const;
+
 private:
-	std::list< AuthenticationUnit* >	m_authUnits;
-	std::vector< std::string >		m_mechs;
-};
-
-
-// Standard authorization classes and authorization provider
-class StandardAuthorizer : public Authorizer
-{
-public:
-	StandardAuthorizer( const std::list< AuthorizationUnit* >& units, bool dflt );
-	~StandardAuthorizer();
-	void close();
-
-	bool allowed( const Information& authzObject );
-private:
-	const std::list< AuthorizationUnit* >&	m_authorizeUnits;
-	bool m_default;
-};
-
-class AuthorizationProvider
-{
-public:
-	AuthorizationProvider( const std::list< config::NamedConfiguration* >& confs,
-			       bool authzDefault,
-			       const module::ModuleDirectory* modules );
-	~AuthorizationProvider();
-	bool resolveDB( const db::DatabaseProvider& db );
-
-	Authorizer* authorizer() const		{ return m_authorizer; }
-private:
-	std::list< AuthorizationUnit* >	m_authorizeUnits;
-	StandardAuthorizer*		m_authorizer;
-};
-
-
-// Standard audit class and audit provider
-class StandardAudit : public Auditor
-{
-public:
-	StandardAudit( const std::list< AuditUnit* >& units, bool mandatory );
-	~StandardAudit();
-	void close();
-
-	bool audit( const Information& );
-private:
-	const std::list< AuditUnit* >&	m_auditUnits;
-	bool				m_mandatory;
-};
-
-class AuditProvider
-{
-public:
-	AuditProvider( const std::list< config::NamedConfiguration* >& confs,
-		       const module::ModuleDirectory* modules );
-	~AuditProvider();
-	bool resolveDB( const db::DatabaseProvider& db );
-
-	Auditor* auditor()			{ return m_auditor; }
-private:
-	std::list< AuditUnit* >		m_auditors;
-	StandardAudit*			m_auditor;
-};
-
-
-// AAAA provider PIMPL class
-class AAAAprovider::AAAAprovider_Impl
-{
-public:
-	AAAAprovider_Impl( const AAAAconfiguration* conf,
-			   const module::ModuleDirectory* modules );
-	~AAAAprovider_Impl()			{}
-	bool resolveDB( const db::DatabaseProvider& db );
-
-	Authenticator* authenticator( const net::RemoteEndpoint& client )
-						{ return m_authenticator.authenticator( client ); }
-	PasswordChanger* passwordChanger( const User& user,
-					  const net::RemoteEndpoint& client )
-						{ return m_authenticator.passwordChanger( user, client ); }
-	Authorizer* authorizer()		{ return m_authorizer.authorizer(); }
-	Auditor* auditor()			{ return m_auditor.auditor(); }
-private:
+	system::RandomGenerator* m_randomGenerator;
 	AuthenticationFactory	m_authenticator;
 	AuthorizationProvider	m_authorizer;
 	AuditProvider		m_auditor;
 };
 
 }} // namespace _Wolframe::AAAA
-
 #endif // _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED

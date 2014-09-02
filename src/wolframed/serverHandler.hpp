@@ -40,12 +40,13 @@
 #include "processor/execContext.hpp"
 #include "cmdbind/protocolHandler.hpp"
 #include "database/database.hpp"
-#include "AAAA/AAAAprovider.hpp"
 #include "processor/execContext.hpp"
 #include "mainConnectionHandler.hpp"
 #include "libconfig/bannerConfiguration.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
+#include "libconfig/AAAAproviderConfiguration.cpp"
 #include "libprovider/procProviderImpl.hpp"
+#include "libprovider/AAAAproviderImpl.cpp"
 
 namespace _Wolframe {
 
@@ -54,9 +55,10 @@ class ServerHandler
 {
 public:
 	ServerHandler( const config::ProcProviderConfiguration* pconf,
-			const AAAA::AAAAconfiguration* aconf,
+			const config::AAAAproviderConfiguration* aconf,
 			const db::DBproviderConfig* dconf,
 			const config::BannerConfiguration* bconf,
+			system::RandomGenerator* randomGenerator_,
 			const module::ModuleDirectory* modules);
 	~ServerHandler();
 	
@@ -64,15 +66,16 @@ public:
 
 	const std::string& banner() const				{ return m_banner; }
 	const db::DatabaseProvider* dbProvider() const			{ return &m_db; }
-	const AAAA::AAAAprovider* aaaaProvider() const			{ return &m_aaaa; }
+	const AAAA::AAAAproviderInterface* aaaaProvider() const		{ return &m_aaaa; }
 	const proc::ProcessorProviderInterface* procProvider() const	{ return &m_proc; }
 
 private:
 	const std::string		m_banner;
 	db::DatabaseProvider		m_db;
-	AAAA::AAAAprovider		m_aaaa;
+	AAAA::AAAAproviderImpl		m_aaaa;
 	prgbind::ProgramLibraryImpl	m_prglib;
 	proc::ProcessorProviderImpl	m_proc;
+	system::RandomGenerator*	m_randomGenerator;
 };
 
 } // namespace _Wolframe

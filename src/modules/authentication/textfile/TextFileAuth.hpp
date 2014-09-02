@@ -39,7 +39,9 @@
 
 #include <string>
 #include <vector>
-#include "AAAA/authUnit.hpp"
+#include "AAAA/authenticationUnit.hpp"
+#include "AAAA/authenticationSlice.hpp"
+#include "AAAA/passwordChanger.hpp"
 #include "module/constructor.hpp"
 #include "AAAA/user.hpp"
 #include "AAAA/CRAM.hpp"
@@ -76,7 +78,7 @@ private:
 class TextFileAuthUnit : public AuthenticationUnit
 {
 public:
-	TextFileAuthUnit( const std::string& Identifier, const std::string& filename );
+	TextFileAuthUnit( const std::string& Identifier, const std::string& filename);
 
 	~TextFileAuthUnit();
 

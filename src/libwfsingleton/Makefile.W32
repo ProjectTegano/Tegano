@@ -24,7 +24,7 @@ LIBRARIES = \
 	wfsingleton.dll \
 	logger\wolframemsg.dll
 
-LOGGER_OBJS = \
+CPP_OBJS = \
 	logger\logLevel.obj \
 	logger\logSyslogFacility.obj \
 	logger\logBackendConsole.obj \
@@ -34,11 +34,6 @@ LOGGER_OBJS = \
 	logger\logBackendEventlog.obj \
 	logger\logBackendWinDebug.obj \
 	logger\logBackendImpl.obj
-
-CPP_OBJS = \
-	$(LOGGER_OBJS) \
-	globalRndGen.obj
-
 OBJS =
 
 all: $(OBJS) $(CPP_OBJS) $(LIBRARIES)

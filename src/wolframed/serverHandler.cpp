@@ -34,9 +34,11 @@
 
 #include "serverHandler.hpp"
 #include "serverConnectionHandler.hpp"
-#include "AAAA/AAAAprovider.hpp"
 #include "libconfig/bannerConfiguration.hpp"
+#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/procProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
+#include "libprovider/AAAAproviderImpl.hpp"
 #include "prgbind/programLibrary.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
@@ -54,14 +56,17 @@ net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR&
 }
 
 ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
-				const AAAA::AAAAconfiguration* aconf,
+				const config::AAAAproviderConfiguration* aconf,
 				const db::DBproviderConfig* dconf,
 				const config::BannerConfiguration* bconf,
+				system::RandomGenerator* randomGenerator_,
 				const module::ModuleDirectory* modules )
 	:m_banner( bconf->toString() )
 	,m_db( dconf, modules )
-	,m_aaaa( aconf, modules )
-	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules){}
+	,m_aaaa( randomGenerator_, aconf->authConfig(), aconf->authzConfig(), aconf->authzDefault(), aconf->auditConfig(), modules )
+	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules)
+	,m_randomGenerator(randomGenerator_)
+	{}
 
 ServerHandler::~ServerHandler()	{}
 

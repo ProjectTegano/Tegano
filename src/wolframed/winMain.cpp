@@ -49,7 +49,7 @@
 #include "libconfig/loggerConfiguration.hpp"
 #include "libconfig/serviceConfiguration.hpp"
 #include "libconfig/serverConfiguration.hpp"
-
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "server.hpp"
 #include "system/errorCode.hpp"
 #include "logger/logger-v1.hpp"
@@ -303,6 +303,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
+		system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
 				_Wolframe::config::ApplicationConfiguration::fileType( configFile, _Wolframe::config::ApplicationConfiguration::configFileType( cmdLineCfg.cfgType) );
@@ -351,7 +352,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		LOG_NOTICE << "Starting service";
 
 // run server in background thread(s).
-		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &modDir );
+		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &randomGenerator, &modDir );
 		_Wolframe::net::server s( conf.serverCfg, handler );
 		boost::thread t( boost::bind( &_Wolframe::net::server::run, &s ));
 
@@ -456,6 +457,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 		_Wolframe::module::ModuleDirectory modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
+		system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
 				_Wolframe::config::ApplicationConfiguration::fileType( configFile, cmdLineCfg.cfgType );
@@ -538,7 +540,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 
 		LOG_NOTICE << "Starting server";
 
-		_Wolframe::ServerHandler handler( conf.handlerCfg, &modDir );
+		_Wolframe::ServerHandler handler( conf.procCfg, conf.aaaaCfg, conf.databaseCfg, conf.bannerCfg, &randomGenerator, &modDir );
 		_Wolframe::net::server s( conf.serverCfg, handler );
 
 		// Set console control handler to allow server to be stopped.

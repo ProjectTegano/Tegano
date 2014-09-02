@@ -27,11 +27,14 @@ LOCAL_STATIC_LIB = \
 	libwfprovider.a
 
 LOCAL_STATIC_LIB_OBJS = \
-	AAAAproviderConfig.o \
+	randomGeneratorImpl.o \
+	auditProvider.o \
+	authenticationFactory.o \
+	authorizationProvider.o \
+	standardAudit.o \
+	standardAuthenticator.o \
+	standardAuthorizer.o \
 	AAAAproviderImpl.o \
-	Audit.o \
-	Authentication.o \
-	Authorization.o \
 	DBproviderConfig.o \
 	DBproviderImpl.o \
 	ddlProgram.o \

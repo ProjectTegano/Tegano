@@ -30,68 +30,32 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// AAAA provider implementation
-//
-
-#include <stdexcept>
+/// \brief AAAA provider implementation
 
 #include "AAAAproviderImpl.hpp"
 #include "logger/logger-v1.hpp"
-#include "boost/algorithm/string.hpp"
-#include "system/globalRngGen.hpp"
+#include "authenticationFactory.hpp"
+#include "auditProvider.hpp"
+#include "authorizationProvider.hpp"
+#include "system/randomGenerator.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::AAAA;
 
-/// AAAAprovider PIMPL
-AAAAprovider::AAAAprovider( const AAAAconfiguration* conf,
-			    const module::ModuleDirectory* modules )
-	: m_impl( new AAAAprovider_Impl( conf, modules ))	{}
+AAAAproviderImpl::AAAAproviderImpl(
+		system::RandomGenerator* randomGenerator_,
+		const std::vector<config::NamedConfiguration*>& authConfig_,
+		const std::vector<config::NamedConfiguration*>& authzConfig_,
+		bool authzDefault_,
+		const std::vector<config::NamedConfiguration*>& auditConfig_,
+		const module::ModuleDirectory* modules_)
+	:m_randomGenerator(randomGenerator_)
+	,m_authenticator( authConfig_, randomGenerator_, modules_)
+	,m_authorizer( authzConfig_, authzDefault_, modules_)
+	,m_auditor( auditConfig_, modules_)
+{}
 
-AAAAprovider::~AAAAprovider()
-{
-	delete m_impl;
-}
-
-bool AAAAprovider::resolveDB( const db::DatabaseProvider& db )
-{
-	return m_impl->resolveDB( db );
-}
-
-Authenticator* AAAAprovider::authenticator( const _Wolframe::net::RemoteEndpoint &client ) const
-{
-	return m_impl->authenticator( client );
-}
-
-PasswordChanger* AAAAprovider::passwordChanger( const User& user, const net::RemoteEndpoint& client) const
-{
-	return m_impl->passwordChanger( user, client );
-}
-
-Authorizer* AAAAprovider::authorizer() const
-{
-	return m_impl->authorizer();
-}
-
-Auditor* AAAAprovider::auditor() const
-{
-	return m_impl->auditor();
-}
-
-
-/// AAAAprovider PIMPL implementation
-AAAAprovider::AAAAprovider_Impl::AAAAprovider_Impl( const AAAAconfiguration* conf,
-						    const module::ModuleDirectory* modules )
-	: m_authenticator( conf->m_authConfig, modules ),
-	  m_authorizer( conf->m_authzConfig, conf->m_authzDefault, modules ),
-	  m_auditor( conf->m_auditConfig, modules )
-{
-	// initialize the global rnd generator
-	GlobalRandomGenerator::instance( conf->m_randomDevice );
-}
-
-bool AAAAprovider::AAAAprovider_Impl::resolveDB( const db::DatabaseProvider& db )
+bool AAAAproviderImpl::resolveDB( const db::DatabaseProvider& db )
 {
 	LOG_DATA << "Resolving authentication databases";
 	if ( !m_authenticator.resolveDB( db ))
@@ -106,4 +70,30 @@ bool AAAAprovider::AAAAprovider_Impl::resolveDB( const db::DatabaseProvider& db 
 	return true;
 }
 
-}} // namespace _Wolframe::AAAA
+Authenticator* AAAAproviderImpl::authenticator( const net::RemoteEndpoint& client ) const
+{
+	return m_authenticator.authenticator( client );
+}
+
+PasswordChanger* AAAAproviderImpl::passwordChanger( const User& user,
+				  const net::RemoteEndpoint& client ) const
+{
+	return m_authenticator.passwordChanger( user, client );
+}
+
+Authorizer* AAAAproviderImpl::authorizer() const
+{
+	return m_authorizer.authorizer();
+}
+
+Auditor* AAAAproviderImpl::auditor() const
+{
+	return m_auditor.auditor();
+}
+
+system::RandomGenerator* AAAAproviderImpl::randomGenerator() const
+{
+	return m_randomGenerator;
+}
+
+

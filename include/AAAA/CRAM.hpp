@@ -43,8 +43,8 @@
 #define _CRAM_HPP_INCLUDED
 
 #include <string>
-#include <system/randomGenerator.hpp>
-#include <AAAA/passwordHash.hpp>
+#include "system/randomGenerator.hpp"
+#include "AAAA/passwordHash.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -59,7 +59,7 @@ static const size_t CRAM_SALT_SIZE = PASSWORD_SALT_SIZE;
 class CRAMchallenge
 {
 public:
-	CRAMchallenge( const crypto::RandomGenerator& rndGen );
+	CRAMchallenge( const system::RandomGenerator& rndGen );
 
 	~CRAMchallenge();
 

@@ -32,11 +32,14 @@ LOCAL_STATIC_LIB = \
 	wfprovider.lib
 
 LOCAL_STATIC_LIB_OBJS = \
-	AAAAproviderConfig.obj \
+	randomGeneratorImpl.obj \
+	auditProvider.obj \
+	authenticationFactory.obj \
+	authorizationProvider.obj \
+	standardAudit.obj \
+	standardAuthenticator.obj \
+	standardAuthorizer.obj \
 	AAAAproviderImpl.obj \
-	Audit.obj \
-	Authentication.obj \
-	Authorization.obj \
 	DBproviderConfig.obj \
 	DBproviderImpl.obj \
 	ddlProgram.obj \
@@ -63,3 +66,6 @@ local_clean:
 local_distclean:
 
 local_test:
+
+
+

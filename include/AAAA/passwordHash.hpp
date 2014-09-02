@@ -38,7 +38,7 @@
 #define _PASSWORD_HPP_INCLUDED
 
 #include <string>
-#include <system/randomGenerator.hpp>
+#include "system/randomGenerator.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -57,7 +57,7 @@ public:
 		/// Construct an empty salt (all bits 0).
 		Salt();
 		/// Construct a random salt.
-		Salt( const crypto::RandomGenerator& rndGen );
+		Salt( const system::RandomGenerator& rndGen );
 		/// Construct a salt from the given byte array.
 		Salt( const unsigned char* data, size_t bytes );
 		/// Construct a salt by setting the value from the base64 encoded string.
@@ -122,7 +122,7 @@ public:
 	/// Construct the password hash with a random salt
 	/// \param rndGen	the random number generator
 	/// \param password	password as plain text
-	PasswordHash( const crypto::RandomGenerator& rndGen, const std::string& password );
+	PasswordHash( const system::RandomGenerator& rndGen, const std::string& password );
 
 	/// Construct the password hash from salt and password (plain text)
 	/// \param pwdSalt	password salt as bytes

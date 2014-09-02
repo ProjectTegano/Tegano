@@ -34,6 +34,7 @@
 
 #include "serverHandler.hpp"
 #include "prgbind/programLibrary.hpp"
+#include "AAAA/AAAAinformation.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
 

@@ -30,7 +30,6 @@
  Project Wolframe.
 
 ************************************************************************/
-//
 /// \file usernameHash.cpp
 /// Username Hash Implementation
 
@@ -56,7 +55,7 @@ static const size_t USERNAME_SALT_BCD_SIZE = 2 * USERNAME_HASH_SALT_SIZE;
 static const size_t USERNAME_SALT_BASE64_SIZE = (( USERNAME_HASH_SALT_SIZE - 1 ) / 3 ) * 4 + 5;
 
 
-UsernameHash::UsernameHash( const crypto::RandomGenerator& rndGen,
+UsernameHash::UsernameHash( const system::RandomGenerator& rndGen,
 			    const std::string& username )
 {
 	rndGen.generate( m_salt, sizeof( m_salt ) );

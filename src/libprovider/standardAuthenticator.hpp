@@ -30,66 +30,60 @@
  Project Wolframe.
 
 ************************************************************************/
+/// \brief Standard authenticator
 
-/// \file AAAA/authorization.hpp
-/// \brief Top-level header file for authorization interface
+#ifndef _AAAA_STANDARD_AUTHENTICATOR_HPP_INCLUDED
+#define _AAAA_STANDARD_AUTHENTICATOR_HPP_INCLUDED
 
-#ifndef _AUTHORIZATION_HPP_INCLUDED
-#define _AUTHORIZATION_HPP_INCLUDED
+#include "AAAA/authenticator.hpp"
+#include "AAAA/authenticationUnit.hpp"
+#include "AAAA/authenticationSlice.hpp"
 
 #include <string>
-
-#include "AAAAinformation.hpp"
-#include "system/connectionEndpoint.hpp"
-#include "database/DBprovider.hpp"
+#include <vector>
 
 namespace _Wolframe {
 namespace AAAA {
 
-/// \brief Interface for all authorization mechanisms
-class Authorizer {
-public:
-	virtual ~Authorizer()		{}
-
-	// close the authorizer (not really)
-	virtual void close()		{}
-
-	// authorization requests
-	virtual bool allowed( const Information& ) = 0;
-};
-
-
-/// \class AuthorizationUnit
-/// \brief This is the base class for authorization unit implementations
-class AuthorizationUnit
+// Standard authentication class and authentication provider
+class StandardAuthenticator : public Authenticator
 {
 public:
-	enum Result	{
-		AUTHZ_DENIED,
-		AUTHZ_ALLOWED,
-		AUTHZ_IGNORED,
-		AUTHZ_ERROR
-	};
+	StandardAuthenticator( const std::vector<std::string>& mechs_,
+			       const std::vector< AuthenticationUnit* >& units_,
+			       const net::RemoteEndpoint& client_ );
 
-	AuthorizationUnit( const std::string& Identifier )
-		: m_identifier( Identifier )	{}
+	~StandardAuthenticator();
+	void dispose();
 
-	virtual ~AuthorizationUnit()		{}
+	/// Get the list of available mechs
+	virtual const std::vector<std::string>& mechs() const;
 
-	const std::string& identifier() const	{ return m_identifier; }
+	/// Set the authentication mech
+	virtual bool setMech( const std::string& mech );
 
-	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
-						{ return true; }
-	virtual const char* className() const = 0;
+	/// The input message
+	virtual void messageIn( const std::string& message );
 
-	virtual Result allowed( const Information& ) = 0;
+	/// The output message
+	virtual std::string messageOut();
 
+	/// The current status of the authenticator
+	virtual Status status() const		{ return m_status; }
+
+	/// The authenticated user or NULL if not authenticated
+	virtual User* user();
 private:
-	void operator=( const AuthorizationUnit&){}
-private:
-	const std::string	m_identifier;
+	const std::vector< std::string >&		m_mechs;
+	const std::vector< AuthenticationUnit* >&	m_authUnits;
+	const net::RemoteEndpoint&			m_client;
+
+	Authenticator::Status				m_status;
+	std::vector< AuthenticatorSlice* >		m_slices;
+	int						m_currentSlice;
+	AAAA::User*					m_user;
 };
 
-}} // namespace _Wolframe::AAAA
+}}//namespace
+#endif
 
-#endif // _AUTHORIZATION_HPP_INCLUDED

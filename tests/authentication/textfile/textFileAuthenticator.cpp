@@ -38,7 +38,7 @@
 #include "gtest/gtest.h"
 
 #include "libconfig/moduleDirectoryImpl.hpp"
-#include "AAAA/AAAAprovider.hpp"
+#include "AAAA/AAAAproviderInterface.hpp"
 
 
 #include "TextFileAuth.hpp"
@@ -80,7 +80,7 @@ protected:
 				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );
 		modDir.addBuilder( &builder );
-		AAAAconfiguration config;
+		AAAAproviderConfiguration config;
 		AAAAprovider provider( &config, &modDir );
 	}
 };

@@ -30,51 +30,38 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file system/globalRngGen.hpp
-/// \brief Global random generator 
+/// \brief Authorization provider
+#ifndef _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
+#define _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
 
-#ifndef _GLOBAL_RANDOM_GENERATOR_HPP_INCLUDED
-#define _GLOBAL_RANDOM_GENERATOR_HPP_INCLUDED
+#include "AAAA/authorizer.hpp"
+#include "database/DBprovider.hpp"
 
 #include <string>
-#include <system/randomGenerator.hpp>
+#include <vector>
 
-#if defined( _MSC_VER )
-	#define WOLFRAME_EXPORT __declspec( dllexport )
-#else
-	#define WOLFRAME_EXPORT
-#endif
+namespace _Wolframe {
+namespace AAAA {
 
-namespace _Wolframe	{
+class AuthorizationUnit;
+class StandardAuthorizer;
 
-/// \class GlobalRandomGenerator
-/// \brief Global random generator (sort of a pseudo-singleton)
-class GlobalRandomGenerator : public crypto::RandomGenerator
+class AuthorizationProvider
 {
 public:
-	~GlobalRandomGenerator();
+	AuthorizationProvider( const std::vector< config::NamedConfiguration* >& confs,
+			       bool authzDefault,
+			       const module::ModuleDirectory* modules );
+	~AuthorizationProvider();
+	bool resolveDB( const db::DatabaseProvider& db );
 
-	WOLFRAME_EXPORT static GlobalRandomGenerator& instance();
-	WOLFRAME_EXPORT static GlobalRandomGenerator& instance( const std::string &rndDev );
-
-	WOLFRAME_EXPORT void device( const std::string &rndDev );
-	WOLFRAME_EXPORT const std::string& device() const;
-	WOLFRAME_EXPORT unsigned random() const;
-	WOLFRAME_EXPORT void generate( unsigned char* buffer, size_t bytes ) const;
-
-protected:
-	GlobalRandomGenerator();
-	GlobalRandomGenerator( const std::string &rndDev );
+	Authorizer* authorizer() const;
 
 private:
-	// make it noncopyable
-	GlobalRandomGenerator( const GlobalRandomGenerator& );
-	const GlobalRandomGenerator& operator= ( const GlobalRandomGenerator& );
-
-	// Real object data
-	std::string	m_device;		///< random generator device
+	std::vector< AuthorizationUnit* >	m_authorizeUnits;
+	StandardAuthorizer*			m_authorizer;
 };
 
-} // namespace _Wolframe
+}}//namespace
+#endif
 
-#endif // _GLOBAL_RANDOM_GENERATOR_HPP_INCLUDED

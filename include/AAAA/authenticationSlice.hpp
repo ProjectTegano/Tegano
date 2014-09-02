@@ -31,7 +31,7 @@
 
 ************************************************************************/
 ///
-/// \file authSlice.hpp
+/// \file AAAA/authenticationSlice.hpp
 /// \brief AuthenticationSlice interface
 ///
 

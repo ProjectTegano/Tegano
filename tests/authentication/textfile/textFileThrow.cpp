@@ -42,7 +42,7 @@
 #include "crypto/HMAC.hpp"
 #include "system/globalRngGen.hpp"
 #include "AAAA/passwordHash.hpp"
-#include "AAAA/authSlice.hpp"
+#include "AAAA/authenticationSlice.hpp"
 #include "AAAA/CRAM.hpp"
 
 #include <boost/algorithm/string.hpp>

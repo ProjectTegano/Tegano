@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file crypto/passwordChanger.hpp
+/// \file AAAA/passwordChanger.hpp
 /// \brief Password changer interface definition
 
 #ifndef _PASSWORD_CHANGER_HPP_INCLUDED

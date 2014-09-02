@@ -46,7 +46,7 @@
 #include "procProviderConfiguration.hpp"
 #include "logger/logger-v1.hpp"
 #include "database/DBprovider.hpp"
-#include "AAAA/AAAAprovider.hpp"
+#include "AAAAproviderConfiguration.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -444,7 +444,7 @@ ApplicationConfiguration::ApplicationConfiguration()
 
 	bannerCfg = new config::BannerConfiguration();
 	databaseCfg = new db::DBproviderConfig();
-	aaaaCfg = new AAAA::AAAAconfiguration();
+	aaaaCfg = new config::AAAAproviderConfiguration();
 	procCfg = new ProcProviderConfiguration();
 
 	// add both sections, the parse function will select the

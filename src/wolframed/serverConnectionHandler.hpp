@@ -39,7 +39,7 @@
 #include "processor/execContext.hpp"
 #include "cmdbind/protocolHandler.hpp"
 #include "database/database.hpp"
-#include "AAAA/AAAAprovider.hpp"
+#include "libprovider/AAAAproviderImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "processor/execContext.hpp"
 

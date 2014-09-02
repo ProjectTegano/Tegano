@@ -38,7 +38,7 @@
 #define _USERNAME_HASH_HPP_INCLUDED
 
 #include <string>
-#include <system/randomGenerator.hpp>
+#include "system/randomGenerator.hpp"
 #include "crypto/HMAC.h"
 
 namespace _Wolframe {
@@ -50,7 +50,7 @@ static const size_t USERNAME_HASH_SALT_SIZE = 128 / 8;
 class UsernameHash
 {
 public:
-	UsernameHash( const crypto::RandomGenerator& rndGen, const std::string& username );
+	UsernameHash( const system::RandomGenerator& rndGen, const std::string& username );
 	UsernameHash( const unsigned char *slt, std::size_t sltSize,
 		      const std::string& username );
 	UsernameHash( const std::string& hashString );
