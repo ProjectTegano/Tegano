@@ -36,6 +36,7 @@
 #include "utils/fileUtils.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libprovider/randomGeneratorImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/AAAAproviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
@@ -64,6 +65,7 @@ static std::string g_selectedTestName;
 static wtest::Random g_random;
 unsigned int g_random_seed = 0;
 bool g_random_seed_set = false;
+system::RandomGeneratorImpl g_randomGenerator;
 
 struct BufferStruct
 {
@@ -294,7 +296,8 @@ struct GlobalContext
 		}
 
 		// Load the modules, scripts, etc. defined in the command line into the global context:
-		m_aaaaProvider = new AAAA::AAAAprovider( &m_aaaaProviderConfig, &m_moduleDirectory);
+		const config::AAAAproviderConfiguration* acfg = &m_aaaaProviderConfig;
+		m_aaaaProvider = new AAAA::AAAAproviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
 		m_databaseProvider = new db::DatabaseProvider( &m_dbProviderConfig, &m_moduleDirectory);
 		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
@@ -327,7 +330,7 @@ struct GlobalContext
 
 private:
 	types::PropertyTree m_config;
-	AAAA::AAAAproviderConfiguration m_aaaaProviderConfig;
+	config::AAAAproviderConfiguration m_aaaaProviderConfig;
 	config::ProcProviderConfiguration m_procProviderConfig;
 	db::DBproviderConfig m_dbProviderConfig;
 
@@ -336,7 +339,7 @@ private:
 	module::ModuleDirectoryImpl m_moduleDirectory;
 
 	prgbind::ProgramLibraryImpl m_programLibrary;
-	AAAA::AAAAprovider* m_aaaaProvider;
+	AAAA::AAAAproviderImpl* m_aaaaProvider;
 	db::DatabaseProvider* m_databaseProvider;
 	proc::ProcessorProviderImpl* m_processorProvider;
 	proc::ExecContext* m_execContext;

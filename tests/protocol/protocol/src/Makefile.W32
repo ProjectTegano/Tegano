@@ -32,8 +32,7 @@ INCLUDE_LIBS = \
 	$(TOPDIR)\src\libwolframe\wolframe.lib \
 	$(TOPDIR)\src\libwfsingleton\wfsingleton.lib
 
-CPP_OBJS = \
-	testProtocolFiles.obj
+CPP_OBJS =
 
 TEST_CPP_BINS = \
 	testProtocol.exe

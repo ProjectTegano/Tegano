@@ -38,8 +38,7 @@ INCLUDE_LIBS = \
 	$(LIBS_LT) \
 	$(LIBS_DL) $(LIBS_NET)
 
-CPP_OBJS = \
-	testProtocolFiles.o
+CPP_OBJS =
 
 TEST_CPP_BINS = \
 	testProtocol$(EXE)
