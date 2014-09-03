@@ -44,7 +44,7 @@
 #include "utils/stringUtils.hpp"
 #include "libprovider/programLibraryImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/aaaaProviderImpl.hpp"
 #include "libprovider/databaseProviderImpl.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 #include "wtest/pseudoRandomGenForTests.hpp"
@@ -148,8 +148,8 @@ TEST_P( WolfilterTest, tests)
 		system::RandomGeneratorImpl randomGenerator;
 		db::DatabaseProviderImpl databaseProvider( cmdline.dbProviderConfig().config(), &cmdline.moduleDirectory());
 
-		const config::AAAAproviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
-		AAAA::AAAAproviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
+		const config::AaaaProviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
+		AAAA::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());

@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file AAAA/AAAAproviderInterface.hpp
+/// \file AAAA/aaaaProviderInterface.hpp
 /// \brief AAAA provider interface
 
 #ifndef _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
@@ -47,13 +47,13 @@
 namespace _Wolframe {
 namespace AAAA {
 
-/// \class AAAAproviderInterface
+/// \class aaaaProviderInterface
 /// \brief Provider interface to create AAAA related objects
-class AAAAproviderInterface
+class AaaaProviderInterface
 {
 public:
 	/// \brief Destructor
-	virtual ~AAAAproviderInterface(){}
+	virtual ~AaaaProviderInterface(){}
 
 	/// \brief Create an return an authenticator object
 	virtual Authenticator* authenticator( const net::RemoteEndpoint& client) const=0;

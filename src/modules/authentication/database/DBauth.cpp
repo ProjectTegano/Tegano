@@ -63,7 +63,7 @@ const char** DBauthUnit::mechs() const
 	return m;
 }
 
-bool DBauthUnit::resolveDB( const db::DatabaseProvider& db )
+bool DBauthUnit::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	if ( m_db == NULL && ! m_dbLabel.empty() )	{
 		m_db = db.database( m_dbLabel );

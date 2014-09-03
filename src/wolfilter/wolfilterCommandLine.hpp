@@ -36,7 +36,7 @@
 #define _Wolframe_WOLFILTER_COMMANDLINE_HPP_INCLUDED
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
-#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libconfig/databaseProviderConfiguration.hpp"
 #include "types/propertyTree.hpp"
 #include "logger/logger-v1.hpp"
@@ -65,7 +65,7 @@ public:
 	const std::string& inputfilter() const				{return m_inputfilter;}
 	const std::string& outputfilter() const				{return m_outputfilter;}
 	const std::string& protocol() const				{return m_protocol;}
-	const config::AAAAproviderConfiguration& aaaaProviderConfig() const {return *m_aaaaProviderConfig;}
+	const config::AaaaProviderConfiguration& aaaaProviderConfig() const {return *m_aaaaProviderConfig;}
 	const config::DatabaseProviderConfiguration& dbProviderConfig() const	{return *m_dbProviderConfig;}
 	const config::ProcProviderConfiguration& procProviderConfig() const {return *m_procProviderConfig;}
 	const module::ModuleDirectory& moduleDirectory() const		{return *m_moduleDirectory;}
@@ -92,7 +92,7 @@ private:
 	std::string m_inputfilter;
 	std::string m_outputfilter;
 	std::string m_protocol;
-	boost::shared_ptr<config::AAAAproviderConfiguration> m_aaaaProviderConfig;
+	boost::shared_ptr<config::AaaaProviderConfiguration> m_aaaaProviderConfig;
 	boost::shared_ptr<config::ProcProviderConfiguration> m_procProviderConfig;
 	boost::shared_ptr<config::DatabaseProviderConfiguration> m_dbProviderConfig;
 	module::ModuleDirectoryImpl* m_moduleDirectory;

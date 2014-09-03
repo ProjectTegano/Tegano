@@ -30,9 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-//
 /// \file applicationConfiguration.cpp
-//
 
 #include "config/configurationTree.hpp"
 #include "config/valueParser.hpp"
@@ -46,8 +44,7 @@
 #include "databaseProviderConfiguration.hpp"
 #include "procProviderConfiguration.hpp"
 #include "logger/logger-v1.hpp"
-#include "database/databaseProvider.hpp"
-#include "AAAAproviderConfiguration.hpp"
+#include "aaaaProviderConfiguration.hpp"
 
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -445,7 +442,7 @@ ApplicationConfiguration::ApplicationConfiguration()
 
 	bannerCfg = new config::BannerConfiguration();
 	databaseCfg = new config::DatabaseProviderConfiguration();
-	aaaaCfg = new config::AAAAproviderConfiguration();
+	aaaaCfg = new config::AaaaProviderConfiguration();
 	procCfg = new ProcProviderConfiguration();
 
 	// add both sections, the parse function will select the

@@ -39,7 +39,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	standardAudit.obj \
 	standardAuthenticator.obj \
 	standardAuthorizer.obj \
-	AAAAproviderImpl.obj \
+	aaaaProviderImpl.obj \
 	databaseProviderImpl.obj \
 	ddlProgram.obj \
 	normalizeProgram.obj \

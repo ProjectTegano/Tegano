@@ -31,7 +31,7 @@
 
 ************************************************************************/
 
-#include "AAAAproviderConfiguration.hpp"
+#include "aaaaProviderConfiguration.hpp"
 #include "logger/logger-v1.hpp"
 #include "module/moduleDirectory.hpp"
 #include "config/valueParser.hpp"
@@ -41,13 +41,13 @@ using namespace _Wolframe;
 using namespace _Wolframe::config;
 
 /// constructor
-AAAAproviderConfiguration::AAAAproviderConfiguration()
+AaaaProviderConfiguration::AaaaProviderConfiguration()
 	: config::ConfigurationBase( "AAAA", NULL, "AAAA configuration"  ),
 	  m_authzDefault( false ), m_mandatoryAudit( true )
 {}
 
 /// destructor
-AAAAproviderConfiguration::~AAAAproviderConfiguration()
+AaaaProviderConfiguration::~AaaaProviderConfiguration()
 {
 	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )
@@ -63,7 +63,7 @@ AAAAproviderConfiguration::~AAAAproviderConfiguration()
 }
 
 /// methods
-bool AAAAproviderConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
+bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 			       const module::ModuleDirectory* modules )
 {
 	using namespace _Wolframe::config;
@@ -169,7 +169,7 @@ bool AAAAproviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 }
 
 
-void AAAAproviderConfiguration::print( std::ostream& os, size_t /* indent */ ) const
+void AaaaProviderConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
 	os << sectionName() << std::endl;
 	os << "   Authentication" << std::endl;
@@ -193,7 +193,7 @@ void AAAAproviderConfiguration::print( std::ostream& os, size_t /* indent */ ) c
 }
 
 /// Check if the AAAA configuration makes sense
-bool AAAAproviderConfiguration::check() const
+bool AaaaProviderConfiguration::check() const
 {
 	bool correct = true;
 
@@ -218,7 +218,7 @@ bool AAAAproviderConfiguration::check() const
 	return correct;
 }
 
-void AAAAproviderConfiguration::setCanonicalPathes( const std::string& refPath )
+void AaaaProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
 	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )

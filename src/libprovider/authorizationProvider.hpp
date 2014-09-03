@@ -35,7 +35,7 @@
 #define _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
 
 #include "AAAA/authorizer.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 #include <string>
 #include <vector>
@@ -53,7 +53,7 @@ public:
 			       bool authzDefault,
 			       const module::ModuleDirectory* modules );
 	~AuthorizationProvider();
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	Authorizer* authorizer() const;
 

@@ -90,6 +90,8 @@ public:
 		m_timeout = timeout_;
 	}
 
+	void clear();
+
 private:
 	DeleteObjectTypeFunc m_deleteObject;	///< Object destructor
 	std::vector<void*> m_availList;		///< List of available objects
@@ -134,6 +136,7 @@ public:
 	ObjectRef get()				{return ObjectRef( ObjectPoolBase::get());}
 	void push( ObjectType* obj)		{ObjectPoolBase::push( (void*)obj);}
 	void setTimeout( unsigned int timeout_)	{ObjectPoolBase::setTimeout( timeout_);}
+	void clear()				{ObjectPoolBase::clear();}
 
 private:
 	static void std_deleteObjectType( void* obj)

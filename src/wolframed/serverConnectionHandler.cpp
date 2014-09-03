@@ -34,7 +34,7 @@
 
 #include "serverHandler.hpp"
 #include "processor/programLibrary.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
 

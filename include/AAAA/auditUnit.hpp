@@ -35,7 +35,7 @@
 
 #ifndef _AUDIT_UNIT_HPP_INCLUDED
 #define _AUDIT_UNIT_HPP_INCLUDED
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -51,7 +51,7 @@ public:
 
 	virtual const char* className() const = 0;
 
-	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
+	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
 							{ return true; }
 	virtual bool required() = 0;
 

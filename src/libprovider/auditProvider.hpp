@@ -34,7 +34,7 @@
 
 #ifndef _AAAA_AUDIT_PROVIDER_HPP_INCLUDED
 #define _AAAA_AUDIT_PROVIDER_HPP_INCLUDED
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 #include <string>
 #include <vector>
 
@@ -51,7 +51,7 @@ public:
 	AuditProvider( const std::vector< config::NamedConfiguration* >& confs,
 		       const module::ModuleDirectory* modules );
 	~AuditProvider();
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	Auditor* auditor() const;
 

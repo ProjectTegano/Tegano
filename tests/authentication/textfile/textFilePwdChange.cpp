@@ -43,7 +43,7 @@
 #include "crypto/AES256.h"
 #include "AAAA/passwordHash.hpp"
 #include "AAAA/passwordChanger.hpp"
-#include "AAAA/pwdChangeMessage.hpp"
+#include "AAAA/passwordChangeMessage.hpp"
 #include "AAAA/CRAM.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 

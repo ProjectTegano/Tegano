@@ -54,7 +54,7 @@ class BannerConfiguration;
 class HandlerConfiguration;
 class CmdLineConfiguration;
 class ProcProviderConfiguration;
-class AAAAproviderConfiguration;
+class AaaaProviderConfiguration;
 class DatabaseProviderConfiguration;
 
 /// \brief Application configuration structure
@@ -67,7 +67,7 @@ public:
 	ServerConfiguration *serverCfg;				///< network server configuration
 	LoggerConfiguration *loggerCfg;				///< logger configuration
 	config::DatabaseProviderConfiguration *databaseCfg;	///< database provider configuration
-	config::AAAAproviderConfiguration *aaaaCfg;		///< AAAA provider configuration
+	config::AaaaProviderConfiguration *aaaaCfg;		///< AAAA provider configuration
 	ProcProviderConfiguration *procCfg;			///< processor configuration
 	BannerConfiguration *bannerCfg;				///< banner configuration
 

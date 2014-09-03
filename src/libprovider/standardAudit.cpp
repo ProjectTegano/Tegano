@@ -33,7 +33,7 @@
 /// \brief Standard audit
 
 #include "standardAudit.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 #include "AAAA/auditUnit.hpp"
 #include "AAAA/auditor.hpp"
 #include <string>

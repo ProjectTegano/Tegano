@@ -115,12 +115,12 @@ const std::string TestUnitImpl2::hullo( )
 	return "hullo";
 }
 
-bool TestUnitImpl1::resolveDB( const db::DatabaseProvider& /* db */ )
+bool TestUnitImpl1::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 {
 	return true;
 }
 
-bool TestUnitImpl2::resolveDB( const db::DatabaseProvider& /* db */ )
+bool TestUnitImpl2::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 {
 	return true;
 }

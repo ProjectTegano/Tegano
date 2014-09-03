@@ -34,7 +34,7 @@
 ///
 /// Password changer data structure implementation
 
-#include "AAAA/pwdChangeMessage.hpp"
+#include "AAAA/passwordChangeMessage.hpp"
 #include "crypto/md5.h"
 #include "crypto/AES256.h"
 #include "types/base64.hpp"

@@ -34,6 +34,7 @@
 ///\file OracleTransactionExecStatemachine.hpp
 #ifndef _DATABASE_ORACLE_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
 #define _DATABASE_ORACLE_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
+#include "Oracle.hpp"
 #include "database/transactionExecStatemachine.hpp"
 #include "database/statement.hpp"
 #include "database/databaseError.hpp"
@@ -160,7 +161,7 @@ private:
 	bool m_hasResult;
 	bool m_hasRow;
 	OracleDatabase* m_database;
-	boost::shared_ptr<OracleConnection> m_conn;	//< DB connection
+	OracleDatabase::Connection m_conn;	//< DB connection
 };
 
 }}//namespace

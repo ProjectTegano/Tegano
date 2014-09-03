@@ -37,7 +37,7 @@
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 #include "logger/logger-v1.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 #include "DBauthz.hpp"
 
 namespace _Wolframe {
@@ -59,7 +59,7 @@ DBauthorizer::~DBauthorizer()
 }
 
 
-bool DBauthorizer::resolveDB( const db::DatabaseProvider& db )
+bool DBauthorizer::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	if ( m_db == NULL && ! m_dbLabel.empty() )	{
 		m_db = db.database( m_dbLabel );

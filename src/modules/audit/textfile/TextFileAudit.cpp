@@ -37,7 +37,7 @@
 
 #include "logger/logger-v1.hpp"
 #include "TextFileAudit.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 
 #include <boost/filesystem.hpp>
 

@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \brief AAAA provider implementation
 
-#include "AAAAproviderImpl.hpp"
+#include "aaaaProviderImpl.hpp"
 #include "logger/logger-v1.hpp"
 #include "authenticationFactory.hpp"
 #include "auditProvider.hpp"
@@ -42,7 +42,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::AAAA;
 
-AAAAproviderImpl::AAAAproviderImpl(
+AaaaProviderImpl::AaaaProviderImpl(
 		system::RandomGenerator* randomGenerator_,
 		const std::vector<config::NamedConfiguration*>& authConfig_,
 		const std::vector<config::NamedConfiguration*>& authzConfig_,
@@ -55,7 +55,7 @@ AAAAproviderImpl::AAAAproviderImpl(
 	,m_auditor( auditConfig_, modules_)
 {}
 
-bool AAAAproviderImpl::resolveDB( const db::DatabaseProvider& db )
+bool AaaaProviderImpl::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	LOG_DATA << "Resolving authentication databases";
 	if ( !m_authenticator.resolveDB( db ))
@@ -70,28 +70,28 @@ bool AAAAproviderImpl::resolveDB( const db::DatabaseProvider& db )
 	return true;
 }
 
-Authenticator* AAAAproviderImpl::authenticator( const net::RemoteEndpoint& client ) const
+Authenticator* AaaaProviderImpl::authenticator( const net::RemoteEndpoint& client ) const
 {
 	return m_authenticator.authenticator( client );
 }
 
-PasswordChanger* AAAAproviderImpl::passwordChanger( const User& user,
+PasswordChanger* AaaaProviderImpl::passwordChanger( const User& user,
 				  const net::RemoteEndpoint& client ) const
 {
 	return m_authenticator.passwordChanger( user, client );
 }
 
-Authorizer* AAAAproviderImpl::authorizer() const
+Authorizer* AaaaProviderImpl::authorizer() const
 {
 	return m_authorizer.authorizer();
 }
 
-Auditor* AAAAproviderImpl::auditor() const
+Auditor* AaaaProviderImpl::auditor() const
 {
 	return m_auditor.auditor();
 }
 
-system::RandomGenerator* AAAAproviderImpl::randomGenerator() const
+system::RandomGenerator* AaaaProviderImpl::randomGenerator() const
 {
 	return m_randomGenerator;
 }

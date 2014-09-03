@@ -38,9 +38,9 @@
 #include "gtest/gtest.h"
 
 #include "libconfig/moduleDirectoryImpl.hpp"
-#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/aaaaProviderImpl.hpp"
 
 #include "TextFileAuth.hpp"
 #include "types/base64.hpp"
@@ -79,8 +79,8 @@ protected:
 				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );
 		modDir.addBuilder( &builder );
-		config::AAAAproviderConfiguration cfg;
-		AAAA::AAAAproviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
+		config::AaaaProviderConfiguration cfg;
+		AAAA::AaaaProviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
 	}
 };
 

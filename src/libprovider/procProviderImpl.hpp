@@ -36,6 +36,7 @@
 #ifndef _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #include "processor/procProviderInterface.hpp"
+#include "config/configurationBase.hpp"
 #include "programLibraryImpl.hpp"
 #include "database/database.hpp"
 #include "cmdbind/commandHandler.hpp"
@@ -49,7 +50,7 @@
 namespace _Wolframe {
 namespace db {
 /// \brief Forward declaration
-class DatabaseProvider;
+class DatabaseProviderInterface;
 }
 namespace proc {
 
@@ -70,7 +71,7 @@ public:
 	virtual ~ProcessorProviderImpl();
 
 	/// \brief Pass the references to the built database interfaces and let the provider find its transaction database
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 	/// \brief Load all configured programs
 	bool loadPrograms();
 
@@ -125,9 +126,9 @@ public:
 	virtual const std::string& referencePath() const;
 
 private:
-	std::string			m_dbLabel;	///< idenfifier of the transaction database
-	db::Database*			m_db;		///< reference to the transaction database
-	const db::DatabaseProvider*	m_dbProvider;	///< alternative database
+	std::string m_dbLabel;					///< idenfifier of the transaction database
+	db::Database* m_db;					///< reference to the transaction database
+	const db::DatabaseProviderInterface* m_dbProvider;	///< provider for alternative database
 
 	/// \class CommandHandlerDef
 	/// \brief Definition of a command handler with its configuration

@@ -41,7 +41,7 @@
 #include "TextFileAuth.hpp"
 #include "AAAA/CRAM.hpp"
 #include "AAAA/passwordHash.hpp"
-#include "AAAA/pwdChangeMessage.hpp"
+#include "AAAA/passwordChangeMessage.hpp"
 #include "passwdFile.hpp"
 #include "system/randomGenerator.hpp"
 

@@ -63,7 +63,7 @@ AuthorizationProvider::AuthorizationProvider( const std::vector< config::NamedCo
 		}
 		else	{
 			LOG_ALERT << "AuthorizationProvider: unknown authorization type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown authorization mechanism type in AAAAprovider constructor. See log" );
+			throw std::domain_error( "Unknown authorization mechanism type in AuthorizationProvider constructor. See log" );
 		}
 	}
 	m_authorizer = new StandardAuthorizer( m_authorizeUnits, authzDefault );
@@ -83,7 +83,7 @@ Authorizer* AuthorizationProvider::authorizer() const
 	return m_authorizer;
 }
 
-bool AuthorizationProvider::resolveDB( const db::DatabaseProvider& db )
+bool AuthorizationProvider::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	bool rt = true;
 	for ( std::vector< AuthorizationUnit* >::iterator it = m_authorizeUnits.begin();

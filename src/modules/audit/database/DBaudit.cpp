@@ -38,7 +38,7 @@
 #include <boost/algorithm/string.hpp>
 
 #include "logger/logger-v1.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 #include "DBaudit.hpp"
 
 namespace _Wolframe {
@@ -60,7 +60,7 @@ DBauditor::~DBauditor()
 {
 }
 
-bool DBauditor::resolveDB( const db::DatabaseProvider& db )
+bool DBauditor::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	if ( m_db == NULL && ! m_dbLabel.empty() )	{
 		m_db = db.database( m_dbLabel );

@@ -77,7 +77,7 @@ public:
 
 	const char* className() const			{ return DB_AUTHENTICATION_CLASS_NAME; }
 
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	const char** mechs() const;
 

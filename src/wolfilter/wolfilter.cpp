@@ -36,10 +36,10 @@
 #include "wolframe.hpp"
 #include "module/moduleInterface.hpp"
 #include "processor/programLibrary.hpp"
-#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/databaseProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/aaaaProviderImpl.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 #include <fstream>
 #include <iostream>
@@ -82,8 +82,8 @@ int main( int argc, char **argv )
 		// Load the modules, scripts, etc. defined in the command line into the global context:
 		system::RandomGeneratorImpl randomGenerator;
 		db::DatabaseProviderImpl databaseProvider( cmdline.dbProviderConfig().config(), &cmdline.moduleDirectory());
-		const config::AAAAproviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
-		AAAA::AAAAproviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
+		const config::AaaaProviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
+		AAAA::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);

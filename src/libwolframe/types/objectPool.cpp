@@ -102,3 +102,9 @@ ObjectPoolBase::ObjectRef::ObjectRef( ObjectPoolBase* pool, void* ptr)
 	:boost::shared_ptr<void>( ptr, boost::bind( readdObjectToPool, pool, _1))
 {}
 
+void ObjectPoolBase::clear()
+{
+	boost::lock_guard<boost::mutex> lock( m_mutex );
+	m_availList.clear();
+}
+

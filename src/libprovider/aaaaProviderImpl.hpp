@@ -35,13 +35,13 @@
 #ifndef _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
-#include "AAAA/AAAAproviderInterface.hpp"
+#include "AAAA/aaaaProviderInterface.hpp"
 #include "authenticationFactory.hpp"
 #include "authorizationProvider.hpp"
 #include "auditProvider.hpp"
 #include "system/randomGenerator.hpp"
 #include "module/moduleDirectory.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 #include <string>
 #include <vector>
@@ -50,11 +50,11 @@ namespace _Wolframe {
 namespace AAAA {
 
 // AAAA provider implementation
-class AAAAproviderImpl
-	:public AAAAproviderInterface
+class AaaaProviderImpl
+	:public AaaaProviderInterface
 {
 public:
-	AAAAproviderImpl(
+	AaaaProviderImpl(
 		system::RandomGenerator* randomGenerator_,
 		const std::vector<config::NamedConfiguration*>& authConfig_,
 		const std::vector<config::NamedConfiguration*>& authzConfig_,
@@ -62,8 +62,8 @@ public:
 		const std::vector<config::NamedConfiguration*>& auditConfig_,
 		const module::ModuleDirectory* modules);
 
-	~AAAAproviderImpl(){}
-	bool resolveDB( const db::DatabaseProvider& db );
+	~AaaaProviderImpl(){}
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	virtual Authenticator* authenticator( const net::RemoteEndpoint& client ) const;
 	virtual PasswordChanger* passwordChanger( const User& user, const net::RemoteEndpoint& client) const;

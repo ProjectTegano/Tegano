@@ -36,6 +36,7 @@
 
 #include "logger/logger-v1.hpp"
 #include "common.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 namespace _Wolframe {
 namespace module {
@@ -52,7 +53,7 @@ extern "C" DLLEXPORT ModuleEntryPoint entryPoint;
 // the implementation of a plugin full-filling the TestUnit interface
 class TestUnitImpl1 : public TestUnit1
 {
-	virtual bool resolveDB( const db::DatabaseProvider& /* db */ );
+	virtual bool resolveDB( const db::DatabaseProviderInterface& /* db */ );
 
 public:
 	// test unit has no configuration, so have an empty constructor
@@ -66,7 +67,7 @@ public:
 // the implementation of a plugin full-filling the TestUnit interface
 class TestUnitImpl2 : public TestUnit2
 {
-	virtual bool resolveDB( const db::DatabaseProvider& /* db */ );
+	virtual bool resolveDB( const db::DatabaseProviderInterface& /* db */ );
 
 public:
 	// test unit has no configuration, so have an empty constructor

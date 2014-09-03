@@ -81,7 +81,7 @@ CPP_OBJS = \
 	passwordHash.o \
 	usernameHash.o \
 	CRAM.o \
-	pwdChangeMessage.o
+	passwordChangeMessage.o
 
 OBJS = \
 	b64encode.o \

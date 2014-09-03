@@ -34,7 +34,7 @@
 
 #include "auditProvider.hpp"
 #include "standardAudit.hpp"
-#include "AAAA/AAAAinformation.hpp"
+#include "AAAA/information.hpp"
 #include "AAAA/auditor.hpp"
 #include "AAAA/auditUnit.hpp"
 #include "module/moduleDirectory.hpp"
@@ -65,7 +65,7 @@ AuditProvider::AuditProvider( const std::vector< config::NamedConfiguration* >& 
 		}
 		else	{
 			LOG_ALERT << "AuditProvider: unknown audit type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown auditing mechanism type in AAAAprovider constructor. See log" );
+			throw std::domain_error( "Unknown auditing mechanism type in AuditProvider constructor. See log" );
 		}
 	}
 }
@@ -77,7 +77,7 @@ AuditProvider::~AuditProvider()
 		delete *it;
 }
 
-bool AuditProvider::resolveDB( const db::DatabaseProvider& db )
+bool AuditProvider::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	for ( std::vector< AuditUnit* >::iterator it = m_auditors.begin();
 						it != m_auditors.end(); it++ )

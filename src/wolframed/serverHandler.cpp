@@ -35,10 +35,10 @@
 #include "serverHandler.hpp"
 #include "serverConnectionHandler.hpp"
 #include "libconfig/bannerConfiguration.hpp"
-#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/aaaaProviderImpl.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
 
@@ -55,7 +55,7 @@ net::ConnectionHandler* ServerHandler::newConnection( const net::LocalEndpointR&
 }
 
 ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
-				const config::AAAAproviderConfiguration* aconf,
+				const config::AaaaProviderConfiguration* aconf,
 				const config::DatabaseProviderConfiguration* dconf,
 				const config::BannerConfiguration* bconf,
 				system::RandomGenerator* randomGenerator_,

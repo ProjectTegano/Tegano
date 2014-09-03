@@ -35,7 +35,7 @@
 #ifndef _AAAA_AUTHENTICATION_FACTORY_HPP_INCLUDED
 #define _AAAA_AUTHENTICATION_FACTORY_HPP_INCLUDED
 
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 #include "config/configurationBase.hpp"
 #include "system/connectionEndpoint.hpp"
 #include "system/randomGenerator.hpp"
@@ -58,7 +58,7 @@ public:
 			       system::RandomGenerator* randomGenerator,
 			       const module::ModuleDirectory* modules);
 	~AuthenticationFactory();
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	Authenticator* authenticator( const net::RemoteEndpoint& client) const;
 	PasswordChanger* passwordChanger( const User& user,

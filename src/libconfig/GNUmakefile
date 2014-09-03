@@ -42,7 +42,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	serverConfiguration.o \
 	cmdLineConfiguration.o \
 	procProviderConfiguration.o \
-	AAAAproviderConfiguration.o \
+	aaaaProviderConfiguration.o \
 	databaseProviderConfiguration.o \
 	applicationInfo.o \
 	applicationConfiguration.o \

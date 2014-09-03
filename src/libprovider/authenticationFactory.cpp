@@ -35,7 +35,7 @@
 #include "standardAuthenticator.hpp"
 #include "AAAA/authenticator.hpp"
 #include "AAAA/passwordChanger.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
@@ -63,7 +63,7 @@ AuthenticationFactory::AuthenticationFactory( const std::vector< config::NamedCo
 		}
 		else	{
 			LOG_ALERT << "AuthenticationFactory: unknown authentication type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown authentication mechanism type in AAAAprovider constructor. See log" );
+			throw std::domain_error( "Unknown authentication type in AuthenticationFactory constructor. See log" );
 		}
 	}
 
@@ -100,7 +100,7 @@ AuthenticationFactory::~AuthenticationFactory()
 		delete *it;
 }
 
-bool AuthenticationFactory::resolveDB( const db::DatabaseProvider& db )
+bool AuthenticationFactory::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	for ( std::vector< AuthenticationUnit* >::const_iterator it = m_authUnits.begin();
 								it != m_authUnits.end(); it++ )

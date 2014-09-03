@@ -75,7 +75,7 @@ CPP_OBJS = \
 	passwordHash.obj \
 	usernameHash.obj \
 	CRAM.obj \
-	pwdChangeMessage.obj
+	passwordChangeMessage.obj
 
 OBJS = \
 	b64encode.obj \

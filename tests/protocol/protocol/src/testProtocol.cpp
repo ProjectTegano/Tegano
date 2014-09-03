@@ -36,11 +36,11 @@
 #include "utils/fileUtils.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libconfig/databaseProviderConfiguration.hpp"
-#include "libconfig/AAAAproviderConfiguration.hpp"
+#include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 #include "libprovider/databaseProviderImpl.hpp"
 #include "libprovider/procProviderImpl.hpp"
-#include "libprovider/AAAAproviderImpl.hpp"
+#include "libprovider/aaaaProviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
 #include "wolframed/mainConnectionHandler.hpp"
 #include "mainProtocolHandler.hpp"
@@ -298,8 +298,8 @@ struct GlobalContext
 		}
 
 		// Load the modules, scripts, etc. defined in the command line into the global context:
-		const config::AAAAproviderConfiguration* acfg = &m_aaaaProviderConfig;
-		m_aaaaProvider = new AAAA::AAAAproviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
+		const config::AaaaProviderConfiguration* acfg = &m_aaaaProviderConfig;
+		m_aaaaProvider = new AAAA::AaaaProviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
 		m_databaseProvider = new db::DatabaseProviderImpl( m_dbProviderConfig.config(), &m_moduleDirectory);
 		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
@@ -332,7 +332,7 @@ struct GlobalContext
 
 private:
 	types::PropertyTree m_config;
-	config::AAAAproviderConfiguration m_aaaaProviderConfig;
+	config::AaaaProviderConfiguration m_aaaaProviderConfig;
 	config::ProcProviderConfiguration m_procProviderConfig;
 	config::DatabaseProviderConfiguration m_dbProviderConfig;
 
@@ -341,7 +341,7 @@ private:
 	module::ModuleDirectoryImpl m_moduleDirectory;
 
 	proc::ProgramLibraryImpl m_programLibrary;
-	AAAA::AAAAproviderImpl* m_aaaaProvider;
+	AAAA::AaaaProviderImpl* m_aaaaProvider;
 	db::DatabaseProviderImpl* m_databaseProvider;
 	proc::ProcessorProviderImpl* m_processorProvider;
 	proc::ExecContext* m_execContext;

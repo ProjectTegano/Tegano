@@ -36,14 +36,12 @@
 
 #ifndef _ORACLEQL_HPP_INCLUDED
 #define _ORACLEQL_HPP_INCLUDED
-
-#include "OracleTransactionExecStatemachine.hpp"
 #include "OracleConfig.hpp"
 #include "database/database.hpp"
 #include "database/transaction.hpp"
 #include "database/transactionExecStatemachine.hpp"
 #include "module/constructor.hpp"
-#include "system/objectPool.hpp"
+#include "types/objectPool.hpp"
 #include "logger/logger-v1.hpp"
 #include <list>
 #include <vector>
@@ -96,11 +94,7 @@ public:
 	const std::string& ID() const		{ return m_ID; }
 	const char* className() const		{ return ORACLE_DB_CLASS_NAME; }
 
-	Transaction* transaction( const std::string& name_)
-	{
-		TransactionExecStatemachineR stm( new TransactionExecStatemachine_oracle( &m_env, this));
-		return new Transaction( name_, stm);
-	}
+	Transaction* transaction( const std::string& name_);
 	
 	virtual const LanguageDescription* getLanguageDescription( ) const
 	{
@@ -108,9 +102,10 @@ public:
 		return &langdescr;
 	}
 
-	boost::shared_ptr<OracleConnection> newConnection()
+	typedef types::ObjectPool<OracleConnection>::ObjectRef Connection;
+	Connection newConnection()
 	{
-		return boost::shared_ptr<OracleConnection>( m_connPool.get(), boost::bind( ObjectPool<OracleConnection*>::static_add, &m_connPool, _1));
+		return m_connPool.get();
 	}
 
 private:
@@ -120,7 +115,7 @@ private:
 	const std::string	m_ID;			//< database ID
 	std::string		m_connStr;		//< connection string
 	unsigned short		m_connections;		//< number of connections
-	ObjectPool< OracleConnection* >	m_connPool;	//< pool of connections
+	types::ObjectPool<OracleConnection> m_connPool;	//< pool of connections
 
 public:
 	OracleEnvirenment m_env;	//< Oracle environment

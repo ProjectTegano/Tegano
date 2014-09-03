@@ -30,11 +30,11 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file database/databaseProvider.hpp
+/// \file database/databaseProviderInterface.hpp
 /// \brief Database provider interface
 
-#ifndef _DATABASE_PROVIDER_HPP_INCLUDED
-#define _DATABASE_PROVIDER_HPP_INCLUDED
+#ifndef _DATABASE_PROVIDER_INTERFACE_HPP_INCLUDED
+#define _DATABASE_PROVIDER_INTERFACE_HPP_INCLUDED
 
 #include "database.hpp"
 #include "config/configurationBase.hpp"
@@ -44,12 +44,14 @@ namespace _Wolframe {
 namespace db {
 
 /// Database provider
-class DatabaseProvider
+class DatabaseProviderInterface
 {
 public:
-	virtual ~DatabaseProvider(){}
+	virtual ~DatabaseProviderInterface(){}
 	virtual Database* database( const std::string& ID ) const=0;
 };
 
-}} // namespace _Wolframe::db
-#endif // _DATABASE_PROVIDER_HPP_INCLUDED
+}}//namespace
+#endif
+
+

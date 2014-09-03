@@ -43,8 +43,8 @@
 
 #include <boost/filesystem.hpp>
 
-namespace _Wolframe {
-namespace db {
+using namespace _Wolframe;
+using namespace _Wolframe::db;
 
 //***  Oracle database functions  ***************************************
 static std::string escConnElement( std::string element )
@@ -89,10 +89,26 @@ static std::string buildConnStr( const std::string& host, unsigned short port, c
 	return ss.str( );
 }
 
+static void closeConnection( void* connptr )
+{
+	OracleConnection* conn = (OracleConnection*)connptr;
+
+	// intentionally ignoring errors here, we try hard to close everything
+	// and not to leave things leaking in the Oracle database
+	(void)OCISessionEnd( conn->svchp, conn->errhp, conn->authp, OCI_DEFAULT );
+	(void)OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
+	(void)OCIHandleFree( conn->transhp, OCI_HTYPE_TRANS );
+	(void)OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
+	(void)OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
+	(void)OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
+	(void)OCIHandleFree( conn->srvhp, OCI_HTYPE_SERVER );
+	delete conn;
+}
+
 OracleDatabase::OracleDatabase( const OracleConfig& config)
 	:m_ID(config.ID())
 	,m_connections(0)
-	,m_connPool(config.acquireTimeout())
+	,m_connPool( &closeConnection, config.acquireTimeout())
 {
 	init( config);
 }
@@ -103,7 +119,7 @@ OracleDatabase::OracleDatabase( const std::string& id_,
 			  size_t connections_, unsigned short acquireTimeout_)
 	:m_ID(id_)
 	,m_connections(0)
-	,m_connPool(acquireTimeout_)
+	,m_connPool( &closeConnection, acquireTimeout_)
 {
 	OracleConfig config( id_, host_, port_, dbName_, user_, password_,
 		connections_, acquireTimeout_);
@@ -268,7 +284,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		}
 		
 		// add connection to pool of connections
-		m_connPool.add( conn );
+		m_connPool.push( conn );
 		m_connections++;
 	}
 	LOG_DEBUG << "Oracle database '" << m_ID << "' created with a pool of " << m_connections << " connections";
@@ -276,45 +292,13 @@ void OracleDatabase::init( const OracleConfig& config)
 
 OracleDatabase::~OracleDatabase()
 {
-	size_t connections = 0;
-	bool hasErrors = false;
-
-	m_connPool.timeout( 3 );
-
-	while( m_connPool.available( ) ) {
-		OracleConnection *conn = m_connPool.get( );
-		if( conn == NULL ) {
-			hasErrors = true;
-		}
-
-		// intentionally ignoring errors here, we try hard to close everything
-		// and not to leave things leaking in the Oracle database
-		(void)OCISessionEnd( conn->svchp, conn->errhp, conn->authp, OCI_DEFAULT );
-		(void)OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
-		(void)OCIHandleFree( conn->transhp, OCI_HTYPE_TRANS );
-		(void)OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
-		(void)OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
-		(void)OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
-		(void)OCIHandleFree( conn->srvhp, OCI_HTYPE_SERVER );
-				
-		m_connections--, connections++;
-	}
-	
-	if( hasErrors ) {
-		LOG_ALERT << "Oracle database '" << m_ID << "' destructor: NULL connection from pool";
-		throw std::logic_error( "Oracle database destructor: NULL connection from pool" );
-	}
-
-	if ( m_connections != 0 )	{
-		LOG_ALERT << "Oracle database '" << m_ID << "' destructor: "
-			      << m_connections << " connections not destroyed";
-		throw std::logic_error( "Oracle database destructor: not all connections destroyed" );
-	}
-
+	m_connPool.clear();
 	(void)OCIHandleFree( (dvoid *)m_env.envhp, OCI_HTYPE_ENV );
-	
-	LOG_TRACE << "Oracle database '" << m_ID << "' destroyed, " << connections << " connections destroyed";
 }
 
-}} // _Wolframe::db
+Transaction* OracleDatabase::transaction( const std::string& name_)
+{
+	TransactionExecStatemachineR stm( new TransactionExecStatemachine_oracle( &m_env, this));
+	return new Transaction( name_, stm);
+}
 

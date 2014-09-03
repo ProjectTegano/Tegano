@@ -33,7 +33,7 @@
 /// \brief Processor provider implementation
 
 #include "procProviderImpl.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 #include "appdevel/module/runtimeEnvironmentConstructor.hpp"
 #include "appdevel/module/filterBuilder.hpp"
 #include "appdevel/module/ddlcompilerBuilder.hpp"
@@ -486,7 +486,7 @@ bool ProcessorProviderImpl::loadPrograms()
 	}
 }
 
-bool ProcessorProviderImpl::resolveDB( const db::DatabaseProvider& db )
+bool ProcessorProviderImpl::resolveDB( const db::DatabaseProviderInterface& db )
 {
 	bool rt = true;
 	if ( m_db == NULL && ! m_dbLabel.empty() )	{

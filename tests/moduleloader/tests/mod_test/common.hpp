@@ -35,7 +35,6 @@
 //
 
 #include "module/moduleInterface.hpp"
-#include "database/databaseProvider.hpp"
 
 namespace _Wolframe {
 namespace module {

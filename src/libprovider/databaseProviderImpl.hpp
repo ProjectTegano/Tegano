@@ -36,7 +36,7 @@
 #define _DATABASE_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
 #include "config/configurationBase.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 #include <vector>
 
 namespace _Wolframe {
@@ -44,7 +44,7 @@ namespace db {
 
 /// \brief Database provider implementation
 class DatabaseProviderImpl
-	:public DatabaseProvider
+	:public DatabaseProviderInterface
 	,private boost::noncopyable
 {
 public:

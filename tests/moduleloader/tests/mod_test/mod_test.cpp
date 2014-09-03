@@ -97,7 +97,7 @@ const std::string TestUnitImpl::hello( )
 	return "hello";
 }
 
-bool TestUnitImpl::resolveDB( const db::DatabaseProvider& /* db */ )
+bool TestUnitImpl::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 {
 	return true;
 }

@@ -75,7 +75,7 @@ public:
 	~DBauthorizer();
 	const char* className() const		{ return DB_AUTHORIZATION_CLASS_NAME; }
 
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	AuthorizationUnit::Result allowed( const Information& );
 private:

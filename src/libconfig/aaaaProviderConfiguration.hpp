@@ -43,13 +43,13 @@ namespace _Wolframe {
 namespace config {
 
 /// \brief Configuration for AAAA (Authentication, Authorization, Audit, Accounting)
-class AAAAproviderConfiguration
+class AaaaProviderConfiguration
 	:public config::ConfigurationBase
 {
 public:
 	/// x-structor
-	AAAAproviderConfiguration();
-	~AAAAproviderConfiguration();
+	AaaaProviderConfiguration();
+	~AaaaProviderConfiguration();
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,

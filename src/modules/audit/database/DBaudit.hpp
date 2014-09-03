@@ -75,7 +75,7 @@ public:
 	~DBauditor();
 	const char* className() const		{ return DB_AUDIT_CLASS_NAME; }
 
-	bool resolveDB( const db::DatabaseProvider& db );
+	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	bool required()				{ return m_required; }
 

@@ -33,7 +33,6 @@
 ///\file wolfilterCommandLine.cpp
 ///\brief Implementation of the options of a wolfilter call
 #include "wolfilterCommandLine.hpp"
-#include "database/databaseProvider.hpp"
 #include "filter/ptreefilter.hpp"
 #include "filter/tostringfilter.hpp"
 #include "module/moduleInterface.hpp"
@@ -320,7 +319,7 @@ WolfilterCommandLine::WolfilterCommandLine( int argc, char** argv, const std::st
 		throw std::runtime_error( "error in processor provider configuration");
 	}
 
-	m_aaaaProviderConfig.reset( new config::AAAAproviderConfiguration());
+	m_aaaaProviderConfig.reset( new config::AaaaProviderConfiguration());
 	types::PropertyTree::Node aacfg;
 	if (hasConfig)
 	{

@@ -40,7 +40,7 @@
 #include <string>
 
 #include "authorizer.hpp"
-#include "database/databaseProvider.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 namespace _Wolframe {
 namespace AAAA {
@@ -64,7 +64,7 @@ public:
 
 	const std::string& identifier() const	{ return m_identifier; }
 
-	virtual bool resolveDB( const db::DatabaseProvider& /*db*/ )
+	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
 						{ return true; }
 	virtual const char* className() const = 0;
 
