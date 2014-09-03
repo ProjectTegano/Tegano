@@ -37,7 +37,6 @@
 #ifndef _POSTGRESQL_HPP_INCLUDED
 #define _POSTGRESQL_HPP_INCLUDED
 
-#include "PostgreSQLTransactionExecStatemachine.hpp"
 #include "PostgreSQLConfig.hpp"
 #include "logger/logger-v1.hpp"
 #include <libpq-fe.h>
@@ -47,9 +46,7 @@
 #include "database/transaction.hpp"
 #include "PostgreSQLServerSettings.hpp"
 #include "module/constructor.hpp"
-#include "system/objectPool.hpp"
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
+#include "types/objectPool.hpp"
 
 #ifdef _WIN32
 #pragma warning(disable:4250)
@@ -91,11 +88,7 @@ public:
 	const std::string& ID() const		{ return m_ID; }
 	const char* className() const		{ return POSTGRESQL_DB_CLASS_NAME; }
 
-	Transaction* transaction( const std::string& name_)
-	{
-		TransactionExecStatemachineR stm( new TransactionExecStatemachine_postgres( this));
-		return new Transaction( name_, stm);
-	}
+	Transaction* transaction( const std::string& name_);
 
 	virtual const LanguageDescription* getLanguageDescription( ) const
 	{
@@ -103,9 +96,10 @@ public:
 		return &langdescr;
 	}
 
-	boost::shared_ptr<PGconn> newConnection()
+	typedef types::ObjectPool<PGconn>::ObjectRef Connection;
+	Connection newConnection()
 	{
-		return boost::shared_ptr<PGconn>( m_connPool.get(), boost::bind( ObjectPool<PGconn*>::static_add, &m_connPool, _1));
+		return m_connPool.get();
 	}
 
 	PostgreSQLServerSettings serverSettings() const
@@ -124,7 +118,7 @@ private:
 	std::string		m_connStr;		//< connection string
 	unsigned short		m_connections;		//< number of connections
 	PostgreSQLServerSettings m_serverSettings;	//< data like protocol settings, OIDs, etc. loaded at initialization from server
-	ObjectPool< PGconn* >	m_connPool;		//< pool of connections
+	types::ObjectPool<PGconn> m_connPool;		//< pool of connections
 };
 
 }} // _Wolframe::db

@@ -173,7 +173,6 @@ public:
 	ConnectionType type() const			{ return TCP; }
 };
 
-#ifdef WITH_SSL
 /// Local SSL connection endpoint
 class LocalSSLendpoint : public LocalEndpoint
 {
@@ -183,8 +182,6 @@ public:
 
 	ConnectionType type() const			{ return SSL; }
 };
-#endif // WITH_SSL
-
 
 /// \brief Remote connection endpoint
 class RemoteEndpoint : public ConnectionEndpoint
@@ -243,6 +240,5 @@ private:
 };
 #endif // WITH_SSL
 
-}} // namespace _Wolframe::net
-
-#endif // _CONNECTION_ENDPOINT_HPP_INCLUDED
+}}//namespace
+#endif

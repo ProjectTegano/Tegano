@@ -37,14 +37,11 @@
 #ifndef _SQLITE_HPP_INCLUDED
 #define _SQLITE_HPP_INCLUDED
 
-#include "SQLiteTransactionExecStatemachine.hpp"
 #include "SQLiteConfig.hpp"
 #include "database/database.hpp"
 #include "database/transaction.hpp"
-#include "database/transactionExecStatemachine.hpp"
-#include <list>
 #include <vector>
-#include "system/objectPool.hpp"
+#include "types/objectPool.hpp"
 #include "sqlite3.h"
 
 #ifdef _WIN32
@@ -65,7 +62,8 @@ struct SQLiteLanguageDescription :public LanguageDescriptionSQL
 	}
 };
 
-class SQLiteDatabase : public Database
+class SQLiteDatabase
+	:public Database
 {
 public:
 	SQLiteDatabase( const std::string& id_, const std::string& filename_,
@@ -78,11 +76,7 @@ public:
 	const std::string& ID() const		{ return m_ID; }
 	const char* className() const		{ return "SQLite"; }
 
-	Transaction* transaction( const std::string& name_)
-	{
-		TransactionExecStatemachineR stm( new TransactionExecStatemachine_sqlite3( this));
-		return new Transaction( name_, stm);
-	}
+	Transaction* transaction( const std::string& name_);
 
 	virtual const LanguageDescription* getLanguageDescription() const
 	{
@@ -90,9 +84,10 @@ public:
 		return &langdescr;
 	}
 
-	boost::shared_ptr<sqlite3> newConnection()
+	typedef types::ObjectPool<sqlite3>::ObjectRef Connection;
+	Connection newConnection()
 	{
-		return boost::shared_ptr<sqlite3>( m_connPool.get(), boost::bind( ObjectPool<sqlite3*>::static_add, &m_connPool, _1));
+		return m_connPool.get();
 	}
 
 private:
@@ -101,9 +96,8 @@ private:
 private:
 	const std::string	m_ID;
 	const std::string	m_filename;
-	std::list< sqlite3* >	m_connections;		///< list of DB connections
-	ObjectPool< sqlite3* >	m_connPool;		///< pool of connections
-	std::vector<std::string>m_extensionFiles;	///< Sqlite extensions
+	types::ObjectPool<sqlite3> m_connPool;		///< pool of connections
+	std::vector<std::string> m_extensionFiles;	///< Sqlite extensions
 };
 
 }} // _Wolframe::db

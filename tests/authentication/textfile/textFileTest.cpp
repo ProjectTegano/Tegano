@@ -221,7 +221,7 @@ TEST_F( AuthenticationFixture, nonexistentFile )
 
 
 static std::string usernameHash( const std::string& username,
-				 bool caseSensitive = Platform::Properties::username_default_casesensitive())
+				 bool caseSensitive = system::Platform::Properties::username_default_casesensitive())
 {
 	unsigned char salt[ PASSWORD_SALT_SIZE ];
 

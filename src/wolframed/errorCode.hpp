@@ -31,7 +31,7 @@
 
 ************************************************************************/
 /// \brief Error codes
-/// \file system/errorCode.hpp
+/// \file errorCode.hpp
 
 #ifndef _ERROR_CODES_HPP_INCLUDED
 #define _ERROR_CODES_HPP_INCLUDED

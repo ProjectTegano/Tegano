@@ -34,10 +34,10 @@
 ///\file PostgreSQLTransactionExecStatemachine.hpp
 #ifndef _DATABASE_POSTGRESQL_LIBPQ_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
 #define _DATABASE_POSTGRESQL_LIBPQ_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
+#include "PostgreSQL.hpp"
 #include "database/transactionExecStatemachine.hpp"
 #include "database/statement.hpp"
 #include "database/databaseError.hpp"
-#include "system/objectPool.hpp"
 #include <string>
 #include <vector>
 #include <cstdlib>
@@ -46,8 +46,6 @@
 
 namespace _Wolframe {
 namespace db {
-
-class PostgreSQLDatabase;
 
 ///\class TransactionExecStatemachine_postgres
 ///\brief Implementation of the standard database transaction execution statemechine for postgresql (libpq)
@@ -122,7 +120,7 @@ private:
 	std::size_t m_idx_row;
 	bool m_hasResult;
 	PostgreSQLDatabase* m_database;
-	boost::shared_ptr<PGconn> m_conn;	//< DB connection
+	PostgreSQLDatabase::Connection m_conn;	//< DB connection
 };
 
 }}//namespace

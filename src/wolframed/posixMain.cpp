@@ -50,7 +50,7 @@
 #include "libprovider/randomGeneratorImpl.hpp"
 
 #include "server.hpp"
-#include "system/errorCode.hpp"
+#include "errorCode.hpp"
 #include "logger/logger-v1.hpp"
 
 #include "system/connectionHandler.hpp"

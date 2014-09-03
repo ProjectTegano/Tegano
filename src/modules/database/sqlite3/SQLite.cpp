@@ -42,17 +42,24 @@
 #include <boost/filesystem.hpp>
 #include "sqlite3.h"
 
-namespace _Wolframe {
-namespace db {
+using namespace _Wolframe;
+using namespace _Wolframe::db;
 
 extern "C" void profiling_callback(  void * /*a*/, const char *b, sqlite3_uint64 c )
 {
 	LOG_DATA << b << " (time: " << c / 1000 << " ms)";
 }
 
+static void closeConnection( void* connptr )
+{
+	sqlite3* conn = (sqlite3*)connptr;
+	sqlite3_close( conn);
+}
+
 SQLiteDatabase::SQLiteDatabase( const SQLiteConfig& config)
 	:m_ID(config.ID())
 	,m_filename(config.filename())
+	,m_connPool( &closeConnection, 0/*no timeout - wait forever*/)
 	,m_extensionFiles(config.extensionFiles())
 {
 	init( config);
@@ -65,6 +72,7 @@ SQLiteDatabase::SQLiteDatabase(
 		const std::vector<std::string>& extensionFiles_ )
 	:m_ID(id_)
 	,m_filename(filename_)
+	,m_connPool( &closeConnection, 0/*no timeout - wait forever*/)
 	,m_extensionFiles(extensionFiles_)
 {
 	SQLiteConfig config( id_, filename_, foreignKeys_, profiling_, connections_, extensionFiles_);
@@ -165,8 +173,7 @@ void SQLiteDatabase::init( const SQLiteConfig& config)
 			}
 			LOG_DEBUG << "Extensions for SQLite database '" << m_ID << "' loaded";
 
-			m_connections.push_back( handle );
-			m_connPool.add( handle );
+			m_connPool.push( handle );
 		}
 	}
 	LOG_DEBUG << "SQLite database '" << m_ID << "' created with "
@@ -175,11 +182,12 @@ void SQLiteDatabase::init( const SQLiteConfig& config)
 
 SQLiteDatabase::~SQLiteDatabase()
 {
-	while( m_connPool.available( ) > 0 ) {
-		sqlite3 *handle = m_connPool.get( );
-		sqlite3_close( handle );
-	}
-	LOG_TRACE << "SQLite database '" << m_ID << "' destroyed";
+	LOG_TRACE << "SQLite database '" << m_ID << "' destructor called";
 }
 
-}} // _Wolframe::db
+Transaction* SQLiteDatabase::transaction( const std::string& name_)
+{
+	TransactionExecStatemachineR stm( new TransactionExecStatemachine_sqlite3( this));
+	return new Transaction( name_, stm);
+}
+

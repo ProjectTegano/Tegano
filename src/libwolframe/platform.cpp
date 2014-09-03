@@ -42,7 +42,8 @@
 #include <windows.h>
 #endif
 
-namespace _Wolframe {
+using namespace _Wolframe;
+using namespace _Wolframe::system;
 
 std::string Platform::toString( ) const
 {
@@ -147,7 +148,7 @@ Platform Platform::runtimePlatform( )
 	return p;
 }
 
-bool _Wolframe::Platform::Properties::username_default_casesensitive()
+bool Platform::Properties::username_default_casesensitive()
 {
 #ifndef _WIN32
 	return true;
@@ -155,6 +156,4 @@ bool _Wolframe::Platform::Properties::username_default_casesensitive()
 	return false;
 #endif
 }
-
-} // namespace _Wolframe
 

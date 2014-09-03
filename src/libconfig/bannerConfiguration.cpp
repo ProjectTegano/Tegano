@@ -165,7 +165,7 @@ std::string BannerConfiguration::toString() const
 			banner = "Wolframe " + _Wolframe::ApplicationInfo::instance().version().toString( "version %M.%m.%r.%b" );
 			break;
 		case PRODUCT_OS: {
-			Platform p = Platform::makePlatform( );
+			system::Platform p = system::Platform::makePlatform( );
 			banner = "Wolframe " + _Wolframe::ApplicationInfo::instance().version().toString( "version %M.%m.%r.%b" ) + " " + p.toString( );
 			}
 			break;

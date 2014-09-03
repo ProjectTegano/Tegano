@@ -34,17 +34,18 @@
 // Wolframe PostgreSQL client view implementation
 //
 
-#include "logger/logger-v1.hpp"
 #include "PostgreSQL.hpp"
-#include "utils/fileUtils.hpp"
 #include "PostgreSQLTransactionExecStatemachine.hpp"
+#include "utils/fileUtils.hpp"
+#include "logger/logger-v1.hpp"
 #include <string>
 #include <sstream>
+#include <libpq-fe.h>
 
 #include <boost/filesystem.hpp>
 
-namespace _Wolframe {
-namespace db {
+using namespace _Wolframe;
+using namespace db;
 
 //***  PostgreSQL database functions  ***************************************
 static std::string escConnElement( std::string element )
@@ -171,10 +172,37 @@ void PostgreSQLDatabase::noticeProcessor( void* this_void, const char * message)
 	LOG_ERROR << "Unknown log message type from PostgreSQL database '" << ((this_)?this_->ID():"") << "': " << message;
 }
 
+static void closeConnection( void* connptr )
+{
+	PGconn* conn = (PGconn*)connptr;
+	const char* connstate = "unknown";
+	PGTransactionStatusType stat = PQtransactionStatus( conn );
+	switch( stat )
+	{
+		case PQTRANS_IDLE:
+			connstate = "idle";
+			break;
+		case PQTRANS_ACTIVE:
+			connstate = "active";
+			break;
+		case PQTRANS_INTRANS:
+			connstate = "in transaction";
+			break;
+		case PQTRANS_INERROR:
+			connstate = "in transaction error";
+			break;
+		case PQTRANS_UNKNOWN:
+			connstate = "unknown";
+			break;
+	}
+	PQfinish( conn );
+	LOG_TRACE << "closed connection state " << connstate;
+}
+
 PostgreSQLDatabase::PostgreSQLDatabase( const PostgreSQLConfig& config)
 	:m_ID(config.ID())
 	,m_connections(0)
-	,m_connPool(config.acquireTimeout())
+	,m_connPool( &closeConnection, config.acquireTimeout())
 {
 	init( config);
 }
@@ -190,7 +218,7 @@ PostgreSQLDatabase::PostgreSQLDatabase( const std::string& id_,
 		  unsigned statementTimeout_)
 	:m_ID(id_)
 	,m_connections(0)
-	,m_connPool(acquireTimeout_)
+	,m_connPool( &closeConnection, acquireTimeout_)
 {
 	PostgreSQLConfig config( id_, host_, port_, dbName_, user_, password_,
 		sslMode_, sslCert_, sslKey_, sslRootCert_, sslCRL_,
@@ -283,64 +311,22 @@ void PostgreSQLDatabase::init( const PostgreSQLConfig& config)
 			PGresult* res = PQexec( conn, statement_timeout_s.str( ).c_str( ) );
 			PQclear( res);
 
-			m_connPool.add( conn );
+			m_connPool.push( conn );
 			m_connections++;
 		}
 	}
 	LOG_DEBUG << "PostgreSQL database '" << m_ID << "' created with a pool of " << m_connections << " connections";
 }
 
-
-// This function needs a lot of work and thinking...
 PostgreSQLDatabase::~PostgreSQLDatabase()
 {
-	size_t connections = 0;
-
-	m_connPool.timeout( 3 );
-
-	while ( m_connPool.available() )	{
-		PGconn* conn = m_connPool.get();
-		if ( conn == NULL )	{
-			LOG_ALERT << "PostgreSQL database '" << m_ID << "' destructor: NULL connection from pool";
-			throw std::logic_error( "PostgreSQL database destructor: NULL connection from pool" );
-		}
-		PGTransactionStatusType stat = PQtransactionStatus( conn );
-		switch( stat )	{
-			case PQTRANS_IDLE:
-				PQfinish( conn );
-				LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor: Connection " << connections << " idle";
-				m_connections--, connections++;
-				break;
-			case PQTRANS_ACTIVE:
-				PQfinish( conn );
-				LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor: Connection " << connections << " active";
-				m_connections--, connections++;
-				break;
-			case PQTRANS_INTRANS:
-				PQfinish( conn );
-				LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor: Connection " << connections << " in transaction";
-				m_connections--, connections++;
-				break;
-			case PQTRANS_INERROR:
-				PQfinish( conn );
-				LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor: Connection " << connections << " in transaction error";
-				m_connections--, connections++;
-				break;
-			case PQTRANS_UNKNOWN:
-				PQfinish( conn );
-				LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor: Connection " << connections << " status unknown";
-				m_connections--, connections++;
-				break;
-		}
-	}
-	if ( m_connections != 0 )	{
-		LOG_ALERT << "PostgreSQL database '" << m_ID << "' destructor: "
-			      << m_connections << " connections not destroyed";
-		throw std::logic_error( "PostgreSQL database destructor: not all connections destroyed" );
-	}
-	LOG_TRACE << "PostgreSQL database '" << m_ID << "' destroyed, " << connections << " connections destroyed";
-	LOG_TRACE << "PostgreSQL database '" << m_ID << "' destroyed, " << connections << " connections destroyed";
+	LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor called";
 }
 
-}} // _Wolframe::db
+Transaction* PostgreSQLDatabase::transaction( const std::string& name_)
+{
+	TransactionExecStatemachineR stm( new TransactionExecStatemachine_postgres( this));
+	return new Transaction( name_, stm);
+}
+
 

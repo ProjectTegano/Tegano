@@ -31,7 +31,7 @@
 
 ************************************************************************/
 /// \file system/platform.hpp
-/// \brief Header file for the Platform class
+/// \brief Platform properties
 
 #ifndef _PLATFORM_HPP_INCLUDED
 #define _PLATFORM_HPP_INCLUDED
@@ -39,8 +39,9 @@
 #include <string>
 
 namespace _Wolframe {
+namespace system {
 
-/// platform class
+/// \brief Platform properties
 class Platform {
 private:
 	std::string	m_os;			///< Operating system
@@ -97,6 +98,5 @@ public:
 	static Platform runtimePlatform( );
 };
 
-} // namespace _Wolframe
-
-#endif // _PLATFORM_HPP_INCLUDED
+}}// namespace
+#endif

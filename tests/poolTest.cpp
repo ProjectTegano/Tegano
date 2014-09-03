@@ -38,13 +38,15 @@
 #include <cassert>
 #include <boost/thread/thread.hpp>
 
-#include "system/objectPool.hpp"
+#include "types/objectPool.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 
-class testObject	{
+using namespace _Wolframe;
+
+class TestObject	{
 public:
-	testObject()		{ m_threads = 0, m_uses = 0; }
+	TestObject()		{ m_threads = 0, m_uses = 0; }
 	void doSomething()	{
 		assert( m_threads == 0 );
 		m_threads++, m_uses++;
@@ -70,7 +72,7 @@ private:
 };
 
 
-// The fixture for testing Wolframe::ObjectPool template
+// The fixture for testing Wolframe::types::ObjectPool template
 class ObjectPoolFixture : public ::testing::Test	{
 protected:
 	// Set-up work for each test here.
@@ -92,55 +94,59 @@ protected:
 	// before each test).
 	virtual void SetUp() {
 		for ( unsigned long i = 0; i < poolSize; i++ )	{
-			testObject *tstObj = new testObject();
-			tstObjs.push_back( tstObj );
-			objPool.add( tstObj );
+			TestObject *tstObj = new TestObject();
+			objPool.push( tstObj );
 		}
 	}
 
 	// Code here will be called immediately after each test (right
 	// before the destructor).
-	virtual void TearDown() {
-		if ( ! emptyPool )
-			for ( unsigned long i = 0; i < poolSize; i++ )
-				objPool.get();
-		for ( unsigned long i = 0; i < poolSize; i++ )
-			delete tstObjs[i];
+	virtual void TearDown()
+	{}
+
+	typedef std::vector<types::ObjectPool<TestObject>::ObjectRef> ObjectList;
+	ObjectList objects()
+	{
+		ObjectList rt;
+		while (objPool.size())
+		{
+			rt.push_back( objPool.get());
+		}
+		return rt;
 	}
 
 	// Objects declared here can be used by all tests in the test case.
 	int					noThreads;
 	std::vector< boost::thread* >		threads;
-	std::vector< testObject* >		tstObjs;
-	_Wolframe::ObjectPool< testObject* >	objPool;
+	types::ObjectPool<TestObject>		objPool;
 	unsigned				poolSize;
 	unsigned long				times;
 	bool					emptyPool;
 
 public:
-	static void testThread( _Wolframe::ObjectPool< testObject* > *pool, unsigned count )
+	static void testThread( types::ObjectPool<TestObject> *pool, unsigned count )
 	{
 		for ( std::size_t i = 0; i < count; )	{
 			try	{
-				boost::shared_ptr<testObject> tstObj( pool->get(), boost::bind( _Wolframe::ObjectPool<testObject*>::static_add, pool, _1) );
+				types::ObjectPool<TestObject>::ObjectRef tstObj = pool->get();
 				tstObj->doSomething();
 				i++;
 			}
-			catch ( _Wolframe::ObjectPoolTimeout )
+			catch ( types::ObjectPoolTimeoutException )
 			{
 			}
 		}
 	}
 
-	static void sleepTestThread( _Wolframe::ObjectPool< testObject* > *pool, unsigned count )
+	static void sleepTestThread( types::ObjectPool<TestObject> *pool, unsigned count )
 	{
 		for ( std::size_t i = 0; i < count; )	{
 			try	{
-				boost::shared_ptr<testObject> tstObj( pool->get(), boost::bind( _Wolframe::ObjectPool<testObject*>::static_add, pool, _1) );
+				types::ObjectPool<TestObject>::ObjectRef tstObj = pool->get();
 				tstObj->sleepSomething();
 				i++;
 			}
-			catch ( _Wolframe::ObjectPoolTimeout )
+			catch ( types::ObjectPoolTimeoutException )
 			{
 			}
 		}
@@ -151,11 +157,6 @@ public:
 
 // Tests the ObjectPool get & release
 TEST_F( ObjectPoolFixture, noTimeout )	{
-	for ( unsigned long i = 0; i < poolSize; i++ )	{
-		ASSERT_EQ( tstObjs[i]->used(), 0u );
-		ASSERT_EQ( tstObjs[i]->threads(), 0 );
-	}
-
 	for ( int i = 0; i < noThreads; i++ )   {
 		boost::thread* thread = new boost::thread( &ObjectPoolFixture::testThread, &objPool, times );
 		threads.push_back( thread );
@@ -164,6 +165,8 @@ TEST_F( ObjectPoolFixture, noTimeout )	{
 		threads[i]->join();
 		delete threads[i];
 	}
+	ASSERT_EQ( objPool.size(), poolSize );
+	ObjectList tstObjs = objects();
 
 	unsigned long used = 0;
 	for ( unsigned long i = 0; i < poolSize; i++ )	{
@@ -178,11 +181,6 @@ TEST_F( ObjectPoolFixture, noTimeout )	{
 }
 
 TEST_F( ObjectPoolFixture, noTimeoutSleep )	{
-	for ( unsigned long i = 0; i < poolSize; i++ )	{
-		ASSERT_EQ( tstObjs[i]->used(), 0u );
-		ASSERT_EQ( tstObjs[i]->threads(), 0 );
-	}
-
 	for ( int i = 0; i < noThreads; i++ )   {
 		boost::thread* thread = new boost::thread( &ObjectPoolFixture::sleepTestThread, &objPool, times );
 		threads.push_back( thread );
@@ -191,6 +189,8 @@ TEST_F( ObjectPoolFixture, noTimeoutSleep )	{
 		threads[i]->join();
 		delete threads[i];
 	}
+	ASSERT_EQ( objPool.size(), poolSize );
+	ObjectList tstObjs = objects();
 
 	unsigned long used = 0;
 	for ( unsigned long i = 0; i < poolSize; i++ )	{
@@ -205,12 +205,7 @@ TEST_F( ObjectPoolFixture, noTimeoutSleep )	{
 }
 
 TEST_F( ObjectPoolFixture, Timeout )	{
-	objPool.timeout( 1 );
-	for ( unsigned long i = 0; i < poolSize; i++ )	{
-		ASSERT_EQ( tstObjs[i]->used(), 0u );
-		ASSERT_EQ( tstObjs[i]->threads(), 0 );
-	}
-
+	objPool.setTimeout( 1 );
 	for ( int i = 0; i < noThreads; i++ )   {
 		boost::thread* thread = new boost::thread( &ObjectPoolFixture::testThread, &objPool, times );
 		threads.push_back( thread );
@@ -219,6 +214,9 @@ TEST_F( ObjectPoolFixture, Timeout )	{
 		threads[i]->join();
 		delete threads[i];
 	}
+
+	ASSERT_EQ( objPool.size(), poolSize );
+	ObjectList tstObjs = objects();
 
 	unsigned long used = 0;
 	for ( unsigned long i = 0; i < poolSize; i++ )	{
@@ -233,12 +231,7 @@ TEST_F( ObjectPoolFixture, Timeout )	{
 }
 
 TEST_F( ObjectPoolFixture, TimeoutSleep )	{
-	objPool.timeout( 1 );
-	for ( unsigned long i = 0; i < poolSize; i++ )	{
-		ASSERT_EQ( tstObjs[i]->used(), 0u );
-		ASSERT_EQ( tstObjs[i]->threads(), 0 );
-	}
-
+	objPool.setTimeout( 1 );
 	for ( int i = 0; i < noThreads; i++ )   {
 		boost::thread* thread = new boost::thread( &ObjectPoolFixture::sleepTestThread, &objPool, times );
 		threads.push_back( thread );
@@ -247,6 +240,9 @@ TEST_F( ObjectPoolFixture, TimeoutSleep )	{
 		threads[i]->join();
 		delete threads[i];
 	}
+
+	ASSERT_EQ( objPool.size(), poolSize );
+	ObjectList tstObjs = objects();
 
 	unsigned long used = 0;
 	for ( unsigned long i = 0; i < poolSize; i++ )	{
@@ -261,11 +257,15 @@ TEST_F( ObjectPoolFixture, TimeoutSleep )	{
 }
 
 TEST_F( ObjectPoolFixture, TestTimeout )	{
-	objPool.timeout( 1 );
+	objPool.setTimeout( 1 );
+
+	std::vector<types::ObjectPool<TestObject>::ObjectRef> ar;
 
 	for ( unsigned long i = 0; i < poolSize; i++ )
-		objPool.get();
-	ASSERT_THROW( objPool.get(), _Wolframe::ObjectPoolTimeout );
+	{
+		ar.push_back( objPool.get());
+	}
+	ASSERT_THROW( objPool.get(), types::ObjectPoolTimeoutException );
 	emptyPool = true;
 }
 

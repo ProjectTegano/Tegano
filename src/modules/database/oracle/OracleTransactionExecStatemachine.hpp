@@ -37,7 +37,7 @@
 #include "database/transactionExecStatemachine.hpp"
 #include "database/statement.hpp"
 #include "database/databaseError.hpp"
-#include "system/objectPool.hpp"
+#include "types/objectPool.hpp"
 #include <string>
 #include <vector>
 #include <cstdlib>

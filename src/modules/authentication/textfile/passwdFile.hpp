@@ -68,7 +68,7 @@ public:
 	///\param create	flag, create the file if it doesn't exist.
 	///			this flag is set only in the password utility
 	PasswordFile( const std::string& file, bool create = false,
-		      bool caseSensitive = Platform::Properties::username_default_casesensitive())
+		      bool caseSensitive = system::Platform::Properties::username_default_casesensitive())
 		: m_filename( file ), m_create( create ),
 		  m_caseSensitive( caseSensitive )		{}
 

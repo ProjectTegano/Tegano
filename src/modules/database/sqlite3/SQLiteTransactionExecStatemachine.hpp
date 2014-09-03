@@ -34,9 +34,9 @@
 ///\file SQLiteTransactionExecStatemachine.hpp
 #ifndef _DATABASE_SQLITE3_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
 #define _DATABASE_SQLITE3_TRANSACTION_EXECUTION_STATEMACHINE_HPP_INCLUDED
+#include "SQLite.hpp"
 #include "database/transactionExecStatemachine.hpp"
 #include "database/statement.hpp"
-#include "system/objectPool.hpp"
 #include <string>
 #include <map>
 #include <cstdlib>
@@ -124,7 +124,7 @@ private:
 	boost::shared_ptr<db::DatabaseError> m_lasterror;	//< last error occurred
 	sqlite3_stmt* m_stm;					//< current statement
 	SQLiteDatabase* m_database;				//< database
-	boost::shared_ptr<sqlite3> m_conn;			//< database connection
+	SQLiteDatabase::Connection m_conn;			//< database connection
 	Statement *m_statement;					//< the statement parser
 };
 

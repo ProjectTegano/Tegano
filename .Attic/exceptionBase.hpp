@@ -40,7 +40,7 @@
 #include <string>
 #include <exception>
 
-#include "system/errorCode.hpp"
+#include "errorCode.hpp"
 
 namespace _Wolframe {
 

@@ -41,6 +41,7 @@
 #include <iostream>
 
 using namespace _Wolframe;
+using namespace _Wolframe::system;
 
 // The fixture for testing class Wolframe::Platform
 class PlatformFixture : public ::testing::Test	{
