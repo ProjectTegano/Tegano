@@ -31,16 +31,16 @@
 
 ************************************************************************/
 /// \brief Interface for loading programs written in a DDL to describe forms
-/// \file prgbind/ddlProgram.hpp
+/// \file ddlProgram.hpp
 
-#ifndef _PRGBIND_DDL_PROGRAM_HPP_INCLUDED
-#define _PRGBIND_DDL_PROGRAM_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#ifndef _Wolframe_proc_DDL_PROGRAM_HPP_INCLUDED
+#define _Wolframe_proc_DDL_PROGRAM_HPP_INCLUDED
+#include "processor/program.hpp"
 #include "langbind/ddlCompilerInterface.hpp"
 #include <string>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class DDLProgram
 /// \brief Program type for a data definition language (DDL) for forms.

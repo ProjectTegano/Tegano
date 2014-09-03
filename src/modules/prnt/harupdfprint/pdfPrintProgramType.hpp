@@ -33,9 +33,9 @@
 ///\brief Program type for printing with simplePDF based on libhpdf (haru)
 ///\file pdfPrintProgramType.hpp
 
-#ifndef _PRGBIND_SIMPLE_PDF_PROGRAM_TYPE_HPP_INCLUDED
-#define _PRGBIND_SIMPLE_PDF_PROGRAM_TYPE_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#ifndef _Wolframe_proc_SIMPLE_PDF_PROGRAM_TYPE_HPP_INCLUDED
+#define _Wolframe_proc_SIMPLE_PDF_PROGRAM_TYPE_HPP_INCLUDED
+#include "processor/program.hpp"
 #include "pdfPrinterDocument.hpp"
 #include <string>
 #include <boost/shared_ptr.hpp>
@@ -46,7 +46,7 @@ namespace prnt {
 ///\class SimplePdfPrintProgram
 ///\brief Program type for printing with simplePDF
 class SimplePdfPrintProgram
-	:public prgbind::Program
+	:public proc::Program
 {
 public:
 	SimplePdfPrintProgram( prnt::CreateDocumentFunc createDocument_)
@@ -55,7 +55,7 @@ public:
 	virtual ~SimplePdfPrintProgram(){}
 
 	virtual bool is_mine( const std::string& filename) const;
-	virtual void loadProgram( prgbind::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	virtual void loadProgram( proc::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
 
 private:
 	prnt::CreateDocumentFunc m_createDocument;

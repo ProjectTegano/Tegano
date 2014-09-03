@@ -33,14 +33,14 @@
 /// \file aaMapProgram.hpp
 /// \brief Interface of the AaMap program type
 
-#ifndef _Wolframe_PRGBIND_AAMAP_PROGRAM_HPP_INCLUDED
-#define _Wolframe_PRGBIND_AAMAP_PROGRAM_HPP_INCLUDED
-#include "prgbind/program.hpp"
-#include "prgbind/programLibrary.hpp"
+#ifndef _Wolframe_proc_AAMAP_PROGRAM_HPP_INCLUDED
+#define _Wolframe_proc_AAMAP_PROGRAM_HPP_INCLUDED
+#include "processor/program.hpp"
+#include "processor/programLibrary.hpp"
 #include <string>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class AaMapProgram
 /// \brief Program type for AaMap function descriptions.

@@ -33,7 +33,7 @@ Project Wolframe.
 /// \brief Interface template for object builder of arbitrary program types implementing form functions
 #ifndef _Wolframe_MODULE_PROGRAM_TYPE_BUILDER_TEMPLATE_HPP_INCLUDED
 #define _Wolframe_MODULE_PROGRAM_TYPE_BUILDER_TEMPLATE_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#include "processor/program.hpp"
 #include "module/moduleInterface.hpp"
 #include "module/constructor.hpp"
 #include <boost/shared_ptr.hpp>
@@ -41,11 +41,11 @@ Project Wolframe.
 namespace _Wolframe {
 namespace module {
 
-typedef prgbind::Program* (*CreateProgramType)();
+typedef proc::Program* (*CreateProgramType)();
 
 /// \class ProgramTypeConstructor
 /// \brief Constructor of a program type of the program library
-class ProgramTypeConstructor :public SimpleObjectConstructor< prgbind::Program >
+class ProgramTypeConstructor :public SimpleObjectConstructor< proc::Program >
 {
 public:
 	ProgramTypeConstructor( const char* classname_, const char* name_, CreateProgramType createFunc_ )
@@ -67,7 +67,7 @@ public:
 	{
 		return m_name.c_str();
 	}
-	virtual prgbind::Program* object() const
+	virtual proc::Program* object() const
 	{
 		return m_createFunc();
 	}

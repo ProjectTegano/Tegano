@@ -37,8 +37,8 @@
 #include "appConfig.hpp"
 #include "handlerConfig.hpp"
 #include "module/moduleDirectory.hpp"
-#include "prgbind/programLibrary.hpp"
 #include "config/configurationTree.hpp"
+#include "processor/programLibrary.hpp"
 #include "processor/procProvider.hpp"
 #include "wtest/testHandlerTemplates.hpp"
 #include "utils/fileUtils.hpp"
@@ -108,7 +108,7 @@ static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const 
 	return rt;
 }
 
-static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const boost::shared_ptr<proc::ProcProviderConfig>& cfg, prgbind::ProgramLibrary* prglib)
+static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const boost::shared_ptr<proc::ProcProviderConfig>& cfg, proc::ProgramLibrary* prglib)
 {
 	boost::shared_ptr<proc::ProcessorProvider> rt( new proc::ProcessorProvider( cfg.get(), g_moduleDirectory, prglib));
 	rt->loadPrograms();
@@ -255,7 +255,7 @@ TEST_F( IProcHandlerXMLTest, tests)
 			std::string testoutput;
 			boost::filesystem::path scriptpath = g_testdir / "scripts" / testDescriptions[ti].scriptfile;
 
-			prgbind::ProgramLibrary prglib;
+			proc::ProgramLibrary prglib;
 			IProcTestConfiguration config( scriptpath, ib[ii]+EoDBufferSize, ob[oo]);
 
 			boost::shared_ptr<proc::ProcessorProvider>

@@ -30,12 +30,12 @@
  Project Wolframe.
 
 ************************************************************************/
-//\brief Implements the list of all initially defined program types
-//\file programLibrary.cpp
+/// \brief Implements the list of all initially defined program types
+/// \file libprovider/programLibraryImpl.cpp
 
 #include "types/customDataNormalizer.hpp"
-#include "prgbind/programLibrary.hpp"
-#include "prgbind/program.hpp"
+#include "processor/programLibrary.hpp"
+#include "processor/program.hpp"
 #include "programLibraryImpl.hpp"
 #include "ddlProgram.hpp"
 #include "normalizeProgram.hpp"
@@ -48,7 +48,7 @@
 #include <algorithm>
 
 using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+using namespace _Wolframe::proc;
 
 ProgramLibraryImpl::~ProgramLibraryImpl(){}
 ProgramLibraryImpl::ProgramLibraryImpl()

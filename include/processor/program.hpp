@@ -31,10 +31,10 @@
 
 ************************************************************************/
 /// \brief Interface for programs loaded by the processor provider
-/// \file prgbind/program.hpp
+/// \file processor/program.hpp
 
-#ifndef _PRGBIND_PROGRAM_HPP_INCLUDED
-#define _PRGBIND_PROGRAM_HPP_INCLUDED
+#ifndef _Wolframe_proc_PROGRAM_HPP_INCLUDED
+#define _Wolframe_proc_PROGRAM_HPP_INCLUDED
 #include <string>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -44,7 +44,7 @@ namespace db {
 	/// \brief Forward declaration
 	class Database;
 }
-namespace prgbind {
+namespace proc {
 
 /// \brief Forward declaration
 class ProgramLibrary;

@@ -31,7 +31,7 @@
 
 ************************************************************************/
 ///\brief Program mapping wolframe elements to output (code generation)
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include "wolframe.hpp"
 #include "wolfwizardCommandLine.hpp"
 #include "module/moduleInterface.hpp"
@@ -293,7 +293,7 @@ static void printFormXML( std::ostream& out, const types::Form& form)
 	out << "</form>" << std::endl;
 }
 
-static void printWizardXML( std::ostream& out, const prgbind::ProgramLibrary& programLibrary)
+static void printWizardXML( std::ostream& out, const proc::ProgramLibrary& programLibrary)
 {
 	out << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" << std::endl;
 	out << "<!DOCTYPE forms SYSTEM \"Wolfwizard.simpleform\">" << std::endl;
@@ -343,7 +343,7 @@ int main( int argc, char **argv )
 			throw std::runtime_error( "error in command line. failed to setup a valid processor provider configuration");
 		}
 
-		prgbind::ProgramLibraryImpl* programLibrary = new prgbind::ProgramLibraryImpl();
+		proc::ProgramLibraryImpl* programLibrary = new proc::ProgramLibraryImpl();
 		proc::ProcessorProviderImpl* processorProvider = new proc::ProcessorProviderImpl( providerconf.dbLabel(), providerconf.procConfig(), providerconf.programFiles(), providerconf.referencePath(), &cmdline.moduleDirectory());
 
 		if (!processorProvider->loadPrograms())

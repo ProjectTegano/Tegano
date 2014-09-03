@@ -37,9 +37,9 @@
 #include "system/connectionHandler.hpp"
 #include "appConfig.hpp"
 #include "handlerConfig.hpp"
-#include "processor/procProvider.hpp"
 #include "module/moduleDirectory.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/procProvider.hpp"
+#include "processor/programLibrary.hpp"
 #include "config/configurationTree.hpp"
 #include "wtest/testHandlerTemplates.hpp"
 #include "testUtils.hpp"
@@ -110,7 +110,7 @@ static boost::shared_ptr<proc::ProcProviderConfig> getProcProviderConfig( const 
 	return rt;
 }
 
-static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const boost::shared_ptr<proc::ProcProviderConfig>& cfg, prgbind::ProgramLibrary* prglib)
+static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const boost::shared_ptr<proc::ProcProviderConfig>& cfg, proc::ProgramLibrary* prglib)
 {
 	boost::shared_ptr<proc::ProcessorProvider>  rt( new proc::ProcessorProvider( cfg.get(), g_modulesDirectory, prglib));
 	rt->loadPrograms();	
@@ -154,7 +154,7 @@ public:
 		return m_providerConfig;
 	}
 
-	prgbind::ProgramLibrary* prglib()
+	proc::ProgramLibrary* prglib()
 	{
 		return &m_prglib;
 	}
@@ -162,7 +162,7 @@ public:
 private:
 	config::ApplicationConfiguration m_appConfig;
 	boost::shared_ptr<proc::ProcProviderConfig> m_providerConfig;
-	prgbind::ProgramLibrary m_prglib;
+	proc::ProgramLibrary m_prglib;
 };
 
 static const char* getRandomAsciiString( unsigned int maxStringSize=4096)

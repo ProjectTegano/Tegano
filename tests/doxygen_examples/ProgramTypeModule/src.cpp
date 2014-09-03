@@ -2,11 +2,11 @@
 #include "appdevel/moduleFrameMacros.hpp"
 
 class MyProgram
-	:public _Wolframe::prgbind::Program
+	:public _Wolframe::proc::Program
 {
 public:
 	MyProgram()
-		:_Wolframe::prgbind::Program( SuperFunction){}
+		:_Wolframe::proc::Program( SuperFunction){}
 
 	virtual bool is_mine( const std::string& /*filename*/) const
 	{
@@ -14,7 +14,7 @@ public:
 		return false;
 	}
 
-	virtual void loadProgram( _Wolframe::prgbind::ProgramLibrary& /*library*/, _Wolframe::db::Database* /*transactionDB*/, const std::string& /*filename*/)
+	virtual void loadProgram( _Wolframe::proc::ProgramLibrary& /*library*/, _Wolframe::db::Database* /*transactionDB*/, const std::string& /*filename*/)
 	{
 		// ... load the program in the file filename and store its declared items in the program library or in the database
 	}

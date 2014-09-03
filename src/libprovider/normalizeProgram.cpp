@@ -31,7 +31,7 @@
 
 ************************************************************************/
 //\brief Implementation of loading programs for token normalization
-//\file prgbind_normalizeProgram.cpp
+//\file normalizeProgram.cpp
 #include "normalizeProgram.hpp"
 #include "types/customDataNormalizer.hpp"
 #include "types/normalizeFunction.hpp"
@@ -45,7 +45,7 @@
 #include <string>
 
 using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+using namespace _Wolframe::proc;
 
 static types::NormalizeFunctionR createBaseFunction( const std::string& name, const std::vector<types::Variant>& arg, const ProgramLibrary& prglibrary)
 {

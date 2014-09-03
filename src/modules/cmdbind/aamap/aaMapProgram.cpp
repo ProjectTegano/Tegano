@@ -49,7 +49,7 @@ Project Wolframe.
 #include <boost/shared_ptr.hpp>
 
 using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+using namespace _Wolframe::proc;
 
 namespace
 {

@@ -33,7 +33,7 @@ Project Wolframe.
 ///\brief Function to create a form function program type object for python scripts
 #ifndef _Wolframe_python_FUNCTION_PROGRAM_TYPE_HPP_INCLUDED
 #define _Wolframe_python_FUNCTION_PROGRAM_TYPE_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#include "processor/program.hpp"
 #include "pythonInterpreter.hpp"
 
 namespace _Wolframe {
@@ -42,17 +42,17 @@ namespace langbind {
 ///\class PythonProgramType
 ///\brief Program type of python programs
 class PythonProgramType
-	:public prgbind::Program
+	:public proc::Program
 {
 public:
 	PythonProgramType()
-		:prgbind::Program( prgbind::Program::Function){}
+		:proc::Program( proc::Program::Function){}
 
 	virtual ~PythonProgramType(){}
 
 	virtual bool is_mine( const std::string& filename) const;
 
-	virtual void loadProgram( prgbind::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	virtual void loadProgram( proc::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
 
 private:
 	python::Interpreter m_interpreter;

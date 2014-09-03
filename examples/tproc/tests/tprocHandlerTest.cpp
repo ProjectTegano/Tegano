@@ -41,7 +41,7 @@
 #include "wtest/testReport.hpp"
 #include "wtest/testDescription.hpp"
 #include "module/moduleDirectory.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include "config/configurationTree.hpp"
 #include "processor/procProvider.hpp"
 #include "wtest/testHandlerTemplates.hpp"
@@ -71,7 +71,7 @@ static boost::filesystem::path g_testdir;
 static module::ModuleDirectory* g_moduleDirectory = 0;
 static boost::filesystem::path g_referencePath;
 
-static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const proc::ProcProviderConfig* cfg, prgbind::ProgramLibrary* prglib)
+static boost::shared_ptr<proc::ProcessorProvider> getProcProvider( const proc::ProcProviderConfig* cfg, proc::ProgramLibrary* prglib)
 {
 	boost::shared_ptr<proc::ProcessorProvider>  rt( new proc::ProcessorProvider( cfg, g_moduleDirectory, prglib));
 	rt->loadPrograms();
@@ -158,7 +158,7 @@ private:
 	net::LocalEndpointR ep;
 	tproc::Connection* m_connection;
 	boost::shared_ptr<proc::ProcessorProvider> m_provider;
-	prgbind::ProgramLibrary m_prglib;
+	proc::ProgramLibrary m_prglib;
 	TestConfiguration* m_config;
 	std::string m_input;
 	std::string m_output;

@@ -43,10 +43,7 @@ namespace _Wolframe {
 	/// Network and connection handling
 	namespace net {}
 
-	/// Interfaces to programs and the program library
-	namespace prgbind {}
-
-	/// Processor provider and execution context
+	/// Programs, processor provider and execution context
 	namespace proc {}
 
 	/// Helper classes for implementing the protocol and handling buffers

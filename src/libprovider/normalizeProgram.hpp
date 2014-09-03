@@ -31,16 +31,16 @@
 
 ************************************************************************/
 /// \brief Interface for loading programs for token normalization
-/// \file prgbind/normalizeProgram.hpp
+/// \file normalizeProgram.hpp
 
-#ifndef _PRGBIND_NORMALIZE_PROGRAM_HPP_INCLUDED
-#define _PRGBIND_NORMALIZE_PROGRAM_HPP_INCLUDED
-#include "prgbind/program.hpp"
-#include "prgbind/programLibrary.hpp"
+#ifndef _Wolframe_proc_NORMALIZE_PROGRAM_HPP_INCLUDED
+#define _Wolframe_proc_NORMALIZE_PROGRAM_HPP_INCLUDED
+#include "processor/program.hpp"
+#include "processor/programLibrary.hpp"
 #include <string>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class NormalizeProgram
 /// \brief Program type for normalizer functions (.wnmp files) used for atomic types in form data description languages.

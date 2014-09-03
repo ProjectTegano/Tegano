@@ -39,7 +39,6 @@
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"
 #include "libprovider/AAAAproviderImpl.hpp"
-#include "prgbind/programLibrary.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
 

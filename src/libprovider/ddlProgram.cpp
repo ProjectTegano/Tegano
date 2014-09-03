@@ -30,17 +30,17 @@
  Project Wolframe.
 
 ************************************************************************/
-///\brief Implementation of programs for definition of forms in a DDL
-///\file prgbind_ddlProgram.cpp
+/// \brief Implementation of programs for definition of forms in a DDL
+/// \file ddlProgram.cpp
 
 #include "ddlProgram.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include "utils/fileUtils.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 
 using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+using namespace _Wolframe::proc;
 
 
 bool DDLProgram::is_mine( const std::string& filename) const

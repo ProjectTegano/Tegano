@@ -33,7 +33,7 @@ Project Wolframe.
 ///\brief Function to create a form function program type object for mylang scripts
 #ifndef _Wolframe_Mylang_FUNCTION_PROGRAM_TYPE_HPP_INCLUDED
 #define _Wolframe_Mylang_FUNCTION_PROGRAM_TYPE_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#include "processor/program.hpp"
 #include "mylangInterpreter.hpp"
 
 namespace _Wolframe {
@@ -42,17 +42,17 @@ namespace langbind {
 ///\class MylangProgramType
 ///\brief Program type of mylang programs
 class MylangProgramType
-	:public prgbind::Program
+	:public proc::Program
 {
 public:
 	MylangProgramType()
-		:prgbind::Program( prgbind::Program::Function){}
+		:proc::Program( proc::Program::Function){}
 
 	virtual ~MylangProgramType(){}
 
 	virtual bool is_mine( const std::string& filename) const;
 
-	virtual void loadProgram( prgbind::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename);
+	virtual void loadProgram( proc::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename);
 
 private:
 	mylang::Interpreter m_interpreter;

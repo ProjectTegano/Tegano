@@ -75,7 +75,7 @@ private:
 	const std::string		m_banner;
 	db::DatabaseProviderImpl	m_db;
 	AAAA::AAAAproviderImpl		m_aaaa;
-	prgbind::ProgramLibraryImpl	m_prglib;
+	proc::ProgramLibraryImpl	m_prglib;
 	proc::ProcessorProviderImpl	m_proc;
 	system::RandomGenerator*	m_randomGenerator;
 };

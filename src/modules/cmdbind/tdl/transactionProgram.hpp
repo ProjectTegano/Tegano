@@ -31,15 +31,15 @@
 
 ************************************************************************/
 /// \brief Interface for loading programs in the transaction definition language
-/// \file prgbind/transactionProgram.hpp
+/// \file transactionProgram.hpp
 
-#ifndef _PRGBIND_TRANSACTION_DEFINITION_PROGRAM_HPP_INCLUDED
-#define _PRGBIND_TRANSACTION_DEFINITION_PROGRAM_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#ifndef _Wolframe_proc_TRANSACTION_DEFINITION_PROGRAM_HPP_INCLUDED
+#define _Wolframe_proc_TRANSACTION_DEFINITION_PROGRAM_HPP_INCLUDED
+#include "processor/program.hpp"
 #include <string>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class TransactionDefinitionProgram
 /// \brief Program type for the transaction definition language (TDL)

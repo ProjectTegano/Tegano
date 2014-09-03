@@ -31,7 +31,7 @@
 
 ************************************************************************/
 /// \brief Program library interface
-/// \file programLibrary.hpp
+/// \file processor/programLibrary.hpp
 
 #ifndef _PRGBIND_PROGRAM_LIBRARY_INTERFACE_HPP_INCLUDED
 #define _PRGBIND_PROGRAM_LIBRARY_INTERFACE_HPP_INCLUDED
@@ -46,12 +46,12 @@
 #include "types/form.hpp"
 #include "types/normalizeFunction.hpp"
 #include "types/customDataType.hpp"
-#include "prgbind/program.hpp"
+#include "processor/program.hpp"
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class ProgramLibrary
 /// \brief Interface for the program library with all programs loaded

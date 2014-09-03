@@ -37,6 +37,6 @@
 #include "aaMapProgram.hpp"
 
 WF_MODULE_BEGIN( "AaFunctionMap", "module to map authorization/audit calls to form functions")
- WF_PROGRAM_TYPE( "AaMap", _Wolframe::prgbind::AaMapProgram)
+ WF_PROGRAM_TYPE( "AaMap", _Wolframe::proc::AaMapProgram)
 WF_MODULE_END
 

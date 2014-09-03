@@ -31,10 +31,10 @@
 
 ************************************************************************/
 /// \brief Program library implementation
-/// \file programLibraryImpl.hpp
+/// \file libprovider/programLibraryImpl.hpp
 
-#ifndef _PRGBIND_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
-#define _PRGBIND_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
+#ifndef _Wolframe_proc_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
+#define _Wolframe_proc_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
 #include "filter/filter.hpp"
 #include "database/database.hpp"
 #include "serialize/cppFormFunction.hpp"
@@ -46,13 +46,13 @@
 #include "types/form.hpp"
 #include "types/normalizeFunction.hpp"
 #include "types/customDataType.hpp"
-#include "prgbind/programLibrary.hpp"
-#include "prgbind/program.hpp"
+#include "processor/programLibrary.hpp"
+#include "processor/program.hpp"
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace prgbind {
+namespace proc {
 
 /// \class ProgramLibraryImpl
 /// \brief Class implementing the program library with all programs loaded

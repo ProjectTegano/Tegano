@@ -30,11 +30,11 @@
  Project Wolframe.
 
 ************************************************************************/
-///\brief Implements the loading of programs in the transaction definition language
-///\file prgbind_transactionProgram.cpp
+/// \brief Implements the loading of programs in the transaction definition language
+/// \file transactionProgram.cpp
 #include "transactionProgram.hpp"
 #include "loadTransactionProgram.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include "filter/redirectFilterClosure.hpp"
 #include "database/databaseError.hpp"
 #include "database/database.hpp"
@@ -42,7 +42,7 @@
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
-using namespace _Wolframe::prgbind;
+using namespace _Wolframe::proc;
 
 bool TransactionDefinitionProgram::is_mine( const std::string& filename) const
 {

@@ -33,21 +33,21 @@ Project Wolframe.
 ///\brief Function to create a program type object for xslt filters
 #ifndef _Wolframe_XSLT_FILTER_PROGRAM_TYPE_HPP_INCLUDED
 #define _Wolframe_XSLT_FILTER_PROGRAM_TYPE_HPP_INCLUDED
-#include "prgbind/program.hpp"
+#include "processor/program.hpp"
 
 namespace _Wolframe {
 namespace langbind {
 
 class XsltProgramType
-	:public prgbind::Program
+	:public proc::Program
 {
 public:
 	XsltProgramType()
-		:prgbind::Program( prgbind::Program::Function){}
+		:proc::Program( proc::Program::Function){}
 
 	virtual ~XsltProgramType();
 	virtual bool is_mine( const std::string& filename) const;
-	virtual void loadProgram( prgbind::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	virtual void loadProgram( proc::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
 };
 
 }} //namespace

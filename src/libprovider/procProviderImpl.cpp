@@ -334,7 +334,7 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				else {
 					try
 					{
-						prgbind::ProgramR prgtype( ffo->object());
+						proc::ProgramR prgtype( ffo->object());
 						m_programs.defineProgramType( prgtype);
 						LOG_TRACE << "registered '" << ffo->name() << "' program type";
 					}

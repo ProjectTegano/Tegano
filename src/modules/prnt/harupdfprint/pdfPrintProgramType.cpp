@@ -36,7 +36,7 @@
 #include "pdfPrinter.hpp"
 #include "utils/fileUtils.hpp"
 #include "langbind/formFunction.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include <boost/algorithm/string.hpp>
 
 using namespace _Wolframe;
@@ -49,7 +49,7 @@ bool SimplePdfPrintProgram::is_mine( const std::string& filename) const
 	return false;
 }
 
-void SimplePdfPrintProgram::loadProgram( prgbind::ProgramLibrary& library, db::Database*, const std::string& filename)
+void SimplePdfPrintProgram::loadProgram( proc::ProgramLibrary& library, db::Database*, const std::string& filename)
 {
 	std::string src( utils::readSourceFileContent( filename));
 	HaruPdfPrintFunction* prntfunc = new HaruPdfPrintFunction( src, m_createDocument);

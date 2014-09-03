@@ -340,7 +340,7 @@ private:
 	std::vector<std::string> m_modules;
 	module::ModuleDirectoryImpl m_moduleDirectory;
 
-	prgbind::ProgramLibraryImpl m_programLibrary;
+	proc::ProgramLibraryImpl m_programLibrary;
 	AAAA::AAAAproviderImpl* m_aaaaProvider;
 	db::DatabaseProviderImpl* m_databaseProvider;
 	proc::ProcessorProviderImpl* m_processorProvider;

@@ -41,7 +41,6 @@
 #include "cmdbind/commandHandler.hpp"
 #include "cmdbind/doctypeDetector.hpp"
 #include "cmdbind/protocolHandler.hpp"
-#include "prgbind/programLibrary.hpp"
 #include "types/keymap.hpp"
 #include <vector>
 #include <map>
@@ -158,7 +157,7 @@ private:
 	types::keymap<cmdbind::ProtocolHandlerUnitR> m_protocols;	///< map protocol identifiers to handler units
 	std::vector<cmdbind::DoctypeDetectorType> m_doctypes;		///< list of document type detectors loaded from modules
 	std::vector<std::string> m_programfiles;			///< list of all programs to load
-	prgbind::ProgramLibraryImpl m_programs;				///< program library
+	proc::ProgramLibraryImpl m_programs;				///< program library
 	std::string m_referencePath;					///< application reference path
 };
 

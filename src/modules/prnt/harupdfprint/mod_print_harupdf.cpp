@@ -45,7 +45,7 @@ using namespace _Wolframe::module;
 namespace {
 struct PdfPrinter
 {
-	static prgbind::Program* createProgram()
+	static proc::Program* createProgram()
 	{
 		return new prnt::SimplePdfPrintProgram( prnt::createLibHpdfDocument);
 	}

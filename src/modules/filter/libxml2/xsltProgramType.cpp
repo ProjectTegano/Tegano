@@ -35,7 +35,7 @@ Project Wolframe.
 #include "xsltMapper.hpp"
 #include "inputfilterImpl.hpp"
 #include "outputfilterImpl.hpp"
-#include "prgbind/programLibrary.hpp"
+#include "processor/programLibrary.hpp"
 #include "utils/fileUtils.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/shared_ptr.hpp>
@@ -113,7 +113,7 @@ bool XsltProgramType::is_mine( const std::string& filename) const
 	return p.extension().string() == ".xslt";
 }
 
-void XsltProgramType::loadProgram( prgbind::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename)
+void XsltProgramType::loadProgram( proc::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename)
 {
 	langbind::FilterTypeR fc( new XsltFilterType( filename));
 	std::string filternme( utils::getFileStem(filename));
@@ -129,7 +129,7 @@ bool XsltProgramType::is_mine( const std::string& filename) const
 	return false;
 }
 
-void XsltProgramType::loadProgram( prgbind::ProgramLibrary&, db::Database*, const std::string&)
+void XsltProgramType::loadProgram( proc::ProgramLibrary&, db::Database*, const std::string&)
 {
 	throw std::runtime_error("XSLT support is not built-in (WITH_XSLT)");
 }

@@ -37,6 +37,6 @@
 #include "transactionProgram.hpp"
 
 WF_MODULE_BEGIN( "TdlProgramType", "tdl program module")
- WF_PROGRAM_TYPE( "TDL", _Wolframe::prgbind::TransactionDefinitionProgram)
+ WF_PROGRAM_TYPE( "TDL", _Wolframe::proc::TransactionDefinitionProgram)
 WF_MODULE_END
 
