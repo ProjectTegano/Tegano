@@ -39,6 +39,8 @@
 #include "aaaa/auditUnit.hpp"
 #include "module/moduleDirectory.hpp"
 #include "module/moduleInterface.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 #include <stdexcept>
@@ -53,8 +55,8 @@ AuditProvider::AuditProvider( const std::vector< config::NamedConfiguration* >& 
 								it != confs.end(); it++ )	{
 		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
-			ConfiguredObjectConstructor< AuditUnit >* audit =
-					dynamic_cast< ConfiguredObjectConstructor< AuditUnit >* >( builder->constructor());
+			module::ConfiguredObjectConstructor< AuditUnit >* audit =
+					dynamic_cast< module::ConfiguredObjectConstructor< AuditUnit >* >( builder->constructor());
 			if ( audit == NULL )	{
 				LOG_ALERT << "AuditProvider: '" << builder->objectClassName()
 					  << "' is not an Audit Unit builder";

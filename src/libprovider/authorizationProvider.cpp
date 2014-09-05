@@ -37,6 +37,8 @@
 #include "aaaa/authorizationUnit.hpp"
 #include <stdexcept>
 #include "module/moduleDirectory.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 
@@ -51,8 +53,8 @@ AuthorizationProvider::AuthorizationProvider( const std::vector< config::NamedCo
 								it != confs.end(); it++ )	{
 		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
-			ConfiguredObjectConstructor< AuthorizationUnit >* authz =
-					dynamic_cast< ConfiguredObjectConstructor< AuthorizationUnit >* >( builder->constructor());
+			module::ConfiguredObjectConstructor< AuthorizationUnit >* authz =
+					dynamic_cast< module::ConfiguredObjectConstructor< AuthorizationUnit >* >( builder->constructor());
 			if ( authz == NULL )	{
 				LOG_ALERT << "AuthorizationProvider: '" << builder->objectClassName()
 					  << "' is not an Authorization Unit builder";

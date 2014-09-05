@@ -45,7 +45,8 @@
 #include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include "module/moduleDirectory.hpp"
-
+#include "module/configuredBuilder.hpp"
+#include "module/simpleBuilder.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <ostream>
@@ -180,10 +181,10 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 		const module::ConfiguredBuilder* builder = modules_->getConfiguredBuilder((*it)->className());
 		if ( builder )
 		{
-			if (builder->objectType() == ObjectConstructorBase::CMD_HANDLER_OBJECT)
+			if (builder->objectType() == module::ObjectConstructorBase::CMD_HANDLER_OBJECT)
 			{
-				ObjectConstructorBaseR constructorRef( builder->constructor());
-				typedef ConfiguredObjectConstructor<cmdbind::CommandHandlerUnit> ThisConstructor;
+				module::ObjectConstructorBaseR constructorRef( builder->constructor());
+				typedef module::ConfiguredObjectConstructor<cmdbind::CommandHandlerUnit> ThisConstructor;
 				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
 
 				if (!constructor)	{
@@ -195,9 +196,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 					m_cmd.push_back( CommandHandlerDef( constructor->object( **it), *it));
 				}
 			}
-			else if (builder->objectType() == ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT)
+			else if (builder->objectType() == module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT)
 			{
-				ObjectConstructorBaseR constructorRef( builder->constructor());
+				module::ObjectConstructorBaseR constructorRef( builder->constructor());
 				module::RuntimeEnvironmentConstructor* constructor = dynamic_cast<module::RuntimeEnvironmentConstructor*>( constructorRef.get());
 				if (!constructor)
 				{
@@ -229,10 +230,10 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 	for ( std::vector<const module::SimpleBuilder*>::const_iterator it = simpleBuilderList.begin();
 								it != simpleBuilderList.end(); it++ )	{
 		switch( (*it)->objectType() )	{
-			case ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT:
+			case module::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT:
 			{
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				typedef SimpleObjectConstructor<cmdbind::ProtocolHandlerUnit> ThisConstructor;
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				typedef module::SimpleObjectConstructor<cmdbind::ProtocolHandlerUnit> ThisConstructor;
 				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
 
 				if (!constructor)	{
@@ -248,11 +249,11 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				}
 				break;
 			}
-			case ObjectConstructorBase::DOCTYPE_DETECTOR_OBJECT:
+			case module::ObjectConstructorBase::DOCTYPE_DETECTOR_OBJECT:
 			{
 				// object defines a document type/format detector
 				const module::DoctypeDetectorBuilder* bld = dynamic_cast<const module::DoctypeDetectorBuilder*>( (*it));
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::DoctypeDetectorConstructor* dtcr = dynamic_cast<module::DoctypeDetectorConstructor*>(constructorRef.get());
 				if (!dtcr || !bld)
 				{
@@ -275,8 +276,8 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				}
 				break;
 			}
-			case ObjectConstructorBase::FILTER_OBJECT:	{	// object is a filter
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+			case module::ObjectConstructorBase::FILTER_OBJECT:	{	// object is a filter
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::FilterConstructor* fltr = dynamic_cast< module::FilterConstructor* >(constructorRef.get());
 				if (!fltr)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
@@ -298,9 +299,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::DDL_COMPILER_OBJECT:
+			case module::ObjectConstructorBase::DDL_COMPILER_OBJECT:
 			{	// object is a DDL compiler
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::DDLCompilerConstructor* ffo = dynamic_cast< module::DDLCompilerConstructor* >(constructorRef.get());
 				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
@@ -322,9 +323,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::PROGRAM_TYPE_OBJECT:
+			case module::ObjectConstructorBase::PROGRAM_TYPE_OBJECT:
 			{	// object is a form function program type
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::ProgramTypeConstructor* ffo = dynamic_cast< module::ProgramTypeConstructor* >( constructorRef.get());
 				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
@@ -346,9 +347,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::FORM_FUNCTION_OBJECT:
+			case module::ObjectConstructorBase::FORM_FUNCTION_OBJECT:
 			{	// object is a form function
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::CppFormFunctionConstructor* ffo = dynamic_cast< module::CppFormFunctionConstructor* >(constructorRef.get());
 				if (!ffo)	{
 					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
@@ -370,9 +371,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::NORMALIZE_FUNCTION_OBJECT:
+			case module::ObjectConstructorBase::NORMALIZE_FUNCTION_OBJECT:
 			{	// object is a normalize function constructor
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::NormalizeFunctionConstructor* constructor = dynamic_cast< module::NormalizeFunctionConstructor* >(constructorRef.get());
 				if (!constructor)
 				{
@@ -394,9 +395,9 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::CUSTOM_DATA_TYPE_OBJECT:
+			case module::ObjectConstructorBase::CUSTOM_DATA_TYPE_OBJECT:
 			{
-				ObjectConstructorBaseR constructorRef( (*it)->constructor());
+				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
 				module::CustomDataTypeConstructor* constructor = dynamic_cast< module::CustomDataTypeConstructor* >(constructorRef.get());
 				if (!constructor)
 				{
@@ -419,16 +420,16 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				break;
 			}
 
-			case ObjectConstructorBase::AUDIT_OBJECT:
-			case ObjectConstructorBase::AUTHENTICATION_OBJECT:
-			case ObjectConstructorBase::AUTHORIZATION_OBJECT:
-			case ObjectConstructorBase::JOB_SCHEDULE_OBJECT:
-			case ObjectConstructorBase::DATABASE_OBJECT:
-			case ObjectConstructorBase::CMD_HANDLER_OBJECT:
-			case ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT:
-			case ObjectConstructorBase::TEST_OBJECT:
+			case module::ObjectConstructorBase::AUDIT_OBJECT:
+			case module::ObjectConstructorBase::AUTHENTICATION_OBJECT:
+			case module::ObjectConstructorBase::AUTHORIZATION_OBJECT:
+			case module::ObjectConstructorBase::JOB_SCHEDULE_OBJECT:
+			case module::ObjectConstructorBase::DATABASE_OBJECT:
+			case module::ObjectConstructorBase::CMD_HANDLER_OBJECT:
+			case module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT:
+			case module::ObjectConstructorBase::TEST_OBJECT:
 				LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-					  << "' is marked as '" << ObjectConstructorBase::objectTypeName( (*it)->objectType())
+					  << "' is marked as '" << module::ObjectConstructorBase::objectTypeName( (*it)->objectType())
 					  << "' object but has a simple object constructor";
 				throw std::logic_error( "Object is not a valid simple object. See log." );
 				break;

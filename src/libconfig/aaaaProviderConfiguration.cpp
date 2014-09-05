@@ -34,6 +34,8 @@
 #include "aaaaProviderConfiguration.hpp"
 #include "logger/logger-v1.hpp"
 #include "module/moduleDirectory.hpp"
+#include "module/simpleBuilder.hpp"
+#include "module/configuredBuilder.hpp"
 #include "config/valueParser.hpp"
 #include <boost/algorithm/string.hpp>
 

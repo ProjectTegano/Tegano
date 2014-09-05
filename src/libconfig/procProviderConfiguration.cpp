@@ -38,6 +38,8 @@
 
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/simpleBuilder.hpp"
 #include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 

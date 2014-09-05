@@ -34,6 +34,8 @@
 
 #include "moduleDirectoryImpl.hpp"
 #include "moduleLoader.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/simpleBuilder.hpp"
 #include "utils/fileUtils.hpp"
 #include <boost/algorithm/string.hpp>
 #include "logger/logger-v1.hpp"

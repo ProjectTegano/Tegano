@@ -36,6 +36,8 @@
 #include "aaaa/authenticator.hpp"
 #include "aaaa/passwordChanger.hpp"
 #include "database/databaseProviderInterface.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
@@ -49,9 +51,9 @@ AuthenticationFactory::AuthenticationFactory( const std::vector< config::NamedCo
 							it != confs.end(); it++ )	{
 		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
-			ObjectConstructorBaseR constructorRef( builder->constructor());
-			ConfiguredObjectConstructor< AuthenticationUnit >* auth =
-					dynamic_cast< ConfiguredObjectConstructor< AuthenticationUnit >* >( constructorRef.get());
+			module::ObjectConstructorBaseR constructorRef( builder->constructor());
+			module::ConfiguredObjectConstructor< AuthenticationUnit >* auth =
+					dynamic_cast< module::ConfiguredObjectConstructor< AuthenticationUnit >* >( constructorRef.get());
 			if ( auth == NULL )	{
 				LOG_ALERT << "AuthenticationFactory: '" << builder->objectClassName()
 					  << "' is not an Authentication Unit builder";
