@@ -1,0 +1,108 @@
+/************************************************************************
+
+ Copyright (C) 2011 - 2014 Project Wolframe.
+ All rights reserved.
+
+ This file is part of Project Wolframe.
+
+ Commercial Usage
+    Licensees holding valid Project Wolframe Commercial licenses may
+    use this file in accordance with the Project Wolframe
+    Commercial License Agreement provided with the Software or,
+    alternatively, in accordance with the terms contained
+    in a written agreement between the licensee and Project Wolframe.
+
+ GNU General Public License Usage
+    Alternatively, you can redistribute this file and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wolframe is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wolframe.  If not, see <http://www.gnu.org/licenses/>.
+
+ If you have questions regarding the use of this file, please contact
+ Project Wolframe.
+
+************************************************************************/
+/// \brief Base class for object properties used for identifying an object
+/// \file module/objectDescription.hpp
+
+#ifndef _MODULE_OBJECT_DESCRIPTION_HPP_INCLUDED
+#define _MODULE_OBJECT_DESCRIPTION_HPP_INCLUDED
+
+namespace _Wolframe {
+namespace module {
+
+/// \class ObjectDescription
+/// Description of an object
+class ObjectDescription
+{
+public:
+	enum ObjectType {ConfigurableModuleObject, SimpleModuleObject, BuiltInObject};
+
+public:
+	~ObjectDescription(){}
+
+	virtual const std::string& className()
+	{
+		return m_className;
+	}
+
+	const std::string& logPrefix() const
+	{
+		return m_logPrefix;
+	}
+
+	const std::string& id() const
+	{
+		return m_id;
+	}
+
+	void setId( const std::string& id_)
+	{
+		m_id = id_;
+	}
+
+private:
+	void update()
+	{
+		switch (m_type)
+		{
+			case ConfigurableModuleObject:
+				m_logPrefix = m_configSection + "/" + m_configKeyword;
+				if (m_id.size())
+				{
+					m_logPrefix.append( "(");
+					m_logPrefix.append( m_id);
+					m_logPrefix.append( ")");
+				}
+				break;
+			case SimpleModuleObject:
+				m_logPrefix = m_className;
+				break;
+			case BuiltInObject:
+				m_logPrefix = m_className;
+				break;
+		}
+		
+	}
+
+private:
+	ObjectType m_type;
+	std::string m_configKeyword;
+	std::string m_configSection;
+	std::string m_className;
+	std::string m_id;
+	std::string m_logPrefix;
+};
+
+}}//namespace
+#endif
+
+
