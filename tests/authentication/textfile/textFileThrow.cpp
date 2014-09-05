@@ -41,13 +41,13 @@
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
-#include "AAAA/passwordHash.hpp"
-#include "AAAA/authenticationSlice.hpp"
-#include "AAAA/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
+#include "aaaa/authenticationSlice.hpp"
+#include "aaaa/CRAM.hpp"
 
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
@@ -92,11 +92,11 @@ static std::string usernameHash( const std::string& username )
 TEST_F( AuthenticationFixture, UnexpectedMessageOut )
 {
 	TextFileAuthUnit authUnit( "test", "passwd" );
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	EXPECT_THROW( std::string msg = slice->messageOut(),
 		      std::logic_error );
@@ -107,15 +107,15 @@ TEST_F( AuthenticationFixture, UnexpectedMessageOut )
 TEST_F( AuthenticationFixture, UnexpectedMessageIn )
 {
 	TextFileAuthUnit authUnit( "test", "passwd" );
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	std::string userHash = usernameHash( "Admin" );
 	slice->messageIn( userHash );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 
 	EXPECT_THROW( slice->messageIn( "The wrong message at the wrong time" ),
 		      std::logic_error );

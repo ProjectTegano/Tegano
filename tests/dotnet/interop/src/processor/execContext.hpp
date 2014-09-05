@@ -38,7 +38,7 @@
 
 namespace _Wolframe {
 
-namespace AAAA {
+namespace aaaa {
 class User {public: User(){} User(const User&){}};
 class Authorizer {public: Authorizer(){} Authorizer(const Authorizer&){}};
 }
@@ -63,14 +63,14 @@ public:
 	const ProcessorProviderInterface* provider() const	{return m_provider;}
 
 	/// \brief Get the user data
-	const AAAA::User& user() const				{return m_user;}
+	const aaaa::User& user() const				{return m_user;}
 	/// \brief Set the user data
-	void setUser( const AAAA::User& u)			{m_user = u;}
+	void setUser( const aaaa::User& u)			{m_user = u;}
 
 	/// \brief Get the authorization instance interface
-	const AAAA::Authorizer* authorizer()			{return m_authorizer;}
+	const aaaa::Authorizer* authorizer()			{return m_authorizer;}
 	/// \brief Set the authorization instance interface
-	void setAuthorizer( const AAAA::Authorizer* a)		{m_authorizer = a;}
+	void setAuthorizer( const aaaa::Authorizer* a)		{m_authorizer = a;}
 
 	/// \brief Checks if a function tagged with AUTHORIZE( authorizationFunction, authorizationResource) is allowed to be executed
 	bool checkAuthorization( const std::string& /*authorizationFunction*/, const std::string& /*authorizationResource*/)
@@ -80,8 +80,8 @@ public:
 
 public:
 	const ProcessorProviderInterface* m_provider;		///< processor provider interface
-	AAAA::User m_user;					///< user data
-	const AAAA::Authorizer* m_authorizer;			///< instance to query for execution permission based on login data
+	aaaa::User m_user;					///< user data
+	const aaaa::Authorizer* m_authorizer;			///< instance to query for execution permission based on login data
 };
 
 }} //namespace

@@ -43,7 +43,7 @@
 #include <cstring>
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 const serialize::StructDescriptionBase* TestAuthenticationConfig::Structure::getStructDescription()
 {

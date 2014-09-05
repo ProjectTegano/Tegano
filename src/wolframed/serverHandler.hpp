@@ -68,13 +68,13 @@ public:
 
 	const std::string& banner() const				{ return m_banner; }
 	const db::DatabaseProviderInterface* dbProvider() const		{ return &m_db; }
-	const AAAA::AaaaProviderInterface* aaaaProvider() const		{ return &m_aaaa; }
+	const aaaa::AaaaProviderInterface* aaaaProvider() const		{ return &m_aaaa; }
 	const proc::ProcessorProviderInterface* procProvider() const	{ return &m_proc; }
 
 private:
 	const std::string		m_banner;
 	db::DatabaseProviderImpl	m_db;
-	AAAA::AaaaProviderImpl		m_aaaa;
+	aaaa::AaaaProviderImpl		m_aaaa;
 	proc::ProgramLibraryImpl	m_prglib;
 	proc::ProcessorProviderImpl	m_proc;
 	system::RandomGenerator*	m_randomGenerator;

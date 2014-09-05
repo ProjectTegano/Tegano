@@ -34,7 +34,7 @@ Project Wolframe.
 #ifndef _Wolframe_MODULE_LUA_LANGUAGE_EXTENSION_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #define _Wolframe_MODULE_LUA_LANGUAGE_EXTENSION_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #include "processor/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include <string>
 #include <cstring>
 #include <stdexcept>
@@ -49,7 +49,8 @@ extern "C" {
 namespace _Wolframe {
 namespace module {
 
-class LuaExtensionConstructor :public SimpleObjectConstructor< lua_CFunction >
+class LuaExtensionConstructor
+	:public SimpleObjectConstructor< lua_CFunction >
 {
 public:
 	LuaExtensionConstructor( const char* className_, const char* moduleName_, lua_CFunction func_)

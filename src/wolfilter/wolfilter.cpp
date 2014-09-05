@@ -83,7 +83,7 @@ int main( int argc, char **argv )
 		system::RandomGeneratorImpl randomGenerator;
 		db::DatabaseProviderImpl databaseProvider( cmdline.dbProviderConfig().config(), &cmdline.moduleDirectory());
 		const config::AaaaProviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
-		AAAA::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
+		aaaa::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);

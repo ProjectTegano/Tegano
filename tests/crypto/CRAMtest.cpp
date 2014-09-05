@@ -36,10 +36,10 @@
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
 #include <stdexcept>
-#include "AAAA/CRAM.hpp"
+#include "aaaa/CRAM.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 TEST( CRAM, Challenge )
 {

@@ -33,7 +33,7 @@
 //
 // a test module
 //
-
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test.hpp"
@@ -74,7 +74,7 @@ void TestModuleConfig::setCanonicalPathes( const std::string& /*refPath*/ )
 {
 }
 
-TestUnit* TestModuleConstructor::object( const config::NamedConfiguration& /* conf */ )
+TestUnit* TestModuleConstructor::object( const config::NamedConfiguration& /* conf */ ) const
 {
 	TestUnit* m_test = new TestUnitImpl( /* conf */ );
 	LOG_DEBUG << "Module: test module object created";
@@ -104,7 +104,7 @@ bool TestUnitImpl::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 
 static const BuilderBase* getModule( void )
 {
-	static const module::ConfiguredBuilderDescription< test::TestModuleConstructor,
+	static const module::ConfiguredBuilderTemplate< test::TestModuleConstructor,
 		test::TestModuleConfig > mod( "Test Module", "Test", "test", "TestObject" );
 	return &mod;
 }

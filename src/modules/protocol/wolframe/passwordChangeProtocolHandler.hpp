@@ -37,7 +37,7 @@
 #define _Wolframe_PASSWORD_CHANGE_PROTOCOL_HANDLER_HPP_INCLUDED
 
 #include "baseCryptoProtocolHandler.hpp"
-#include "AAAA/passwordChanger.hpp"
+#include "aaaa/passwordChanger.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {
@@ -49,7 +49,7 @@ class PasswordChangeProtocolHandler
 	:public cmdbind::BaseCryptoProtocolHandler
 {
 public:
-	explicit PasswordChangeProtocolHandler( const boost::shared_ptr<AAAA::PasswordChanger>& passwordChanger_);
+	explicit PasswordChangeProtocolHandler( const boost::shared_ptr<aaaa::PasswordChanger>& passwordChanger_);
 	virtual ~PasswordChangeProtocolHandler();
 
 private:
@@ -59,7 +59,7 @@ private:
 	virtual void processMessage( const std::string& msg);
 
 private:
-	boost::shared_ptr<AAAA::PasswordChanger> m_passwordChanger;	///< password changer object reference
+	boost::shared_ptr<aaaa::PasswordChanger> m_passwordChanger;	///< password changer object reference
 };
 
 }} //namespace

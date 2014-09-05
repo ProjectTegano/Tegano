@@ -48,7 +48,7 @@
 //   7. call sasl_dispose(), may return to step 2
 //   8. call sasl_done() when program terminates
 
-#include "AAAA/authentication_sasl.hpp"
+#include "aaaa/authentication_sasl.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/thread/thread.hpp>
@@ -61,7 +61,7 @@
 #include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static int sasl_my_log( void* /* context */, int priority, const char *message )
 {
@@ -326,4 +326,4 @@ std::string SaslAuthenticator::getError( )
 	return m_error;
 }
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa

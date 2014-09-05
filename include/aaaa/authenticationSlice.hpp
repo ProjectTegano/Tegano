@@ -30,55 +30,58 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file AAAA/authenticator.hpp
-/// \brief Authenticator interface definition
+///
+/// \file aaaa/authenticationSlice.hpp
+/// \brief AuthenticationSlice interface
+///
 
-#ifndef _AUTHENTICATOR_HPP_INCLUDED
-#define _AUTHENTICATOR_HPP_INCLUDED
+#ifndef _AUTHENTICATION_SLICE_HPP_INCLUDED
+#define _AUTHENTICATION_SLICE_HPP_INCLUDED
 
 #include <string>
 #include <vector>
-#include "AAAA/user.hpp"
-#include "system/connectionEndpoint.hpp"
+
+#include "aaaa/user.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
-/// \class Authenticator
-/// \brief Authenticator interface
-/// This the only interface to be used by the system. All other interfaces
-/// are internal to the authentication objects.
+/// \class AuthenticatorSlice
+/// \brief This is the base class for authenticator slices implementations
+/// An authenticator has (usually) several authenticator slices
+/// The AuthenticatorSlice(s) are provided by the their respective
+/// AuthenticationUnit(s) in the AAAA provider
 ///
-/// \note	The authenticator works only with complete messages.
-///		Sending a message in multiple parts will most likely
-///		result in an error. But that depends also on the authentication
-///		backend.
-class Authenticator
+class AuthenticatorSlice
 {
 public:
 	enum Status	{
-		INITIALIZED,		///< the authenticator is initialized,
-					///  no mech has been selected yet
 		MESSAGE_AVAILABLE,	///< an output message is available
 		AWAITING_MESSAGE,	///< waiting for an input message
+		USER_NOT_FOUND,		///< this slice doesn't handle the credentials
+					///  for the requested user
 		AUTHENTICATED,		///< a user has been authenticated
 		INVALID_CREDENTIALS,	///< the user authentication failed,
 					///  either the username or the credentials are invalid
-		MECH_UNAVAILABLE,	///< the requested mech is not available,
-					///  usually due to configured restrictions
 		SYSTEM_FAILURE		///< some other error occurred
 	};
 
 	static const char* statusName( Status i)
 	{
-		static const char* ar[] = {"INITIALIZED","MESSAGE_AVAILABLE","AWAITING_MESSAGE","AUTHENTICATED","INVALID_CREDENTIALS","MECH_UNAVAILABLE","SYSTEM_FAILURE"};
+		static const char* ar[] = {	"MESSAGE_AVAILABLE",
+						"AWAITING_MESSAGE",
+						"USER_NOT_FOUND",
+						"AUTHENTICATED",
+						"INVALID_CREDENTIALS",
+						"SYSTEM_FAILURE"
+					  };
 		return ar[i];
 	}
 
 	/// The virtual destructor
-	virtual ~Authenticator()	{}
+	virtual ~AuthenticatorSlice()	{}
 
-	/// Destroy the authenticator
+	/// Dispose of the authenticator
 	///
 	/// \note	In many cases this is a suicidal function (delete this),
 	///		so you should be very careful how you use it.
@@ -86,17 +89,13 @@ public:
 	///		because not all authentication instances are created with new.
 	virtual void dispose() = 0;
 
-	/// The list of available mechs
-	virtual const std::vector<std::string>& mechs() const = 0;
+	/// The class name of the authentication unit / subunit
+	///\note	This is the name of the authentication type / class
+	virtual const char* className() const = 0;
 
-	/// Set the authentication mech
-	/// \param [in]	mech	the name of the mech (case-insensitive)
-	/// \returns		true if the mech could be selected
-	///			false if the mech is not available
-	/// \note	This function works like a reset function
-	///		Whenever it is called it will release all the allocated
-	///		resources and it will reinitialize all the data structures
-	virtual bool setMech( const std::string& mech ) = 0;
+	/// The identifier of the authentication unit / slice
+	///\note	This is the identifier of the authentication unit / slice
+	virtual const std::string& identifier() const = 0;
 
 	/// The input message
 	/// \param [in]	message	the input message
@@ -109,15 +108,26 @@ public:
 	/// The current status of the authenticator
 	virtual Status status() const = 0;
 
+	/// Is the last input message reusable for this mech ?
+	/// If true then the last input message will be used also
+	/// for the next slice in case of an USER_NOT_FOUND status
+	/// otherwise a CLIENT_RESET will be issued
+	virtual bool inputReusable() const	{ return false; }
+
+	/// Tell the slice that it is the last one in the current authenticator.
+	/// In this case, if the user is not found, the slice will not make
+	/// the transition to USER_NOT_FOUND. Instead it will continue
+	/// the operations normally, using fake data and will end up in the
+	/// INVALID_CREDENTIALS state.
+	virtual void lastSlice()		{ }
+
 	/// The authenticated user or NULL if not authenticated
-	/// \note	It is intended that this function can be called only once.
+	/// \note	It is intended that this function can be called only once
 	///		As a security precaution, all the instance information regarding
 	///		the current authentication operation should be destroyed after
-	///		the authentication is complete and the user is no longer
-	///		available after the call of this function
+	///		calling this function
 	virtual User* user() = 0;
 };
 
-}} // namespace _Wolframe::AAAA
-
-#endif // _AUTHENTICATOR_HPP_INCLUDED
+}} // namespace _Wolframe::aaaa
+#endif

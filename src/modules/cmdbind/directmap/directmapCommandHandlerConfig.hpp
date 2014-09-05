@@ -36,7 +36,7 @@ Project Wolframe.
 #include "processor/execContext.hpp"
 #include "config/configurationTree.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include <string>
 #include <map>
 

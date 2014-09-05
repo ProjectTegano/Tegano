@@ -36,6 +36,7 @@
 
 #include "scheduleDB.hpp"
 #include "module/moduleInterface.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
@@ -43,7 +44,7 @@ namespace module {
 
 static const BuilderBase* getBuilder( void )
 {
-	static const module::ConfiguredBuilderDescription< processor::JobScheduleDBconstructor,
+	static const module::ConfiguredBuilderTemplate< processor::JobScheduleDBconstructor,
 			processor::JobScheduleDBconfig > mod( "Schedule database", "JobSchedule",
 						   "database", "JobScheduleDB" );
 	return &mod;

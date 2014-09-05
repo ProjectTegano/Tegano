@@ -30,9 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// acceptor.cpp
-//
+/// \file acceptor.cpp
 
 #include "acceptor.hpp"
 #include "connection.hpp"
@@ -290,7 +288,7 @@ void SSLacceptor::handleAccept( const boost::system::error_code& e )
 
 std::string SSLacceptor::getPassword()
 {
-	return _Wolframe::AAAA::getPassword();
+	return _Wolframe::aaaa::getPassword();
 }
 
 void SSLacceptor::stop()

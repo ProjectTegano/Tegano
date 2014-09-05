@@ -33,6 +33,7 @@
 ///\file modules/database/testtrace/mod_database_testtrace.cpp
 ///\brief Module for a fake database implementation used for tests
 #include "testtraceDatabase.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
@@ -41,7 +42,7 @@ namespace module {
 
 static const BuilderBase* createTesttraceDatabaseModule()
 {
-	static const module::ConfiguredBuilderDescription< db::TesttraceDatabaseConstructor,
+	static const module::ConfiguredBuilderTemplate< db::TesttraceDatabaseConstructor,
 		db::TesttraceDatabaseConfig > mod( "testtrace database", "database", "test", TESTTRACE_DATABASE_CLASSNAME);
 	return &mod;
 }

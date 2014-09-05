@@ -34,7 +34,7 @@
 /// \brief Interface to constructors of runtime environment for executing functions that need it
 #ifndef _Wolframe_MODULE_RUNTIME_ENVIRONMENT_CONSTRUCTOR_HPP_INCLUDED
 #define _Wolframe_MODULE_RUNTIME_ENVIRONMENT_CONSTRUCTOR_HPP_INCLUDED
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "langbind/runtimeEnvironment.hpp"
 #include "module/moduleInterface.hpp"
 #include <string>
@@ -50,7 +50,7 @@ namespace module {
 /// \class RuntimeEnvironmentConstructor
 /// \brief Constructor of a runtime environment for executing functions
 class RuntimeEnvironmentConstructor
-	:public ConfiguredObjectConstructor<langbind::RuntimeEnvironment>
+	:public module::ConfiguredObjectConstructor<langbind::RuntimeEnvironment>
 {
 public:
 	/// \brief Destructor

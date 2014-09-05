@@ -37,7 +37,7 @@
 #include "types/secureReference.hpp"
 #include "types/keymap.hpp"
 #include "processor/procProviderInterface.hpp"
-#include "AAAA/aaaaProviderInterface.hpp"
+#include "aaaa/aaaaProviderInterface.hpp"
 
 namespace _Wolframe {
 namespace proc {
@@ -51,22 +51,22 @@ public:
 	ExecContext()
 		:m_provider(0),m_authorizer(0),m_aaaaProvider(0),m_default_timeout(0){}
 	/// \brief Constructor
-	ExecContext( const ProcessorProviderInterface* p, const AAAA::AaaaProviderInterface* a)
+	ExecContext( const ProcessorProviderInterface* p, const aaaa::AaaaProviderInterface* a)
 		:m_provider(p),m_authorizer(0),m_aaaaProvider(a),m_default_timeout(0){}
 
 	/// \brief Get the processor provider interface
 	const ProcessorProviderInterface* provider() const	{return m_provider;}
 
 	/// \brief Get the the user instance reference
-	const AAAA::User* user() const				{return m_user.get();}
+	const aaaa::User* user() const				{return m_user.get();}
 	/// \brief Set the user instance
 	/// \remark Allocated with new, owned by this from now
-	void setUser( AAAA::User* u)				{m_user.reset( u);}
+	void setUser( aaaa::User* u)				{m_user.reset( u);}
 
 	/// \brief Get the authorization instance interface
-	const AAAA::Authorizer* authorizer() const		{return m_authorizer;}
+	const aaaa::Authorizer* authorizer() const		{return m_authorizer;}
 	/// \brief Set the authorization instance interface
-	void setAuthorizer( const AAAA::Authorizer* a)		{m_authorizer = a;}
+	void setAuthorizer( const aaaa::Authorizer* a)		{m_authorizer = a;}
 
 	/// \brief Get the default timeout for read operations in seconds
 	unsigned int defaultTimeout() const			{return m_default_timeout;}
@@ -97,12 +97,12 @@ public:
 	}
 
 	/// \brief Get an authenticator
-	AAAA::Authenticator* authenticator( const net::RemoteEndpoint& client ) const
+	aaaa::Authenticator* authenticator( const net::RemoteEndpoint& client ) const
 	{
 		return m_aaaaProvider?m_aaaaProvider->authenticator( client ):0;
 	}
 	/// \brief Get a password changer
-	AAAA::PasswordChanger* passwordChanger( const net::RemoteEndpoint& client ) const
+	aaaa::PasswordChanger* passwordChanger( const net::RemoteEndpoint& client ) const
 	{
 		return m_aaaaProvider?m_aaaaProvider->passwordChanger( *m_user.get(), client ):0;
 	}
@@ -144,9 +144,9 @@ private:
 
 private:
 	const ProcessorProviderInterface* m_provider;		///< processor provider interface
-	types::SecureReference<AAAA::User> m_user;		///< user instance
-	const AAAA::Authorizer* m_authorizer;			///< instance to query for execution permission based on login data
-	const AAAA::AaaaProviderInterface* m_aaaaProvider;	///< instance to query for an authenticator
+	types::SecureReference<aaaa::User> m_user;		///< user instance
+	const aaaa::Authorizer* m_authorizer;			///< instance to query for execution permission based on login data
+	const aaaa::AaaaProviderInterface* m_aaaaProvider;	///< instance to query for an authenticator
 	unsigned int m_default_timeout;				///< default timeout
 	net::RemoteEndpointR m_remoteEndpoint;			///< remote end point of the connection
 	net::LocalEndpointR m_localEndpoint;			///< local end point of the connection

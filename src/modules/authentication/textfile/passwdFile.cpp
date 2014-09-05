@@ -49,7 +49,7 @@
 #include <boost/lexical_cast.hpp>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const std::size_t PWD_FILE_LINE_SIZE = 1024 + 1;
 static const std::size_t MAX_HMAC_KEY_SIZE = 1024;
@@ -319,4 +319,4 @@ bool PasswordFile::getHMACuser( const std::string& userHash,
 	return getHMACuser( hash, key, user );
 }
 
-}} // namepspace _Wolframe::AAAA
+}} // namepspace _Wolframe::aaaa

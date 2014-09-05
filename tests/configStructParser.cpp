@@ -180,7 +180,7 @@ struct DaemonConfig
 	static const serialize::StructDescriptionBase* getStructDescription();
 };
 
-struct AAAAConfig
+struct AaaaConfig
 {
 	struct AuthConfig
 	{

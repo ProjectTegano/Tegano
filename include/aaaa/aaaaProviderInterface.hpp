@@ -30,62 +30,44 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// getPassword.cpp
-//
-#include "utils/getPassword.hpp"
-#include <string>
-#if !defined(_WIN32)
-#include <unistd.h>
-#include <libintl.h>
-#else // defined(_WIN32)
-#include <tchar.h>
-#define WIN32_MEAN_AND_LEAN
-#include <windows.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <cstdio>
-#endif // defined(_WIN32)
+/// \file aaaa/aaaaProviderInterface.hpp
+/// \brief AAAA provider interface
 
-#if !defined(_WIN32)
-	std::string _Wolframe::AAAA::getLogin( )
-	{
-		return getlogin( );
-	}
+#ifndef _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
+#define _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
 
-	std::string _Wolframe::AAAA::getPassword()
-	{
-		char	*pass;
+#include "aaaa/authenticator.hpp"
+#include "aaaa/passwordChanger.hpp"
+#include "aaaa/authorizer.hpp"
+#include "aaaa/auditor.hpp"
+#include "aaaa/user.hpp"
+#include "system/connectionEndpoint.hpp"
+#include "system/randomGenerator.hpp"
 
-		pass = getpass( gettext( "Enter your password:" ));
+namespace _Wolframe {
+namespace aaaa {
 
-		return std::string( pass );
-	}
+/// \class aaaaProviderInterface
+/// \brief Provider interface to create AAAA related objects
+class AaaaProviderInterface
+{
+public:
+	/// \brief Destructor
+	virtual ~AaaaProviderInterface(){}
 
-#else // defined(_WIN32)
-	std::string _Wolframe::AAAA::getLogin( )
-	{
-		TCHAR login[256];
-		DWORD len = 254;
-		GetUserName( login, &len );
-		return std::string( login );
-	}
+	/// \brief Create an return an authenticator object
+	virtual Authenticator* authenticator( const net::RemoteEndpoint& client) const=0;
+	/// \brief Create an return a password changer object
+	virtual PasswordChanger* passwordChanger( const User& user,
+					  const net::RemoteEndpoint& client ) const=0;
+	/// \brief Create an return an authorizer object
+	virtual Authorizer* authorizer() const=0;
+	/// \brief Create an return an auditor object
+	virtual Auditor* auditor() const=0;
+	/// \brief Get the global random number generator
+	virtual system::RandomGenerator* randomGenerator() const=0;
+};
 
-	std::string _Wolframe::AAAA::getPassword()
-	{
-		std::string pass = "";
-
-		_cputs( "Enter your password:" );
-
-		int ch = _getch( );
-		while( ch != 13 ) {
-			// Let's hope we get the right characters here!
-			pass.push_back( (char)ch );
-			ch = _getch( );
-		}
-		puts( "" );
-
-		return pass;
-	}
-#endif // defined(_WIN32)
+}}// namespace
+#endif
 

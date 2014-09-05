@@ -34,10 +34,8 @@
 /// \brief Interface to constructors of authenticators
 #ifndef _Wolframe_MODULE_AUTHENTICATION_CONSTRUCTOR_HPP_INCLUDED
 #define _Wolframe_MODULE_AUTHENTICATION_CONSTRUCTOR_HPP_INCLUDED
-#include "module/constructor.hpp"
-#include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
-#include "AAAA/authenticationUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "aaaa/authenticationUnit.hpp"
 #include <boost/lexical_cast.hpp>
 #include <string>
 
@@ -48,13 +46,13 @@ namespace module {
 /// \brief Constructor of an authentication unit
 template<class UNIT, class CONFIG>
 class AuthenticationConstructor
-	:public _Wolframe::ConfiguredObjectConstructor<AAAA::AuthenticationUnit>
+	:public _Wolframe::module::ConfiguredObjectConstructor<aaaa::AuthenticationUnit>
 {
 public:
 	AuthenticationConstructor(){}
 
 	virtual ~AuthenticationConstructor(){}
-	virtual UNIT* object( const _Wolframe::config::NamedConfiguration& cfgi)
+	virtual UNIT* object( const _Wolframe::config::NamedConfiguration& cfgi) const
 	{
 		const CONFIG* cfg = dynamic_cast<const CONFIG*>(&cfgi);
 		if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to authentication constructor");

@@ -38,8 +38,8 @@
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 bool DBAuthConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 				const module::ModuleDirectory* /*modules*/ )
@@ -86,4 +86,3 @@ void DBAuthConfig::print( std::ostream& os, size_t indent ) const
 	os << indStr << "   Database: " << m_dbLabel << std::endl;
 }
 
-}} // namespace _Wolframe::config

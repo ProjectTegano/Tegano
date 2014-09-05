@@ -41,7 +41,7 @@
 #include "system/randomGenerator.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const size_t PASSWORD_HASH_SIZE = 384 / 8;
 static const size_t PASSWORD_SALT_SIZE = 128 / 8;
@@ -165,7 +165,7 @@ private:
 	Salt	m_salt;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif	// _PASSWORD_HPP_INCLUDED
 

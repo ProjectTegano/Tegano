@@ -106,11 +106,11 @@ WF_MODULE_END
          A runtime environment (_Wolframe::langbind::RuntimeEnvironment) is a configurable environment for functions that need a context for execution. The only case where a runtime environment is currently used in Wolframe is for .NET (Windows only).
          See \ref RuntimeEnvironmentModule. The only real example we have is .NET at src/modules/cmdbind/dotnet/.
     - \b Authenticator \b unit:
-         An authenticator unit (_Wolframe::AAAA::AuthenticatorUnit) implements one
+         An authenticator unit (_Wolframe::aaaa::AuthenticatorUnit) implements one
          or more authentication mechanisms. An authentication unit is chosen
          for authentication of the client if it is the first configured authentication
          unit in the configuration section AAAA that implements the mechanism chosen.
-         The class processing the authentication is called authentication slice (_Wolframe::AAAA::AuthenticatorSlice).
+         The class processing the authentication is called authentication slice (_Wolframe::aaaa::AuthenticatorSlice).
          See \ref AuthenticatorModule. As a real example we suggest to have a look at tests/modules/authentication/fakeauth/.
     - \b Database \b interface:
          Wolframe has interfaces to execute queries on Sqlite3 and PostgreSQL databases.
@@ -710,8 +710,8 @@ you will find an example at \ref ConfigDescription
 #include "appdevel/moduleFrameMacros.hpp"
 #include "config/configurationBase.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
-#include "AAAA/authenticationSlice.hpp"
-#include "AAAA/authenticator.hpp"
+#include "aaaa/authenticationSlice.hpp"
+#include "aaaa/authenticator.hpp"
 #include <string>
 
 class MyAuthenticationConfig
@@ -733,12 +733,12 @@ public:
 
 
 class MyAuthenticatorSlice
-	:public _Wolframe::AAAA::AuthenticatorSlice
+	:public _Wolframe::aaaa::AuthenticatorSlice
 {
 public:
 	virtual void dispose()
 	{
-		// ... destroy the object accordingly to the method is was created by the unit method _Wolframe::AAAA::AuthenticatorUnit::slice( const std::string&, const _Wolframe::net::RemoteEndpoint&)
+		// ... destroy the object accordingly to the method is was created by the unit method _Wolframe::aaaa::AuthenticatorUnit::slice( const std::string&, const _Wolframe::net::RemoteEndpoint&)
 	}
 
 	virtual const char* className() const
@@ -762,7 +762,7 @@ public:
 		// ... return the message to be sent announced by 'status()const' here
 	}
 
-	virtual _Wolframe::AAAA::AuthenticatorSlice::Status status() const
+	virtual _Wolframe::aaaa::AuthenticatorSlice::Status status() const
 	{
 		// ... return the current status of the authenticator slice
 	}
@@ -772,14 +772,14 @@ public:
 		// ... return true, if the last message processed can be forwarded to another slice of the same mech
 	}
 
-	virtual _Wolframe::AAAA::User* user()
+	virtual _Wolframe::aaaa::User* user()
 	{
 		// ... 	return the authenticated user or NULL if not authenticated here
 	}
 };
 
 class MyAuthenticationUnit
-	:public _Wolframe::AAAA::AuthenticationUnit
+	:public _Wolframe::aaaa::AuthenticationUnit
 {
 public:
 	MyAuthenticationUnit( const MyAuthenticationConfig& cfg);

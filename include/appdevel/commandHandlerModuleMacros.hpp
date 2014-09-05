@@ -33,7 +33,8 @@
 /// \file appdevel/commandHandlerModuleMacros.hpp
 /// \brief Macros for a module for a configurable command handler
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/configuredBuilder.hpp"
 #include "cmdbind/commandHandler.hpp"
 #include "processor/procProviderInterface.hpp"
 
@@ -41,12 +42,12 @@
 #define WF_COMMAND_HANDLER(TITLE,CONFIG_SECTION,CONFIG_TITLE,CLASSDEF,CONFIGDEF)\
 {\
 	class CommandHandlerConstructor\
-		:public _Wolframe::ConfiguredObjectConstructor<_Wolframe::cmdbind::CommandHandlerUnit>\
+		:public _Wolframe::module::ConfiguredObjectConstructor<_Wolframe::cmdbind::CommandHandlerUnit>\
 	{\
 	public:\
 		CommandHandlerConstructor(){}\
 		virtual ~CommandHandlerConstructor(){}\
-		virtual _Wolframe::cmdbind::CommandHandlerUnit* object( const _Wolframe::config::NamedConfiguration& cfgi)\
+		virtual _Wolframe::cmdbind::CommandHandlerUnit* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
 		{\
 			const CONFIGDEF* cfg = dynamic_cast<const CONFIGDEF*>(&cfgi);\
 			if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to " CONFIG_TITLE " command handler constructor");\
@@ -70,15 +71,15 @@
 			:_Wolframe::module::ConfiguredBuilder( TITLE, CONFIG_SECTION, CONFIG_TITLE, CONFIG_TITLE)\
 		{}\
 		virtual ~CommandHandlerBuilder(){}\
-		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
+		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return _Wolframe::ObjectConstructorBase::CMD_HANDLER_OBJECT;\
+			return _Wolframe::module::ObjectConstructorBase::CMD_HANDLER_OBJECT;\
 		}\
 		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
 		{\
 			return new CONFIGDEF( CONFIG_TITLE, title(), logPrefix, keyword());\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor() const\
+		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
 		{\
 			return new CommandHandlerConstructor();\
 		}\

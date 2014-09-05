@@ -35,6 +35,7 @@
 //
 
 #include "TextFileAuth.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
@@ -43,8 +44,8 @@ namespace module {
 
 static const BuilderBase* getModule( void )
 {
-	static const module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
-			AAAA::TextFileAuthConfig > mod( "Authentication file", "Authentication",
+	static const module::ConfiguredBuilderTemplate< aaaa::TextFileAuthConstructor,
+			aaaa::TextFileAuthConfig > mod( "Authentication file", "Authentication",
 							"TextFile", "TextFileAuth" );
 	return &mod;
 }

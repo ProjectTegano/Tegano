@@ -35,7 +35,8 @@ Project Wolframe.
 #define _Wolframe_MODULE_FILTER_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #include "filter/filter.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleBuilder.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {

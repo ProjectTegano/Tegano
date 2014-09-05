@@ -36,17 +36,17 @@
 #define _Wolframe_MODULE_AUTH_TEST_AUTHENTICATION_HPP_INCLUDED
 
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "types/secureString.hpp"
 #include "config/configurationTree.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
-#include "AAAA/authenticator.hpp"
-#include "AAAA/authenticationUnit.hpp"
-#include "AAAA/authenticationSlice.hpp"
+#include "aaaa/authenticator.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "aaaa/authenticationSlice.hpp"
 #include <boost/lexical_cast.hpp>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class TestAuthenticationConfig
 	:public config::NamedConfiguration

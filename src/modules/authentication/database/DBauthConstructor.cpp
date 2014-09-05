@@ -38,9 +38,9 @@
 #include "DBauth.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
-DBauthUnit* DBauthConstructor::object( const config::NamedConfiguration& conf )
+DBauthUnit* DBauthConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const DBAuthConfig& cfg = dynamic_cast< const DBAuthConfig& >( conf );
 
@@ -50,5 +50,5 @@ DBauthUnit* DBauthConstructor::object( const config::NamedConfiguration& conf )
 	return m_auth;
 }
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 

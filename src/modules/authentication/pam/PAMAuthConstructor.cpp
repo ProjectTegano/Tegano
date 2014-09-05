@@ -37,10 +37,10 @@
 #include "PAMAuth.hpp"
 #include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
-PAMAuthUnit* PAMAuthConstructor::object( const config::NamedConfiguration& conf )
+PAMAuthUnit* PAMAuthConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const PAMAuthConfig& cfg = dynamic_cast< const PAMAuthConfig& >( conf );
 
@@ -49,4 +49,3 @@ PAMAuthUnit* PAMAuthConstructor::object( const config::NamedConfiguration& conf 
 	return m_auth;
 }
 
-}} // namespace _Wolframe::AAAA

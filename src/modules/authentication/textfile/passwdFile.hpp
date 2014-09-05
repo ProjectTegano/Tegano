@@ -41,7 +41,7 @@
 #include "system/platform.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 struct PwdFileUser	{
 	std::string	user;
@@ -128,6 +128,6 @@ private:
 	const bool		m_caseSensitive;
 };
 
-}} // namepspace _Wolframe::AAAA
+}} // namepspace _Wolframe::aaaa
 
 #endif // _PASSWDFILE_HPP_INCLUDED

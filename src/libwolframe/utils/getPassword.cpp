@@ -30,52 +30,62 @@
  Project Wolframe.
 
 ************************************************************************/
-
-/// \file AAAA/authorizationUnit.hpp
-/// \brief Authorization unit
-
-#ifndef _AUTHORIZATION_UNIT_HPP_INCLUDED
-#define _AUTHORIZATION_UNIT_HPP_INCLUDED
-
+//
+// getPassword.cpp
+//
+#include "utils/getPassword.hpp"
 #include <string>
+#if !defined(_WIN32)
+#include <unistd.h>
+#include <libintl.h>
+#else // defined(_WIN32)
+#include <tchar.h>
+#define WIN32_MEAN_AND_LEAN
+#include <windows.h>
+#include <stdlib.h>
+#include <conio.h>
+#include <cstdio>
+#endif // defined(_WIN32)
 
-#include "authorizer.hpp"
-#include "database/databaseProviderInterface.hpp"
+#if !defined(_WIN32)
+	std::string _Wolframe::aaaa::getLogin( )
+	{
+		return getlogin( );
+	}
 
-namespace _Wolframe {
-namespace AAAA {
+	std::string _Wolframe::aaaa::getPassword()
+	{
+		char	*pass;
 
-/// \class AuthorizationUnit
-/// \brief This is the base class for authorization unit implementations
-class AuthorizationUnit
-{
-public:
-	enum Result	{
-		AUTHZ_DENIED,
-		AUTHZ_ALLOWED,
-		AUTHZ_IGNORED,
-		AUTHZ_ERROR
-	};
+		pass = getpass( gettext( "Enter your password:" ));
 
-	AuthorizationUnit( const std::string& Identifier )
-		: m_identifier( Identifier )	{}
+		return std::string( pass );
+	}
 
-	virtual ~AuthorizationUnit()		{}
+#else // defined(_WIN32)
+	std::string _Wolframe::aaaa::getLogin( )
+	{
+		TCHAR login[256];
+		DWORD len = 254;
+		GetUserName( login, &len );
+		return std::string( login );
+	}
 
-	const std::string& identifier() const	{ return m_identifier; }
+	std::string _Wolframe::aaaa::getPassword()
+	{
+		std::string pass = "";
 
-	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
-						{ return true; }
-	virtual const char* className() const = 0;
+		_cputs( "Enter your password:" );
 
-	virtual Result allowed( const Information& ) = 0;
+		int ch = _getch( );
+		while( ch != 13 ) {
+			// Let's hope we get the right characters here!
+			pass.push_back( (char)ch );
+			ch = _getch( );
+		}
+		puts( "" );
 
-private:
-	void operator=( const AuthorizationUnit&){}
-private:
-	const std::string	m_identifier;
-};
+		return pass;
+	}
+#endif // defined(_WIN32)
 
-}} // namespace _Wolframe::AAAA
-
-#endif // _AUTHORIZATION_HPP_INCLUDED

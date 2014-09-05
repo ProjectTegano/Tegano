@@ -35,7 +35,8 @@ Project Wolframe.
 #define _Wolframe_MODULE_CPP_FORM_FUNCTION_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #include "serialize/cppFormFunction.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/simpleBuilder.hpp"
 #include "types/keymap.hpp"
 #include <boost/shared_ptr.hpp>
 

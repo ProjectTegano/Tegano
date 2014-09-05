@@ -30,47 +30,52 @@
  Project Wolframe.
 
 ************************************************************************/
-///
-/// \file AAAA/AAAAinformation.hpp
-/// \brief Header file for the objects used for AAAA information.
-///
 
-#include "system/connectionEndpoint.hpp"
+/// \file aaaa/authorizationUnit.hpp
+/// \brief Authorization unit
 
-#ifndef _AAAA_OBJECTS_HPP_INCLUDED
-#define _AAAA_OBJECTS_HPP_INCLUDED
+#ifndef _AUTHORIZATION_UNIT_HPP_INCLUDED
+#define _AUTHORIZATION_UNIT_HPP_INCLUDED
+
+#include <string>
+
+#include "authorizer.hpp"
+#include "database/databaseProviderInterface.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
-/// Base class for AAAA information objects.
-class Information
+/// \class AuthorizationUnit
+/// \brief This is the base class for authorization unit implementations
+class AuthorizationUnit
 {
 public:
-	enum Type	{
-		CONNECTION,			///< object is connection infromation
-		LOGIN,				///< object is login information
-		LOGOUT,				///< object is logout information
-		TRANSACTION			///< object is a transaction information
+	enum Result	{
+		AUTHZ_DENIED,
+		AUTHZ_ALLOWED,
+		AUTHZ_IGNORED,
+		AUTHZ_ERROR
 	};
 
-	virtual Type type() const = 0;
-};
+	AuthorizationUnit( const std::string& Identifier )
+		: m_identifier( Identifier )	{}
 
-/// Connection intiation info for AAAA purposes
-struct ConnectInfo : public Information
-{
-	const net::LocalEndpoint&	local;	///< local endpoint info
-	const net::RemoteEndpoint&	remote;	///< remote endpoint info
+	virtual ~AuthorizationUnit()		{}
 
-	ConnectInfo( const net::LocalEndpoint& lcl, const net::RemoteEndpoint& rmt )
-		: local( lcl ), remote( rmt )	{}
+	const std::string& identifier() const	{ return m_identifier; }
 
-	Information::Type type() const		{ return CONNECTION; }
+	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
+						{ return true; }
+	virtual const char* className() const = 0;
+
+	virtual Result allowed( const Information& ) = 0;
+
 private:
-	void operator=( const ConnectInfo&){}
+	void operator=( const AuthorizationUnit&){}
+private:
+	const std::string	m_identifier;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
-#endif // _AAAA_OBJECTS_HPP_INCLUDED
+#endif // _AUTHORIZATION_HPP_INCLUDED

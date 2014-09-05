@@ -37,7 +37,7 @@
 #define _Wolframe_BASE_CRYPTO_PROTOCOL_HANDLER_HPP_INCLUDED
 
 #include "lineProtocolHandler.hpp"
-#include "AAAA/authenticator.hpp"
+#include "aaaa/authenticator.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {

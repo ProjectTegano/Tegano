@@ -37,7 +37,7 @@
 #define _Wolframe_AUTH_PROTOCOL_HANDLER_HPP_INCLUDED
 
 #include "baseCryptoProtocolHandler.hpp"
-#include "AAAA/authenticator.hpp"
+#include "aaaa/authenticator.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {
@@ -49,7 +49,7 @@ class AuthProtocolHandler
 	:public cmdbind::BaseCryptoProtocolHandler
 {
 public:
-	explicit AuthProtocolHandler( const boost::shared_ptr<AAAA::Authenticator>& authenticator_);
+	explicit AuthProtocolHandler( const boost::shared_ptr<aaaa::Authenticator>& authenticator_);
 	virtual ~AuthProtocolHandler();
 
 private:
@@ -59,7 +59,7 @@ private:
 	virtual void processMessage( const std::string& msg);
 
 private:
-	boost::shared_ptr<AAAA::Authenticator> m_authenticator;	///< authenticator object reference
+	boost::shared_ptr<aaaa::Authenticator> m_authenticator;	///< authenticator object reference
 };
 
 }} //namespace

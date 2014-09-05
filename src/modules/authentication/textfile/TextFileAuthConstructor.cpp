@@ -37,10 +37,10 @@
 #include "TextFileAuth.hpp"
 #include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
-TextFileAuthUnit* TextFileAuthConstructor::object( const config::NamedConfiguration& conf )
+TextFileAuthUnit* TextFileAuthConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const TextFileAuthConfig& cfg = dynamic_cast< const TextFileAuthConfig& >( conf );
 
@@ -50,4 +50,3 @@ TextFileAuthUnit* TextFileAuthConstructor::object( const config::NamedConfigurat
 	return m_auth;
 }
 
-}} // namespace _Wolframe::AAAA

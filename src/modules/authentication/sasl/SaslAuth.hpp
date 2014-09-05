@@ -37,14 +37,14 @@
 #ifndef _SASL_AUTHENTICATION_HPP_INCLUDED
 #define _SASL_AUTHENTICATION_HPP_INCLUDED
 
-#include "AAAA/authenticationUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 
 #include <string>
 #include "sasl/sasl.h"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* SASL_AUTHENTICATION_CLASS_NAME = "SASLAuth";
 
@@ -148,6 +148,6 @@ private:
 	std::string		m_user;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _TEXT_FILE_AUTHENTICATION_HPP_INCLUDED

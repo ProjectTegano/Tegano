@@ -35,7 +35,8 @@ Project Wolframe.
 #define _Wolframe_MODULE_PROGRAM_TYPE_BUILDER_TEMPLATE_HPP_INCLUDED
 #include "processor/program.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/simpleBuilder.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {

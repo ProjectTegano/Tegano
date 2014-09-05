@@ -37,11 +37,13 @@
 #define _MODULE_DIRECTORY_INTERFACE_HPP_INCLUDED
 
 #include <string>
-#include <list>
-#include "module/moduleInterface.hpp"
+#include <vector>
 
 namespace _Wolframe {
 namespace module {
+
+class ConfiguredBuilder;
+class SimpleBuilder;
 
 /// \class ModuleDirectory
 /// \brief Interface to the modules directory used by the constructors of the providers to build themselves.

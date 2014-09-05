@@ -41,14 +41,14 @@
 #include "utils/getPassword.hpp"
 #include "utils/fileUtils.hpp"
 #include "passwdFile.hpp"
-#include "AAAA/passwordHash.hpp"
+#include "aaaa/passwordHash.hpp"
 #include "types/base64.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 
 namespace PO = boost::program_options;
-namespace WA = _Wolframe::AAAA;
+namespace WA = _Wolframe::aaaa;
 namespace WU = _Wolframe::utils;
 
 

@@ -32,10 +32,10 @@
 ************************************************************************/
 /// \brief Standard authorizer
 #include "standardAuthorizer.hpp"
-#include "AAAA/authorizationUnit.hpp"
+#include "aaaa/authorizationUnit.hpp"
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 StandardAuthorizer::StandardAuthorizer( const std::vector< AuthorizationUnit* >& units,
 					bool dflt )

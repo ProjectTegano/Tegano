@@ -35,12 +35,12 @@
 #ifndef _AAAA_STANDARD_AUTHORIZER_HPP_INCLUDED
 #define _AAAA_STANDARD_AUTHORIZER_HPP_INCLUDED
 
-#include "AAAA/authorizer.hpp"
+#include "aaaa/authorizer.hpp"
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class AuthorizationUnit;
 

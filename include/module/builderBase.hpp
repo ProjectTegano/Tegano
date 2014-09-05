@@ -30,34 +30,29 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file auditUnit.hpp
-/// \brief Audit unit
+/// \brief Base class for object builders
+/// \file module/builderBase.hpp
 
-#ifndef _AUDIT_UNIT_HPP_INCLUDED
-#define _AUDIT_UNIT_HPP_INCLUDED
-#include "database/databaseProviderInterface.hpp"
+#ifndef _MODULE_BUILDER_BASE_HPP_INCLUDED
+#define _MODULE_BUILDER_BASE_HPP_INCLUDED
+#include "module/objectConstructorBase.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace module {
 
-class Information;
-
-/// \class AuditUnit
-/// \brief This is the base class for audit unit implementations
-class AuditUnit
+/// \class BuilderBase
+/// Base class of all builders
+class BuilderBase
 {
 public:
-	virtual ~AuditUnit()				{}
+	virtual ~BuilderBase()				{}
 
-	virtual const char* className() const = 0;
-
-	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
-							{ return true; }
-	virtual bool required() = 0;
-
-	virtual bool audit( const Information& auditObject ) = 0;
+	virtual const char* objectClassName() const = 0;
+	virtual ObjectConstructorBase::ObjectType objectType() const = 0;
+	virtual ObjectConstructorBase* constructor() const = 0;
 };
 
 }}//namespace
 #endif
+
 

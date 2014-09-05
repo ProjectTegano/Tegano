@@ -81,8 +81,8 @@ private:
 	bool redirectConsumedInput( cmdbind::DoctypeFilterProtocolHandler* fromh, cmdbind::ProtocolHandler* toh, std::ostream& out);
 
 private:
-	boost::shared_ptr<AAAA::Authenticator> m_authenticator;
-	boost::shared_ptr<AAAA::PasswordChanger> m_passwordChanger;
+	boost::shared_ptr<aaaa::Authenticator> m_authenticator;
+	boost::shared_ptr<aaaa::PasswordChanger> m_passwordChanger;
 	net::RemoteEndpointR m_remoteEndpoint;
 	net::LocalEndpointR m_localEndpoint;
 	std::string m_command;

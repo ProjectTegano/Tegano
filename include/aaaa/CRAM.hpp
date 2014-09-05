@@ -31,7 +31,7 @@
 
 ************************************************************************/
 //
-/// \file AAAA/CRAM.hpp
+/// \file aaaa/CRAM.hpp
 /// \brief Challenge Response Authentication Mechanism classes
 ///
 /// \note This implementation of a CRAM mechanism is specific to the Wolframe Project.
@@ -44,10 +44,10 @@
 
 #include <string>
 #include "system/randomGenerator.hpp"
-#include "AAAA/passwordHash.hpp"
+#include "aaaa/passwordHash.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const size_t CRAM_BLOCK_SIZE = 512 / 8;
 static const size_t CRAM_DIGEST_SIZE = 256 / 8;
@@ -133,7 +133,7 @@ private:
 	unsigned char	m_salt[ CRAM_SALT_SIZE ];
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif	// _CRAM_HPP_INCLUDED
 

@@ -37,8 +37,8 @@
 #include "SaslAuth.hpp"
 #include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 SaslAuthUnit* SaslAuthConstructor::object( const config::NamedConfiguration& conf )
 {
@@ -50,4 +50,3 @@ SaslAuthUnit* SaslAuthConstructor::object( const config::NamedConfiguration& con
 	return m_auth;
 }
 
-}} // namespace _Wolframe::AAAA

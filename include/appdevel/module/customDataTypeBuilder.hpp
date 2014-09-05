@@ -34,7 +34,8 @@ Project Wolframe.
 #ifndef _Wolframe_MODULE_CUSTOM_DATA_TYPE_BUILDER_HPP_INCLUDED
 #define _Wolframe_MODULE_CUSTOM_DATA_TYPE_BUILDER_HPP_INCLUDED
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/simpleBuilder.hpp"
 #include "types/customDataType.hpp"
 #include "types/keymap.hpp"
 #include <string>
@@ -90,7 +91,7 @@ typedef boost::shared_ptr<CustomDataTypeConstructor> CustomDataTypeConstructorR;
 
 /// \class CustomDataTypeBuilder
 /// \brief Builder of a custom data type constructor for language bindings
-class CustomDataTypeBuilder :public SimpleBuilder
+class CustomDataTypeBuilder :public module::SimpleBuilder
 {
 public:
 	CustomDataTypeBuilder( const char* classname_, const char* identifier_, types::CreateCustomDataType createFunc_)

@@ -37,7 +37,7 @@
 #ifndef _AUTHENTICATION_SASL_HPP_INCLUDED
 #define _AUTHENTICATION_SASL_HPP_INCLUDED
 
-#include "AAAA/authentication.hpp"
+#include "aaaa/authentication.hpp"
 
 #include <string>
 
@@ -46,7 +46,7 @@
 #include "sasl/sasl.h"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class SaslAuthenticator : public Authenticator {
 	private:
@@ -81,7 +81,7 @@ class SaslAuthenticator : public Authenticator {
 		std::string getConfPath( ) { return m_confpath; }
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // WITH_SASL
 

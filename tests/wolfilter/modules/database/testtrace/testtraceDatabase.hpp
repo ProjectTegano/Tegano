@@ -37,7 +37,7 @@
 #include "database/database.hpp"
 #include "config/configurationBase.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include <list>
 #include <string>
 
@@ -168,7 +168,7 @@ private:
 
 ///\class TesttraceDatabaseConstructor
 ///\brief Testtrace fake database constructor
-class TesttraceDatabaseConstructor : public ConfiguredObjectConstructor<db::DatabaseUnit>
+class TesttraceDatabaseConstructor : public module::ConfiguredObjectConstructor<db::DatabaseUnit>
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
@@ -181,7 +181,7 @@ public:
 		return TESTTRACE_DATABASE_CLASSNAME;
 	}
 
-	virtual TesttraceDatabaseUnit* object( const config::NamedConfiguration& conf_)
+	virtual TesttraceDatabaseUnit* object( const config::NamedConfiguration& conf_) const
 	{
 		const TesttraceDatabaseConfig& conf = dynamic_cast<const TesttraceDatabaseConfig&>( conf_);
 		return new TesttraceDatabaseUnit( conf.id(), conf.resultfilename(), conf.outfilename());

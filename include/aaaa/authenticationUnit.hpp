@@ -40,7 +40,7 @@
 
 #include <string>
 
-#include "user.hpp"
+#include "aaaa/user.hpp"
 #include "database/databaseProviderInterface.hpp"
 #include "system/connectionEndpoint.hpp"
 
@@ -49,7 +49,7 @@ namespace system
 {
 	class RandomGenerator;
 }
-namespace AAAA {
+namespace aaaa {
 
 class AuthenticatorSlice;
 class PasswordChanger;
@@ -101,6 +101,5 @@ private:
 	system::RandomGenerator* m_randomGenerator;
 };
 
-}} // namespace _Wolframe::AAAA
-
-#endif // _AUTHENTICATION_UNIT_HPP_INCLUDED
+}}//namespace
+#endif

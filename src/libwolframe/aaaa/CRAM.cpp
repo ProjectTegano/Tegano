@@ -50,8 +50,8 @@
 #include <time.h>
 #endif
 
-#include "AAAA/CRAM.hpp"
-#include "AAAA/passwordHash.hpp"
+#include "aaaa/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
 #include "types/byte2hex.h"
 #include "types/base64.hpp"
 #include "crypto/sha2.h"
@@ -60,7 +60,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe;
 
 static const size_t CRAM_CHALLENGE_BCD_SIZE = 2 * CRAM_CHALLENGE_SIZE + 1;

@@ -39,7 +39,7 @@
 #include <cstring>
 #include <cassert>
 
-#include "AAAA/passwordHash.hpp"
+#include "aaaa/passwordHash.hpp"
 #include "crypto/PBKDF2.hpp"
 #include "types/byte2hex.h"
 #include "types/base64.hpp"
@@ -47,7 +47,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe;
 
 static const unsigned int PBKDF2_ROUNDS = 10589;

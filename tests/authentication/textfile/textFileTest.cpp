@@ -42,12 +42,12 @@
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
-#include "AAAA/passwordHash.hpp"
-#include "AAAA/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
+#include "aaaa/CRAM.hpp"
 
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
@@ -246,25 +246,25 @@ TEST_F( AuthenticationFixture, AuthenticationSuccess )
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
 	authUnit.setRandomGenerator( &g_randomGenerator);
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	std::string userHash = usernameHash( "Admin" );
 	std::cout << "User hash: " << userHash << std::endl;
 	slice->messageIn( userHash );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 
 	std::string challenge = slice->messageOut();
 	std::cout << "Challenge: " << challenge << std::endl;
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
-	AAAA::CRAMresponse response( challenge, "Good Password" );
+	aaaa::CRAMresponse response( challenge, "Good Password" );
 	std::cout << "Response:  " << response.toString() << std::endl;
 	slice->messageIn( response.toString() );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AUTHENTICATED );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AUTHENTICATED );
 
 	user = slice->user();
 	ASSERT_TRUE( user != NULL );
@@ -287,23 +287,23 @@ TEST_F( AuthenticationFixture, AuthenticationWrongPassword )
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
 	authUnit.setRandomGenerator( &g_randomGenerator);
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	std::string userHash = usernameHash( "Admin" );
 	slice->messageIn( userHash );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 
 	std::string challenge = slice->messageOut();
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
-	AAAA::CRAMresponse response( challenge, "Good Password " );
+	aaaa::CRAMresponse response( challenge, "Good Password " );
 
 	slice->messageIn( response.toString() );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::INVALID_CREDENTIALS );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::INVALID_CREDENTIALS );
 
 	user = slice->user();
 	ASSERT_TRUE( user == NULL );
@@ -317,16 +317,16 @@ TEST_F( AuthenticationFixture, AuthenticationWrongUser )
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
 	authUnit.setRandomGenerator( &g_randomGenerator);
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	std::string userHash = usernameHash( "admin" );
 
 	slice->messageIn( userHash );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::USER_NOT_FOUND );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::USER_NOT_FOUND );
 
 	user = slice->user();
 	ASSERT_TRUE( user == NULL );
@@ -340,26 +340,26 @@ TEST_F( AuthenticationFixture, AuthenticationLastSlice )
 	User* user = NULL;
 	TextFileAuthUnit authUnit( "test", "passwd" );
 	authUnit.setRandomGenerator( &g_randomGenerator);
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 	slice->lastSlice();
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	std::string userHash = usernameHash( "bzgg12" );
 	std::cout << "User hash: " << userHash << std::endl;
 	slice->messageIn( userHash );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 
 	std::string challenge = slice->messageOut();
 	std::cout << "Challenge: " << challenge << std::endl;
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
-	AAAA::CRAMresponse response( challenge, "Extremely Good Password " );
+	aaaa::CRAMresponse response( challenge, "Extremely Good Password " );
 	std::cout << "Response:  " << response.toString() << std::endl;
 	slice->messageIn( response.toString() );
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::INVALID_CREDENTIALS );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::INVALID_CREDENTIALS );
 
 	user = slice->user();
 	ASSERT_TRUE( user == NULL );

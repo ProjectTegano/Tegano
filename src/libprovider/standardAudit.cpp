@@ -33,14 +33,14 @@
 /// \brief Standard audit
 
 #include "standardAudit.hpp"
-#include "AAAA/information.hpp"
-#include "AAAA/auditUnit.hpp"
-#include "AAAA/auditor.hpp"
+#include "aaaa/information.hpp"
+#include "aaaa/auditUnit.hpp"
+#include "aaaa/auditor.hpp"
 #include <string>
 #include <vector>
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 StandardAudit::StandardAudit( const std::vector< AuditUnit* >& units, bool mandatory )
 	: m_auditUnits( units ), m_mandatory( mandatory )

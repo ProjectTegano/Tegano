@@ -35,19 +35,20 @@
 //
 
 #include "DBauth.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
-} // namespace AAAA
+namespace aaaa {
+} // namespace aaaa
 
 namespace module {
 
 static const BuilderBase* getModule( void )
 {
-	static const module::ConfiguredBuilderDescription< AAAA::DBauthConstructor,
-			AAAA::DBAuthConfig > mod( "Authentication database", "Authentication",
+	static const module::ConfiguredBuilderTemplate< aaaa::DBauthConstructor,
+			aaaa::DBAuthConfig > mod( "Authentication database", "Authentication",
 						  "database", "DBAuth" );
 	return &mod;
 }

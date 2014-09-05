@@ -33,7 +33,7 @@
 //
 // a test module
 //
-
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test_containers.hpp"
@@ -69,14 +69,14 @@ void TestModuleConfig::setCanonicalPathes( const std::string& /*refPath*/ )
 {
 }
 
-TestUnit1* TestModuleContainer1::object( const config::NamedConfiguration& /* conf */ )
+TestUnit1* TestModuleContainer1::object( const config::NamedConfiguration& /* conf */ ) const
 {
 	TestUnit1* m_test = new TestUnitImpl1( /* conf */ );
 	LOG_DEBUG << "Module: test module 1 container created";
 	return m_test;
 }
 
-TestUnit2* TestModuleContainer2::object( const config::NamedConfiguration& /*conf */ )
+TestUnit2* TestModuleContainer2::object( const config::NamedConfiguration& /*conf */ ) const
 {
 	TestUnit2* m_test = new TestUnitImpl2( /* conf */ );
 	LOG_DEBUG << "Module: test module 2 container created";
@@ -127,14 +127,14 @@ bool TestUnitImpl2::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 
 static const BuilderBase* getModule1( void )
 {
-	static const module::ConfiguredBuilderDescription< test_containers::TestModuleContainer1,
+	static const module::ConfiguredBuilderTemplate< test_containers::TestModuleContainer1,
 		test_containers::TestModuleConfig > mod( "Test Module 1", "Test 1", "test1", "TestObject1" );
 	return &mod;
 }
 
 static const BuilderBase* getModule2( void )
 {
-	static const module::ConfiguredBuilderDescription< test_containers::TestModuleContainer2,
+	static const module::ConfiguredBuilderTemplate< test_containers::TestModuleContainer2,
 		test_containers::TestModuleConfig > mod( "Test Module 2", "Test 2", "test 2", "TestObject2" );
 	return &mod;
 }

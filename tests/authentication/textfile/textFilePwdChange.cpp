@@ -41,15 +41,15 @@
 #include "types/base64.hpp"
 #include "types/byte2hex.h"
 #include "crypto/AES256.h"
-#include "AAAA/passwordHash.hpp"
-#include "AAAA/passwordChanger.hpp"
-#include "AAAA/passwordChangeMessage.hpp"
-#include "AAAA/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
+#include "aaaa/passwordChanger.hpp"
+#include "aaaa/passwordChangeMessage.hpp"
+#include "aaaa/CRAM.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
@@ -193,22 +193,22 @@ TEST_F( PasswordChangerFixture, PasswordChangeSuccess )
 	PasswordChanger* changer = authUnit.passwordChanger( user, net::RemoteTCPendpoint( "localhost", 2222 ));
 	ASSERT_TRUE( changer != NULL );
 
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::MESSAGE_AVAILABLE );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::MESSAGE_AVAILABLE );
 
 	std::string challenge = changer->messageOut();
 	std::cout << "Challenge: " << challenge << std::endl;
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::AWAITING_MESSAGE );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::AWAITING_MESSAGE );
 
-	AAAA::CRAMsalt salt( challenge );
+	aaaa::CRAMsalt salt( challenge );
 	std::cout << "Salt (IV): " << salt.toString() << std::endl;
-	AAAA::CRAMresponse response( challenge, "Good Password" );
+	aaaa::CRAMresponse response( challenge, "Good Password" );
 	std::cout << "Response:  " << response.toString() << std::endl;
 
 	PasswordChangeMessage pwd( "New Password" );
 	std::string pwdMsg = pwd.toBase64( salt.salt(), response.response() );
 	std::cout << "Message:   " << pwdMsg << std::endl;
 	changer->messageIn( pwdMsg );
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::PASSWORD_EXCHANGED );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::PASSWORD_EXCHANGED );
 
 	EXPECT_EQ( changer->password(), "New Password" );
 
@@ -224,22 +224,22 @@ TEST_F( PasswordChangerFixture, PasswordChangeFailure )
 	PasswordChanger* changer = authUnit.passwordChanger( user, net::RemoteTCPendpoint( "localhost", 2222 ));
 	ASSERT_TRUE( changer != NULL );
 
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::MESSAGE_AVAILABLE );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::MESSAGE_AVAILABLE );
 
 	std::string challenge = changer->messageOut();
 	std::cout << "Challenge: " << challenge << std::endl;
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::AWAITING_MESSAGE );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::AWAITING_MESSAGE );
 
-	AAAA::CRAMsalt salt( challenge );
+	aaaa::CRAMsalt salt( challenge );
 	std::cout << "Salt (IV): " << salt.toString() << std::endl;
-	AAAA::CRAMresponse response( challenge, "Good Password" );
+	aaaa::CRAMresponse response( challenge, "Good Password" );
 	std::cout << "Response:  " << response.toString() << std::endl;
 
 	PasswordChangeMessage pwd( "New Password" );
 	std::string pwdMsg = pwd.toBase64( salt.salt(), response.response() );
 	pwdMsg[ 59 ] ^= 0x01;
 	changer->messageIn( pwdMsg );
-	EXPECT_EQ( changer->status(), AAAA::PasswordChanger::INVALID_MESSAGE );
+	EXPECT_EQ( changer->status(), aaaa::PasswordChanger::INVALID_MESSAGE );
 
 	EXPECT_THROW( changer->password(), std::logic_error );
 

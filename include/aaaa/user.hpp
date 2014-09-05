@@ -40,7 +40,7 @@
 #include <ctime>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 /// \class User
 /// \brief Data structure containing all login data of a user
@@ -81,6 +81,6 @@ private:
 	const types::SecureString	m_name;			///< name of the user
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _USER_HPP_INCLUDED

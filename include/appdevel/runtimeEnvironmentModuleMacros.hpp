@@ -34,6 +34,7 @@
 /// \brief Macros for a module for a configurable runtime environment for a binding language or a binding language universe
 #include "appdevel/module/runtimeEnvironmentConstructor.hpp"
 #include "module/moduleInterface.hpp"
+#include "module/configuredBuilder.hpp"
 #include "processor/procProviderInterface.hpp"
 #include <boost/lexical_cast.hpp>
 
@@ -46,7 +47,7 @@
 	public:\
 		RuntimeEnvConstructor(){}\
 		virtual ~RuntimeEnvConstructor(){}\
-		virtual CLASSDEF* object( const _Wolframe::config::NamedConfiguration& cfgi)\
+		virtual CLASSDEF* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
 		{\
 			const CONFIGDEF* cfg = dynamic_cast<const CONFIGDEF*>(&cfgi);\
 			if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to runtime environment constructor " CONFIG_TITLE);\
@@ -73,15 +74,15 @@
 			if (0!=(err=INITFUNCTION())) throw std::runtime_error(std::string("failed to initialize runtime environment (error code ") + boost::lexical_cast<std::string>(err) + ")");\
 		}\
 		virtual ~RuntimeEnvBuilder(){}\
-		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
+		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return _Wolframe::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT;\
+			return _Wolframe::module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT;\
 		}\
 		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
 		{\
 			return new CONFIGDEF( CONFIG_TITLE "RuntimeEnvironment", title(), logPrefix, keyword());\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor() const\
+		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
 		{\
 			return new RuntimeEnvConstructor();\
 		}\

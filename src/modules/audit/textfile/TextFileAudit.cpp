@@ -37,12 +37,12 @@
 
 #include "logger/logger-v1.hpp"
 #include "TextFileAudit.hpp"
-#include "AAAA/information.hpp"
+#include "aaaa/information.hpp"
 
 #include <boost/filesystem.hpp>
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 //****  Text File Audit   ***************************************************
 TextFileAuditor::TextFileAuditor( const std::string& filename )
@@ -66,5 +66,3 @@ bool TextFileAuditor::audit( const Information& auditObject )
 	}
 	return false;
 }
-
-}} // namespace _Wolframe::AAAA

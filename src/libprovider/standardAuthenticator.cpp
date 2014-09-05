@@ -37,7 +37,7 @@
 #include <vector>
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 StandardAuthenticator::StandardAuthenticator( const std::vector<std::string>& mechs_,
 					      const std::vector<AuthenticationUnit *> &units_,
@@ -314,7 +314,7 @@ std::string StandardAuthenticator::messageOut()
 // The authenticated user or NULL if not authenticated
 User* StandardAuthenticator::user()
 {
-	AAAA::User* retUser = m_user;
+	aaaa::User* retUser = m_user;
 	if ( m_user )	{
 		m_user = NULL;
 		assert( m_slices.empty() );

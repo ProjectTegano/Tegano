@@ -45,8 +45,8 @@
 
 using namespace _Wolframe::utils;
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 /// Text file authentication
 bool SaslAuthConfig::check() const
@@ -154,6 +154,4 @@ User* SaslAuthSlice::user()
 {
 	return NULL;
 }
-
-}} // namespace _Wolframe::AAAA
 

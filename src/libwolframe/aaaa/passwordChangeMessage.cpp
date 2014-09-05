@@ -34,7 +34,7 @@
 ///
 /// Password changer data structure implementation
 
-#include "AAAA/passwordChangeMessage.hpp"
+#include "aaaa/passwordChangeMessage.hpp"
 #include "crypto/md5.h"
 #include "crypto/AES256.h"
 #include "types/base64.hpp"
@@ -44,7 +44,7 @@
 #include <boost/lexical_cast.hpp>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 PasswordChangeMessage::PasswordChangeMessage( const std::string& pwd )
 {
@@ -119,4 +119,4 @@ bool PasswordChangeMessage::fromBase64( const std::string& msg,
 	return true;
 }
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa

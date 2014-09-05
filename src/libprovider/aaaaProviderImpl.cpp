@@ -40,7 +40,7 @@
 #include "system/randomGenerator.hpp"
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 AaaaProviderImpl::AaaaProviderImpl(
 		system::RandomGenerator* randomGenerator_,

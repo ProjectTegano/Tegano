@@ -40,11 +40,11 @@
 #include <string>
 
 #include "config/configurationTree.hpp"
-#include "AAAA/auditUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/auditUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* FILE_AUDIT_CLASS_NAME = "FileAudit";
 
@@ -85,15 +85,15 @@ private:
 };
 
 
-class TextFileAuditConstructor : public ConfiguredObjectConstructor< AuditUnit >
+class TextFileAuditConstructor : public module::ConfiguredObjectConstructor< AuditUnit >
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 						{ return AUDIT_OBJECT; }
 	const char* objectClassName() const	{ return FILE_AUDIT_CLASS_NAME; }
-	TextFileAuditor* object( const config::NamedConfiguration& conf );
+	TextFileAuditor* object( const config::NamedConfiguration& conf ) const;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _FILE_AUDIT_HPP_INCLUDED

@@ -33,7 +33,10 @@ INCLUDE_LIBS =
 LIBRARIES = \
 	wolframe.lib
 
-TYPE_OBJS = \
+TYP_OBJS = \
+	types\base64.obj \
+	types\b64encode.obj \
+	types\b64decode.obj \
 	types\objectPool.obj \
 	types\docmetadata.obj \
 	types\conversions.obj \
@@ -47,7 +50,7 @@ TYPE_OBJS = \
 	types\variant.obj \
 	types\variantStructDescription.obj \
 	types\variantStruct.obj \
-	types\form.obj
+	types\form.o
 
 UTIL_OBJS = \
 	utils\asciiCharParser.obj \
@@ -59,35 +62,35 @@ UTIL_OBJS = \
 	utils\stringUtils.obj \
 	utils\fileUtils.obj \
 	utils\parseUtils.obj \
-	utils\printFormats.obj
+	utils\printFormats.obj \
+	utils\getPassword.o
+
+AAAA_OBJS = \
+	aaaa\user.obj \
+	aaaa\passwordHash.obj \
+	aaaa\usernameHash.obj \
+	aaaa\CRAM.obj \
+	aaaa\passwordChangeMessage.o
 
 CPP_OBJS = \
-	$(TYPE_OBJS) \
+	$(TYP_OBJS) \
 	$(UTIL_OBJS) \
-	logError.obj \
-	platform.obj \
-	execContext.obj \
-	getPassword.obj \
-	user.obj \
-	base64.obj \
-	HMAC.obj \
-	PBKDF2.obj \
-	passwordHash.obj \
-	usernameHash.obj \
-	CRAM.obj \
-	passwordChangeMessage.obj
+	$(AAAA_OBJS) \
+	logger\logError.obj \
+	processor\execContext.obj \
+	system\platform.obj \
+	crypto\HMAC.obj \
+	crypto\PBKDF2.obj
 
 OBJS = \
-	b64encode.obj \
-	b64decode.obj \
-	byte2hex.obj \
-	AES256.obj \
-	sha1.obj \
-	sha2.obj \
-	hmac_sha1.obj \
-	hmac_sha256.obj \
-	pbkdf2_hmac_sha1.obj \
-	md5.obj
+	types\byte2hex.obj \
+	crypto\AES256.obj \
+	crypto\sha1.obj \
+	crypto\sha2.obj \
+	crypto\hmac_sha1.obj \
+	crypto\hmac_sha256.obj \
+	crypto\pbkdf2_hmac_sha1.obj \
+	crypto\md5.obj
 
 all: $(OBJS) $(CPP_OBJS) $(LIBRARIES)
 

@@ -34,7 +34,7 @@
 
 #include "serverHandler.hpp"
 #include "processor/programLibrary.hpp"
-#include "AAAA/information.hpp"
+#include "aaaa/information.hpp"
 #include "logger/logger-v1.hpp"
 #include <stdexcept>
 
@@ -182,7 +182,7 @@ void ServerConnectionHandler::setPeer( const net::RemoteEndpointR& remote )
 
 	// Check if the connection is allowed
 	if (( m_authorization = m_globalCtx->aaaaProvider()->authorizer()))	{
-		if ( m_authorization->allowed( AAAA::ConnectInfo( *m_localEP, *m_remoteEP )))	{
+		if ( m_authorization->allowed( aaaa::ConnectInfo( *m_localEP, *m_remoteEP )))	{
 			LOG_DEBUG << "Connection from " << m_remoteEP->toString()
 				  << " to " << m_localEP->toString() << " authorized";
 			m_execContext.setAuthorizer( m_authorization);

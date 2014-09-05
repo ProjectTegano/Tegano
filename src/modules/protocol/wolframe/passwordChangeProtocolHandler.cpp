@@ -38,7 +38,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;
 
-PasswordChangeProtocolHandler::PasswordChangeProtocolHandler( const boost::shared_ptr<AAAA::PasswordChanger>& passwordChanger_)
+PasswordChangeProtocolHandler::PasswordChangeProtocolHandler( const boost::shared_ptr<aaaa::PasswordChanger>& passwordChanger_)
 	:m_passwordChanger(passwordChanger_)
 {}
 
@@ -65,21 +65,21 @@ ProtocolHandler::Operation PasswordChangeProtocolHandler::nextOperation()
 			case NextOperation:
 				switch (m_passwordChanger->status())
 				{
-					case AAAA::PasswordChanger::MESSAGE_AVAILABLE:
+					case aaaa::PasswordChanger::MESSAGE_AVAILABLE:
 						pushOutput( m_passwordChanger->messageOut());
 						continue;
-					case AAAA::PasswordChanger::AWAITING_MESSAGE:
+					case aaaa::PasswordChanger::AWAITING_MESSAGE:
 						if (!consumeNextMessage())
 						{
 							return READ;
 						}
 						continue;
-					case AAAA::PasswordChanger::PASSWORD_EXCHANGED:
+					case aaaa::PasswordChanger::PASSWORD_EXCHANGED:
 						return CLOSE;
-					case AAAA::PasswordChanger::INVALID_MESSAGE:
+					case aaaa::PasswordChanger::INVALID_MESSAGE:
 						setLastError( "invalid message");
 						return CLOSE;
-					case AAAA::PasswordChanger::SYSTEM_FAILURE:
+					case aaaa::PasswordChanger::SYSTEM_FAILURE:
 						setLastError( "unspecified authentication system error");
 						return CLOSE;
 				}

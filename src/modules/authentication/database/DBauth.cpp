@@ -39,8 +39,8 @@
 #include "logger/logger-v1.hpp"
 #include "DBauth.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 DBauthUnit::DBauthUnit( const std::string& Identifier, const std::string& dbLabel )
 	: AuthenticationUnit( Identifier ), m_dbLabel( dbLabel )
@@ -84,6 +84,4 @@ AuthenticatorSlice* DBauthUnit::slice( const std::string& /*mech*/,
 {
 	return NULL;
 }
-
-}} // namespace _Wolframe::AAAA
 

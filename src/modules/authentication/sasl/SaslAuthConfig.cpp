@@ -42,8 +42,8 @@
 #include "boost/algorithm/string.hpp"
 #include <boost/filesystem.hpp>
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 bool SaslAuthConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 				const module::ModuleDirectory* /*modules*/ )
@@ -78,4 +78,3 @@ bool SaslAuthConfig::parse( const config::ConfigurationNode& pt, const std::stri
 	return retVal;
 }
 
-}} // namespace _Wolframe::config

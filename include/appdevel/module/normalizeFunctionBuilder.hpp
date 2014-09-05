@@ -36,7 +36,8 @@ Project Wolframe.
 #include "types/normalizeFunction.hpp"
 #include "types/keymap.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/simpleBuilder.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {

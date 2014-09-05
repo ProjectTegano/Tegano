@@ -37,10 +37,10 @@
 #include "logger/logger-v1.hpp"
 #include "TextFileAudit.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
-TextFileAuditor* TextFileAuditConstructor::object( const config::NamedConfiguration& conf )
+TextFileAuditor* TextFileAuditConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const TextFileAuditConfig& cfg = dynamic_cast< const TextFileAuditConfig& >( conf );
 
@@ -49,4 +49,3 @@ TextFileAuditor* TextFileAuditConstructor::object( const config::NamedConfigurat
 	return m_audit;
 }
 
-}} // namespace _Wolframe::AAAA

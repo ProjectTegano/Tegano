@@ -30,44 +30,47 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file AAAA/aaaaProviderInterface.hpp
-/// \brief AAAA provider interface
+///
+/// \file aaaa/information.hpp
+/// \brief Header file for the objects used for AAAA information.
+///
 
-#ifndef _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
-#define _AAAA_PROVIDER_INTERFACE_HPP_INCLUDED
-
-#include "AAAA/authenticator.hpp"
-#include "AAAA/passwordChanger.hpp"
-#include "AAAA/authorizer.hpp"
-#include "AAAA/auditor.hpp"
-#include "AAAA/user.hpp"
 #include "system/connectionEndpoint.hpp"
-#include "system/randomGenerator.hpp"
+
+#ifndef _AAAA_OBJECTS_HPP_INCLUDED
+#define _AAAA_OBJECTS_HPP_INCLUDED
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
-/// \class aaaaProviderInterface
-/// \brief Provider interface to create AAAA related objects
-class AaaaProviderInterface
+/// Base class for AAAA information objects.
+class Information
 {
 public:
-	/// \brief Destructor
-	virtual ~AaaaProviderInterface(){}
+	enum Type	{
+		CONNECTION,			///< object is connection infromation
+		LOGIN,				///< object is login information
+		LOGOUT,				///< object is logout information
+		TRANSACTION			///< object is a transaction information
+	};
 
-	/// \brief Create an return an authenticator object
-	virtual Authenticator* authenticator( const net::RemoteEndpoint& client) const=0;
-	/// \brief Create an return a password changer object
-	virtual PasswordChanger* passwordChanger( const User& user,
-					  const net::RemoteEndpoint& client ) const=0;
-	/// \brief Create an return an authorizer object
-	virtual Authorizer* authorizer() const=0;
-	/// \brief Create an return an auditor object
-	virtual Auditor* auditor() const=0;
-	/// \brief Get the global random number generator
-	virtual system::RandomGenerator* randomGenerator() const=0;
+	virtual Type type() const = 0;
 };
 
-}}// namespace
-#endif
+/// Connection intiation info for AAAA purposes
+struct ConnectInfo : public Information
+{
+	const net::LocalEndpoint&	local;	///< local endpoint info
+	const net::RemoteEndpoint&	remote;	///< remote endpoint info
 
+	ConnectInfo( const net::LocalEndpoint& lcl, const net::RemoteEndpoint& rmt )
+		: local( lcl ), remote( rmt )	{}
+
+	Information::Type type() const		{ return CONNECTION; }
+private:
+	void operator=( const ConnectInfo&){}
+};
+
+}} // namespace _Wolframe::aaaa
+
+#endif // _AAAA_OBJECTS_HPP_INCLUDED

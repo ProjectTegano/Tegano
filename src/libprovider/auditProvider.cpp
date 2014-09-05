@@ -34,9 +34,9 @@
 
 #include "auditProvider.hpp"
 #include "standardAudit.hpp"
-#include "AAAA/information.hpp"
-#include "AAAA/auditor.hpp"
-#include "AAAA/auditUnit.hpp"
+#include "aaaa/information.hpp"
+#include "aaaa/auditor.hpp"
+#include "aaaa/auditUnit.hpp"
 #include "module/moduleDirectory.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
@@ -44,7 +44,7 @@
 #include <stdexcept>
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 AuditProvider::AuditProvider( const std::vector< config::NamedConfiguration* >& confs,
 			const module::ModuleDirectory* modules )

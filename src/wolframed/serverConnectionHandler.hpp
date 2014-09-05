@@ -91,9 +91,9 @@ private:
 	/// Back link to global context
 	const ServerHandler*		m_globalCtx;
 
-	AAAA::Authenticator*		m_authentication;
-	AAAA::Authorizer*		m_authorization;
-	AAAA::Auditor*			m_audit;
+	aaaa::Authenticator*		m_authentication;
+	aaaa::Authorizer*		m_authorization;
+	aaaa::Auditor*			m_audit;
 
 	net::LocalEndpointR		m_localEP;		///< local endpoint
 	net::RemoteEndpointR		m_remoteEP;		///< remote endpoint

@@ -38,11 +38,11 @@
 #include <string>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 std::string getLogin( );
 std::string getPassword( );
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _GET_PASSWORD_HPP_INCLUDED

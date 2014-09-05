@@ -43,8 +43,8 @@
 #include <cstring>
 #include <sstream>
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 /// Text file authentication
 bool PAMAuthConfig::check() const
@@ -516,4 +516,3 @@ User* PAMAuthSlice::user()
 	}
 }
 
-}} // namespace _Wolframe::AAAA

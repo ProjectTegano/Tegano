@@ -38,13 +38,13 @@
 #define _PAM_AUTHENTICATION_HPP_INCLUDED
 
 #include <string>
-#include "AAAA/authenticationUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 
 #include <security/pam_appl.h>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* PAM_AUTHENTICATION_CLASS_NAME = "PAMAuth";
 
@@ -154,6 +154,6 @@ private:
 	std::string		m_user;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _PAM_AUTHENTICATION_HPP_INCLUDED

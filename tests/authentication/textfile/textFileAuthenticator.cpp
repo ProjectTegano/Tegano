@@ -36,6 +36,7 @@
 
 #include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
+#include "module/configuredBuilderTemplate.hpp"
 
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "libconfig/aaaaProviderConfiguration.hpp"
@@ -45,8 +46,8 @@
 #include "TextFileAuth.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
-#include "AAAA/passwordHash.hpp"
-#include "AAAA/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
+#include "aaaa/CRAM.hpp"
 #include <boost/algorithm/string.hpp>
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -54,7 +55,7 @@
 static std::string g_execdir;
 _Wolframe::system::RandomGeneratorImpl g_randomGenerator;
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe::module;
 
@@ -75,12 +76,12 @@ protected:
 
 		// Build the modules directory
 		ModuleDirectoryImpl modDir( g_execdir);
-		static module::ConfiguredBuilderDescription< AAAA::TextFileAuthConstructor,
-				AAAA::TextFileAuthConfig > builder( "Authentication file", "Authentication",
+		static module::ConfiguredBuilderTemplate< aaaa::TextFileAuthConstructor,
+				aaaa::TextFileAuthConfig > builder( "Authentication file", "Authentication",
 								    "TextFile", "TextFileAuth" );
 		modDir.addBuilder( &builder );
 		config::AaaaProviderConfiguration cfg;
-		AAAA::AaaaProviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
+		aaaa::AaaaProviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
 	}
 };
 
@@ -89,26 +90,26 @@ protected:
 //{
 //	User* user = NULL;
 
-//	AAAA::Authenticator* authenticator = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+//	aaaa::Authenticator* authenticator = authUnit.slice( "WOLFRAME-CRAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 //	slice->lastSlice();
 
 //	ASSERT_TRUE( authenticator != NULL );
 
-//	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+//	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 //	std::string userHash = usernameHash( "bzgg12" );
 //	std::cout << "User hash: " << userHash << std::endl;
 //	slice->messageIn( userHash );
-//	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+//	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 
 //	std::string challenge = slice->messageOut();
 //	std::cout << "Challenge: " << challenge << std::endl;
-//	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+//	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
-//	AAAA::CRAMresponse response( challenge, "Extremely Good Password " );
+//	aaaa::CRAMresponse response( challenge, "Extremely Good Password " );
 //	std::cout << "Response:  " << response.toString() << std::endl;
 //	slice->messageIn( response.toString() );
-//	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::INVALID_CREDENTIALS );
+//	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::INVALID_CREDENTIALS );
 
 //	user = slice->user();
 //	ASSERT_TRUE( user == NULL );

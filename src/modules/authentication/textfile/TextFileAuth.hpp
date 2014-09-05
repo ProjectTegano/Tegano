@@ -39,16 +39,16 @@
 
 #include <string>
 #include <vector>
-#include "AAAA/authenticationUnit.hpp"
-#include "AAAA/authenticationSlice.hpp"
-#include "AAAA/passwordChanger.hpp"
-#include "module/constructor.hpp"
-#include "AAAA/user.hpp"
-#include "AAAA/CRAM.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "aaaa/authenticationSlice.hpp"
+#include "aaaa/passwordChanger.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "aaaa/user.hpp"
+#include "aaaa/CRAM.hpp"
 #include "passwdFile.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* TEXT_FILE_AUTH_CLASS_NAME = "TextFileAuth";
 
@@ -236,7 +236,7 @@ private:
 
 // Text file authentication - constructor
 //***********************************************************************
-class TextFileAuthConstructor : public ConfiguredObjectConstructor< AuthenticationUnit >
+class TextFileAuthConstructor : public module::ConfiguredObjectConstructor< AuthenticationUnit >
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
@@ -244,9 +244,9 @@ public:
 
 	const char* objectClassName() const		{ return TEXT_FILE_AUTH_CLASS_NAME; }
 
-	TextFileAuthUnit* object( const config::NamedConfiguration& conf );
+	TextFileAuthUnit* object( const config::NamedConfiguration& conf ) const;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _TEXT_FILE_AUTHENTICATION_HPP_INCLUDED

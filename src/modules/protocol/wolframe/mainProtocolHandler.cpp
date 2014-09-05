@@ -183,7 +183,7 @@ int MainProtocolHandler::endMech( cmdbind::ProtocolHandler* ch, std::ostream& ou
 	}
 	else
 	{
-		AAAA::User* usr = m_authenticator->user();
+		aaaa::User* usr = m_authenticator->user();
 		if (usr)
 		{
 			out << "OK authenticated" << endl();
@@ -261,7 +261,7 @@ int MainProtocolHandler::endPasswordChange( cmdbind::ProtocolHandler* ch, std::o
 	}
 	else
 	{
-		if (m_passwordChanger->status() == AAAA::PasswordChanger::PASSWORD_EXCHANGED)
+		if (m_passwordChanger->status() == aaaa::PasswordChanger::PASSWORD_EXCHANGED)
 		{
 			out << "OK password changed" << endl();
 		}

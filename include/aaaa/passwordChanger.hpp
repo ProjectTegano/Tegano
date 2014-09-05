@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file AAAA/passwordChanger.hpp
+/// \file aaaa/passwordChanger.hpp
 /// \brief Password changer interface definition
 
 #ifndef _PASSWORD_CHANGER_HPP_INCLUDED
@@ -39,7 +39,7 @@
 #include <string>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 /// \class PasswordChanger
 /// \brief Password changer interface
@@ -103,6 +103,6 @@ public:
 	virtual std::string password() = 0;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _PASSWORD_CHANGER_HPP_INCLUDED

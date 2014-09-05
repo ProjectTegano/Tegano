@@ -35,7 +35,7 @@
 #ifndef _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
-#include "AAAA/aaaaProviderInterface.hpp"
+#include "aaaa/aaaaProviderInterface.hpp"
 #include "authenticationFactory.hpp"
 #include "authorizationProvider.hpp"
 #include "auditProvider.hpp"
@@ -47,7 +47,7 @@
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 // AAAA provider implementation
 class AaaaProviderImpl
@@ -78,5 +78,5 @@ private:
 	AuditProvider		m_auditor;
 };
 
-}} // namespace _Wolframe::AAAA
+}} //namespace
 #endif // _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED

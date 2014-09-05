@@ -35,6 +35,7 @@
 //
 
 #include "module/moduleInterface.hpp"
+#include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
 namespace module {
@@ -84,7 +85,7 @@ public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 						{ return TEST_OBJECT; }
 	virtual const char* objectClassName() const	{ return "TestUnit"; }
-	virtual TestUnit* object( const config::NamedConfiguration& conf );
+	virtual TestUnit* object( const config::NamedConfiguration& conf ) const;
 };
 
 }}} // namespace _Wolframe::module::test

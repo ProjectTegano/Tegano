@@ -40,7 +40,7 @@
 #include "database/database.hpp"
 #include "database/transaction.hpp"
 #include "database/transactionExecStatemachine.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "types/objectPool.hpp"
 #include "logger/logger-v1.hpp"
 #include <list>

@@ -35,7 +35,8 @@ Project Wolframe.
 #define _Wolframe_MODULE_DOCYPE_DETECTOR_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #include "cmdbind/doctypeDetector.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/simpleBuilder.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace _Wolframe {
@@ -90,7 +91,7 @@ typedef boost::shared_ptr<DoctypeDetectorConstructor> DoctypeDetectorConstructor
 
 /// \brief Document type and format detector builder
 class DoctypeDetectorBuilder
-	:public SimpleBuilder
+	:public module::SimpleBuilder
 {
 public:
 	/// \brief Constructor

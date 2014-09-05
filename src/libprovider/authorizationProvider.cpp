@@ -34,14 +34,14 @@
 
 #include "authorizationProvider.hpp"
 #include "standardAuthorizer.hpp"
-#include "AAAA/authorizationUnit.hpp"
+#include "aaaa/authorizationUnit.hpp"
 #include <stdexcept>
 #include "module/moduleDirectory.hpp"
 #include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 AuthorizationProvider::AuthorizationProvider( const std::vector< config::NamedConfiguration* >& confs,
 					      bool authzDefault,

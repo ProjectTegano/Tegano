@@ -39,17 +39,17 @@
 
 #include "logger/logger-v1.hpp"
 #include "TextFileAuth.hpp"
-#include "AAAA/CRAM.hpp"
-#include "AAAA/passwordHash.hpp"
-#include "AAAA/passwordChangeMessage.hpp"
+#include "aaaa/CRAM.hpp"
+#include "aaaa/passwordHash.hpp"
+#include "aaaa/passwordChangeMessage.hpp"
 #include "passwdFile.hpp"
 #include "system/randomGenerator.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 // Text file authentication - authentication unit
 //***********************************************************************
@@ -525,6 +525,4 @@ std::string TextFilePwdChanger::password()
 		throw std::logic_error( msg );
 	}
 }
-
-}} // namespace _Wolframe::AAAA
 

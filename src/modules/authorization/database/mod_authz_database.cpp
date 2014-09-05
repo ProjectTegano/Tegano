@@ -35,6 +35,7 @@
 //
 
 #include "DBauthz.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
@@ -43,8 +44,8 @@ namespace module {
 
 static const BuilderBase* getModule( void )
 {
-	static const module::ConfiguredBuilderDescription< AAAA::DBauthzConstructor,
-			AAAA::DatabaseAuthzConfig > mod( "Authorization database", "authorization",
+	static const module::ConfiguredBuilderTemplate< aaaa::DBauthzConstructor,
+			aaaa::DatabaseAuthzConfig > mod( "Authorization database", "authorization",
 							 "database", "DatabaseAuthorization" );
 	return &mod;
 }

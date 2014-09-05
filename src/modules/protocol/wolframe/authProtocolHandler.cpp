@@ -38,7 +38,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::cmdbind;
 
-AuthProtocolHandler::AuthProtocolHandler( const boost::shared_ptr<AAAA::Authenticator>& authenticator_)
+AuthProtocolHandler::AuthProtocolHandler( const boost::shared_ptr<aaaa::Authenticator>& authenticator_)
 	:m_authenticator(authenticator_)
 {}
 
@@ -65,26 +65,26 @@ ProtocolHandler::Operation AuthProtocolHandler::nextOperation()
 			case NextOperation:
 				switch (m_authenticator->status())
 				{
-					case AAAA::Authenticator::INITIALIZED:
+					case aaaa::Authenticator::INITIALIZED:
 						throw std::logic_error("authentication protocol operation in state INITIALIZED");
-					case AAAA::Authenticator::MESSAGE_AVAILABLE:
+					case aaaa::Authenticator::MESSAGE_AVAILABLE:
 						pushOutput( m_authenticator->messageOut());
 						continue;
-					case AAAA::Authenticator::AWAITING_MESSAGE:
+					case aaaa::Authenticator::AWAITING_MESSAGE:
 						if (!consumeNextMessage())
 						{
 							return READ;
 						}
 						continue;
-					case AAAA::Authenticator::AUTHENTICATED:
+					case aaaa::Authenticator::AUTHENTICATED:
 						return CLOSE;
-					case AAAA::Authenticator::INVALID_CREDENTIALS:
+					case aaaa::Authenticator::INVALID_CREDENTIALS:
 						setLastError( "either the username or the credentials are invalid");
 						return CLOSE;
-					case AAAA::Authenticator::MECH_UNAVAILABLE:
+					case aaaa::Authenticator::MECH_UNAVAILABLE:
 						setLastError( "the requested authentication mech is not available");
 						return CLOSE;
-					case AAAA::Authenticator::SYSTEM_FAILURE:
+					case aaaa::Authenticator::SYSTEM_FAILURE:
 						setLastError( "unspecified authentication system error");
 						return CLOSE;
 				}

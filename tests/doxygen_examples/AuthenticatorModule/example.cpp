@@ -1,8 +1,8 @@
 #include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
-#include "AAAA/authenticationSlice.hpp"
-#include "AAAA/authenticator.hpp"
+#include "aaaa/authenticationSlice.hpp"
+#include "aaaa/authenticator.hpp"
 #include <string>
 
 class MyAuthenticationConfig
@@ -24,12 +24,12 @@ public:
 
 
 class MyAuthenticatorSlice
-	:public _Wolframe::AAAA::AuthenticatorSlice
+	:public _Wolframe::aaaa::AuthenticatorSlice
 {
 public:
 	virtual void dispose()
 	{
-		// ... destroy the object accordingly to the method is was created by the unit method _Wolframe::AAAA::AuthenticatorUnit::slice( const std::string&, const _Wolframe::net::RemoteEndpoint&)
+		// ... destroy the object accordingly to the method is was created by the unit method _Wolframe::aaaa::AuthenticatorUnit::slice( const std::string&, const _Wolframe::net::RemoteEndpoint&)
 	}
 
 	virtual const char* className() const
@@ -53,7 +53,7 @@ public:
 		// ... return the message to be sent announced by 'status()const' here
 	}
 
-	virtual _Wolframe::AAAA::AuthenticatorSlice::Status status() const
+	virtual _Wolframe::aaaa::AuthenticatorSlice::Status status() const
 	{
 		// ... return the current status of the authenticator slice
 	}
@@ -63,14 +63,14 @@ public:
 		// ... return true, if the last message processed can be forwarded to another slice of the same mech
 	}
 
-	virtual _Wolframe::AAAA::User* user()
+	virtual _Wolframe::aaaa::User* user()
 	{
 		// ... 	return the authenticated user or NULL if not authenticated here
 	}
 };
 
 class MyAuthenticationUnit
-	:public _Wolframe::AAAA::AuthenticationUnit
+	:public _Wolframe::aaaa::AuthenticationUnit
 {
 public:
 	MyAuthenticationUnit( const MyAuthenticationConfig& cfg);

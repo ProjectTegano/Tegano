@@ -39,8 +39,8 @@
 #include "config/configurationTree.hpp"
 #include "types/propertyTree.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 bool DBauditConfig::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 			   const module::ModuleDirectory* /*modules*/ )
@@ -83,7 +83,4 @@ void DBauditConfig::print( std::ostream& os, size_t indent ) const
 	os << indStr << "   Required: " << (m_required ? "yes" : "no") << std::endl;
 	os << indStr << "   Database: " << m_dbConfig << std::endl;
 }
-
-}} // namespace _Wolframe::AAAA
-
 

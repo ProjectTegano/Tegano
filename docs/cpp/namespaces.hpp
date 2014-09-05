@@ -5,7 +5,7 @@
 namespace _Wolframe {
 
 	/// Interfaces for authentication, authorization, auditing and accounting
-	namespace AAAA {}
+	namespace aaaa {}
 
 	/// Development interfaces for writing Wolframe application extension modules
 	namespace appdevel {}

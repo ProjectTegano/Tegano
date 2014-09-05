@@ -37,11 +37,11 @@
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 #include "logger/logger-v1.hpp"
-#include "AAAA/information.hpp"
+#include "aaaa/information.hpp"
 #include "DBauthz.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 //***  Database authorizer  *********************************************
 DBauthorizer::DBauthorizer( const std::string& Identifier, const std::string& DbLabel )
@@ -99,6 +99,4 @@ AuthorizationUnit::Result DBauthorizer::connectionAllowed( const net::LocalEndpo
 		return AUTHZ_ALLOWED;
 	return AUTHZ_DENIED;
 }
-
-}} // namespace _Wolframe::AAAA
 

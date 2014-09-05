@@ -33,7 +33,7 @@
 /// \file appdevel/protocolHandlerModuleMacros.hpp
 /// \brief Macros for a module for a protocol handler
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "cmdbind/protocolHandler.hpp"
 #include "processor/procProviderInterface.hpp"
 
@@ -41,7 +41,7 @@
 #define WF_PROTOCOL_HANDLER(NAME,CLASSDEF)\
 {\
 	class ProtocolHandlerConstructor\
-		:public _Wolframe::SimpleObjectConstructor<_Wolframe::cmdbind::ProtocolHandlerUnit>\
+		:public _Wolframe::module::SimpleObjectConstructor<_Wolframe::cmdbind::ProtocolHandlerUnit>\
 	{\
 	public:\
 		ProtocolHandlerConstructor(){}\
@@ -67,11 +67,11 @@
 			:_Wolframe::module::SimpleBuilder(NAME)\
 		{}\
 		virtual ~ProtocolHandlerBuilder(){}\
-		virtual _Wolframe::ObjectConstructorBase::ObjectType objectType() const\
+		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
 		{\
-			return _Wolframe::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT;\
+			return _Wolframe::module::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT;\
 		}\
-		virtual _Wolframe::ObjectConstructorBase* constructor() const\
+		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
 		{\
 			return new ProtocolHandlerConstructor();\
 		}\

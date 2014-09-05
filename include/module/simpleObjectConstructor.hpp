@@ -30,27 +30,26 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file auditor.hpp
-/// \brief Auditor
+/// \file module/simpleObjectConstructor.hpp
+/// \brief Base class for virtual constructors of objects without configuration
 
-#ifndef _AUDITOR_HPP_INCLUDED
-#define _AUDITOR_HPP_INCLUDED
+#include "module/objectConstructorBase.hpp"
+#include <boost/shared_ptr.hpp>
+
+#ifndef _SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
+#define _SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
 
 namespace _Wolframe {
-namespace AAAA {
+namespace module {
 
-class Information;
-
-/// Virtual base (interface) for auditor classes
-class Auditor {
+/// Constructor of a simple (without configuration) object
+template < class T >
+class SimpleObjectConstructor : public ObjectConstructorBase
+{
 public:
-	virtual ~Auditor(){}
-
-	/// \brief Close the auditor
-	virtual void close(){}
-
-	virtual bool audit( const Information& auditObject ) = 0;
+	virtual ~SimpleObjectConstructor()	{}
+	virtual T* object() const = 0;
 };
 
-}}//namespace
+}}// namespac
 #endif

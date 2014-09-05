@@ -38,9 +38,9 @@
 #include "logger/logger-v1.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
-DBauthorizer* DBauthzConstructor::object( const config::NamedConfiguration& conf )
+DBauthorizer* DBauthzConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const DatabaseAuthzConfig& cfg = dynamic_cast< const DatabaseAuthzConfig& >( conf );
 
@@ -49,4 +49,4 @@ DBauthorizer* DBauthzConstructor::object( const config::NamedConfiguration& conf
 	return m_authz;
 }
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa

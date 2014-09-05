@@ -39,7 +39,7 @@
 
 #include "PAMAuth.hpp"
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;
@@ -97,22 +97,22 @@ TEST_F( AuthenticationFixture, AuthenticationSliceUserPassword )
 {
 	User* user = NULL;
 	PAMAuthUnit authUnit( "test", "wolframe" );
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	slice->messageIn( "wolfusr" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 	std::string passwordRequired = slice->messageOut();
 	EXPECT_EQ( passwordRequired, "password?" );
 	
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 	slice->messageIn( "wolfpwd" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AUTHENTICATED );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AUTHENTICATED );
 	
 	user = slice->user();
 	ASSERT_TRUE( user != NULL );
@@ -133,23 +133,23 @@ TEST_F( AuthenticationFixture, AuthenticationWrongPassword )
 {
 	User* user = NULL;
 	PAMAuthUnit authUnit( "test", "wolframe" );
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	slice->messageIn( "wolfusr" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 	std::string passwordRequired = slice->messageOut();
 	EXPECT_EQ( passwordRequired, "password?" );
 	
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 	slice->messageIn( "xx" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::INVALID_CREDENTIALS );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::INVALID_CREDENTIALS );
 	
 	user = slice->user();
 	ASSERT_TRUE( user == NULL );
@@ -162,23 +162,23 @@ TEST_F( AuthenticationFixture, AuthenticationWrongUser )
 {
 	User* user = NULL;
 	PAMAuthUnit authUnit( "test", "wolframe" );
-	AAAA::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
+	aaaa::AuthenticatorSlice* slice = authUnit.slice( "WOLFRAME-PAM", net::RemoteTCPendpoint( "localhost", 2222 ));
 
 	ASSERT_TRUE( slice != NULL );
 	ASSERT_TRUE( slice != NULL );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 
 	slice->messageIn( "wolfusr2" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::MESSAGE_AVAILABLE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::MESSAGE_AVAILABLE );
 	std::string passwordRequired = slice->messageOut();
 	EXPECT_EQ( passwordRequired, "password?" );
 	
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::AWAITING_MESSAGE );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::AWAITING_MESSAGE );
 	slice->messageIn( "xx" );
 
-	EXPECT_EQ( slice->status(), AAAA::AuthenticatorSlice::USER_NOT_FOUND );
+	EXPECT_EQ( slice->status(), aaaa::AuthenticatorSlice::USER_NOT_FOUND );
 	
 	user = slice->user();
 	ASSERT_TRUE( user == NULL );

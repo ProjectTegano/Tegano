@@ -35,6 +35,8 @@
 //
 #include "databaseProviderImpl.hpp"
 #include "module/moduleDirectory.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/configuredBuilder.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 
@@ -47,9 +49,9 @@ DatabaseProviderImpl::DatabaseProviderImpl( const std::vector<config::NamedConfi
 	for ( std::vector< config::NamedConfiguration* >::const_iterator it = config.begin(); it != config.end(); it++ )	{
 		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
 		if ( builder )	{
-			ObjectConstructorBaseR constructorRef( builder->constructor());
-			ConfiguredObjectConstructor< db::DatabaseUnit >* db =
-					dynamic_cast< ConfiguredObjectConstructor< db::DatabaseUnit >* >( constructorRef.get());
+			module::ObjectConstructorBaseR constructorRef( builder->constructor());
+			module::ConfiguredObjectConstructor< db::DatabaseUnit >* db =
+					dynamic_cast< module::ConfiguredObjectConstructor< db::DatabaseUnit >* >( constructorRef.get());
 			if ( db == NULL )	{
 				LOG_ALERT << "DatabaseProvider: '" << builder->objectClassName()
 					  << "' is not a Database Unit builder";

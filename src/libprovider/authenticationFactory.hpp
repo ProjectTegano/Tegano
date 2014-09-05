@@ -40,13 +40,13 @@
 #include "system/connectionEndpoint.hpp"
 #include "system/randomGenerator.hpp"
 #include "module/moduleDirectory.hpp"
-#include "AAAA/user.hpp"
-#include "AAAA/authenticationUnit.hpp"
+#include "aaaa/user.hpp"
+#include "aaaa/authenticationUnit.hpp"
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class Authenticator;
 class PasswordChanger;

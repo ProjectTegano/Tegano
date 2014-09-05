@@ -38,11 +38,11 @@
 #include <boost/algorithm/string.hpp>
 
 #include "logger/logger-v1.hpp"
-#include "AAAA/information.hpp"
+#include "aaaa/information.hpp"
 #include "DBaudit.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
 //****  DBauditor  **********************************************************
 DBauditor::DBauditor( const std::string& dbLabel )
@@ -88,4 +88,3 @@ bool DBauditor::audit( const Information& auditObject )
 	return false;
 }
 
-}} // namespace _Wolframe::AAAA

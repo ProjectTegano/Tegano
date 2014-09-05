@@ -35,6 +35,7 @@
 //
 
 #include "TextFileAudit.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
@@ -43,8 +44,8 @@ namespace module {
 
 static const BuilderBase* getModule( void )
 {
-	static module::ConfiguredBuilderDescription< AAAA::TextFileAuditConstructor,
-			AAAA::TextFileAuditConfig > mod( "Audit - text file", "audit",
+	static module::ConfiguredBuilderTemplate< aaaa::TextFileAuditConstructor,
+			aaaa::TextFileAuditConfig > mod( "Audit - text file", "audit",
 						     "TextFile", "FileAudit" );
 	return &mod;
 }

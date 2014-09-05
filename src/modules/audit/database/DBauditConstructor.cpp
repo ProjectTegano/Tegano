@@ -37,10 +37,10 @@
 #include "logger/logger-v1.hpp"
 #include "DBaudit.hpp"
 
-namespace _Wolframe {
-namespace AAAA {
+using namespace _Wolframe;
+using namespace _Wolframe::aaaa;
 
-DBauditor* DBauditConstructor::object( const config::NamedConfiguration& conf )
+DBauditor* DBauditConstructor::object( const config::NamedConfiguration& conf ) const
 {
 	const DBauditConfig& cfg = dynamic_cast< const DBauditConfig& >( conf );
 
@@ -49,4 +49,3 @@ DBauditor* DBauditConstructor::object( const config::NamedConfiguration& conf )
 	return m_audit;
 }
 
-}} // namespace _Wolframe::AAAA

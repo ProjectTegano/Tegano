@@ -45,7 +45,7 @@
 #include "database/database.hpp"
 #include "database/transaction.hpp"
 #include "PostgreSQLServerSettings.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "types/objectPool.hpp"
 
 #ifdef _WIN32

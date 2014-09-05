@@ -35,12 +35,12 @@
 #ifndef _AAAA_STANDARD_AUDIT_HPP_INCLUDED
 #define _AAAA_STANDARD_AUDIT_HPP_INCLUDED
 
-#include "AAAA/auditor.hpp"
+#include "aaaa/auditor.hpp"
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class AuditUnit;
 class Information;

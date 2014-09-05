@@ -2,15 +2,15 @@
 #include <string>
 #include <algorithm>
 
-#include "AAAA/authentication_textfile.hpp"
-#include "AAAA/authentication_pam.hpp"
-#include "AAAA/authentication_db_sqlite3.hpp"
-#include "AAAA/authentication_sasl.hpp"
+#include "aaaa/authentication_textfile.hpp"
+#include "aaaa/authentication_pam.hpp"
+#include "aaaa/authentication_db_sqlite3.hpp"
+#include "aaaa/authentication_sasl.hpp"
 
 #include "getPassword.hpp"
 
 using namespace std;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 static void print_usage( ) {
 	cerr << "Available authentication methods: DBSQLITE3 PAM SASL TEXTFILE" << endl;

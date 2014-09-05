@@ -39,7 +39,7 @@
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class StandardAudit;
 class AuditUnit;

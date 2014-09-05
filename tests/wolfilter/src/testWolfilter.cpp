@@ -149,13 +149,13 @@ TEST_P( WolfilterTest, tests)
 		db::DatabaseProviderImpl databaseProvider( cmdline.dbProviderConfig().config(), &cmdline.moduleDirectory());
 
 		const config::AaaaProviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
-		AAAA::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
+		aaaa::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
 		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
 
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);
-		AAAA::User* fakeuser = new AAAA::User( "WolfilterAuth", "NONE", "wolfilter", "Wolfilter");
+		aaaa::User* fakeuser = new aaaa::User( "WolfilterAuth", "NONE", "wolfilter", "Wolfilter");
 
 		execContext.setUser( fakeuser);
 		net::LocalEndpointConfig localEndpointConfig( "fakeSocketIdentifier");

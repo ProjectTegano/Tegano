@@ -36,7 +36,7 @@
 #include <stdexcept>
 #include <cstring>
 
-#include "AAAA/usernameHash.hpp"
+#include "aaaa/usernameHash.hpp"
 #include "types/byte2hex.h"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
@@ -45,7 +45,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe;
 
 static const size_t USERNAME_HASH_BCD_SIZE = 2 * USERNAME_HASH_SIZE ;

@@ -34,15 +34,15 @@
 // database audit
 //
 
-#include "AAAA/auditUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/auditUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "config/configurationTree.hpp"
 
 #ifndef _DB_AUDIT_HPP_INCLUDED
 #define _DB_AUDIT_HPP_INCLUDED
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* DB_AUDIT_CLASS_NAME = "DatabaseAudit";
 
@@ -86,15 +86,15 @@ private:
 	const db::Database*	m_db;
 };
 
-class DBauditConstructor : public ConfiguredObjectConstructor< AuditUnit >
+class DBauditConstructor : public module::ConfiguredObjectConstructor< AuditUnit >
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 						{ return AUDIT_OBJECT; }
 	const char* objectClassName() const	{ return DB_AUDIT_CLASS_NAME; }
-	DBauditor* object( const config::NamedConfiguration& conf );
+	DBauditor* object( const config::NamedConfiguration& conf ) const;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _DB_AUDIT_HPP_INCLUDED

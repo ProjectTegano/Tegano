@@ -41,7 +41,7 @@
 #include "crypto/md5.h"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 /// Password changer data structure
 class PasswordChangeMessage
@@ -92,6 +92,6 @@ public:
 			 const unsigned char IV[ 16 ], const unsigned char key[ 32 ] );
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _PASSWORD_CHANGE_MESSAGE_HPP_INCLUDED

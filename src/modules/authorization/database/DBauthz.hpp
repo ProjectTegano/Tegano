@@ -37,11 +37,11 @@
 #ifndef _DB_AUTHORIZATION_HPP_INCLUDED
 #define _DB_AUTHORIZATION_HPP_INCLUDED
 
-#include "AAAA/authorizationUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/authorizationUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* DB_AUTHORIZATION_CLASS_NAME = "DatabaseAuthorization";
 
@@ -88,15 +88,15 @@ private:
 
 
 //***  Database authorizer constructor  ***********************************
-class DBauthzConstructor : public ConfiguredObjectConstructor< AuthorizationUnit >
+class DBauthzConstructor : public module::ConfiguredObjectConstructor< AuthorizationUnit >
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 						{ return AUTHORIZATION_OBJECT; }
 	const char* objectClassName() const	{ return DB_AUTHORIZATION_CLASS_NAME; }
-	DBauthorizer* object( const config::NamedConfiguration& conf );
+	DBauthorizer* object( const config::NamedConfiguration& conf ) const;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _DB_AUTHORIZATION_HPP_INCLUDED

@@ -6,6 +6,8 @@
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
+#include "module/configuredBuilder.hpp"
+#include "module/simpleBuilder.hpp"
 
 #include "tests/mod_test/common.hpp"
 #include "tests/mod_test_containers/common.hpp"

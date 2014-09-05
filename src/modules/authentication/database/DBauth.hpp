@@ -37,12 +37,12 @@
 #ifndef _DB_AUTHENTICATION_HPP_INCLUDED
 #define _DB_AUTHENTICATION_HPP_INCLUDED
 
-#include "AAAA/authenticationUnit.hpp"
-#include "module/constructor.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "config/configurationTree.hpp"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const char* DB_AUTHENTICATION_CLASS_NAME = "DBAuth";
 
@@ -88,15 +88,15 @@ private:
 	const db::Database*		m_db;
 };
 
-class DBauthConstructor : public ConfiguredObjectConstructor< AuthenticationUnit >
+class DBauthConstructor : public module::ConfiguredObjectConstructor< AuthenticationUnit >
 {
 public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 							{ return AUTHENTICATION_OBJECT; }
 	const char* objectClassName() const		{ return DB_AUTHENTICATION_CLASS_NAME; }
-	DBauthUnit* object( const config::NamedConfiguration& conf );
+	DBauthUnit* object( const config::NamedConfiguration& conf ) const;
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif // _DB_AUTHENTICATION_HPP_INCLUDED

@@ -33,8 +33,9 @@
 /// \file appdevel/authenticationModuleMacros.hpp
 /// \brief Macros for a module for defining an authentication mechanism
 #include "appdevel/module/authenticationConstructor.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include <boost/lexical_cast.hpp>
 
 /// \brief Defines a an authentication mechanism
@@ -44,7 +45,7 @@
 	{\
 		static const _Wolframe::module::BuilderBase* impl()\
 		{\
-			static const _Wolframe::module::ConfiguredBuilderDescription<\
+			static const _Wolframe::module::ConfiguredBuilderTemplate<\
 					_Wolframe::module::AuthenticationConstructor<UNITCLASS, CONFIGCLASS>,\
 					CONFIGCLASS >\
 				mod( "Authentication " #NAME, "Authentication", #NAME, #NAME "Authentication");\

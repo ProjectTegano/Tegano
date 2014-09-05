@@ -33,13 +33,13 @@
 /// \brief Authentication factory
 #include "authenticationFactory.hpp"
 #include "standardAuthenticator.hpp"
-#include "AAAA/authenticator.hpp"
-#include "AAAA/passwordChanger.hpp"
+#include "aaaa/authenticator.hpp"
+#include "aaaa/passwordChanger.hpp"
 #include "database/databaseProviderInterface.hpp"
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 
 AuthenticationFactory::AuthenticationFactory( const std::vector< config::NamedConfiguration* >& confs,
 					      system::RandomGenerator* randomGenerator,

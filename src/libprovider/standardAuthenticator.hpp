@@ -35,15 +35,15 @@
 #ifndef _AAAA_STANDARD_AUTHENTICATOR_HPP_INCLUDED
 #define _AAAA_STANDARD_AUTHENTICATOR_HPP_INCLUDED
 
-#include "AAAA/authenticator.hpp"
-#include "AAAA/authenticationUnit.hpp"
-#include "AAAA/authenticationSlice.hpp"
+#include "aaaa/authenticator.hpp"
+#include "aaaa/authenticationUnit.hpp"
+#include "aaaa/authenticationSlice.hpp"
 
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 // Standard authentication class and authentication provider
 class StandardAuthenticator : public Authenticator
@@ -81,7 +81,7 @@ private:
 	Authenticator::Status				m_status;
 	std::vector< AuthenticatorSlice* >		m_slices;
 	int						m_currentSlice;
-	AAAA::User*					m_user;
+	aaaa::User*					m_user;
 };
 
 }}//namespace

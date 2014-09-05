@@ -38,10 +38,10 @@
 #include "gtest/gtest.h"
 #include "passwdFile.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
-#include "AAAA/passwordHash.hpp"
+#include "aaaa/passwordHash.hpp"
 #include "crypto/HMAC.hpp"
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::crypto;
 using namespace std;
 

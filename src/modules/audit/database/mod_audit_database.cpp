@@ -35,6 +35,7 @@
 //
 
 #include "DBaudit.hpp"
+#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 
@@ -43,8 +44,8 @@ namespace module {
 
 static const BuilderBase* getModule( void )
 {
-	static const module::ConfiguredBuilderDescription< AAAA::DBauditConstructor,
-			AAAA::DBauditConfig > mod( "Audit - database", "audit",
+	static const module::ConfiguredBuilderTemplate< aaaa::DBauditConstructor,
+			aaaa::DBauditConfig > mod( "Audit - database", "audit",
 						   "database", "DatabaseAudit" );
 	return &mod;
 }

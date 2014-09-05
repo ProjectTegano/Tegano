@@ -30,13 +30,33 @@
  Project Wolframe.
 
 ************************************************************************/
-///
-/// \file user.cpp
 
-#include "AAAA/user.hpp"
+/// \file aaaa/authorizer.hpp
+/// \brief Authorization interface
 
-namespace _Wolframe	{
-namespace AAAA	{
+#ifndef _AUTHORIZER_HPP_INCLUDED
+#define _AUTHORIZER_HPP_INCLUDED
 
-}} // namespace _Wolframe::AAAA
+#include "system/connectionEndpoint.hpp"
+#include <string>
+
+namespace _Wolframe {
+namespace aaaa {
+
+class Information;
+
+/// \brief Interface for all authorization mechanisms
+class Authorizer {
+public:
+	virtual ~Authorizer()		{}
+
+	// close the authorizer (not really)
+	virtual void close()		{}
+
+	// authorization requests
+	virtual bool allowed( const Information& ) = 0;
+};
+
+}} // namespace _Wolframe::aaaa
+#endif // _AUTHORIZATION_HPP_INCLUDED
 

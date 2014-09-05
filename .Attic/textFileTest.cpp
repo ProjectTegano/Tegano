@@ -43,7 +43,7 @@
 #include "system/globalRngGen.hpp"
 #include <boost/algorithm/string.hpp>
 
-using namespace _Wolframe::AAAA;
+using namespace _Wolframe::aaaa;
 using namespace _Wolframe::log;
 using namespace _Wolframe;
 using namespace std;

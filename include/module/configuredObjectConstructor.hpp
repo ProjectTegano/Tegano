@@ -30,33 +30,26 @@
  Project Wolframe.
 
 ************************************************************************/
+/// \file module/configuredObjectConstructor.hpp
+/// \brief Base class for virtual constructors of objects with configuration
 
-/// \file AAAA/authorizer.hpp
-/// \brief Authorization interface
+#include "module/objectConstructorBase.hpp"
+#include <boost/shared_ptr.hpp>
 
-#ifndef _AUTHORIZER_HPP_INCLUDED
-#define _AUTHORIZER_HPP_INCLUDED
-
-#include "system/connectionEndpoint.hpp"
-#include <string>
+#ifndef _CONFIGURED_OBJECT_CONSTRUCTOR_HPP_INCLUDED
+#define _CONFIGURED_OBJECT_CONSTRUCTOR_HPP_INCLUDED
 
 namespace _Wolframe {
-namespace AAAA {
+namespace module {
 
-class Information;
-
-/// \brief Interface for all authorization mechanisms
-class Authorizer {
+/// Constructor of a simple (without configuration) object
+template < class T >
+class ConfiguredObjectConstructor : public ObjectConstructorBase
+{
 public:
-	virtual ~Authorizer()		{}
-
-	// close the authorizer (not really)
-	virtual void close()		{}
-
-	// authorization requests
-	virtual bool allowed( const Information& ) = 0;
+	virtual ~ConfiguredObjectConstructor()	{}
+	virtual T* object( const config::NamedConfiguration& conf) const = 0;
 };
 
-}} // namespace _Wolframe::AAAA
-#endif // _AUTHORIZATION_HPP_INCLUDED
-
+}}// namespac
+#endif

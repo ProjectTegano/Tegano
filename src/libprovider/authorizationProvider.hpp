@@ -34,14 +34,14 @@
 #ifndef _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
 #define _AAAA_AUTHORIZATION_PROVIDER_HPP_INCLUDED
 
-#include "AAAA/authorizer.hpp"
+#include "aaaa/authorizer.hpp"
 #include "database/databaseProviderInterface.hpp"
 
 #include <string>
 #include <vector>
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 class AuthorizationUnit;
 class StandardAuthorizer;

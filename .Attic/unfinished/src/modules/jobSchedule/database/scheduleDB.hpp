@@ -35,7 +35,7 @@
 //
 
 #include "processor/jobSchedule.hpp"
-#include "module/constructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "database/databaseProvider.hpp"
 
 #ifndef _SCHEDULE_DATABASE_HPP_INCLUDED

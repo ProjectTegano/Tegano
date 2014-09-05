@@ -31,7 +31,7 @@
 
 ************************************************************************/
 //
-/// \file AAAA/usernameHash.hpp
+/// \file aaaa/usernameHash.hpp
 /// \brief username hash used by Wolframe authentication
 
 #ifndef _USERNAME_HASH_HPP_INCLUDED
@@ -42,7 +42,7 @@
 #include "crypto/HMAC.h"
 
 namespace _Wolframe {
-namespace AAAA {
+namespace aaaa {
 
 static const size_t USERNAME_HASH_SIZE = HMAC_SHA256_HASH_SIZE;
 static const size_t USERNAME_HASH_SALT_SIZE = 128 / 8;
@@ -84,7 +84,7 @@ private:
 	unsigned char	m_hash[ USERNAME_HASH_SIZE ];
 };
 
-}} // namespace _Wolframe::AAAA
+}} // namespace _Wolframe::aaaa
 
 #endif	// _USERNAME_HASH_HPP_INCLUDED
 

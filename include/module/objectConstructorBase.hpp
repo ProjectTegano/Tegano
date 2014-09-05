@@ -30,18 +30,19 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file module/constructor.hpp
+/// \file module/objectConstructorBase.hpp
 /// \brief Base classes for virtual constructors to build objects loaded from modules
 
 #include "config/configurationBase.hpp"
 #include <boost/shared_ptr.hpp>
 
-#ifndef _CONSTRUCTOR_HPP_INCLUDED
-#define _CONSTRUCTOR_HPP_INCLUDED
+#ifndef _OBJECT_CONSTRUCTOR_BASE_HPP_INCLUDED
+#define _OBJECT_CONSTRUCTOR_BASE_HPP_INCLUDED
 
-namespace _Wolframe	{
+namespace _Wolframe {
+namespace module {
 
-/// Constructor base class
+/// \brief Object constructor base class
 class ObjectConstructorBase
 {
 public:
@@ -105,26 +106,5 @@ public:
 /// \brief Reference for exception save memory handling
 typedef boost::shared_ptr<ObjectConstructorBase> ObjectConstructorBaseR;
 
-
-// Templates of specialized constructors
-/// Constructor of a configured object
-template < class T >
-class ConfiguredObjectConstructor : public ObjectConstructorBase
-{
-public:
-	virtual ~ConfiguredObjectConstructor()	{}
-	virtual T* object( const config::NamedConfiguration& conf ) = 0;
-};
-
-/// Constructor of a simple (without configuration) object
-template < class T >
-class SimpleObjectConstructor : public ObjectConstructorBase
-{
-public:
-	virtual ~SimpleObjectConstructor()	{}
-	virtual T* object() const = 0;
-};
-
-} // namespace _Wolframe
-
-#endif // _CONSTRUCTOR_HPP_INCLUDED
+}} // namespace
+#endif
