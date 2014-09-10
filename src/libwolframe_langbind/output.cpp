@@ -32,7 +32,6 @@ Project Wolframe.
 //\file output.cpp
 //\brief Interface to network output for processor language bindings
 #include "langbind/output.hpp"
-#include "utils/typeSignature.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;

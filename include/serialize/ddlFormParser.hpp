@@ -33,7 +33,6 @@ Project Wolframe.
 /// \brief Interface to DDL form parsing
 #ifndef _Wolframe_serialize_DDL_FORM_PARSER_HPP_INCLUDED
 #define _Wolframe_serialize_DDL_FORM_PARSER_HPP_INCLUDED
-#include "utils/typeSignature.hpp"
 #include "types/form.hpp"
 #include "types/variantStruct.hpp"
 #include "types/variantStructDescription.hpp"

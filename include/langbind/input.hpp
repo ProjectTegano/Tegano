@@ -34,7 +34,6 @@ Project Wolframe.
 #ifndef _Wolframe_langbind_INPUT_HPP_INCLUDED
 #define _Wolframe_langbind_INPUT_HPP_INCLUDED
 #include "filter/filter.hpp"
-#include "utils/typeSignature.hpp"
 #include <cstdlib>
 #include <string>
 #include <boost/shared_ptr.hpp>

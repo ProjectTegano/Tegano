@@ -30,8 +30,8 @@ If you have questions regarding the use of this file, please contact
 Project Wolframe.
 
 ************************************************************************/
-///\file src/filter_tostringfilter.cpp
-///\brief Implementation of tostring methods in language bindings
+///\file src/libwolframe_langbind/filter_tostringfilter.cpp
+///\brief Implementation of tostring filter
 #include "filter/tostringfilter.hpp"
 
 using namespace _Wolframe;
