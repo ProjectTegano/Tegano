@@ -37,8 +37,7 @@
 #ifndef _TEXT_FILE_AUTHENTICATION_HPP_INCLUDED
 #define _TEXT_FILE_AUTHENTICATION_HPP_INCLUDED
 
-#include <string>
-#include <vector>
+#include "config/configurationObject.hpp"
 #include "aaaa/authenticationUnit.hpp"
 #include "aaaa/authenticationSlice.hpp"
 #include "aaaa/passwordChanger.hpp"
@@ -46,43 +45,39 @@
 #include "aaaa/user.hpp"
 #include "aaaa/CRAM.hpp"
 #include "passwdFile.hpp"
+#include <string>
+#include <vector>
 
 namespace _Wolframe {
 namespace aaaa {
 
-static const char* TEXT_FILE_AUTH_CLASS_NAME = "TextFileAuth";
-
-class TextFileAuthConfig :  public config::NamedConfiguration
+class TextFileAuthConfig :  public config::ConfigurationObject
 {
-	friend class TextFileAuthConstructor;
 public:
-	TextFileAuthConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName ) {}
+	TextFileAuthConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		: config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
-	virtual const char* className() const		{ return TEXT_FILE_AUTH_CLASS_NAME; }
-
-	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
+
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& file() const		{return m_file;}
+
 private:
 	std::string			m_identifier;
 	std::string			m_file;
-	bool				m_caseSensitive;
-	bool				m_canChangePassword;
 };
 
 
 class TextFileAuthUnit : public AuthenticationUnit
 {
 public:
-	TextFileAuthUnit( const std::string& Identifier, const std::string& filename);
+	TextFileAuthUnit( const TextFileAuthConfig* config);
 
 	~TextFileAuthUnit();
-
-	virtual const char* className() const		{ return TEXT_FILE_AUTH_CLASS_NAME; }
 
 	const char** mechs() const;
 
@@ -109,9 +104,11 @@ public:
 	bool getUser( const std::string& userHash, PwdFileUser& user ) const;
 
 	bool getUserPlain( const std::string& username, PwdFileUser& user ) const;
+	const std::string& identifier() const	{return m_identifier;}
 
 private:
 	static const std::string	m_mechs[];
+	std::string			m_identifier;
 	const PasswordFile		m_pwdFile;
 };
 
@@ -141,8 +138,6 @@ public:
 	~TextFileAuthSlice();
 
 	void dispose();
-
-	virtual const char* className() const		{ return m_backend.className(); }
 
 	virtual const std::string& identifier() const	{ return m_backend.identifier(); }
 
@@ -209,8 +204,6 @@ public:
 
 	void dispose();
 
-	virtual const char* className() const		{ return m_backend.className(); }
-
 	virtual const std::string& identifier() const	{ return m_backend.identifier(); }
 
 	/// The input message
@@ -231,20 +224,6 @@ private:
 	ChangerState		m_state;
 	CRAMchallenge*		m_challenge;
 	std::string		m_password;
-};
-
-
-// Text file authentication - constructor
-//***********************************************************************
-class TextFileAuthConstructor : public module::ConfiguredObjectConstructor< AuthenticationUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-							{ return AUTHENTICATION_OBJECT; }
-
-	const char* objectClassName() const		{ return TEXT_FILE_AUTH_CLASS_NAME; }
-
-	TextFileAuthUnit* object( const config::NamedConfiguration& conf ) const;
 };
 
 }} // namespace _Wolframe::aaaa

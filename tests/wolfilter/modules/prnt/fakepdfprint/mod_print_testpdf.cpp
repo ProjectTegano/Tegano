@@ -30,37 +30,25 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_print_testpdf.cpp
-///\brief Module for testing the printing of PDFs with a simple command interpreter logging a trace of called functions and states
+///\file mod_printer_testpdf.cpp
+///\brief Module for testing the PDF printing framework (page description)
 
-#include "pdfPrinterDocumentImpl.hpp"
-#include "appdevel/module/programTypeBuilder.hpp"
+#include "appdevel/programTypeModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "pdfPrinter.hpp"
+#include "pdfPrinterDocumentImpl.hpp"
 #include "pdfPrintProgramType.hpp"
-#include "logger/logger-v1.hpp"
 
-using namespace _Wolframe;
-using namespace _Wolframe::module;
-
-namespace {
-struct PdfPrinter
+class TestPdfPrintProgram
+	:public _Wolframe::prnt::SimplePdfPrintProgram
 {
-	static proc::Program* createProgram()
-	{
-		return new prnt::SimplePdfPrintProgram( prnt::createTestTraceDocument);
-	}
-	static const BuilderBase* constructor()
-	{
-		return new ProgramTypeBuilder( "TestPdfPrintFunction", "simplepdf", &PdfPrinter::createProgram);
-	}
-};
-}//anonymous namespace
-
-static getBuilderFunc objdef[] =
-{
-	PdfPrinter::constructor, NULL
+public:
+	TestPdfPrintProgram()
+		:_Wolframe::prnt::SimplePdfPrintProgram( _Wolframe::prnt::createTestTraceDocument){}
 };
 
-extern "C" {
-ModuleEntryPoint entryPoint( 0, "simple PDF print function for test", objdef );
-}
+WF_MODULE_BEGIN( "TestPdfPrinterProgramType", "PDF printer for testing")
+ WF_PROGRAM_TYPE( "TestPdfPrinter", TestPdfPrintProgram)
+WF_MODULE_END
+
+

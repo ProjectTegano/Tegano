@@ -37,6 +37,8 @@
 #define _MODULE_DIRECTORY_IMPLEMENTATION_HPP_INCLUDED
 #include "module/moduleDirectory.hpp"
 #include "module/moduleInterface.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include <string>
 #include <vector>
 
@@ -44,7 +46,7 @@ namespace _Wolframe {
 namespace module {
 
 /// \class ModuleDirectory
-/// \brief The modules directory used by the constructors of the providers to build themselves.
+/// \brief The modules directory with all modules loaded
 class ModuleDirectoryImpl
 	:public module::ModuleDirectory
 {
@@ -55,22 +57,22 @@ public:
 		:m_confDir(confDir_){}
 	virtual ~ModuleDirectoryImpl(){}
 
-	/// \brief Add a configured builder to the directory.
-	bool addBuilder( const ConfiguredBuilder* builder );
+	/// \brief Add a configured object constructor to the directory.
+	bool addObjectConstructor( const ConfiguredObjectConstructor* c);
 
-	/// \brief Add a simple builder (builder for objects without configuration) to the directory.
-	bool addBuilder( const SimpleBuilder* builder );
+	/// \brief Add a simple object constructor (constructor for objects without configuration) to the directory.
+	bool addObjectConstructor( const SimpleObjectConstructor* c);
 
-	/// \brief Get the builder for the configuration section, keyword pair.
+	/// \brief Get the object constructor for the configuration section, keyword pair.
 	/// \param[in] section	the section (parent) of the configuration
 	/// \param[in] keyword	the keyword in the section
-	virtual const ConfiguredBuilder* getConfiguredBuilder( const std::string& section, const std::string& keyword ) const;
+	virtual const ConfiguredObjectConstructor* getConfiguredObjectConstructor( const std::string& section, const std::string& keyword ) const;
 
-	/// \brief Get the builder for the specified object class name
-	virtual const ConfiguredBuilder* getConfiguredBuilder( const std::string& objectClassName ) const;
+	/// \brief Get the object constructor for the specified object class name
+	virtual const ConfiguredObjectConstructor* getConfiguredObjectConstructor( const std::string& objectClassName ) const;
 
-	/// \brief Get the list of simple builders
-	virtual const std::vector<const SimpleBuilder*>& getSimpleBuilderList() const;
+	/// \brief Get the list of simple object constructor
+	virtual const std::vector<const SimpleObjectConstructor*>& getSimpleObjectConstructorList() const;
 
 	/// \brief Get the absolute path of a module
 	/// \brief param[in] moduleName name of the module to resolve
@@ -83,9 +85,9 @@ public:
 	bool loadModules( const std::vector<std::string>& modFiles);
 
 private:
-	std::string m_confDir;						///< configuration directory needed as base for calculating the absolute path of a module
-	std::vector< const ConfiguredBuilder* > m_cfgdBuilder;		///< list of configurable builders
-	std::vector< const SimpleBuilder* >	m_simpleBuilder;	///< list of simple builders
+	std::string m_confDir;									///< configuration directory needed as base for calculating the absolute path of a module
+	std::vector< const ConfiguredObjectConstructor* > m_configuredObjectConstructor;	///< list of configurable object constructors
+	std::vector< const SimpleObjectConstructor* >	m_simpleObjectConstructor;		///< list of simple object constructors
 };
 
 }}//namespace

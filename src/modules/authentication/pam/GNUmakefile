@@ -25,7 +25,6 @@ DYNAMIC_MODULE = mod_auth_pam.so
 
 CPP_OBJS = \
 	PAMAuthConfig.o \
-	PAMAuthConstructor.o \
 	PAMAuth.o
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk

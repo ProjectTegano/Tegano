@@ -35,11 +35,12 @@
 //
 
 #include "procProviderConfiguration.hpp"
-
+#include "moduleConfigParseUtils.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
-#include "module/configuredBuilder.hpp"
-#include "module/simpleBuilder.hpp"
+#include "config/configurationObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 
@@ -76,45 +77,15 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 			|| boost::algorithm::iequals( "runtimeenv", L1it->first ) )	{
 			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
 									  L2it != L1it->second.end(); L2it++ )	{
-				if ( modules )	{
-					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( L1it->first, L2it->first );
-					if ( builder )	{
-						config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
-						if ( conf->parse( L2it->second, L2it->first, modules ))
-							m_procConfig.push_back( conf );
-						else	{
-							delete conf;
-							retVal = false;
-						}
-					}
-					else
-						LOG_WARNING << logPrefix() << "unknown '" << L1it->first << "' configuration option: '"
-							    << L2it->first << "'";
+				if (modules)
+				{
+					retVal &= parseModuleConfiguration( L1it->first, L2it->first, L2it->second, m_procConfig, modules);
 				}
-				else
-					LOG_WARNING << logPrefix() << "unknown '" << L1it->first << "' configuration option: '"
-						    << L2it->first << "'";
 			}
 		}
-		else	{
-			if ( modules )	{
-				const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "processor", L1it->first );
-				if ( builder )	{
-					config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
-					if ( conf->parse( L1it->second, L1it->first, modules ))
-						m_procConfig.push_back( conf );
-					else	{
-						delete conf;
-						retVal = false;
-					}
-				}
-				else
-					LOG_WARNING << logPrefix() << "unknown processor configuration option: '"
-						    << L1it->first << "'";
-			}
-			else
-				LOG_WARNING << logPrefix() << "unknown processor configuration option: '"
-					    << L1it->first << "'";
+		else
+		{	
+			LOG_ERROR << logPrefix() << "unknown configuration option: '" << L1it->first << "'";
 		}
 	}
 	return retVal;
@@ -122,17 +93,17 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 
 ProcProviderConfiguration::~ProcProviderConfiguration()
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )
 		delete *it;
 }
 
 void ProcProviderConfiguration::print( std::ostream& os, size_t indent ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 	os << "   Database: " << (m_dbLabel.empty() ? "(none)" : m_dbLabel) << std::endl;
 	if ( m_procConfig.size() > 0 )	{
-		for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+		for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 			(*it)->print( os, 3 );
 		}
@@ -159,7 +130,7 @@ bool ProcProviderConfiguration::check() const
 {
 	bool correct = true;
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
@@ -170,7 +141,7 @@ bool ProcProviderConfiguration::check() const
 void ProcProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
 	m_referencePath = refPath;
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_procConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{
 		(*it)->setCanonicalPathes( refPath );
 	}

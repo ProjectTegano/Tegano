@@ -38,7 +38,7 @@
 #include "datatypeBigfxp.hpp"
 
 WF_MODULE_BEGIN( "bcdnumber", "custom data types for arbitrary length BCD numbers")
- WF_CUSTOM_DATATYPE( "bigint",	_Wolframe::types::BigintDataType::create)
- WF_CUSTOM_DATATYPE( "bigfxp",	_Wolframe::types::BigfxpDataType::create)
+ WF_CUSTOM_DATATYPE( "bigint",	_Wolframe::types::BigintDataType)
+ WF_CUSTOM_DATATYPE( "bigfxp",	_Wolframe::types::BigfxpDataType)
 WF_MODULE_END
 

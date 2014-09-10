@@ -87,7 +87,7 @@ bool TextFileAuthConfig::check() const
 void TextFileAuthConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Identifier: " << m_identifier << std::endl;
 	os << indStr << "   File: " << m_file << std::endl;
 }

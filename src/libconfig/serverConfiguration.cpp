@@ -338,7 +338,7 @@ bool ServerConfiguration::parse( const config::ConfigurationNode& pt, const std:
 
 // Constructor
 ServerConfiguration::ServerConfiguration()
-	: ConfigurationBase( "Network Server", NULL, "Network server configuration" )
+	: ConfigurationObject( "Server", "Server", "" )
 {
 	threads = 0;
 	maxConnections = 0;
@@ -348,7 +348,7 @@ ServerConfiguration::ServerConfiguration()
 // Server configuration functions
 void ServerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os<< sectionName() << std::endl;
+	os<< configSection() << std::endl;
 	os << "   Number of client threads: " << threads << std::endl;
 	if ( maxConnections > 0 )
 		os << "   Maximum number of connections (global): " << maxConnections << std::endl;

@@ -83,7 +83,7 @@ const char* ApplicationConfiguration::chooseFile( const char *globalFile, const 
 
 
 bool ApplicationConfiguration::addConfig( const std::string& nodeName,
-					  ConfigurationBase* conf )
+					  ConfigurationObject* conf )
 {
 	std::string nodeNameLC = nodeName;
 	boost::algorithm::to_lower( nodeNameLC );
@@ -92,7 +92,7 @@ bool ApplicationConfiguration::addConfig( const std::string& nodeName,
 		return false;
 
 	// find the appropriate index in the configurations vector
-	std::vector< ConfigurationBase* >::const_iterator it = m_conf.begin();
+	std::vector< ConfigurationObject* >::const_iterator it = m_conf.begin();
 	std::size_t pos = 0;
 	bool found = false;
 	for( ; it != m_conf.end(); it++, pos++ )	{

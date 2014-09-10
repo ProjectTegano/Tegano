@@ -492,7 +492,7 @@ bool TransactionExecStatemachine_postgres::next()
 
 const std::string& TransactionExecStatemachine_postgres::databaseID() const
 {
-	return m_database->ID();
+	return m_database->id();
 }
 
 

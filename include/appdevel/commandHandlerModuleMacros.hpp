@@ -34,64 +34,48 @@
 /// \brief Macros for a module for a configurable command handler
 #include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
-#include "module/configuredBuilder.hpp"
+#include "config/configurationObject.hpp"
 #include "cmdbind/commandHandler.hpp"
 #include "processor/procProviderInterface.hpp"
+#include "logger/logger-v1.hpp"
 
-/// \brief Defines a Wolframe command handler module after the includes section.
-#define WF_COMMAND_HANDLER(TITLE,CONFIG_SECTION,CONFIG_TITLE,CLASSDEF,CONFIGDEF)\
+/// \brief Defines a Wolframe command handler object after the includes section.
+#define WF_COMMAND_HANDLER(NAME,CONFIG_SECTION,CONFIG_KEYWORD,CLASSDEF,CONFIGDEF)\
 {\
-	class CommandHandlerConstructor\
-		:public _Wolframe::module::ConfiguredObjectConstructor<_Wolframe::cmdbind::CommandHandlerUnit>\
+	class ModuleObjectEnvelope \
+		:public CLASSDEF \
+		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		CommandHandlerConstructor(){}\
-		virtual ~CommandHandlerConstructor(){}\
-		virtual _Wolframe::cmdbind::CommandHandlerUnit* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
+		ModuleObjectEnvelope( const CONFIGDEF* cfg) :CLASSDEF(cfg){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::CMD_HANDLER_OBJECT, className_, configSection_, configKeyword_){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
 			const CONFIGDEF* cfg = dynamic_cast<const CONFIGDEF*>(&cfgi);\
-			if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to " CONFIG_TITLE " command handler constructor");\
-			CLASSDEF* rt = new CLASSDEF(cfg);\
-			return rt;\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " command handler constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
 		}\
-		virtual const char* objectClassName() const\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
 		{\
-			return CONFIG_TITLE;\
+			return new CONFIGDEF( NAME "CommandHandler", CONFIG_SECTION, CONFIG_KEYWORD);\
 		}\
-		virtual ObjectConstructorBase::ObjectType objectType() const\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			return ObjectConstructorBase::CMD_HANDLER_OBJECT;\
-		}\
-	};\
-	class CommandHandlerBuilder\
-		:public _Wolframe::module::ConfiguredBuilder\
-	{\
-	public:\
-		CommandHandlerBuilder()\
-			:_Wolframe::module::ConfiguredBuilder( TITLE, CONFIG_SECTION, CONFIG_TITLE, CONFIG_TITLE)\
-		{}\
-		virtual ~CommandHandlerBuilder(){}\
-		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::CMD_HANDLER_OBJECT;\
-		}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
-		{\
-			return new CONFIGDEF( CONFIG_TITLE, title(), logPrefix, keyword());\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
-		{\
-			return new CommandHandlerConstructor();\
-		}\
-	};\
-	struct Constructor\
-	{\
-		static const _Wolframe::module::BuilderBase* impl()\
-		{\
-			static const CommandHandlerBuilder rt;\
+			static const Constructor rt( NAME "CommandHandler", CONFIG_SECTION, CONFIG_KEYWORD);\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
+
 

@@ -54,7 +54,7 @@ const serialize::StructDescriptionBase* SQLiteConfig::getStructDescription()
 	ThisDescription()
 	{
 		(*this)
-		( "identifier", &SQLiteConfig::m_ID)		.mandatory()
+		( "identifier", &SQLiteConfig::m_id)		.mandatory()
 		( "file", &SQLiteConfig::m_filename)		.mandatory()
 		( "foreignKeys", &SQLiteConfig::m_foreignKeys)	.optional()
 		( "profiling", &SQLiteConfig::m_profiling)	.optional()
@@ -71,9 +71,9 @@ void SQLiteConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
 
-	os << indStr << sectionName() << ":" << std::endl;
-	if ( ! m_ID.empty() )
-		os << indStr << "   ID: " << m_ID << std::endl;
+	os << indStr << configSection() << ":" << std::endl;
+	if ( ! m_id.empty() )
+		os << indStr << "   ID: " << m_id << std::endl;
 	os << indStr << "   Filename: " << m_filename << std::endl;
 	os << indStr << "      Referential integrity: " << (m_foreignKeys ? "enabled" : "disabled") << std::endl;
 	os << indStr << "      Profiling: " << (m_profiling ? "enabled" : "disabled") << std::endl;

@@ -35,7 +35,7 @@
 #ifndef _TESTTRACE_FAKE_DATABASE_HPP_INCLUDED
 #define _TESTTRACE_FAKE_DATABASE_HPP_INCLUDED
 #include "database/database.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include <list>
@@ -50,11 +50,11 @@ namespace db {
 ///\class TesttraceConfig
 ///\brief Fake database configuration
 class TesttraceDatabaseConfig
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 public:
-	TesttraceDatabaseConfig( const char* name_, const char* logParent_, const char* logName_)
-		:config::NamedConfiguration( name_, logParent_, logName_){}
+	TesttraceDatabaseConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
 	~TesttraceDatabaseConfig(){}
 
@@ -90,12 +90,8 @@ class TesttraceDatabase
 	:public Database
 {
 public:
-	TesttraceDatabase( const std::string& id_, const std::string& resultfilename_, const std::string& outfilename_);
-	TesttraceDatabase( const TesttraceDatabase& o)
-		:Database()
-		,m_id(o.m_id)
-		,m_outfilename(o.m_outfilename)
-		,m_result(o.m_result){}
+	TesttraceDatabase( const TesttraceDatabaseConfig* config);
+	TesttraceDatabase( const TesttraceDatabase& o);
 
 	virtual ~TesttraceDatabase(){}
 
@@ -127,68 +123,6 @@ private:
 	std::vector<std::string> m_result;
 };
 
-///\class TesttraceDatabaseUnit
-///\brief Testtrace fake database constructor
-class TesttraceDatabaseUnit
-	:public DatabaseUnit
-{
-public:
-	TesttraceDatabaseUnit( const std::string& id_, const std::string& resultfilename_, const std::string& outfilename_)
-		:m_id(id_)
-		,m_db(id_,resultfilename_,outfilename_)
-		{}
-	TesttraceDatabaseUnit( const TesttraceDatabaseUnit& o)
-		:DatabaseUnit()
-		,m_id(o.m_id)
-		,m_db(o.m_db)
-		{}
-
-	virtual ~TesttraceDatabaseUnit(){}
-
-	virtual const std::string& ID() const
-	{
-		return m_id;
-	}
-
-	virtual const char* className() const
-	{
-		return TESTTRACE_DATABASE_CLASSNAME;
-	}
-
-	virtual Database* database()
-	{
-		return &m_db;
-	}
-
-private:
-	std::string m_id;
-	TesttraceDatabase m_db;
-};
-
-
-///\class TesttraceDatabaseConstructor
-///\brief Testtrace fake database constructor
-class TesttraceDatabaseConstructor : public module::ConfiguredObjectConstructor<db::DatabaseUnit>
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-	{
-		return DATABASE_OBJECT;
-	}
-
-	virtual const char* objectClassName() const
-	{
-		return TESTTRACE_DATABASE_CLASSNAME;
-	}
-
-	virtual TesttraceDatabaseUnit* object( const config::NamedConfiguration& conf_) const
-	{
-		const TesttraceDatabaseConfig& conf = dynamic_cast<const TesttraceDatabaseConfig&>( conf_);
-		return new TesttraceDatabaseUnit( conf.id(), conf.resultfilename(), conf.outfilename());
-	}
-};
-
-}} // _Wolframe::db
-
+}}
 #endif
 

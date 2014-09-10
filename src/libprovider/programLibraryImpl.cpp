@@ -82,11 +82,6 @@ void ProgramLibraryImpl::defineAuditFunction( const std::string& name, const lan
 	m_auditFunctionMap.insert( name, f);
 }
 
-void ProgramLibraryImpl::defineCppFormFunction( const std::string& name, const serialize::CppFormFunction& f)
-{
-	m_formFunctionMap.insert( name, langbind::FormFunctionR( new serialize::CppFormFunction( f)));
-}
-
 void ProgramLibraryImpl::defineFormFunction( const std::string& name, const langbind::FormFunctionR& f)
 {
 	m_formFunctionMap.insert( name, f);
@@ -118,7 +113,7 @@ void ProgramLibraryImpl::defineFormDDL( const langbind::DDLCompilerR& c)
 	m_programTypes.push_back( ProgramR( prg));
 }
 
-void ProgramLibraryImpl::defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionType& f)
+void ProgramLibraryImpl::defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionTypeR& f)
 {
 	m_normalizeFunctionTypeMap.insert( name, f);
 }
@@ -185,9 +180,9 @@ const types::NormalizeFunction* ProgramLibraryImpl::getNormalizeFunction( const 
 
 const types::NormalizeFunctionType* ProgramLibraryImpl::getNormalizeFunctionType( const std::string& name) const
 {
-	types::keymap<types::NormalizeFunctionType>::const_iterator fi = m_normalizeFunctionTypeMap.find( name);
+	types::keymap<types::NormalizeFunctionTypeR>::const_iterator fi = m_normalizeFunctionTypeMap.find( name);
 	if  (fi == m_normalizeFunctionTypeMap.end()) return 0;
-	return &fi->second;
+	return fi->second.get();
 }
 
 const types::NormalizeFunctionMap* ProgramLibraryImpl::formtypemap() const

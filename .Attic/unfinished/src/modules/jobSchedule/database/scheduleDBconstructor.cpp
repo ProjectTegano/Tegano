@@ -35,12 +35,13 @@
 //
 
 #include "logger/logger-v1.hpp"
+#include "config/configurationObject.hpp"
 #include "scheduleDB.hpp"
 
 namespace _Wolframe {
 namespace processor {
 
-JobScheduleDB* JobScheduleDBconstructor::object( const config::NamedConfiguration& conf )
+JobScheduleDB* JobScheduleDBconstructor::object( const config::ConfigurationObject& conf )
 {
 	const JobScheduleDBconfig& cfg = dynamic_cast< const JobScheduleDBconfig& >( conf );
 

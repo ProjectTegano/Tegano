@@ -43,6 +43,7 @@
 #include "aaaa/user.hpp"
 #include "database/databaseProviderInterface.hpp"
 #include "system/connectionEndpoint.hpp"
+#include "module/objectDescription.hpp"
 
 namespace _Wolframe {
 namespace system
@@ -55,21 +56,18 @@ class AuthenticatorSlice;
 class PasswordChanger;
 
 /// \class AuthenticationUnit
-/// \brief This is the base class for the authentication unit implementations
+/// \brief This is the interface of the authentication unit implementations
 class AuthenticationUnit
 {
 public:
-	AuthenticationUnit( const std::string& id )
-		: m_identifier(id), m_randomGenerator(0){}
+	explicit AuthenticationUnit( const std::string& id_)
+		:m_randomGenerator(0)
+		,m_id(id_){}
 
-	virtual ~AuthenticationUnit()		{}
-
-	const std::string& identifier() const	{ return m_identifier; }
+	virtual ~AuthenticationUnit(){}
 
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
 						{ return true; }
-	virtual const char* className() const = 0;
-
 	/// \brief The list of mechs implemented by this unit
 	/// \note	The authentication unit returns the mechs as an
 	///		array of strings. The array ends with a NULL
@@ -96,9 +94,14 @@ public:
 		m_randomGenerator = randomGenerator_;
 	}
 
+	const std::string& id() const
+	{
+		return m_id;
+	}
+
 private:
-	const std::string m_identifier;
 	system::RandomGenerator* m_randomGenerator;
+	std::string m_id;
 };
 
 }}//namespace

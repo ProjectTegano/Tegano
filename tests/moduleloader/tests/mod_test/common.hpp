@@ -36,17 +36,16 @@
 
 #include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 
 namespace _Wolframe {
 namespace module {
 namespace test {
 
-class TestModuleConfig :  public config::NamedConfiguration
+class TestModuleConfig :  public config::ConfigurationObject
 {
-	friend class TestModuleConstructor;
-
 public:
-	TestModuleConfig( const char* cfgName, const char* logParent, const char* logName );
+	TestModuleConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_);
 
 	virtual ~TestModuleConfig();
 
@@ -77,15 +76,6 @@ public:
 	// must be abstract too, otherwise we get a dlopen error with
 	// 'typeinfo for _Wolframe::module::test::TestUnit' missing
 	virtual const std::string hello( ) = 0;
-};
-
-class TestModuleConstructor : public ConfiguredObjectConstructor< TestUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return TEST_OBJECT; }
-	virtual const char* objectClassName() const	{ return "TestUnit"; }
-	virtual TestUnit* object( const config::NamedConfiguration& conf ) const;
 };
 
 }}} // namespace _Wolframe::module::test

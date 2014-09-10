@@ -44,8 +44,8 @@ using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
 //***  Database authorizer  *********************************************
-DBauthorizer::DBauthorizer( const std::string& Identifier, const std::string& DbLabel )
-	: AuthorizationUnit( Identifier ), m_dbLabel( DbLabel )
+DBauthorizer::DBauthorizer( const DatabaseAuthzConfig* config)
+	: AuthorizationUnit( config->identifier()), m_dbLabel( config->dbConfig())
 {
 	m_db = NULL;
 	if ( m_dbLabel.empty() )

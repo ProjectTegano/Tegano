@@ -37,7 +37,6 @@
 #define _Wolframe_appdevel_CPPFUNCTION_TEMPLATE_HPP_INCLUDED
 
 #include "serialize/cppFormFunction.hpp"
-#include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
 
 namespace _Wolframe {
@@ -45,22 +44,19 @@ namespace appdevel {
 
 /// \class CppFormFunction
 /// \brief Application development template for form functions written in C++
-template <class OutputType, class InputType, int (*Function)( proc::ExecContext* ctx, OutputType&, const InputType&)>
-struct CppFormFunction
+template <class OutputType, class InputType, int FunctionType( proc::ExecContext* ctx, OutputType&, const InputType&)>
+class CppFormFunctionTemplate
+	:public serialize::CppFormFunction
 {
-	static const serialize::CppFormFunction& declaration()
+public:
+	CppFormFunctionTemplate( const std::string& name_)
+		:serialize::CppFormFunction( name_, implementation, InputType::getStructDescription(), OutputType::getStructDescription())
+	{}
+
+private:
+	static int implementation( proc::ExecContext* ctx, void* res, const void* param)
 	{
-		static const serialize::StructDescriptionBase* param = InputType::getStructDescription();
-		static const serialize::StructDescriptionBase* result = OutputType::getStructDescription();
-		struct Functor
-		{
-			static int implementation( proc::ExecContext* ctx, void* res, const void* param)
-			{
-				return Function( ctx, *(OutputType*)res, *(const InputType*) param);
-			}
-		};
-		static serialize::CppFormFunction func( Functor::implementation, param, result);
-		return func;
+		return FunctionType( ctx, *(OutputType*)res, *(const InputType*) param);
 	}
 };
 

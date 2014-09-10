@@ -34,6 +34,7 @@ Project Wolframe.
 #ifndef _Wolframe_DOTNET_RUNTIME_ENVIRONMENT_CONFIGURATION_HPP_INCLUDED
 #define _Wolframe_DOTNET_RUNTIME_ENVIRONMENT_CONFIGURATION_HPP_INCLUDED
 #include "config/configurationTree.hpp"
+#include "config/configurationObject.hpp"
 #include "module/moduleInterface.hpp"
 #include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
@@ -45,7 +46,7 @@ namespace module {
 
 ///\brief Named configuration definition
 class DotnetRuntimeEnvironmentConfig
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 public:
 	class AssemblyDescription
@@ -62,7 +63,7 @@ public:
 
 public:
 	DotnetRuntimeEnvironmentConfig( const char* className_, const char* name, const char* logParent, const char* logName)
-		:config::NamedConfiguration( name, logParent, logName)
+		:config::ConfigurationObject( name, logParent, logName)
 		,m_className(className_){}
 	virtual ~DotnetRuntimeEnvironmentConfig(){}
 

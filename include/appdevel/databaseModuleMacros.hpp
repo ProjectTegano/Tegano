@@ -32,10 +32,10 @@
 ************************************************************************/
 /// \file appdevel/databaseModuleMacros.hpp
 /// \brief Macros for a module for defining a database interface
-#include "appdevel/module/authenticationConstructor.hpp"
 #include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
-#include "module/configuredBuilder.hpp"
+#include "config/configurationObject.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/lexical_cast.hpp>
 
 /// \brief Defines a simple database (one database object per unit) interface
@@ -44,13 +44,9 @@
 	class Unit :public _Wolframe::db::DatabaseUnit \
 	{\
 	public:\
-		Unit( const CONFIGCLASS& cfg)\
-			:m_id(cfg.ID()),m_db(cfg){}\
-		virtual const char* className() const\
-		{\
-			return #DBCLASS "Unit";\
-		}\
-		virtual const std::string& ID() const\
+		Unit( const CONFIGCLASS* cfg)\
+			:m_id(cfg->id()),m_db(cfg){}\
+		virtual const std::string& id() const\
 		{\
 			return m_id;\
 		}\
@@ -62,54 +58,39 @@
 		std::string m_id;\
 		DBCLASS m_db;\
 	};\
-	class Constructor :public _Wolframe::module::ConfiguredObjectConstructor< _Wolframe::db::DatabaseUnit >\
+	class ModuleObjectEnvelope \
+		:public Unit \
+		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		virtual ~Constructor(){}\
-		_Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::DATABASE_OBJECT;\
-		}\
-		const char* objectClassName() const\
-		{\
-			return NAME "Database";\
-		}\
-		_Wolframe::db::DatabaseUnit* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
+		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :Unit(cfg){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
+	{\
+	public:\
+		Constructor()\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::DATABASE_OBJECT, NAME "Database", "database", NAME){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
 			const CONFIGCLASS* cfg = dynamic_cast<const CONFIGCLASS*>(&cfgi);\
-			return new Unit(*cfg);\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " DatabaseUnit constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
+		}\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
+		{\
+			return new CONFIGCLASS( NAME "Database", "Database", NAME);\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt;\
+			return &rt;\
 		}\
 	};\
-	class BuilderDescription : public _Wolframe::module::ConfiguredBuilder\
-	{\
-	public:\
-		BuilderDescription( const char* title_, const char* section_,\
-					const char* keyword_, const char* className_ )\
-			:_Wolframe::module::ConfiguredBuilder( title_, section_, keyword_, className_ ){}\
-		virtual ~BuilderDescription()\
-		{}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix ) const\
-		{\
-			return new CONFIGCLASS( title(), logPrefix);\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::DATABASE_OBJECT;\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
-		{\
-			return new Constructor();\
-		}\
-	};\
-	struct Builder \
-	{\
-		static const _Wolframe::module::BuilderBase* impl()\
-		{\
-			static const BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
-			return &mod;\
-		}\
-	};\
-	(*this)(&Builder::impl);\
 }
 
 
@@ -119,74 +100,53 @@
 	class Unit :public _Wolframe::db::DatabaseUnit \
 	{\
 	public:\
-		Unit( const CONFIGCLASS& cfg)\
-			:m_dbinit(cfg),m_db(cfg){}\
-		virtual const char* className() const\
+		Unit( const CONFIGCLASS* cfg)\
+			:m_id(cfg->id()),m_dbinit(cfg),m_db(cfg){}\
+		virtual const std::string& id() const\
 		{\
-			return #DBCLASS "Unit";\
-		}\
-		virtual const std::string& ID() const\
-		{\
-			return m_db.ID();\
+			return m_id;\
 		}\
 		virtual DBCLASS* database()\
 		{\
 			return &m_db;\
 		}\
 	private:\
+		std::string m_id;\
 		DBINITCLASS m_dbinit;\
 		DBCLASS m_db;\
 	};\
-	class Constructor :public _Wolframe::module::ConfiguredObjectConstructor< _Wolframe::db::DatabaseUnit >\
+	class ModuleObjectEnvelope \
+		:public Unit \
+		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		virtual ~Constructor(){}\
-		_Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::DATABASE_OBJECT;\
-		}\
-		const char* objectClassName() const\
-		{\
-			return NAME "Database";\
-		}\
-		Unit* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
+		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :Unit(cfg){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
+	{\
+	public:\
+		Constructor()\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::DATABASE_OBJECT, NAME "Database", "database", NAME){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
 			const CONFIGCLASS* cfg = dynamic_cast<const CONFIGCLASS*>(&cfgi);\
-			return new Unit(*cfg);\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " DatabaseUnit constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
+		}\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
+		{\
+			return new CONFIGCLASS( NAME "Database");\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt;\
+			return &rt;\
 		}\
 	};\
-	class BuilderDescription : public _Wolframe::module::ConfiguredBuilder\
-	{\
-	public:\
-		BuilderDescription( const char* title_, const char* section_,\
-					const char* keyword_, const char* className_ )\
-			:_Wolframe::module::ConfiguredBuilder( title_, section_, keyword_, className_ ){}\
-		virtual ~BuilderDescription()\
-		{}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix ) const\
-		{\
-			return new CONFIGCLASS( title(), logPrefix);\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::DATABASE_OBJECT;\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
-		{\
-			return new Constructor();\
-		}\
-	};\
-	struct Builder \
-	{\
-		static const _Wolframe::module::BuilderBase* impl()\
-		{\
-			static const BuilderDescription mod( NAME "Database", "Database", NAME, NAME "Database");\
-			return &mod;\
-		}\
-	};\
-	(*this)(&Builder::impl);\
 }
-
-
-
 

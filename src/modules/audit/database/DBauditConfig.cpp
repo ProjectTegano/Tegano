@@ -61,6 +61,11 @@ bool DBauditConfig::parse( const config::ConfigurationNode& pt, const std::strin
 			if ( !Parser::getValue( logPrefix().c_str(), *L1it, m_dbConfig, &isDefined ))
 				retVal = false;
 		}
+		else if ( boost::algorithm::iequals( L1it->first, "identifier" ))	{
+			bool isDefined = ( !m_id.empty() );
+			if ( !Parser::getValue( logPrefix().c_str(), *L1it, m_id, &isDefined ))
+				retVal = false;
+		}
 		else	{
 			LOG_WARNING << logPrefix() << "unknown configuration option: '"
 					<< L1it->first << "' " << L1it->second.position().logtext();
@@ -79,7 +84,7 @@ bool DBauditConfig::check() const
 void DBauditConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Required: " << (m_required ? "yes" : "no") << std::endl;
 	os << indStr << "   Database: " << m_dbConfig << std::endl;
 }

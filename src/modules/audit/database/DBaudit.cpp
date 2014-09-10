@@ -45,8 +45,8 @@ using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
 //****  DBauditor  **********************************************************
-DBauditor::DBauditor( const std::string& dbLabel )
-	: m_dbLabel( dbLabel )
+DBauditor::DBauditor( const DBauditConfig* config_)
+	:m_dbLabel( config_->dbConfig())
 {
 	m_db = NULL;
 

@@ -165,11 +165,11 @@ void PostgreSQLDatabase::noticeProcessor( void* this_void, const char * message)
 		_Wolframe::log::LogLevel::Level lv = getLogLevel( std::string( message, ii));
 		if (lv != log::LogLevel::LOGLEVEL_UNDEFINED)
 		{
-			_Wolframe::log::Logger( _Wolframe::log::LogBackend::instance() ).Get( lv) << "PostgreSQL database '" << ((this_)?this_->ID():"") << "': " << (message + ii + 1);
+			_Wolframe::log::Logger( _Wolframe::log::LogBackend::instance() ).Get( lv) << "PostgreSQL database '" << ((this_)?this_->id():"") << "': " << (message + ii + 1);
 			return;
 		}
 	}
-	LOG_ERROR << "Unknown log message type from PostgreSQL database '" << ((this_)?this_->ID():"") << "': " << message;
+	LOG_ERROR << "Unknown log message type from PostgreSQL database '" << ((this_)?this_->id():"") << "': " << message;
 }
 
 static void closeConnection( void* connptr )
@@ -199,12 +199,13 @@ static void closeConnection( void* connptr )
 	LOG_TRACE << "closed connection state " << connstate;
 }
 
-PostgreSQLDatabase::PostgreSQLDatabase( const PostgreSQLConfig& config)
-	:m_ID(config.ID())
+PostgreSQLDatabase::PostgreSQLDatabase( const PostgreSQLConfig* config)
+	:Database("PostgreSQL", config->id())
+	,m_id(config->id())
 	,m_connections(0)
-	,m_connPool( &closeConnection, config.acquireTimeout())
+	,m_connPool( &closeConnection, config->acquireTimeout())
 {
-	init( config);
+	init( *config);
 }
 
 PostgreSQLDatabase::PostgreSQLDatabase( const std::string& id_,
@@ -216,7 +217,8 @@ PostgreSQLDatabase::PostgreSQLDatabase( const std::string& id_,
 		  unsigned short connectTimeout_,
 		  unsigned short connections_, unsigned short acquireTimeout_,
 		  unsigned statementTimeout_)
-	:m_ID(id_)
+	:Database("PostgreSQL", id_)
+	,m_id(id_)
 	,m_connections(0)
 	,m_connPool( &closeConnection, acquireTimeout_)
 {
@@ -236,12 +238,12 @@ void PostgreSQLDatabase::init( const PostgreSQLConfig& config)
 				  config.sslMode(), config.sslCert(), config.sslKey(),
 				  config.sslRootCert(), config.sslCRL(),
 				  config.connectTimeout() );
-	LOG_DATA << "PostgreSQL database '" << m_ID << "' connection string <" << m_connStr << ">";
+	LOG_DATA << "PostgreSQL database '" << m_id << "' connection string <" << m_connStr << ">";
 
 	for ( unsigned short i = 0; i < connections; i++ )	{
 		PGconn* conn = PQconnectdb( m_connStr.c_str() );
 		if ( conn == NULL )
-			LOG_ALERT << "Failed to connect to PostgreSQL database '" << m_ID << "'";
+			LOG_ALERT << "Failed to connect to PostgreSQL database '" << m_id << "'";
 		else	{
 			if (i == 0)
 			{
@@ -257,50 +259,50 @@ void PostgreSQLDatabase::init( const PostgreSQLConfig& config)
 				err.erase( err.size() - 1 );
 			switch( stat )	{
 				case CONNECTION_OK:
-					LOG_TRACE << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_TRACE << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connected OK.";
 					break;
 				case CONNECTION_BAD:
 					if ( err.compare( 0, 6, "FATAL:" ) == 0 )	{
-						LOG_ALERT << "PostgreSQL database '" << m_ID << "' (connection "
+						LOG_ALERT << "PostgreSQL database '" << m_id << "' (connection "
 							      << i << ") error: '" << err << "'";
 						throw std::runtime_error( "Fatal error connecting to the PostgreSQL database" );
 					}
-					LOG_WARNING << "PostgreSQL database '" << m_ID << "' connection "
+					LOG_WARNING << "PostgreSQL database '" << m_id << "' connection "
 							<< i << " error: '" << err << "'";
 					break;
 				case CONNECTION_STARTED:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection STARTED: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_STARTED in synchronous connection" );
 					break;
 				case CONNECTION_MADE:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection MADE: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_MADE in synchronous connection" );
 					break;
 				case CONNECTION_AWAITING_RESPONSE:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection AWAITING RESPONSE: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_AWAITING_RESPONSE in synchronous connection" );
 					break;
 				case CONNECTION_AUTH_OK:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection AUTH OK: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_AUTH_OK in synchronous connection" );
 					break;
 				case CONNECTION_SSL_STARTUP:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection SSL start: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_SSL_STARTUP in synchronous connection" );
 					break;
 				case CONNECTION_SETENV:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection SETENV: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_SETENV in synchronous connection" );
 					break;
 				case CONNECTION_NEEDED:
-					LOG_ALERT << "PostgreSQL database '" << m_ID << "' constructor: connection "
+					LOG_ALERT << "PostgreSQL database '" << m_id << "' constructor: connection "
 						      << i << " connection NEEDED: '" << err << "'";
 					throw std::range_error( "PostgreSQL database: CONNECTION_NEEDED in synchronous connection" );
 					break;
@@ -315,12 +317,12 @@ void PostgreSQLDatabase::init( const PostgreSQLConfig& config)
 			m_connections++;
 		}
 	}
-	LOG_DEBUG << "PostgreSQL database '" << m_ID << "' created with a pool of " << m_connections << " connections";
+	LOG_DEBUG << "PostgreSQL database '" << m_id << "' created with a pool of " << m_connections << " connections";
 }
 
 PostgreSQLDatabase::~PostgreSQLDatabase()
 {
-	LOG_TRACE << "PostgreSQL database '" << m_ID << "' destructor called";
+	LOG_TRACE << "PostgreSQL database '" << m_id << "' destructor called";
 }
 
 Transaction* PostgreSQLDatabase::transaction( const std::string& name_)

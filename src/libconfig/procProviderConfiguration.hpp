@@ -35,7 +35,7 @@
 
 #ifndef _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
 #define _PROCESSOR_PROVIDER_CONFIG_HPP_INCLUDED
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "moduleDirectoryImpl.hpp"
 #include "types/keymap.hpp"
 #include <string>
@@ -46,12 +46,12 @@ namespace config {
 
 /// \brief Processor provider configuration
 class ProcProviderConfiguration
-	:public config::ConfigurationBase
+	:public config::ConfigurationObject
 {
 public:
 	/// constructor & destructor
 	ProcProviderConfiguration()
-		: ConfigurationBase( "Processor(s)", NULL, "Processor configuration" )	{}
+		: ConfigurationObject( "ProcProvider", "Processor", "") {}
 	~ProcProviderConfiguration();
 
 	/// methods
@@ -62,13 +62,13 @@ public:
 	void setCanonicalPathes( const std::string& referencePath );
 
 	const std::string& dbLabel() const					{return m_dbLabel;}
-	const std::vector<config::NamedConfiguration*>& procConfig() const	{return m_procConfig;}
+	const std::vector<config::ConfigurationObject*>& procConfig() const	{return m_procConfig;}
 	const std::vector<std::string> programFiles() const			{return m_programFiles;}
 	const std::string& referencePath() const				{return m_referencePath;}
 
 private:
 	std::string					m_dbLabel;
-	std::vector< config::NamedConfiguration* >	m_procConfig;
+	std::vector< config::ConfigurationObject* >	m_procConfig;
 	std::vector< std::string >			m_programFiles;
 	std::string					m_referencePath;
 };

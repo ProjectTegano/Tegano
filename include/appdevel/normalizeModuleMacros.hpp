@@ -32,7 +32,9 @@
 ************************************************************************/
 /// \file appdevel/normalizeModuleMacros.hpp
 /// \brief Macros for defining normalization and validaton function module
-#include "appdevel/module/normalizeFunctionBuilder.hpp"
+#include "module/moduleInterface.hpp"
+#include "module/baseObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "types/normalizeFunction.hpp"
 #include "types/variant.hpp"
 #include <boost/shared_ptr.hpp>
@@ -52,17 +54,33 @@ struct macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS\
 };\
 
 /// \brief Defines normalization function
-#define WF_NORMALIZER(NAME,NORMALIZERCLASS)\
+#define WF_NORMALIZER(NAME,NORMALIZEFUNCTION)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public _Wolframe::types::NormalizeFunctionType\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static _Wolframe::types::NormalizeFunction* create( _Wolframe::types::NormalizeResourceHandle*, const std::vector<_Wolframe::types::Variant>& arg)\
+	public:\
+		ModuleObjectEnvelope() \
+			:_Wolframe::types::NormalizeFunctionType(NAME){}\
+		virtual _Wolframe::types::NormalizeFunction* create( const std::vector<_Wolframe::types::Variant>& arg) const\
 		{\
-			return new NORMALIZERCLASS( arg);\
+			return new NORMALIZEFUNCTION( arg);\
 		}\
-		static const _Wolframe::module::BuilderBase* impl()\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::NORMALIZE_FUNCTION_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			static const _Wolframe::module::NormalizeFunctionBuilder rt( "NormalizeFunction_" #NAME, NAME, create);\
+			return new ModuleObjectEnvelope();\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt( NAME "NormalizeFunction");\
 			return &rt;\
 		}\
 	};\
@@ -70,17 +88,33 @@ struct macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS\
 }
 
 /// \brief Defines normalization function
-#define WF_NORMALIZER_WITH_RESOURCE(NAME,NORMALIZERCLASS,RESOURCECLASS)\
+#define WF_NORMALIZER_WITH_RESOURCE(NAME,NORMALIZEFUNCTION,RESOURCECLASS)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public _Wolframe::types::NormalizeFunctionType\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static _Wolframe::types::NormalizeFunction* create( _Wolframe::types::NormalizeResourceHandle* reshnd, const std::vector<_Wolframe::types::Variant>& arg)\
+	public:\
+		ModuleObjectEnvelope() \
+			:_Wolframe::types::NormalizeFunctionType( NAME, macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS::get()){}\
+		virtual _Wolframe::types::NormalizeFunction* create( const std::vector<_Wolframe::types::Variant>& arg) const\
 		{\
-			return new NORMALIZERCLASS( reshnd, arg);\
+			return new NORMALIZEFUNCTION( resources(), arg);\
 		}\
-		static const _Wolframe::module::BuilderBase* impl()\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::NORMALIZE_FUNCTION_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			static const _Wolframe::module::NormalizeFunctionBuilder rt( "NormalizeFunction_" #NAME, NAME, create, macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS::get());\
+			return new ModuleObjectEnvelope();\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt( NAME "NormalizeFunction");\
 			return &rt;\
 		}\
 	};\

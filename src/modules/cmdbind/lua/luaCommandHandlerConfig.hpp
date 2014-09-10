@@ -38,7 +38,7 @@ Project Wolframe.
 #include "cmdbind/commandHandler.hpp"
 #include "cmdbind/ioFilterCommandHandler.hpp"
 #include "config/configurationTree.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "types/keymap.hpp"
 #include <string>
 #include <map>
@@ -48,13 +48,13 @@ namespace cmdbind {
 
 ///\brief Named configuration definition based on a langbind::ScriptEnvironmentConfigStruct structure
 class LuaCommandHandlerConfig
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 public:
-	LuaCommandHandlerConfig( const char* classname_, const char* name, const char* logParent, const char* logName)
-		:config::NamedConfiguration( name, logParent, logName)
+	LuaCommandHandlerConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_)
 		,m_modules(0)
-		,m_classname(classname_){}
+	{}
 	virtual ~LuaCommandHandlerConfig(){}
 
 	///\brief Parse the configuration
@@ -70,11 +70,6 @@ public:
 
 	virtual void print( std::ostream& os, size_t indent ) const;
 
-	virtual const char* className() const
-	{
-		return m_classname;
-	}
-
 	std::vector<std::string> programfiles() const
 	{
 		return m_programfiles;
@@ -89,7 +84,6 @@ private:
 	std::vector<std::string> m_programfiles;
 	types::keymap<std::string> m_filtermap;
 	const module::ModuleDirectory* m_modules;
-	const char* m_classname;
 };
 
 }}//namespace

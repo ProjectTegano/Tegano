@@ -33,55 +33,45 @@
 /// \brief Authentication factory
 #include "authenticationFactory.hpp"
 #include "standardAuthenticator.hpp"
+#include "providerUtils.hpp"
 #include "aaaa/authenticator.hpp"
 #include "aaaa/passwordChanger.hpp"
 #include "database/databaseProviderInterface.hpp"
-#include "module/configuredBuilder.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
-AuthenticationFactory::AuthenticationFactory( const std::vector< config::NamedConfiguration* >& confs,
+AuthenticationFactory::AuthenticationFactory( const std::vector<config::ConfigurationObject*>& config,
 					      system::RandomGenerator* randomGenerator,
 					      const module::ModuleDirectory* modules)
 {
-	for ( std::vector<config::NamedConfiguration*>::const_iterator it = confs.begin();
-							it != confs.end(); it++ )	{
-		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
-		if ( builder )	{
-			module::ObjectConstructorBaseR constructorRef( builder->constructor());
-			module::ConfiguredObjectConstructor< AuthenticationUnit >* auth =
-					dynamic_cast< module::ConfiguredObjectConstructor< AuthenticationUnit >* >( constructorRef.get());
-			if ( auth == NULL )	{
-				LOG_ALERT << "AuthenticationFactory: '" << builder->objectClassName()
-					  << "' is not an Authentication Unit builder";
-				throw std::logic_error( "object is not an AuthenticationUnit builder" );
-			}
-			m_authUnits.push_back( auth->object( **it ));
-			m_authUnits.back()->setRandomGenerator( randomGenerator);
-			LOG_TRACE << "'" << auth->objectClassName() << "' authentication unit registered";
-		}
-		else	{
-			LOG_ALERT << "AuthenticationFactory: unknown authentication type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown authentication type in AuthenticationFactory constructor. See log" );
-		}
+	if (!createConfiguredProviderObjects( "AuthenticationFactory: " , m_authUnits, config, modules))
+	{
+		throw std::runtime_error("could not load authentication provider module objects");
 	}
 
 	// Iterate through the list of authenticators (built at this point)
-	// and build the vector of available mechs
-	for ( std::vector< AuthenticationUnit* >::const_iterator ait = m_authUnits.begin();
-						ait != m_authUnits.end(); ait ++ )	{
+	// and build the vector of available mechs and define the random generator
+	std::vector<AuthenticationUnit*>::iterator ai = m_authUnits.begin(), ae = m_authUnits.end();
+	std::vector<config::ConfigurationObject*>::const_iterator ci = config.begin(), ce = config.end();
+
+	for ( ; ai != ae && ci != ce; ci++,ai++ )
+	{
+		// init the global random generator
+		(*ai)->setRandomGenerator( randomGenerator);
+
 		// add unit mechs to the list
-		const char** p_mech = (*ait)->mechs();
+		const char** p_mech = (*ai)->mechs();
 		if ( *p_mech == NULL )	{
-			LOG_WARNING << "'" << (*ait)->className() << "' has no authentication mechanisms";
+			LOG_WARNING << "'" << (*ci)->className() << "' has no authentication mechanisms";
 		}
 		while ( *p_mech )	{
 			std::string mech( *p_mech ); boost::to_upper( mech );
 			bool exists = false;
-			for( std::vector< std::string >::const_iterator mit = m_mechs.begin();
+			for( std::vector<std::string>::const_iterator mit = m_mechs.begin();
 						mit != m_mechs.end(); mit++ )	{
 				if ( *mit == mech )
 					exists = true;
@@ -93,6 +83,7 @@ AuthenticationFactory::AuthenticationFactory( const std::vector< config::NamedCo
 			p_mech++;
 		}
 	}
+	if (ci != ce || ai != ae) throw std::logic_error("assertion failed in authentication factory: configuration and object lists not parallel");
 }
 
 AuthenticationFactory::~AuthenticationFactory()
@@ -122,7 +113,7 @@ PasswordChanger* AuthenticationFactory::passwordChanger( const User& user,
 {
 	for ( std::vector< AuthenticationUnit* >::const_iterator it = m_authUnits.begin();
 								it != m_authUnits.end(); it++ )
-		if ( boost::iequals( (*it)->identifier(), user.authenticator() ))	{
+		if ( boost::iequals( (*it)->id(), user.authenticator()))	{
 			PasswordChanger* pwc = (*it)->passwordChanger( user, client );
 			if ( pwc )
 				return pwc;

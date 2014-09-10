@@ -81,7 +81,7 @@ bool LuaConfiguration::parse( const config::ConfigurationNode& pt, const std::st
 
 
 LuaConfiguration::LuaConfiguration()
-	: ConfigurationBase( "Lua Example Server", NULL, "Lua Example configuration " )
+	: ConfigurationObject( "LuaExampleServer", "", "" )
 {
 	LuaModuleDefinition x;
 

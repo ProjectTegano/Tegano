@@ -33,8 +33,10 @@
 //
 // a test module
 //
-#include "module/configuredBuilderTemplate.hpp"
+#include "module/configuredObjectConstructorTemplate.hpp"
+#include "config/configurationObject.hpp"
 #include "module/moduleInterface.hpp"
+#include "module/objectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test_containers.hpp"
 
@@ -42,8 +44,8 @@ namespace _Wolframe {
 namespace module {
 namespace test_containers {
 
-TestModuleConfig::TestModuleConfig( const char* cfgName, const char* logParent, const char* logName )
-	: config::NamedConfiguration( cfgName, logParent, logName )
+TestModuleConfig::TestModuleConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+	: config::ConfigurationObject( className_, configSection_, configKeyword_)
 {
 	LOG_DEBUG << "Module: test module config created";
 }
@@ -62,33 +64,19 @@ bool TestModuleConfig::check( ) const
 void TestModuleConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << ": no config " << std::endl;
+	os << indStr << configSection() << ": no config " << std::endl;
 }
 
 void TestModuleConfig::setCanonicalPathes( const std::string& /*refPath*/ )
 {
 }
 
-TestUnit1* TestModuleContainer1::object( const config::NamedConfiguration& /* conf */ ) const
-{
-	TestUnit1* m_test = new TestUnitImpl1( /* conf */ );
-	LOG_DEBUG << "Module: test module 1 container created";
-	return m_test;
-}
-
-TestUnit2* TestModuleContainer2::object( const config::NamedConfiguration& /*conf */ ) const
-{
-	TestUnit2* m_test = new TestUnitImpl2( /* conf */ );
-	LOG_DEBUG << "Module: test module 2 container created";
-	return m_test;
-}
-
-TestUnitImpl1::TestUnitImpl1( )
+TestUnitImpl1::TestUnitImpl1( const TestModuleConfig*)
 {
 	LOG_DEBUG << "Module: TestUnit1 object created";
 }
 
-TestUnitImpl2::TestUnitImpl2( )
+TestUnitImpl2::TestUnitImpl2( const TestModuleConfig*)
 {
 	LOG_DEBUG << "Module: TestUnit2 object created";
 }
@@ -125,22 +113,20 @@ bool TestUnitImpl2::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 	return true;
 }
 
-static const BuilderBase* getModule1( void )
+static const ObjectConstructor* getModule1( void )
 {
-	static const module::ConfiguredBuilderTemplate< test_containers::TestModuleContainer1,
-		test_containers::TestModuleConfig > mod( "Test Module 1", "Test 1", "test1", "TestObject1" );
+	static const ConfiguredObjectConstructorTemplate<module::ObjectDescription::TEST_OBJECT, test_containers::TestUnitImpl1, test_containers::TestModuleConfig> mod( "TestObject1", "Test1", "test1");
 	return &mod;
 }
 
-static const BuilderBase* getModule2( void )
+static const ObjectConstructor* getModule2( void )
 {
-	static const module::ConfiguredBuilderTemplate< test_containers::TestModuleContainer2,
-		test_containers::TestModuleConfig > mod( "Test Module 2", "Test 2", "test 2", "TestObject2" );
+	static const ConfiguredObjectConstructorTemplate<module::ObjectDescription::TEST_OBJECT, test_containers::TestUnitImpl2, test_containers::TestModuleConfig> mod( "TestObject2", "Test2", "test2");
 	return &mod;
 }
 
 
-static const BuilderBase* (*containers[])() = {
+static const ObjectConstructor* (*containers[])() = {
 	getModule1,
 	getModule2,
 	NULL

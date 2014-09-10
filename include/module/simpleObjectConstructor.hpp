@@ -33,22 +33,26 @@
 /// \file module/simpleObjectConstructor.hpp
 /// \brief Base class for virtual constructors of objects without configuration
 
-#include "module/objectConstructorBase.hpp"
+#include "module/objectConstructor.hpp"
 #include <boost/shared_ptr.hpp>
 
-#ifndef _SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
-#define _SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
+#ifndef _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
+#define _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
 
 namespace _Wolframe {
 namespace module {
 
-/// Constructor of a simple (without configuration) object
-template < class T >
-class SimpleObjectConstructor : public ObjectConstructorBase
+/// \brief Constructor of a simple (without configuration) object
+class SimpleObjectConstructor
+	:public ObjectConstructor
 {
 public:
-	virtual ~SimpleObjectConstructor()	{}
-	virtual T* object() const = 0;
+	SimpleObjectConstructor( const TypeId& typeId_, const std::string& className_ )
+		:ObjectConstructor( typeId_, className_ ){}
+
+	virtual ~SimpleObjectConstructor(){}
+
+	virtual BaseObject* object() const = 0;
 };
 
 }}// namespac

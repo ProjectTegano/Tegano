@@ -32,20 +32,40 @@
 ************************************************************************/
 /// \file appdevel/customDataTypeModuleMacros.hpp
 /// \brief Macros for defining a custom datatype module
-#include "appdevel/module/customDataTypeBuilder.hpp"
+#include "module/moduleInterface.hpp"
+#include "module/baseObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "types/customDataType.hpp"
+#include "types/keymap.hpp"
+#include <boost/shared_ptr.hpp>
 
 /// \brief Defines a custom datatype in the CUSTOM_DATATYPE_MODULE section
-#define WF_CUSTOM_DATATYPE(NAME,CONSTRUCTOR)\
+#define WF_CUSTOM_DATATYPE(NAME,DATATYPECLASS)\
+{\
+	class ModuleObjectEnvelope \
+		:public DATATYPECLASS \
+		,public _Wolframe::module::BaseObject \
 	{\
-		struct Constructor\
+	public:\
+		ModuleObjectEnvelope()\
+			:DATATYPECLASS( NAME){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::CUSTOM_DATA_TYPE_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			static const _Wolframe::module::BuilderBase* impl()\
-			{\
-				static const _Wolframe::module::CustomDataTypeBuilder rt( "CustomDataType_" #NAME, NAME, CONSTRUCTOR);\
-				return &rt;\
-			}\
-		};\
-		(*this)(&Constructor ::impl);\
-	}
+			return new ModuleObjectEnvelope();\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt( NAME "Type");\
+			return &rt;\
+		}\
+	};\
+}
 
 

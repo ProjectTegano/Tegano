@@ -88,11 +88,10 @@ public:
 			  const std::string& host, unsigned short port, const std::string& dbName,
 			  const std::string& user, const std::string& password,
 			  size_t connections, unsigned short acquireTimeout);
-	OracleDatabase( const OracleConfig& config);
+	OracleDatabase( const OracleConfig* config);
 	 ~OracleDatabase();
 
-	const std::string& ID() const		{ return m_ID; }
-	const char* className() const		{ return ORACLE_DB_CLASS_NAME; }
+	const std::string& id() const		{ return m_id; }
 
 	Transaction* transaction( const std::string& name_);
 	
@@ -112,7 +111,7 @@ private:
 	void init( const OracleConfig& config);
 
 private:
-	const std::string	m_ID;			//< database ID
+	const std::string	m_id;			//< database ID
 	std::string		m_connStr;		//< connection string
 	unsigned short		m_connections;		//< number of connections
 	types::ObjectPool<OracleConnection> m_connPool;	//< pool of connections

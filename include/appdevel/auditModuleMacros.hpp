@@ -30,38 +30,53 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appdevel/filterModuleMacros.hpp
-/// \brief Macros for a filter modules
+/// \file appdevel/auditModuleMacros.hpp
+/// \brief Macros for a module for defining auditing of some sort
 #include "module/moduleInterface.hpp"
-#include "module/baseObject.hpp"
-#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
+#include <boost/lexical_cast.hpp>
+#include "aaaa/auditUnit.hpp"
+#include "logger/logger-v1.hpp"
 
-/// \brief Defines a Wolframe filter module after the includes section.
-#define WF_FILTER_TYPE( FILTERNAME, FILTERTYPECLASS)\
+/// \brief Defines auditing
+#define WF_AUDIT(NAME,UNITCLASS,CONFIGCLASS)\
 {\
 	class ModuleObjectEnvelope \
-		:public FILTERTYPECLASS\
+		:public UNITCLASS \
 		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		ModuleObjectEnvelope(){}\
+		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :UNITCLASS(cfg){}\
 	};\
 	class Constructor\
-		:public _Wolframe::module::SimpleObjectConstructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
 	{\
 	public:\
-		Constructor( const std::string& className_)\
-			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::FILTER_OBJECT, className_){}\
-		virtual _Wolframe::module::BaseObject* object() const\
+		Constructor()\
+	:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::AUDIT_OBJECT, NAME "Audit", "audit", NAME){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
-			return new ModuleObjectEnvelope();\
+			const CONFIGCLASS* cfg = dynamic_cast<const CONFIGCLASS*>(&cfgi);\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " AuditUnit constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
+		}\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
+		{\
+			return new CONFIGCLASS( NAME "Audit", "audit", NAME);\
 		}\
 		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const Constructor rt( FILTERNAME "Filter");\
+			static const Constructor rt;\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
+
+
 

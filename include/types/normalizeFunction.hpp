@@ -53,7 +53,6 @@ class NormalizeFunction
 {
 public:
 	virtual ~NormalizeFunction(){}
-	virtual const char* name() const=0;
 	virtual Variant execute( const Variant& i) const=0;
 	virtual NormalizeFunction* copy() const=0;
 };
@@ -74,38 +73,31 @@ typedef boost::shared_ptr<NormalizeResourceHandle> NormalizeResourceHandleR;
 
 
 typedef const NormalizeResourceHandleR& (*GetNormalizeResourceHandle)();
-typedef NormalizeFunction* (*CreateNormalizeFunction)( NormalizeResourceHandle* reshnd, const std::vector<types::Variant>& arg);
 
 /// \class NormalizeFunctionType
 /// \brief Class of basic normalization functions instantiated by arguments
 class NormalizeFunctionType
 {
 public:
-	explicit NormalizeFunctionType( CreateNormalizeFunction c=0)
-		:m_createFunction(c){}
-	explicit NormalizeFunctionType( CreateNormalizeFunction c, const NormalizeResourceHandleR& resources_)
-		:m_createFunction(c),m_resources(resources_){}
+	explicit NormalizeFunctionType( const std::string& name_)
+		:m_name(name_){}
+	explicit NormalizeFunctionType( const std::string& name_, const NormalizeResourceHandleR& resources_)
+		:m_name(name_),m_resources(resources_){}
 	NormalizeFunctionType( const NormalizeFunctionType& o)
-		:m_createFunction(o.m_createFunction),m_resources(o.m_resources){}
-	~NormalizeFunctionType(){}
+		:m_name(o.m_name),m_resources(o.m_resources){}
+	virtual ~NormalizeFunctionType(){}
 
-	NormalizeFunction* createFunction( const std::vector<types::Variant>& arg) const
-	{
-		if (m_createFunction)
-		{
-			return m_createFunction( m_resources.get(), arg);
-		}
-		else
-		{
-			return 0;
-		}
-		
-	}
+	virtual NormalizeFunction* create( const std::vector<types::Variant>& arg) const=0;
+	virtual const std::string& name() const	{return m_name;}
+	virtual NormalizeResourceHandle* resources() const {return m_resources.get();}
+
 private:
-	CreateNormalizeFunction m_createFunction;
+	const std::string m_name;
 	NormalizeResourceHandleR m_resources;
 };
 
+/// \brief Shared ownership reference for collections of interfaces
+typedef boost::shared_ptr<NormalizeFunctionType> NormalizeFunctionTypeR;
 
 
 

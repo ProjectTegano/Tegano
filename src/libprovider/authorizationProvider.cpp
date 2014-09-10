@@ -33,40 +33,26 @@
 /// \brief Authorization provider
 
 #include "authorizationProvider.hpp"
+#include "providerUtils.hpp"
 #include "standardAuthorizer.hpp"
 #include "aaaa/authorizationUnit.hpp"
 #include <stdexcept>
 #include "module/moduleDirectory.hpp"
-#include "module/configuredBuilder.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
-AuthorizationProvider::AuthorizationProvider( const std::vector< config::NamedConfiguration* >& confs,
+AuthorizationProvider::AuthorizationProvider( const std::vector< config::ConfigurationObject* >& config,
 					      bool authzDefault,
 					      const module::ModuleDirectory* modules )
 {
-	for ( std::vector<config::NamedConfiguration*>::const_iterator it = confs.begin();
-								it != confs.end(); it++ )	{
-		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
-		if ( builder )	{
-			module::ConfiguredObjectConstructor< AuthorizationUnit >* authz =
-					dynamic_cast< module::ConfiguredObjectConstructor< AuthorizationUnit >* >( builder->constructor());
-			if ( authz == NULL )	{
-				LOG_ALERT << "AuthorizationProvider: '" << builder->objectClassName()
-					  << "' is not an Authorization Unit builder";
-				throw std::logic_error( "object is not an AuthorizationUnit builder" );
-			}
-			m_authorizeUnits.push_back( authz->object( **it ) );
-			LOG_TRACE << "'" << authz->objectClassName() << "' authorization unit registered";
-		}
-		else	{
-			LOG_ALERT << "AuthorizationProvider: unknown authorization type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown authorization mechanism type in AuthorizationProvider constructor. See log" );
-		}
+	if (!createConfiguredProviderObjects( "AuthorizationProvider: ", m_authorizeUnits, config, modules))
+	{
+		throw std::runtime_error("could not load authentication provider module objects");
 	}
 	m_authorizer = new StandardAuthorizer( m_authorizeUnits, authzDefault );
 }
@@ -93,7 +79,7 @@ bool AuthorizationProvider::resolveDB( const db::DatabaseProviderInterface& db )
 	{
 		if (!(*it)->resolveDB( db))
 		{
-			LOG_ERROR << "failed to resolve database for authorization unit '" << (*it)->className() << "'";
+			LOG_ERROR << "failed to resolve database for authorization unit '" << (*it)->id() << "'";
 			rt = false;
 		}
 	}

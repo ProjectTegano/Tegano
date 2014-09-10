@@ -10,7 +10,7 @@ class MyDatabaseConfig
 	:public _Wolframe::serialize::DescriptiveConfiguration
 {
 public:
-	const std::string& ID() const
+	const std::string& id() const
 	{
 		// ... return the identifier of the database as declared in the configuration here
 		// ... for convenience the identifier of the database should be configured as 'identifier'
@@ -24,8 +24,8 @@ public:
 		// ... return your introspection description reference of the configuration here
 	}
 
-	MyDatabaseConfig( const char* title, const char* logprefix)
-		:_Wolframe::serialize::DescriptiveConfiguration( title, "database", logprefix, getStructDescription())
+	MyDatabaseConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 	{
 		setBasePtr( (void*)this); // ... mandatory to set pointer to start of configuration
 	}
@@ -118,20 +118,10 @@ class MyDatabase
 	:public _Wolframe::db::Database
 {
 public:
-	MyDatabase( const MyDatabaseConfig& config)
+	MyDatabase( const MyDatabaseConfig* config)
+		:Database("MyDatabase", config->id())
 	{
 		// ... define your database from configuration here
-	}
-
-	virtual const std::string& ID() const
-	{
-		static const std::string my_ID("mydb");
-		return my_ID;    // ... return the configuration identifier of your database
-	}
-
-	virtual const char* className() const
-	{
-		return "MyDatabase";
 	}
 
 	virtual _Wolframe::db::Transaction* transaction( const std::string& name_)

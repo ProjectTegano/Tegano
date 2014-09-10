@@ -33,20 +33,33 @@
 /// \file appdevel/doctypeModuleMacros.hpp
 /// \brief Macros for a document type/format module definition
 #include "module/moduleInterface.hpp"
-#include "appdevel/module/doctypeDetectorBuilder.hpp"
+#include "module/baseObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "cmdbind/doctypeDetector.hpp"
 
 /// \brief Defines a Wolframe document format with a document type detector after the module includes section and module declaration header.
-#define WF_DOCUMENT_FORMAT( DOCFORMATNAME, DETECTORCLASS)\
+#define WF_DOCUMENT_FORMAT(NAME,CLASSDEF)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope\
+		:public CLASSDEF\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static _Wolframe::cmdbind::DoctypeDetector* create()\
+	public:\
+		ModuleObjectEnvelope(){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::DOCTYPE_DETECTOR_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			return new DETECTORCLASS();\
+			return new ModuleObjectEnvelope();\
 		}\
-		static const _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const _Wolframe::module::DoctypeDetectorBuilder rt( DOCFORMATNAME "Detector", DOCFORMATNAME, create);\
+			static const Constructor rt( NAME "DocTypeDetection");\
 			return &rt;\
 		}\
 	};\

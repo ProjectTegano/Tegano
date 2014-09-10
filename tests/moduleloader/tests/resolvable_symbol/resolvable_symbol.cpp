@@ -35,6 +35,7 @@
 //
 
 #include "module/moduleInterface.hpp"
+#include "module/objectConstructor.hpp"
 
 extern void bar( );
 
@@ -43,7 +44,7 @@ bool foo( int a, int b ) {
 	return ( a == b );
 }
 
-static const _Wolframe::module::BuilderBase* (*containers[])() = {
+static const _Wolframe::module::ObjectConstructor* (*containers[])() = {
 	NULL
 };
 

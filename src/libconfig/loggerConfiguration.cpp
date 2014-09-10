@@ -234,7 +234,7 @@ bool LoggerConfiguration::parse( const types::PropertyTree::Node& pt, const std:
 }
 
 
-LoggerConfiguration::LoggerConfiguration() : ConfigurationBase( "Logging", NULL, "Logging" )
+LoggerConfiguration::LoggerConfiguration() : ConfigurationObject( "Logger", "Logger", "" )
 {
 	logToStderr = false;
 	stderrLogLevel = log::LogLevel::LOGLEVEL_UNDEFINED;
@@ -257,7 +257,7 @@ LoggerConfiguration::LoggerConfiguration() : ConfigurationBase( "Logging", NULL,
 
 void LoggerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 	if ( logToStderr )
 		os << "   Log to stderr, level " << stderrLogLevel << std::endl;
 	else

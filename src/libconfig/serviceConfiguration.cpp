@@ -147,16 +147,16 @@ bool ServiceConfiguration::parse( const config::ConfigurationNode& pt, const std
 
 // Constructor
 #if !defined(_WIN32)	// Unix daemon
-ServiceConfiguration::ServiceConfiguration() : ConfigurationBase( "Daemon", NULL, "Daemon configuration" )	{}
+ServiceConfiguration::ServiceConfiguration() : ConfigurationObject( "Daemon", "Daemon", "" ){}
 #else
-ServiceConfiguration::ServiceConfiguration() : ConfigurationBase( "Service", NULL, "Service configuration" )	{}
+ServiceConfiguration::ServiceConfiguration() : ConfigurationObject( "Service", NULL, "Service configuration" )	{}
 #endif
 
 
 // Server configuration functions
 void ServiceConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 #if !defined(_WIN32)	// Unix daemon
 	os << "   Run as " << (user.empty() ? "(not specified)" : user) << ":"
 	   << (group.empty() ? "(not specified)" : group) << std::endl;

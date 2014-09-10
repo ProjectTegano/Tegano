@@ -42,8 +42,8 @@
 namespace _Wolframe {
 namespace module {
 
-class ConfiguredBuilder;
-class SimpleBuilder;
+class ConfiguredObjectConstructor;
+class SimpleObjectConstructor;
 
 /// \class ModuleDirectory
 /// \brief Interface to the modules directory used by the constructors of the providers to build themselves.
@@ -54,13 +54,13 @@ public:
 	/// \brief Get the configured builder for the configuration section, keyword pair.
 	/// \param[in] section	the section (parent) of the configuration
 	/// \param[in] keyword	the keyword in the section
-	virtual const ConfiguredBuilder* getConfiguredBuilder( const std::string& section, const std::string& keyword ) const=0;
+	virtual const ConfiguredObjectConstructor* getConfiguredObjectConstructor( const std::string& section, const std::string& keyword ) const=0;
 
 	/// \brief Get the configured builder for the specified object class name
-	virtual const ConfiguredBuilder* getConfiguredBuilder( const std::string& objectClassName ) const=0;
+	virtual const ConfiguredObjectConstructor* getConfiguredObjectConstructor( const std::string& objectClassName ) const=0;
 
 	/// \brief Get the list of simple builders
-	virtual const std::vector<const SimpleBuilder*>& getSimpleBuilderList() const=0;
+	virtual const std::vector<const SimpleObjectConstructor*>& getSimpleObjectConstructorList() const=0;
 
 	/// \brief Get the absolute path of a module
 	/// \brief param[in] moduleName name of the module to resolve

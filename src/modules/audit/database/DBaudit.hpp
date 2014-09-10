@@ -35,6 +35,7 @@
 //
 
 #include "aaaa/auditUnit.hpp"
+#include "config/configurationObject.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationTree.hpp"
 
@@ -44,57 +45,49 @@
 namespace _Wolframe {
 namespace aaaa {
 
-static const char* DB_AUDIT_CLASS_NAME = "DatabaseAudit";
-
-class DBauditConfig : public config::NamedConfiguration
+class DBauditConfig :public config::ConfigurationObject
 {
-	friend class DBauditConstructor;
 public:
-	DBauditConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName )
-	{ m_required = true; }
-
-	const char* className() const		{ return DB_AUDIT_CLASS_NAME; }
+	DBauditConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_)
+		,m_required(true)
+	{}
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
+
+	const std::string& dbConfig() const	{return m_dbConfig;}
+	const std::string& id() const		{return m_id;}
+
 private:
 	bool			m_required;
 	std::string		m_dbConfig;
+	std::string		m_id;
 	config::ConfigurationTree::Position m_config_pos;
 };
 
 
-class DBauditor : public AuditUnit
+class DBauditor
+	:public AuditUnit
 {
 public:
-	DBauditor( const std::string& dbLabel );
+	DBauditor( const DBauditConfig* config_);
 	~DBauditor();
-	const char* className() const		{ return DB_AUDIT_CLASS_NAME; }
 
 	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	bool required()				{ return m_required; }
 
 	bool audit( const Information& auditObject );
+
 private:
 	bool			m_required;
 	std::string		m_dbLabel;
 	const db::Database*	m_db;
 };
 
-class DBauditConstructor : public module::ConfiguredObjectConstructor< AuditUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return AUDIT_OBJECT; }
-	const char* objectClassName() const	{ return DB_AUDIT_CLASS_NAME; }
-	DBauditor* object( const config::NamedConfiguration& conf ) const;
-};
-
-}} // namespace _Wolframe::aaaa
-
-#endif // _DB_AUDIT_HPP_INCLUDED
+}}
+#endif

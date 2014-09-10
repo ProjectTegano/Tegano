@@ -56,13 +56,14 @@ static void closeConnection( void* connptr )
 	sqlite3_close( conn);
 }
 
-SQLiteDatabase::SQLiteDatabase( const SQLiteConfig& config)
-	:m_ID(config.ID())
-	,m_filename(config.filename())
+SQLiteDatabase::SQLiteDatabase( const SQLiteConfig* config)
+	:Database("SQLite", config->id())
+	,m_id(config->id())
+	,m_filename(config->filename())
 	,m_connPool( &closeConnection, 0/*no timeout - wait forever*/)
-	,m_extensionFiles(config.extensionFiles())
+	,m_extensionFiles(config->extensionFiles())
 {
-	init( config);
+	init( *config);
 }
 
 SQLiteDatabase::SQLiteDatabase(
@@ -70,7 +71,8 @@ SQLiteDatabase::SQLiteDatabase(
 		bool foreignKeys_, bool profiling_,
 		unsigned short connections_,
 		const std::vector<std::string>& extensionFiles_ )
-	:m_ID(id_)
+	:Database("SQLite", id_)
+	,m_id(id_)
 	,m_filename(filename_)
 	,m_connPool( &closeConnection, 0/*no timeout - wait forever*/)
 	,m_extensionFiles(extensionFiles_)
@@ -87,7 +89,7 @@ void SQLiteDatabase::init( const SQLiteConfig& config)
 
 	if ( ! sqlite3_threadsafe() )	{
 		if ( connections != 1 )	{
-			LOG_WARNING << "SQLite database '" << m_ID
+			LOG_WARNING << "SQLite database '" << m_id
 				    << "' has not been compiled without the SQLITE_THREADSAFE parameter."
 				    << " Using only 1 connection instead of " << connections << ".";
 			connections = 1;
@@ -148,12 +150,12 @@ void SQLiteDatabase::init( const SQLiteConfig& config)
 			// enable extensions in every connection
 			std::vector<std::string>::const_iterator it = m_extensionFiles.begin( ), end = m_extensionFiles.end( );
 			for( ; it != end; it++ ) {
-				LOG_DEBUG << "Loading extension '" << *it << "' for SQLite database unit '" << m_ID << "'";
+				LOG_DEBUG << "Loading extension '" << *it << "' for SQLite database unit '" << m_id << "'";
 				// No extension file, do nothing
 				if( (*it).empty( ) ) continue;
 
 				if( !boost::filesystem::exists( (*it) ) ) {
-					LOG_ALERT << "Extension file '" << (*it) << "' does not exist (SQLite database '" << m_ID << "')";
+					LOG_ALERT << "Extension file '" << (*it) << "' does not exist (SQLite database '" << m_id << "')";
 					continue;
 				}
 
@@ -171,18 +173,18 @@ void SQLiteDatabase::init( const SQLiteConfig& config)
 					continue;
 				}
 			}
-			LOG_DEBUG << "Extensions for SQLite database '" << m_ID << "' loaded";
+			LOG_DEBUG << "Extensions for SQLite database '" << m_id << "' loaded";
 
 			m_connPool.push( handle );
 		}
 	}
-	LOG_DEBUG << "SQLite database '" << m_ID << "' created with "
+	LOG_DEBUG << "SQLite database '" << m_id << "' created with "
 		      << connections << " connections to file '" << m_filename << "'";
 }
 
 SQLiteDatabase::~SQLiteDatabase()
 {
-	LOG_TRACE << "SQLite database '" << m_ID << "' destructor called";
+	LOG_TRACE << "SQLite database '" << m_id << "' destructor called";
 }
 
 Transaction* SQLiteDatabase::transaction( const std::string& name_)

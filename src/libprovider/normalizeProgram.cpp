@@ -56,7 +56,7 @@ static types::NormalizeFunctionR createBaseFunction( const std::string& name, co
 		if (normalizer)
 		{
 			if (customtype) throw std::runtime_error( std::string( "amgibuus definition of custom data type and normalize function '") + name + "'");
-			return types::NormalizeFunctionR( normalizer->createFunction( arg));
+			return types::NormalizeFunctionR( normalizer->create( arg));
 		}
 		else if (customtype)
 		{

@@ -54,11 +54,12 @@ using namespace _Wolframe::aaaa;
 // Text file authentication - authentication unit
 //***********************************************************************
 
-TextFileAuthUnit::TextFileAuthUnit( const std::string& Identifier,
-				    const std::string& filename)
-	: AuthenticationUnit( Identifier ), m_pwdFile( filename, false )
+TextFileAuthUnit::TextFileAuthUnit( const TextFileAuthConfig* config)
+	: AuthenticationUnit( config->identifier())
+	, m_identifier( config->identifier())
+	, m_pwdFile( config->file())
 {
-	LOG_DEBUG << "Text file authenticator '" << identifier()
+	LOG_DEBUG << "Text file authenticator '" << m_identifier
 		      << "' created with file '" << m_pwdFile.filename() << "'";
 }
 
@@ -145,9 +146,6 @@ bool TextFileAuthUnit::getUserPlain( const std::string& username, PwdFileUser& u
 	return false;
 }
 
-
-// Text file authentication - authentication slice
-//***********************************************************************
 TextFileAuthSlice::TextFileAuthSlice( const TextFileAuthUnit& backend )
 	: m_backend( backend )
 {

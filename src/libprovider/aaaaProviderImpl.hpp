@@ -35,6 +35,7 @@
 #ifndef _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _AAAA_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
+#include "config/configurationObject.hpp"
 #include "aaaa/aaaaProviderInterface.hpp"
 #include "authenticationFactory.hpp"
 #include "authorizationProvider.hpp"
@@ -56,10 +57,10 @@ class AaaaProviderImpl
 public:
 	AaaaProviderImpl(
 		system::RandomGenerator* randomGenerator_,
-		const std::vector<config::NamedConfiguration*>& authConfig_,
-		const std::vector<config::NamedConfiguration*>& authzConfig_,
+		const std::vector<config::ConfigurationObject*>& authConfig_,
+		const std::vector<config::ConfigurationObject*>& authzConfig_,
 		bool authzDefault_,
-		const std::vector<config::NamedConfiguration*>& auditConfig_,
+		const std::vector<config::ConfigurationObject*>& auditConfig_,
 		const module::ModuleDirectory* modules);
 
 	~AaaaProviderImpl(){}

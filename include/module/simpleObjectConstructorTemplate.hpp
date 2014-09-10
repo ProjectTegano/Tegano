@@ -30,23 +30,38 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Text File Authentication constructor
-//
+/// \file module/simpleObjectConstructorTemplate.hpp
+/// \brief Template to define a simple object constructor by type
+#include "module/simpleObjectConstructor.hpp"
+#include <boost/shared_ptr.hpp>
+#include <stdexcept>
 
-#include "TextFileAuth.hpp"
-#include "logger/logger-v1.hpp"
+#ifndef _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
+#define _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
 
-using namespace _Wolframe;
-using namespace _Wolframe::aaaa;
+namespace _Wolframe {
+namespace module {
 
-TextFileAuthUnit* TextFileAuthConstructor::object( const config::NamedConfiguration& conf ) const
+/// \brief Template to define a constructor of a simple object by type
+template <ObjectDescription::TypeId TYPEID, class OBJECT>
+struct SimpleObjectConstructorTemplate
+	:public SimpleObjectConstructor
 {
-	const TextFileAuthConfig& cfg = dynamic_cast< const TextFileAuthConfig& >( conf );
+	SimpleObjectConstructorTemplate( const std::string& className_)
+		:SimpleObjectConstructor( TYPEID, className_){}
 
-	TextFileAuthUnit* m_auth = new TextFileAuthUnit( cfg.m_identifier, cfg.m_file );
-	LOG_DEBUG << "Text file authenticator container created for '"
-		      << cfg.m_identifier << "'";
-	return m_auth;
-}
+	virtual BaseObject* object() const
+	{
+		const module::ObjectDescription* description = this;
+		return new OBJECT( *description);
+	}
 
+	static const ObjectConstructor* create()
+	{
+		static const SimpleObjectConstructorTemplate<TYPEID,OBJECT> rt;
+		return &rt;
+	}
+};
+
+}}// namespace
+#endif

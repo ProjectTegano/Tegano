@@ -30,22 +30,26 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// file audit constructor
-//
+/// \file module/baseObject.hpp
+/// \brief Base class for objects loaded from module
 
-#include "logger/logger-v1.hpp"
-#include "TextFileAudit.hpp"
+#include "config/configurationObject.hpp"
+#include "module/objectDescription.hpp"
+#include <boost/shared_ptr.hpp>
 
-using namespace _Wolframe;
-using namespace _Wolframe::aaaa;
+#ifndef _Wolframe_MODULE_BASE_OBJECT_HPP_INCLUDED
+#define _Wolframe_MODULE_BASE_OBJECT_HPP_INCLUDED
 
-TextFileAuditor* TextFileAuditConstructor::object( const config::NamedConfiguration& conf ) const
+namespace _Wolframe {
+namespace module {
+
+/// \class BaseObject
+/// \brief Base class for objects loaded from module
+class BaseObject
 {
-	const TextFileAuditConfig& cfg = dynamic_cast< const TextFileAuditConfig& >( conf );
+public:
+	virtual ~BaseObject(){}
+};
 
-	TextFileAuditor* m_audit = new TextFileAuditor( cfg.m_file );
-	LOG_TRACE << "Text file auditor container created";
-	return m_audit;
-}
-
+}} // namespace
+#endif

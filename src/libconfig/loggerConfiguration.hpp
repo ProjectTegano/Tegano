@@ -36,7 +36,7 @@
 #ifndef _Wolframe_CONFIG_LOGGER_HPP_INCLUDED
 #define _Wolframe_CONFIG_LOGGER_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 #include "logger/logLevel.hpp"
 #include "logger/logSyslogFacility.hpp"
@@ -49,7 +49,7 @@ namespace config {
 
 /// \class LoggerConfiguration
 /// \brief Logger configuration
-class LoggerConfiguration : public _Wolframe::config::ConfigurationBase
+class LoggerConfiguration : public _Wolframe::config::ConfigurationObject
 {
 public:
 	bool			logToStderr;

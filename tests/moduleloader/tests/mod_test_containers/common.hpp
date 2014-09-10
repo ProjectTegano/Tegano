@@ -35,22 +35,21 @@
 //
 
 #include "module/moduleInterface.hpp"
+#include "config/configurationObject.hpp"
 #include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
 namespace module {
 namespace test_containers {
 
-class TestModuleConfig :  public config::NamedConfiguration
+class TestModuleConfig :  public config::ConfigurationObject
 {
 	friend class TestModuleContainer;
 
 public:
-	TestModuleConfig( const char* cfgName, const char* logParent, const char* logName );
+	TestModuleConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_);
 
 	virtual ~TestModuleConfig( ) {}
-
-	virtual const char* className() const		{ return "TestUnit"; }
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
@@ -59,6 +58,7 @@ public:
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
+
 private:
 	std::string m_a_param;
 };
@@ -91,24 +91,6 @@ public:
 	// must be abstract too, otherwise we get a dlopen error with
 	// 'typeinfo for _Wolframe::module::test::TestUnit' missing
 	virtual const std::string hullo( ) = 0;
-};
-
-class TestModuleContainer1 : public ConfiguredObjectConstructor< TestUnit1 >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return TEST_OBJECT; }
-	virtual const char* objectClassName() const	{ return "TestUnit1"; }
-	virtual TestUnit1* object( const config::NamedConfiguration& conf ) const;
-};
-
-class TestModuleContainer2 : public ConfiguredObjectConstructor< TestUnit2 >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return TEST_OBJECT; }
-	virtual const char* objectClassName() const	{ return "TestUnit2"; }
-	virtual TestUnit2* object( const config::NamedConfiguration& conf ) const;
 };
 
 }}} // namespace _Wolframe::module::test_containers

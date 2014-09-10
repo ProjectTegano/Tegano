@@ -61,7 +61,7 @@ bool SaslAuthConfig::check() const
 void SaslAuthConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Identifier: " << m_identifier << std::endl;
 	os << indStr << "   SASL service: " << m_service << std::endl;
 	if( !m_confPath.empty( ) ) {
@@ -85,14 +85,15 @@ void SaslAuthConfig::setCanonicalPathes( const std::string& refPath )
 
 //*********   SASL Authentication Unit   ************************************
 
-SaslAuthUnit::SaslAuthUnit( const std::string& Identifier,
-		   const std::string& service, const std::string& confPath )
-	: AuthenticationUnit( Identifier ),
-	  m_service( service ), m_confPath( confPath )
+SaslAuthUnit::SaslAuthUnit( const SaslAuthConfig* config)
+	: AuthenticationUnit( config->identifier())
+	, m_identifier( config->identifier())
+	, m_service( config->service())
+	, m_confPath( config->confPath() )
 {
 	LOG_DEBUG << "SASL authentication unit created for service '" << m_service << "'";
 	if( !m_confPath.empty( ) ) {
-		LOG_DEBUG << "     and with SASL configuration '" << confPath << "'";
+		LOG_DEBUG << "     and with SASL configuration '" << m_confPath << "'";
 	}
 }
 

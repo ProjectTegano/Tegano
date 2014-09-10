@@ -36,7 +36,7 @@
 #ifndef _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
 #define _Wolframe_APPLICATION_CONFIGURATION_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "moduleDirectoryImpl.hpp"
 #include <cstddef>
 #include <string>
@@ -106,14 +106,14 @@ public:
 				       const char *localFile );
 private:
 	ConfigFileType				m_type;
-	std::vector<ConfigurationBase*>		m_conf;
+	std::vector<ConfigurationObject*>	m_conf;
 	std::map<std::string, std::size_t>	m_section;
 	std::string				m_modFolder;
 	std::vector<std::string>		m_modFiles;
 
 	const module::ModuleDirectory*		m_modDir;
 public:
-	bool addConfig( const std::string& nodeName, ConfigurationBase* conf );
+	bool addConfig( const std::string& nodeName, ConfigurationObject* conf );
 };
 
 }} // namespace

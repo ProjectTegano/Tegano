@@ -36,7 +36,7 @@
 #define _AAAA_AUTHENTICATION_FACTORY_HPP_INCLUDED
 
 #include "database/databaseProviderInterface.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "system/connectionEndpoint.hpp"
 #include "system/randomGenerator.hpp"
 #include "module/moduleDirectory.hpp"
@@ -54,7 +54,7 @@ class PasswordChanger;
 class AuthenticationFactory
 {
 public:
-	AuthenticationFactory( const std::vector< config::NamedConfiguration* >& confs,
+	AuthenticationFactory( const std::vector< config::ConfigurationObject* >& confs,
 			       system::RandomGenerator* randomGenerator,
 			       const module::ModuleDirectory* modules);
 	~AuthenticationFactory();

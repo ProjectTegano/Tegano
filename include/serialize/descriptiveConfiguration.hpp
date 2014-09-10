@@ -33,7 +33,7 @@ Project Wolframe.
 /// \brief Named configuration defined by description
 #ifndef _Wolframe_serialize_DESCRIPTIVE_CONFIG_HPP_INCLUDED
 #define _Wolframe_serialize_DESCRIPTIVE_CONFIG_HPP_INCLUDED
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 #include "serialize/configSerialize.hpp"
 #include "logger/logger-v1.hpp"
@@ -42,12 +42,11 @@ namespace _Wolframe {
 namespace serialize {
 
 class DescriptiveConfiguration
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 public:
-	DescriptiveConfiguration( const char* sectionName_, const char* logParent_, const char* logName_, const serialize::StructDescriptionBase* descr_)
-		:config::NamedConfiguration( sectionName_,logParent_,logName_)
-		,m_classname(sectionName_)
+	DescriptiveConfiguration( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_, const serialize::StructDescriptionBase* descr_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_)
 		,m_descr(descr_)
 		,m_baseptr(0)
 	{}
@@ -59,11 +58,6 @@ public:
 
 	virtual ~DescriptiveConfiguration()
 	{}
-
-	virtual const char* className() const
-	{
-		return m_classname.c_str();
-	}
 
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 			const module::ModuleDirectory*)
@@ -89,12 +83,11 @@ public:
 	virtual void print( std::ostream& os, size_t indent=0) const
 	{
 		std::string indentstr( indent, ' ');
-		os << indentstr << "Configuration of " << m_classname << ":" << std::endl;
+		os << indentstr << "Configuration of " << className() << ":" << std::endl;
 		os << indentstr << serialize::structureToStringVP( m_baseptr, m_descr);
 	}
 
 private:
-	const std::string m_classname;
 	const serialize::StructDescriptionBase* m_descr;
 	void* m_baseptr;
 };

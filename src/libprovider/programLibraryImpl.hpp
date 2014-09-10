@@ -72,8 +72,6 @@ public:
 	virtual void defineAuthorizationFunction( const std::string& name, const langbind::AuthorizationFunctionR& f);
 	/// \brief Define an audit function
 	virtual void defineAuditFunction( const std::string& name, const langbind::AuditFunctionR& f);
-	/// \brief Define a C++ form function
-	virtual void defineCppFormFunction( const std::string& name, const serialize::CppFormFunction& f);
 	/// \brief Define an ordinary form function
 	virtual void defineFormFunction( const std::string& name, const langbind::FormFunctionR& f);
 	/// \brief Define a runtime environment
@@ -85,7 +83,7 @@ public:
 	/// \brief Define a normalization function
 	virtual void defineNormalizeFunction( const std::string& name, const types::NormalizeFunctionR& f);
 	/// \brief Define a normalization function type
-	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionType& ftype);
+	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionTypeR& ftype);
 	/// \brief Define a custom data type
 	virtual void defineCustomDataType( const std::string& name, const types::CustomDataTypeR& t);
 	/// \brief Define a data definition language
@@ -144,7 +142,7 @@ private:
 private:
 	types::keymap<langbind::AuthorizationFunctionR> m_authorizationFunctionMap;
 	types::keymap<langbind::AuditFunctionR> m_auditFunctionMap;
-	types::keymap<types::NormalizeFunctionType> m_normalizeFunctionTypeMap;
+	types::keymap<types::NormalizeFunctionTypeR> m_normalizeFunctionTypeMap;
 	types::keymap<types::CustomDataTypeR> m_customDataTypeMap;
 	NormalizeFunctionMap m_normalizeFunctionMap;
 	types::keymap<langbind::FormFunctionR> m_formFunctionMap;

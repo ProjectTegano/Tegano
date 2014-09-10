@@ -82,13 +82,12 @@ public:
 			  unsigned short connectTimeout,
 			  unsigned short connections, unsigned short acquireTimeout,
 			  unsigned statementTimeout);
-	PostgreSQLDatabase( const PostgreSQLConfig& config);
+	PostgreSQLDatabase( const PostgreSQLConfig* config);
 	 ~PostgreSQLDatabase();
 
-	const std::string& ID() const		{ return m_ID; }
-	const char* className() const		{ return POSTGRESQL_DB_CLASS_NAME; }
+	virtual const std::string& id() const		{ return m_id; }
 
-	Transaction* transaction( const std::string& name_);
+	virtual Transaction* transaction( const std::string& name_);
 
 	virtual const LanguageDescription* getLanguageDescription( ) const
 	{
@@ -114,7 +113,7 @@ public:
 	static void noticeProcessor( void* this_void, const char * message);
 
 private:
-	const std::string	m_ID;			//< database ID
+	const std::string	m_id;			//< database ID
 	std::string		m_connStr;		//< connection string
 	unsigned short		m_connections;		//< number of connections
 	PostgreSQLServerSettings m_serverSettings;	//< data like protocol settings, OIDs, etc. loaded at initialization from server

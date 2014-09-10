@@ -33,7 +33,8 @@
 /// \file module/configuredObjectConstructor.hpp
 /// \brief Base class for virtual constructors of objects with configuration
 
-#include "module/objectConstructorBase.hpp"
+#include "module/objectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include <boost/shared_ptr.hpp>
 
 #ifndef _CONFIGURED_OBJECT_CONSTRUCTOR_HPP_INCLUDED
@@ -42,13 +43,17 @@
 namespace _Wolframe {
 namespace module {
 
-/// Constructor of a simple (without configuration) object
-template < class T >
-class ConfiguredObjectConstructor : public ObjectConstructorBase
+/// \brief Constructor of a configured object
+class ConfiguredObjectConstructor
+	:public ObjectConstructor
 {
 public:
+	ConfiguredObjectConstructor( const TypeId& typeId_, const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:ObjectConstructor( typeId_, className_, configSection_, configKeyword_){}
+
 	virtual ~ConfiguredObjectConstructor()	{}
-	virtual T* object( const config::NamedConfiguration& conf) const = 0;
+	virtual BaseObject* object( const config::ConfigurationObject& conf) const = 0;
+	virtual config::ConfigurationObject* configuration() const = 0;
 };
 
 }}// namespac

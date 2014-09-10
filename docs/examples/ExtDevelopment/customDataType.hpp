@@ -46,7 +46,5 @@ public:
     void define( const char* methodname, CustomDataValueMethod method);
 };
 
-typedef CustomDataType* (*CreateCustomDataType)( const std::string& name);
-
 }}//namespace
 

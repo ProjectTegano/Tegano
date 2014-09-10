@@ -34,36 +34,22 @@
 // database.cpp
 //
 #include "databaseProviderImpl.hpp"
+#include "providerUtils.hpp"
 #include "module/moduleDirectory.hpp"
 #include "module/configuredObjectConstructor.hpp"
-#include "module/configuredBuilder.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/algorithm/string.hpp>
 
 namespace _Wolframe	{
 namespace db	{
 
-DatabaseProviderImpl::DatabaseProviderImpl( const std::vector<config::NamedConfiguration*>& config,
+DatabaseProviderImpl::DatabaseProviderImpl( const std::vector<config::ConfigurationObject*>& config,
 						const module::ModuleDirectory* modules )
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = config.begin(); it != config.end(); it++ )	{
-		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
-		if ( builder )	{
-			module::ObjectConstructorBaseR constructorRef( builder->constructor());
-			module::ConfiguredObjectConstructor< db::DatabaseUnit >* db =
-					dynamic_cast< module::ConfiguredObjectConstructor< db::DatabaseUnit >* >( constructorRef.get());
-			if ( db == NULL )	{
-				LOG_ALERT << "DatabaseProvider: '" << builder->objectClassName()
-					  << "' is not a Database Unit builder";
-				throw std::logic_error( "Object is not an DatabaseUnit builder" );
-			}
-			m_db.push_back( db->object(**it ) );
-			LOG_TRACE << "'" << db->objectClassName() << "' database unit registered";
-		}
-		else	{
-			LOG_ALERT << "DatabaseProvider: unknown database module '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown database type in DBprovider constructor. See log" );
-		}
+	if (!createConfiguredProviderObjects( "DatabaseProvider: " , m_db, config, modules))
+	{
+		throw std::runtime_error("could not load database provider module objects");
 	}
 }
 
@@ -78,7 +64,7 @@ Database* DatabaseProviderImpl::database( const std::string& id ) const
 {
 	for ( std::vector<db::DatabaseUnit* >::const_iterator it = m_db.begin();
 							it != m_db.end(); it++ )	{
-		if ( (*it)->ID() == id )
+		if ( (*it)->id() == id )
 			return (*it)->database();
 	}
 	return NULL;

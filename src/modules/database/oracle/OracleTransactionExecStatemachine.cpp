@@ -689,5 +689,5 @@ bool TransactionExecStatemachine_oracle::next()
 
 const std::string& TransactionExecStatemachine_oracle::databaseID() const
 {
-	return m_database->ID();
+	return m_database->id();
 }

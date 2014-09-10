@@ -36,7 +36,7 @@
 #ifndef _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _PROCESSOR_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #include "processor/procProviderInterface.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "programLibraryImpl.hpp"
 #include "database/database.hpp"
 #include "cmdbind/commandHandler.hpp"
@@ -63,7 +63,7 @@ class ProcessorProviderImpl
 public:
 	/// \brief Constructor
 	ProcessorProviderImpl( const std::string& dbLabel_,
-				const std::vector<config::NamedConfiguration*>& procConfig_,
+				const std::vector<config::ConfigurationObject*>& procConfig_,
 				const std::vector<std::string>& programFiles_,
 				const std::string& referencePath_,
 				const module::ModuleDirectory* modules_);
@@ -142,14 +142,14 @@ private:
 		CommandHandlerDef( const CommandHandlerDef& o)
 			:unit(o.unit),configuration(o.configuration){}
 		/// \brief Constructor
-		CommandHandlerDef( cmdbind::CommandHandlerUnit* unit_, const config::NamedConfiguration* configuration_)
+		CommandHandlerDef( cmdbind::CommandHandlerUnit* unit_, const config::ConfigurationObject* configuration_)
 			:unit(unit_),configuration(configuration_){}
 		/// \brief Destructor
 		~CommandHandlerDef(){}
 
 	public:
 		cmdbind::CommandHandlerUnitR unit;			///< command handler unit to instantiate new command handlers
-		const config::NamedConfiguration* configuration;	///< command handler configuration
+		const config::ConfigurationObject* configuration;	///< command handler configuration
 	};
 
 	std::vector<CommandHandlerDef> m_cmd;				///< list of defined command handlers

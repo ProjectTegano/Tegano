@@ -30,34 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Database Authentification module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "DBauth.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace aaaa {
-} // namespace aaaa
+WF_MODULE_BEGIN( "databaseAuthentication", "database authentication module")
+ WF_AUDIT( "database", _Wolframe::aaaa::DBauthUnit, _Wolframe::aaaa::DBAuthConfig)
+WF_MODULE_END
 
-namespace module {
-
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::DBauthConstructor,
-			aaaa::DBAuthConfig > mod( "Authentication database", "Authentication",
-						  "database", "DBAuth" );
-	return &mod;
-}
-
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Database authentification", containers );
-
-}} // namespace _Wolframe::module
 

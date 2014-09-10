@@ -37,7 +37,7 @@
 #ifndef _POSTGRESQL_CONFIG_HPP_INCLUDED
 #define _POSTGRESQL_CONFIG_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/configSerialize.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include <vector>
@@ -45,7 +45,6 @@
 namespace _Wolframe {
 namespace db {
 
-static const char* POSTGRESQL_DB_CLASS_NAME = "PostgreSQL";
 enum {
 	DEFAULT_POSTGRESQL_PORT = 5432,
 	DEFAULT_POSTGRESQL_CONNECTIONS = 4,
@@ -59,8 +58,8 @@ class PostgreSQLConfig
 	:public _Wolframe::serialize::DescriptiveConfiguration
 {
 public:
-	explicit PostgreSQLConfig( const char* sectionName_="PostgreSQL", const char* logName_="PostgreSQL")
-		:_Wolframe::serialize::DescriptiveConfiguration( sectionName_, "database" /*log parent*/, logName_, getStructDescription())
+	explicit PostgreSQLConfig( const std::string& className_="PostgreSQL", const std::string& configSection_="Database", const std::string& configKeyword_="PostgreSQL")
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 		,m_port(DEFAULT_POSTGRESQL_PORT)
 		,m_connectTimeout(DEFAULT_POSTGRESQL_CONNECTION_TIMEOUT)
 		,m_connections(DEFAULT_POSTGRESQL_CONNECTIONS)
@@ -79,7 +78,7 @@ public:
 			unsigned short connectTimeout_, unsigned short connections_,
 			unsigned short acquireTimeout_, unsigned statementTimeout_)
 		:_Wolframe::serialize::DescriptiveConfiguration( "PostgreSQL" /*section name*/, "database" /*log parent*/, "PostgreSQL" /*log name*/, getStructDescription())
-		,m_ID(id_)
+		,m_id(id_)
 		,m_host(host_)
 		,m_port(port_)
 		,m_dbName(dbName_)
@@ -101,7 +100,7 @@ public:
 	virtual void print( std::ostream& os, size_t indent ) const;
 	virtual void setCanonicalPathes( const std::string& referencePath );
 
-	const std::string& ID() const			{ return m_ID; }
+	const std::string& id() const			{ return m_id; }
 	const std::string& host() const			{ return m_host; }
 	unsigned short port() const			{ return m_port; }
 	const std::string& dbName() const		{ return m_dbName; }
@@ -122,7 +121,7 @@ public:
 	static const serialize::StructDescriptionBase* getStructDescription();
 
 private:
-	std::string	m_ID;			//< database identifier
+	std::string	m_id;			//< database identifier
 	std::string	m_host;			//< server host
 	unsigned short	m_port;			//< server port
 	std::string	m_dbName;		//< database name on server

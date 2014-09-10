@@ -36,7 +36,7 @@
 
 	<sect4>
 	<title>CustomDataInitializer Interface</title>
-	<para>The custom data inizializer definition. From this class we have to derive our own
+	<para>The custom data initializer definition. From this class we have to derive our own
 	initializer definions.</para>
 	<programlisting language='C++'>
 <xi:include  xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ExtDevelopment/customDataInitializer.hpp" parse="text" />
@@ -66,14 +66,11 @@
 	<para>The following declaration shows a declaration of a simple custom data type.
 	</para>
 	<programlisting language='C++'>
-    WF_CUSTOM_DATATYPE(name,constructor)
+    WF_CUSTOM_DATATYPE(name,datatype)
 	</programlisting>
-	<para>where name is the identifier string of the function in the system and constructor a
-	function with the following signature:
-
-	<programlisting language='C++'>
-<xi:include  xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ExtDevelopment/customDataTypeConstructor.hpp" parse="text" />
-	</programlisting>
+	<para>where name is the identifier string of the function in the system and datatype
+	the class defining the custom data type with a constructor with one string as argument.
+	The argument is the name of the custom data type.
 	</para>
 	</sect4>
 	</sect3>

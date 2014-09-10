@@ -34,8 +34,8 @@
 
 #include "moduleDirectoryImpl.hpp"
 #include "moduleLoader.hpp"
-#include "module/configuredBuilder.hpp"
-#include "module/simpleBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "utils/fileUtils.hpp"
 #include <boost/algorithm/string.hpp>
 #include "logger/logger-v1.hpp"
@@ -43,61 +43,59 @@
 using namespace _Wolframe;
 using namespace _Wolframe::module;
 
-bool ModuleDirectoryImpl::addBuilder( const ConfiguredBuilder* builder )
+bool ModuleDirectoryImpl::addObjectConstructor( const ConfiguredObjectConstructor* cst)
 {
-	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
-							it != m_cfgdBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->section(), builder->section() ) &&
-				boost::algorithm::iequals( (*it)->keyword(), builder->keyword() ))	{
-			LOG_ALERT << "A configuration module for section '" << builder->section()
-				  << "' keyword '" << builder->keyword() << "' already exists";
+	for ( std::vector< const ConfiguredObjectConstructor* >::const_iterator it = m_configuredObjectConstructor.begin();
+							it != m_configuredObjectConstructor.end(); it++ )	{
+		if ( boost::algorithm::iequals( (*it)->configSection(), cst->configSection() ) &&
+				boost::algorithm::iequals( (*it)->configKeyword(), cst->configKeyword() ))	{
+			LOG_ALERT << "A configuration module for section '" << cst->configSection()
+				  << "' keyword '" << cst->configKeyword() << "' already exists";
 			return false;
 		}
-		if ( boost::algorithm::iequals( (*it)->className(), builder->className() ))	{
-			LOG_ALERT << "A module container named '" << builder->className()
+		if ( boost::algorithm::iequals( (*it)->className(), cst->className() ))	{
+			LOG_ALERT << "A module container named '" << cst->className()
 				  << "' already exists";
 			return false;
 		}
 	}
-	m_cfgdBuilder.push_back( builder );
-	LOG_DEBUG << "Module '" << builder->className() << "' registered for section '"
-		  << builder->section() << "' keyword '" << builder->keyword() << "'";
+	m_configuredObjectConstructor.push_back( cst);
+	LOG_DEBUG << "Module object '" << cst->className() << "' registered for section '" << cst->configSection() << "' keyword '" << cst->configKeyword() << "'";
 	return true;
 }
 
-bool ModuleDirectoryImpl::addBuilder( const SimpleBuilder* builder )
+bool ModuleDirectoryImpl::addObjectConstructor( const SimpleObjectConstructor* cst)
 {
-	for ( std::vector< const SimpleBuilder* >::const_iterator it = m_simpleBuilder.begin();
-							it != m_simpleBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->className(), builder->className() ))	{
-			LOG_ALERT << "A module object named '" << builder->className()
+	for ( std::vector<const SimpleObjectConstructor*>::const_iterator it = m_simpleObjectConstructor.begin();
+							it != m_simpleObjectConstructor.end(); it++ )	{
+		if ( boost::algorithm::iequals( (*it)->className(), cst->className() ))	{
+			LOG_ALERT << "A module object named '" << cst->className()
 				  << "' already exists";
 			return false;
 		}
 	}
-	m_simpleBuilder.push_back( builder );
-	LOG_DEBUG << "Module object '" << builder->className() << "' registered";
+	m_simpleObjectConstructor.push_back( cst);
+	LOG_DEBUG << "Module object '" << cst->className() << "' registered";
 	return true;
 }
 
-const ConfiguredBuilder* ModuleDirectoryImpl::getConfiguredBuilder( const std::string& section,
-						 const std::string& keyword ) const
+const ConfiguredObjectConstructor* ModuleDirectoryImpl::getConfiguredObjectConstructor( const std::string& section, const std::string& keyword ) const
 {
-	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
-							it != m_cfgdBuilder.end(); it++ )	{
-		if ( boost::algorithm::iequals( (*it)->keyword(), keyword ) &&
-				boost::algorithm::iequals( (*it)->section(), section ))
+	for ( std::vector< const ConfiguredObjectConstructor* >::const_iterator it = m_configuredObjectConstructor.begin();
+							it != m_configuredObjectConstructor.end(); it++ )	{
+		if ( boost::algorithm::iequals( (*it)->configKeyword(), keyword ) &&
+				boost::algorithm::iequals( (*it)->configSection(), section ))
 			return *it;
 	}
 	return NULL;
 }
 
-const ConfiguredBuilder* ModuleDirectoryImpl::getConfiguredBuilder( const std::string& objectClassName ) const
+const ConfiguredObjectConstructor* ModuleDirectoryImpl::getConfiguredObjectConstructor( const std::string& objectClassName) const
 {
-	for ( std::vector< const ConfiguredBuilder* >::const_iterator it = m_cfgdBuilder.begin();
-							it != m_cfgdBuilder.end(); it++ )
+	for ( std::vector< const ConfiguredObjectConstructor* >::const_iterator it = m_configuredObjectConstructor.begin();
+							it != m_configuredObjectConstructor.end(); it++ )
 	{
-		LOG_DATA << "Get builder of '" << objectClassName << "' test '" << (*it)->className() << "'";
+		LOG_DATA << "Get constructor of '" << objectClassName << "' test '" << (*it)->className() << "'";
 		if ( boost::algorithm::iequals( (*it)->className(), objectClassName ))
 		{
 			return *it;
@@ -106,10 +104,11 @@ const ConfiguredBuilder* ModuleDirectoryImpl::getConfiguredBuilder( const std::s
 	return NULL;
 }
 
-const std::vector<const SimpleBuilder*>& ModuleDirectoryImpl::getSimpleBuilderList() const
+const std::vector<const SimpleObjectConstructor*>& ModuleDirectoryImpl::getSimpleObjectConstructorList() const
 {
-	return m_simpleBuilder;
+	return m_simpleObjectConstructor;
 }
+
 
 #define DO_STRINGIFY(x)	#x
 #define STRINGIFY(x)	DO_STRINGIFY(x)
@@ -177,22 +176,22 @@ bool module::ModuleDirectoryImpl::loadModules( const std::vector< std::string >&
 			retVal = false;
 			break;
 		}
-		for ( unsigned short i = 0; entry->getBuilder[ i ]; i++ )
+		for ( unsigned short i = 0; entry->constructors[ i ]; i++ )
 		{
-			const BuilderBase* builder = entry->getBuilder[ i ]();
-			const SimpleBuilder* simpleBuilder = dynamic_cast<const SimpleBuilder*>(builder);
-			const ConfiguredBuilder* configuredBuilder = dynamic_cast<const ConfiguredBuilder*>(builder);
-			if (configuredBuilder)
+			const ObjectConstructor* constructor = entry->constructors[ i ]();
+			const SimpleObjectConstructor* simpleObjectConstructor = dynamic_cast<const SimpleObjectConstructor*>(constructor);
+			const ConfiguredObjectConstructor* configuredObjectConstructor = dynamic_cast<const ConfiguredObjectConstructor*>(constructor);
+			if (configuredObjectConstructor)
 			{
-				addBuilder( configuredBuilder);
+				addObjectConstructor( configuredObjectConstructor);
 			}
-			else if (simpleBuilder)
+			else if (simpleObjectConstructor)
 			{
-				addBuilder( simpleBuilder);
+				addObjectConstructor( simpleObjectConstructor);
 			}
 			else
 			{
-				LOG_ERROR << "Unknown type of builder in module '" << entry->name << "'";
+				LOG_ERROR << "Unknown type of constructor in module '" << entry->name << "'";
 			}
 		}
 		LOG_DEBUG << "Module '" << entry->name << "' loaded";

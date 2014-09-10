@@ -30,30 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Database Audit module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "DBaudit.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "databaseAudit", "database audit")
+ WF_AUDIT( "database", _Wolframe::aaaa::DBauditor, _Wolframe::aaaa::DBauditConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::DBauditConstructor,
-			aaaa::DBauditConfig > mod( "Audit - database", "audit",
-						   "database", "DatabaseAudit" );
-	return &mod;
-}
 
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Database audit", containers);
-
-}} // namespace _Wolframe::module

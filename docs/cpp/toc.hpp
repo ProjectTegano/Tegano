@@ -115,7 +115,7 @@ WF_MODULE_END
     - \b Database \b interface:
          Wolframe has interfaces to execute queries on Sqlite3 and PostgreSQL databases.
          To define a new database interface, we have to implement the following interfaces:
-              - configuration (implements _Wolframe::config::NamedConfiguration)
+              - configuration (implements _Wolframe::config::ConfigurationObject)
               - database (implements _Wolframe::db::Database)
               - transaction execution statemachine (implements _Wolframe::db::TransactionExecStatemachine)
               .
@@ -125,7 +125,7 @@ WF_MODULE_END
 
  * \subsection ModuleConfiguration Defining a module configuration
     For defining the configuration of a module we can either derive a class
-    from _Wolframe::config::NamedConfiguration and implement the parsing 
+    from _Wolframe::config::ConfigurationObject and implement the parsing 
     by hand or we can derive from the class _Wolframe::serialize::DescriptiveConfiguration
     and declare the configuration in a descriptive way. The first method is mainly
     used in the core for not getting into a dependency to the serialization library
@@ -708,7 +708,7 @@ you will find an example at \ref ConfigDescription
 * \code
 #include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include "aaaa/authenticationSlice.hpp"
 #include "aaaa/authenticator.hpp"
@@ -815,7 +815,7 @@ introspection, you will find an example at \ref ConfigDescription
 * \code
 #include "appdevel/databaseModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "database/database.hpp"
 #include "database/transaction.hpp"
 #include "types/variant.hpp"
@@ -967,7 +967,7 @@ WF_MODULE_END
 * description for introspection:
 *
 * \code
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include "serialize/struct/structDescription.hpp"
 #include "config/configurationTree.hpp"

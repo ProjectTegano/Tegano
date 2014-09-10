@@ -105,19 +105,21 @@ static void closeConnection( void* connptr )
 	delete conn;
 }
 
-OracleDatabase::OracleDatabase( const OracleConfig& config)
-	:m_ID(config.ID())
+OracleDatabase::OracleDatabase( const OracleConfig* config)
+	:Database( "Oracle", config->id())
+	,m_id(config->id())
 	,m_connections(0)
-	,m_connPool( &closeConnection, config.acquireTimeout())
+	,m_connPool( &closeConnection, config->acquireTimeout())
 {
-	init( config);
+	init( *config);
 }
 
 OracleDatabase::OracleDatabase( const std::string& id_,
 			  const std::string& host_, unsigned short port_, const std::string& dbName_,
 			  const std::string& user_, const std::string& password_,
 			  size_t connections_, unsigned short acquireTimeout_)
-	:m_ID(id_)
+	:Database( "Oracle", id_)
+	,m_id(id_)
 	,m_connections(0)
 	,m_connPool( &closeConnection, acquireTimeout_)
 {
@@ -131,7 +133,7 @@ void OracleDatabase::init( const OracleConfig& config)
 	int connections = config.connections();
 
 	m_connStr = buildConnStr( config.host(), config.port(), config.dbName() );
-	LOG_DATA << "Oracle database '" << m_ID << "' connection string '" << m_connStr << "'";
+	LOG_DATA << "Oracle database '" << m_id << "' connection string '" << m_connStr << "'";
 
 	sword status;
 	
@@ -140,7 +142,7 @@ void OracleDatabase::init( const OracleConfig& config)
 	status = OCIEnvCreate( &( m_env.envhp ), OCI_THREADED, (dvoid *)0,
 		0, 0, 0, 0, (dvoid **)0 );
 	if( status != OCI_SUCCESS ) {
-		LOG_ALERT << "Failed to create Oracle environment for database '" << m_ID << "'";
+		LOG_ALERT << "Failed to create Oracle environment for database '" << m_id << "'";
 		throw std::runtime_error( "Fatal error creating an Oracle environment" );
 	}
 	
@@ -150,14 +152,14 @@ void OracleDatabase::init( const OracleConfig& config)
 		// a server handle
 		status = OCIHandleAlloc( m_env.envhp, (dvoid **)&conn->srvhp, OCI_HTYPE_SERVER, (size_t)0, (dvoid **)0 );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't allocate OCI server handle for database '" << m_ID << "'";
+			LOG_ALERT << "Can't allocate OCI server handle for database '" << m_id << "'";
 			throw std::runtime_error( "Can't allocate OCI server handle for Oracle database" );
 		}
 
 		// an error handle
 		status = OCIHandleAlloc( m_env.envhp, (dvoid **)&conn->errhp, OCI_HTYPE_ERROR, (size_t)0, (dvoid **)0 );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't allocate OCI error handle for database '" << m_ID << "'";
+			LOG_ALERT << "Can't allocate OCI error handle for database '" << m_id << "'";
 			OCIHandleFree( conn->srvhp, OCI_HTYPE_SERVER );
 			throw std::runtime_error( "Can't allocate OCI error handle for Oracle database" );
 		}
@@ -165,7 +167,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		// a service context handle
 		status = OCIHandleAlloc( m_env.envhp, (dvoid **)&conn->svchp, OCI_HTYPE_SVCCTX, (size_t)0, (dvoid **)0 );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't allocate OCI service context handle for database '" << m_ID << "'";
+			LOG_ALERT << "Can't allocate OCI service context handle for database '" << m_id << "'";
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
 			OCIHandleFree( conn->srvhp, OCI_HTYPE_SERVER );
 			throw std::runtime_error( "Can't allocate OCI service context handle for Oracle database" );
@@ -177,7 +179,7 @@ void OracleDatabase::init( const OracleConfig& config)
 			m_connStr.empty( ) ? (sb4)0 : (sb4)( m_connStr.length( ) ),
 			OCI_DEFAULT );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't attach to Oracle server for database '" << m_ID << "'";
+			LOG_ALERT << "Can't attach to Oracle server for database '" << m_id << "'";
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
 			OCIHandleFree( conn->srvhp, OCI_HTYPE_SERVER );
@@ -189,7 +191,7 @@ void OracleDatabase::init( const OracleConfig& config)
 			conn->srvhp, (ub4)0, OCI_ATTR_SERVER,
 			(OCIError *)conn->errhp );		
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't attach to Oracle server for database '" << m_ID << "'";
+			LOG_ALERT << "Can't attach to Oracle server for database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
@@ -201,7 +203,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		status = OCIHandleAlloc( m_env.envhp, (dvoid **)&conn->authp,
 			OCI_HTYPE_SESSION, (size_t)0, (dvoid **)0 );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't create handle for Oracle authentication credentials for database '" << m_ID << "'";
+			LOG_ALERT << "Can't create handle for Oracle authentication credentials for database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
@@ -214,7 +216,7 @@ void OracleDatabase::init( const OracleConfig& config)
 			(dvoid *)const_cast<char *>( config.user( ).c_str( ) ), (ub4)config.user( ).length( ),
 			OCI_ATTR_USERNAME, conn->errhp );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't create handle for username for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't create handle for username for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
@@ -225,7 +227,7 @@ void OracleDatabase::init( const OracleConfig& config)
 			(dvoid *)const_cast<char *>( config.password( ).c_str( ) ), (ub4)config.password( ).length( ),
 			OCI_ATTR_PASSWORD, conn->errhp );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't create handle for username for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't create handle for username for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
 			OCIHandleFree( conn->errhp, OCI_HTYPE_ERROR );
@@ -237,7 +239,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		status = OCISessionBegin( conn->svchp, conn->errhp, conn->authp,
 			OCI_CRED_RDBMS, OCI_DEFAULT );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't create user session for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't create user session for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
@@ -250,7 +252,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		status = OCIAttrSet( conn->svchp, OCI_HTYPE_SVCCTX,
 			conn->authp, (ub4)0, OCI_ATTR_SESSION, conn->errhp );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't set user session in service context for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't set user session in service context for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
@@ -263,7 +265,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		status = OCIHandleAlloc( m_env.envhp, (dvoid **)&conn->transhp,
 			OCI_HTYPE_TRANS, (size_t)0, (dvoid **)0 );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't create transaction handle for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't create transaction handle for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
@@ -274,7 +276,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		status = OCIAttrSet( conn->svchp, OCI_HTYPE_SVCCTX,
 			conn->transhp, (ub4)0, OCI_ATTR_TRANS, conn->errhp );
 		if( status != OCI_SUCCESS ) {
-			LOG_ALERT << "Can't set transaction handle in service context for Oracle database '" << m_ID << "'";
+			LOG_ALERT << "Can't set transaction handle in service context for Oracle database '" << m_id << "'";
 			OCIServerDetach( conn->srvhp, conn->errhp, OCI_DEFAULT );
 			OCIHandleFree( conn->authp, OCI_HTYPE_SESSION );
 			OCIHandleFree( conn->svchp, OCI_HTYPE_SVCCTX );
@@ -287,7 +289,7 @@ void OracleDatabase::init( const OracleConfig& config)
 		m_connPool.push( conn );
 		m_connections++;
 	}
-	LOG_DEBUG << "Oracle database '" << m_ID << "' created with a pool of " << m_connections << " connections";
+	LOG_DEBUG << "Oracle database '" << m_id << "' created with a pool of " << m_connections << " connections";
 }
 
 OracleDatabase::~OracleDatabase()

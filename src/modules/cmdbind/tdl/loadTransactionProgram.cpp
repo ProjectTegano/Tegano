@@ -435,20 +435,20 @@ static std::vector<std::string> parseDatabaseList( const LanguageDescription* la
 	}
 }
 
-static bool checkDatabaseList( const std::string& databaseID, const std::string& databaseClassName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+static bool checkDatabaseList( const std::string& databaseID, const std::string& databaseName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	std::vector<std::string> dblist = parseDatabaseList( langdescr, si, se);
 	std::vector<std::string>::const_iterator di = dblist.begin(), de = dblist.end();
 	for (; di != de; ++di)
 	{
 		if (boost::algorithm::iequals( *di, databaseID)) return true;
-		if (boost::algorithm::iequals( *di, databaseClassName)) return true;
+		if (boost::algorithm::iequals( *di, databaseName)) return true;
 	}
 	return false;
 }
 
 
-static bool parseSubroutineBody( Tdl2vmTranslator& prg, const std::string& databaseId, const std::string& databaseClassName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se, utils::FileLineInfo& posinfo)
+static bool parseSubroutineBody( Tdl2vmTranslator& prg, const std::string& databaseId, const std::string& databaseName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se, utils::FileLineInfo& posinfo)
 {
 	static const char* g_subroutine_ids[] = {"DATABASE","BEGIN",0};
 	enum SubroutineKeyword{ s_NONE, s_DATABASE, s_BEGIN};
@@ -472,7 +472,7 @@ static bool parseSubroutineBody( Tdl2vmTranslator& prg, const std::string& datab
 			case s_DATABASE:
 			{
 				tdl::checkUniqOccurrence( s_DATABASE, mask, g_subroutine_idtab);
-				isValidDatabase = checkDatabaseList( databaseId, databaseClassName, langdescr, si, se);
+				isValidDatabase = checkDatabaseList( databaseId, databaseName, langdescr, si, se);
 				break;
 			}
 			case s_BEGIN:
@@ -586,7 +586,7 @@ static AuditCallDef parseAuditCallDef( const LanguageDescription* langdescr, std
 	return AuditCallDef( auditlevel, auditfunction, prg.createProgram( false));
 }
 
-static bool parseTransactionBody( langbind::FormFunctionR& tfunc, const std::string& transactionFunctionName, const std::string& databaseId, const std::string& databaseClassName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se, const SubroutineMap& subroutineMap, utils::FileLineInfo& posinfo)
+static bool parseTransactionBody( langbind::FormFunctionR& tfunc, const std::string& transactionFunctionName, const std::string& databaseId, const std::string& databaseName, const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se, const SubroutineMap& subroutineMap, utils::FileLineInfo& posinfo)
 {
 	static const char* g_transaction_ids[] = {"TRANSACTION","SUBROUTINE","TEMPLATE","INCLUDE","DATABASE","AUTHORIZE","RESULT","PREPROC","BEGIN","AUDIT", 0};
 	enum TransactionKeyword{ b_NONE, b_TRANSACTION, b_SUBROUTINE, b_TEMPLATE, b_INCLUDE, b_DATABASE, b_AUTHORIZE, b_RESULT, b_PREPROC, b_BEGIN, b_AUDIT};
@@ -624,7 +624,7 @@ static bool parseTransactionBody( langbind::FormFunctionR& tfunc, const std::str
 
 			case b_DATABASE:
 				tdl::checkUniqOccurrence( b_DATABASE, mask, g_transaction_idtab);
-				isValidDatabase = checkDatabaseList( databaseId, databaseClassName, langdescr, si, se);
+				isValidDatabase = checkDatabaseList( databaseId, databaseName, langdescr, si, se);
 				break;
 
 			case b_RESULT:
@@ -717,13 +717,13 @@ EXITLOOP:
 
 
 ///\brief Forward declaration
-static void includeFile( const std::string& mainfilename, const std::string& incfilename, const std::string& databaseId, const std::string& databaseClassName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList);
+static void includeFile( const std::string& mainfilename, const std::string& incfilename, const std::string& databaseId, const std::string& databaseName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList);
 
 static const char* g_toplevel_ids[] = {"DATABASE","TRANSACTION","SUBROUTINE","TEMPLATE","INCLUDE",0};
 enum TopLevelKeyword{ t_NONE,t_DATABASE,t_TRANSACTION,t_SUBROUTINE,t_TEMPLATE,t_INCLUDE};
 static const utils::IdentifierTable g_toplevel_idtab( false, g_toplevel_ids);
 
-static void load( const std::string& filename, const std::string& source, const std::string& databaseId, const std::string& databaseClassName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList)
+static void load( const std::string& filename, const std::string& source, const std::string& databaseId, const std::string& databaseName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList)
 {
 	char ch;
 	std::string::const_iterator si = source.begin(), se = source.end();
@@ -736,7 +736,7 @@ static void load( const std::string& filename, const std::string& source, const 
 	{
 		if (tdl::parseKeyword( langdescr, si, se, "DATABASE"))
 		{
-			if (!checkDatabaseList( databaseId, databaseClassName, langdescr, si, se))
+			if (!checkDatabaseList( databaseId, databaseName, langdescr, si, se))
 			{
 				LOG_INFO << "TDL file parsed but ignored for database '" << databaseId << "'";
 			}
@@ -768,7 +768,7 @@ static void load( const std::string& filename, const std::string& source, const 
 					posinfo_si = si;
 
 					langbind::FormFunctionR tfunc;
-					if (parseTransactionBody( tfunc, transactionName, databaseId, databaseClassName, langdescr, si, se, subroutineMap, posinfo))
+					if (parseTransactionBody( tfunc, transactionName, databaseId, databaseName, langdescr, si, se, subroutineMap, posinfo))
 					{
 						std::pair<std::string,langbind::FormFunctionR> tfuncdef( transactionName, tfunc);
 						transactionFunctionList.push_back( tfuncdef);
@@ -796,7 +796,7 @@ static void load( const std::string& filename, const std::string& source, const 
 					posinfo_si = si;
 
 					Tdl2vmTranslator prg( &subroutineMap, true);
-					if (parseSubroutineBody( prg, databaseId, databaseClassName, langdescr, si, se, posinfo))
+					if (parseSubroutineBody( prg, databaseId, databaseName, langdescr, si, se, posinfo))
 					{
 						subroutineMap.insert( 
 							subroutineName, 
@@ -834,7 +834,7 @@ static void load( const std::string& filename, const std::string& source, const 
 					posinfo_si = si;
 
 					Tdl2vmTranslator prg( &subroutineMap, true);
-					if (parseSubroutineBody( prg, databaseId, databaseClassName, langdescr, si, se, posinfo))
+					if (parseSubroutineBody( prg, databaseId, databaseName, langdescr, si, se, posinfo))
 					{
 						subroutineMap.insert( 
 							subroutineName, 
@@ -850,7 +850,7 @@ static void load( const std::string& filename, const std::string& source, const 
 				case t_INCLUDE:
 				{
 					std::string incfile = tdl::parseFilename( langdescr, si, se);
-					includeFile( filename, incfile, databaseId, databaseClassName, langdescr, subroutineMap, transactionFunctionList);
+					includeFile( filename, incfile, databaseId, databaseName, langdescr, subroutineMap, transactionFunctionList);
 					break;
 				}
 			}
@@ -863,7 +863,7 @@ static void load( const std::string& filename, const std::string& source, const 
 	}
 }
 
-static void includeFile( const std::string& mainfilename, const std::string& incfilename, const std::string& databaseId, const std::string& databaseClassName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList)
+static void includeFile( const std::string& mainfilename, const std::string& incfilename, const std::string& databaseId, const std::string& databaseName, const LanguageDescription* langdescr, SubroutineMap& subroutineMap, TdlTransactionFunctionList& transactionFunctionList)
 {
 	try
 	{
@@ -877,7 +877,7 @@ static void includeFile( const std::string& mainfilename, const std::string& inc
 		{
 			src = utils::readSourceFileContent( utils::joinPath( utils::getParentPath( mainfilename), incfilename));
 		}
-		load( incfilename, src, databaseId, databaseClassName, langdescr, subroutineMap, transactionFunctionList);
+		load( incfilename, src, databaseId, databaseName, langdescr, subroutineMap, transactionFunctionList);
 	}
 	catch (const std::runtime_error& e)
 	{
@@ -890,14 +890,14 @@ TdlTransactionFunctionList
 	db::loadTransactionProgramFile(
 		const std::string& filename,
 		const std::string& databaseId,
-		const std::string& databaseClassName,
+		const std::string& databaseName,
 		const LanguageDescription* langdescr)
 {
 	TdlTransactionFunctionList rt;
 	try
 	{
 		SubroutineMap subroutineMap;
-		load( filename, utils::readSourceFileContent( filename), databaseId, databaseClassName, langdescr, subroutineMap, rt);
+		load( filename, utils::readSourceFileContent( filename), databaseId, databaseName, langdescr, subroutineMap, rt);
 	}
 	catch (const std::runtime_error& e)
 	{

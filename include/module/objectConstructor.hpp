@@ -30,29 +30,33 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \brief Base class for object builders
-/// \file module/builderBase.hpp
+/// \file module/objectConstructor.hpp
+/// \brief Base class for a virtual constructor of a module object
 
-#ifndef _MODULE_BUILDER_BASE_HPP_INCLUDED
-#define _MODULE_BUILDER_BASE_HPP_INCLUDED
-#include "module/objectConstructorBase.hpp"
+#include "module/baseObject.hpp"
+#include "module/objectDescription.hpp"
+#include <boost/shared_ptr.hpp>
+
+#ifndef _MODULE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
+#define _MODULE_OBJECT_CONSTRUCTOR_HPP_INCLUDED
 
 namespace _Wolframe {
 namespace module {
 
-/// \class BuilderBase
-/// Base class of all builders
-class BuilderBase
+/// \brief Virtual constructor base class
+class ObjectConstructor
+	:public ObjectDescription
 {
 public:
-	virtual ~BuilderBase()				{}
+	ObjectConstructor( const TypeId& typeId_, const std::string& className_ )
+		:ObjectDescription( typeId_, className_ )
+	{}
+	ObjectConstructor( const TypeId& typeId_, const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:ObjectDescription( typeId_, className_, configSection_, configKeyword_)
+	{}
 
-	virtual const char* objectClassName() const = 0;
-	virtual ObjectConstructorBase::ObjectType objectType() const = 0;
-	virtual ObjectConstructorBase* constructor() const = 0;
+	virtual ~ObjectConstructor(){}
 };
 
-}}//namespace
+}} // namespace
 #endif
-
-

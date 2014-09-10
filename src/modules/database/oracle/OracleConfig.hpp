@@ -37,7 +37,7 @@
 #ifndef _ORACLE_CONFIG_HPP_INCLUDED
 #define _ORACLE_CONFIG_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/configSerialize.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include <vector>
@@ -45,7 +45,6 @@
 namespace _Wolframe {
 namespace db {
 
-static const char* ORACLE_DB_CLASS_NAME = "Oracle";
 enum {
 	DEFAULT_ORACLE_PORT = 1521,
 	DEFAULT_ORACLE_CONNECTIONS = 4,
@@ -57,8 +56,8 @@ class OracleConfig
 	:public _Wolframe::serialize::DescriptiveConfiguration
 {
 public:
-	OracleConfig( const char* sectionName_="Oracle", const char* logName_="Oracle")
-		:_Wolframe::serialize::DescriptiveConfiguration( sectionName_, "database", logName_, getStructDescription())
+	explicit OracleConfig( const std::string& className_="Oracle", const std::string& configSection_="Database", const std::string& configKeyword_="Oracle")
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 		,m_host("")
 		,m_port(DEFAULT_ORACLE_PORT)
 		,m_connections(DEFAULT_ORACLE_CONNECTIONS)
@@ -72,8 +71,8 @@ public:
 			const std::string& user_, const std::string& password_,
 			unsigned short connections_,
 			unsigned short acquireTimeout_)
-		:_Wolframe::serialize::DescriptiveConfiguration(ORACLE_DB_CLASS_NAME, "database", "sqlite", getStructDescription())
-		,m_ID(id_)
+		:_Wolframe::serialize::DescriptiveConfiguration( "OracleDatabase", "Database", "Oracle", getStructDescription())
+		,m_id(id_)
 		,m_host(host_)
 		,m_port(port_)
 		,m_dbName(dbName_)
@@ -87,7 +86,7 @@ public:
 	virtual bool check() const;
 	virtual void print( std::ostream& os, size_t indent ) const;
 
-	const std::string& ID() const			{ return m_ID; }
+	const std::string& id() const			{ return m_id; }
 	const std::string& host() const			{ return m_host; }
 	unsigned short port() const			{ return m_port; }
 	const std::string& dbName() const		{ return m_dbName; }
@@ -101,7 +100,7 @@ public:
 	static const serialize::StructDescriptionBase* getStructDescription();
 
 private:
-	std::string	m_ID;			//< database identifier
+	std::string	m_id;			//< database identifier
 	std::string	m_host;			//< server host
 	unsigned short	m_port;			//< server port
 	std::string	m_dbName;		//< database name on server

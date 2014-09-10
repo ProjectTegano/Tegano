@@ -59,14 +59,14 @@ void TransactionDefinitionProgram::loadProgram( ProgramLibrary& library, db::Dat
 	try
 	{
 		std::string databaseID;
-		std::string databaseClassName;
+		std::string databaseName;
 		if (transactionDB)
 		{
-			databaseID = transactionDB->ID();
-			databaseClassName = transactionDB->className();
+			databaseID = transactionDB->id();
+			databaseName = transactionDB->name();
 		}
 		db::TdlTransactionFunctionList funclist
-			= db::loadTransactionProgramFile( filename, databaseID, databaseClassName, languageDescr);
+			= db::loadTransactionProgramFile( filename, databaseID, databaseName, languageDescr);
 
 		db::TdlTransactionFunctionList::const_iterator fi = funclist.begin(), fe = funclist.end();
 		for (; fi != fe; ++fi)

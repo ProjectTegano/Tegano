@@ -30,30 +30,13 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file modules/database/testtrace/mod_database_testtrace.cpp
-///\brief Module for a fake database implementation used for tests
+///\file mod_db_postgresqltest.cpp
+///\brief Database interface test module for PostgreSQL
+#include "appdevel/databaseModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "testtraceDatabase.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
-
-static const BuilderBase* createTesttraceDatabaseModule()
-{
-	static const module::ConfiguredBuilderTemplate< db::TesttraceDatabaseConstructor,
-		db::TesttraceDatabaseConfig > mod( "testtrace database", "database", "test", TESTTRACE_DATABASE_CLASSNAME);
-	return &mod;
-}
-
-static getBuilderFunc containers[] =
-{
-	createTesttraceDatabaseModule,
-	NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Testtrace database", containers );
-
-}} // namespace _Wolframe::module
+WF_MODULE_BEGIN( "TestTraceDatabase", "Database interface module for PostgreSQL")
+ WF_DATABASE( "TestTrace", _Wolframe::db::TesttraceDatabase, _Wolframe::db::TesttraceDatabaseConfig)
+WF_MODULE_END
 

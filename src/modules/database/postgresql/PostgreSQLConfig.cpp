@@ -53,7 +53,7 @@ const serialize::StructDescriptionBase* PostgreSQLConfig::getStructDescription()
 	ThisDescription()
 	{
 		(*this)
-		( "identifier", &PostgreSQLConfig::m_ID)		.mandatory()
+		( "identifier", &PostgreSQLConfig::m_id)		.mandatory()
 		( "host", &PostgreSQLConfig::m_host )			.optional()
 		( "port", &PostgreSQLConfig::m_port )			.optional()
 		( "database", &PostgreSQLConfig::m_dbName )		.optional()
@@ -171,9 +171,9 @@ void PostgreSQLConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
 
-	os << indStr << sectionName() << ":" << std::endl;
-	if ( ! m_ID.empty() )
-		os << indStr << "   ID: " << m_ID << std::endl;
+	os << indStr << configSection() << ":" << std::endl;
+	if ( ! m_id.empty() )
+		os << indStr << "   ID: " << m_id << std::endl;
 	if ( m_host.empty())
 		os << indStr << "   Database host: local unix domain socket" << std::endl;
 	else

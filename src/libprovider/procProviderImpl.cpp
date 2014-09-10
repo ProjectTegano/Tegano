@@ -33,20 +33,14 @@
 /// \brief Processor provider implementation
 
 #include "procProviderImpl.hpp"
+#include "providerUtils.hpp"
 #include "database/databaseProviderInterface.hpp"
-#include "appdevel/module/runtimeEnvironmentConstructor.hpp"
-#include "appdevel/module/filterBuilder.hpp"
-#include "appdevel/module/ddlcompilerBuilder.hpp"
-#include "appdevel/module/programTypeBuilder.hpp"
-#include "appdevel/module/cppFormFunctionBuilder.hpp"
-#include "appdevel/module/normalizeFunctionBuilder.hpp"
-#include "appdevel/module/customDataTypeBuilder.hpp"
-#include "appdevel/module/doctypeDetectorBuilder.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
 #include "module/moduleDirectory.hpp"
-#include "module/configuredBuilder.hpp"
-#include "module/simpleBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <ostream>
@@ -165,7 +159,7 @@ private:
 
 
 ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
-					const std::vector<config::NamedConfiguration*>& procConfig_,
+					const std::vector<config::ConfigurationObject*>& procConfig_,
 					const std::vector<std::string>& programFiles_,
 					const std::string& referencePath_,
 					const module::ModuleDirectory* modules_)
@@ -175,269 +169,175 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 	,m_programfiles(programFiles_)
 	,m_referencePath(referencePath_)
 {
+	bool success = true;
 	// Build the list of command handlers and runtime environments (configured objects)
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = procConfig_.begin();
+	for ( std::vector<config::ConfigurationObject*>::const_iterator it = procConfig_.begin();
 									it != procConfig_.end(); it++ )	{
-		const module::ConfiguredBuilder* builder = modules_->getConfiguredBuilder((*it)->className());
-		if ( builder )
+		const module::ConfiguredObjectConstructor* constructor = modules_->getConfiguredObjectConstructor((*it)->className());
+		if (constructor)
 		{
-			if (builder->objectType() == module::ObjectConstructorBase::CMD_HANDLER_OBJECT)
+			if (constructor->typeId() == module::ObjectDescription::CMD_HANDLER_OBJECT)
 			{
-				module::ObjectConstructorBaseR constructorRef( builder->constructor());
-				typedef module::ConfiguredObjectConstructor<cmdbind::CommandHandlerUnit> ThisConstructor;
-				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
-
-				if (!constructor)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << builder->objectClassName()
-						  << "' is not a command handler";
-					throw std::logic_error( "Object is not a commandHandler. See log." );
-				}
-				else	{
-					m_cmd.push_back( CommandHandlerDef( constructor->object( **it), *it));
-				}
-			}
-			else if (builder->objectType() == module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT)
-			{
-				module::ObjectConstructorBaseR constructorRef( builder->constructor());
-				module::RuntimeEnvironmentConstructor* constructor = dynamic_cast<module::RuntimeEnvironmentConstructor*>( constructorRef.get());
-				if (!constructor)
+				cmdbind::CommandHandlerUnit* obj = createConfiguredProviderObject<cmdbind::CommandHandlerUnit>( "processorProvider: ", constructor, *it);
+				if (obj)
 				{
-					LOG_ALERT << "Wolframe Processor Provider: '" << builder->objectClassName()
-						  << "' is not a runtime environment constructor";
-					throw std::logic_error( "Object is not a runtime environment constructor. See log." );
+					m_cmd.push_back( CommandHandlerDef( obj, *it));
 				}
 				else
 				{
-					langbind::RuntimeEnvironmentR env( constructor->object( **it));
-					m_programs.defineRuntimeEnvironment( env);
-
-					LOG_TRACE << "Registered runtime environment '" << env->name() << "'";
+					success = false;
 				}
 			}
-			else	{
-				LOG_ALERT << "Wolframe Processor Provider: unknown processor type '" << (*it)->className() << "'";
-				throw std::domain_error( "Unknown command handler type constructor. See log." );
+			else if (constructor->typeId() == module::ObjectDescription::RUNTIME_ENVIRONMENT_OBJECT)
+			{
+				langbind::RuntimeEnvironment* obj = createConfiguredProviderObject<langbind::RuntimeEnvironment>( "processorProvider: ", constructor, *it);
+				if (obj)
+				{
+					langbind::RuntimeEnvironmentR objref( obj);
+					m_programs.defineRuntimeEnvironment( objref);
+				}
+				else
+				{
+					success = false;
+				}
+			}
+			else
+			{
+				LOG_ERROR << "internal: unexpected type of configured object in processor provider";
+				success = false;
 			}
 		}
-		else	{
-			LOG_ALERT << "Wolframe Processor Provider: processor provider configuration can not handle objects of this type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown configurable object for processor provider. See log." );
+		else
+		{
+			throw std::logic_error( "internal: unexpected type of configured object in processor provider" );
 		}
 	}
 
 	// Build the lists of objects without configuration
-	std::vector<const module::SimpleBuilder*> simpleBuilderList = modules_->getSimpleBuilderList();
-	for ( std::vector<const module::SimpleBuilder*>::const_iterator it = simpleBuilderList.begin();
-								it != simpleBuilderList.end(); it++ )	{
-		switch( (*it)->objectType() )	{
-			case module::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT:
+	std::vector<const module::SimpleObjectConstructor*> simpleObjectConstructorList = modules_->getSimpleObjectConstructorList();
+	for ( std::vector<const module::SimpleObjectConstructor*>::const_iterator it = simpleObjectConstructorList.begin();
+								it != simpleObjectConstructorList.end(); it++ )	{
+		const module::SimpleObjectConstructor* constructor = *it;
+		switch (constructor->typeId())
+		{
+			case module::ObjectDescription::PROTOCOL_HANDLER_OBJECT:
 			{
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				typedef module::SimpleObjectConstructor<cmdbind::ProtocolHandlerUnit> ThisConstructor;
-				ThisConstructor* constructor = dynamic_cast<ThisConstructor*>( constructorRef.get());
-
-				if (!constructor)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a protocol handler";
-					throw std::logic_error( "Object is not a protocolHandler. See log." );
-				}
-				else
+				cmdbind::ProtocolHandlerUnit* obj = createSimpleProviderObject<cmdbind::ProtocolHandlerUnit>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					cmdbind::ProtocolHandlerUnitR unit( constructor->object());
+					cmdbind::ProtocolHandlerUnitR unit( obj);
 					std::string name( unit->protocol());
 					m_protocols.insert( name, unit);
+					LOG_TRACE << "ProcessorProvider: registered protocol handler '" << constructor->className() << ")";
 				}
 				break;
 			}
-			case module::ObjectConstructorBase::DOCTYPE_DETECTOR_OBJECT:
+			case module::ObjectDescription::DOCTYPE_DETECTOR_OBJECT:
 			{
-				// object defines a document type/format detector
-				const module::DoctypeDetectorBuilder* bld = dynamic_cast<const module::DoctypeDetectorBuilder*>( (*it));
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::DoctypeDetectorConstructor* dtcr = dynamic_cast<module::DoctypeDetectorConstructor*>(constructorRef.get());
-				if (!dtcr || !bld)
+				cmdbind::DoctypeDetectorType* obj = createSimpleProviderObject<cmdbind::DoctypeDetectorType>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a document type/format detector";
-					throw std::logic_error( "Object is not a document type/format detector. See log." );
+					boost::shared_ptr<cmdbind::DoctypeDetectorType> objref( obj);
+					m_doctypes.push_back( *obj);
+					LOG_TRACE << "ProcessorProvider: registered document type/format detection '" << constructor->className() << ")";
 				}
-				else
+				break;
+			}
+			case module::ObjectDescription::FILTER_OBJECT:
+			{
+				langbind::FilterType* obj = createSimpleProviderObject<langbind::FilterType>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					try
-					{
-						boost::shared_ptr<cmdbind::DoctypeDetectorType> type( dtcr->object());
-						m_doctypes.push_back( *type);
-						LOG_TRACE << "registered document type/format detection for '" << bld->name() << "' (" << (*it)->objectClassName() << ")";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_ERROR << "error loading document type/format detection object: " << e.what();
-					}
-				}
-				break;
-			}
-			case module::ObjectConstructorBase::FILTER_OBJECT:	{	// object is a filter
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::FilterConstructor* fltr = dynamic_cast< module::FilterConstructor* >(constructorRef.get());
-				if (!fltr)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a filter";
-					throw std::logic_error( "Object is not a filter. See log." );
-				}
-				else	{
-					try
-					{
-						langbind::FilterTypeR filtertype( fltr->object());
-						m_programs.defineFilterType( fltr->name(), filtertype);
-						LOG_TRACE << "registered filter '" << fltr->name() << "' (" << fltr->objectClassName() << ")";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_ERROR << "error loading filter object module: " << e.what();
-					}
+					boost::shared_ptr<langbind::FilterType> objref( obj);
+					m_programs.defineFilterType( obj->name(), objref);
+					LOG_TRACE << "ProcessorProvider: registered filter type '" << constructor->className() << ")";
 				}
 				break;
 			}
 
-			case module::ObjectConstructorBase::DDL_COMPILER_OBJECT:
-			{	// object is a DDL compiler
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::DDLCompilerConstructor* ffo = dynamic_cast< module::DDLCompilerConstructor* >(constructorRef.get());
-				if (!ffo)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a DDL compiler";
-					throw std::logic_error( "Object is not a form function. See log." );
-				}
-				else {
-					try
-					{
-						langbind::DDLCompilerR constructor( ffo->object());
-						m_programs.defineFormDDL( constructor);
-						LOG_TRACE << "registered '" << constructor->ddlname() << "' DDL compiler";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_FATAL << "Error loading DDL compiler '" << ffo->name() << "':" << e.what();
-					}
-				}
-				break;
-			}
-
-			case module::ObjectConstructorBase::PROGRAM_TYPE_OBJECT:
-			{	// object is a form function program type
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::ProgramTypeConstructor* ffo = dynamic_cast< module::ProgramTypeConstructor* >( constructorRef.get());
-				if (!ffo)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a program type";
-					throw std::logic_error( "Object is not a program type. See log." );
-				}
-				else {
-					try
-					{
-						proc::ProgramR prgtype( ffo->object());
-						m_programs.defineProgramType( prgtype);
-						LOG_TRACE << "registered '" << ffo->name() << "' program type";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_FATAL << "Error loading program type '" << ffo->name() << "':" << e.what();
-					}
-				}
-				break;
-			}
-
-			case module::ObjectConstructorBase::FORM_FUNCTION_OBJECT:
-			{	// object is a form function
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::CppFormFunctionConstructor* ffo = dynamic_cast< module::CppFormFunctionConstructor* >(constructorRef.get());
-				if (!ffo)	{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a form function";
-					throw std::logic_error( "Object is not a form function. See log." );
-				}
-				else
+			case module::ObjectDescription::DDL_COMPILER_OBJECT:
+			{
+				langbind::DDLCompiler* obj = createSimpleProviderObject<langbind::DDLCompiler>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					try
-					{
-						m_programs.defineCppFormFunction( ffo->identifier(), ffo->function());
-						LOG_TRACE << "registered C++ form function '" << ffo->identifier() << "'";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_FATAL << "Error loading form function object '" << ffo->objectClassName() << "':" << e.what();
-					}
+					boost::shared_ptr<langbind::DDLCompiler> objref( obj);
+					m_programs.defineFormDDL( objref);
+					LOG_TRACE << "ProcessorProvider: registered DDL compiler '" << constructor->className() << ")";
 				}
 				break;
 			}
 
-			case module::ObjectConstructorBase::NORMALIZE_FUNCTION_OBJECT:
+			case module::ObjectDescription::PROGRAM_TYPE_OBJECT:
+			{
+				proc::Program* obj = createSimpleProviderObject<proc::Program>( "ProcessorProvider: ", constructor);
+				if (obj)
+				{
+					boost::shared_ptr<proc::Program> objref( obj);
+					m_programs.defineProgramType( objref);
+					LOG_TRACE << "ProcessorProvider: registered program type '" << constructor->className() << ")";
+				}
+				break;
+			}
+
+			case module::ObjectDescription::FORM_FUNCTION_OBJECT:
+			{
+				serialize::CppFormFunction* obj = createSimpleProviderObject<serialize::CppFormFunction>( "ProcessorProvider: ", constructor);
+				if (obj)
+				{
+					boost::shared_ptr<serialize::CppFormFunction> objref( obj);
+					m_programs.defineFormFunction( obj->name(), objref);
+					LOG_TRACE << "ProcessorProvider: registered C++ form function '" << constructor->className() << ")";
+				}
+				break;
+			}
+
+			case module::ObjectDescription::NORMALIZE_FUNCTION_OBJECT:
 			{	// object is a normalize function constructor
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::NormalizeFunctionConstructor* constructor = dynamic_cast< module::NormalizeFunctionConstructor* >(constructorRef.get());
-				if (!constructor)
+				types::NormalizeFunctionType* obj = createSimpleProviderObject<types::NormalizeFunctionType>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a normalize function constructor";
-					throw std::logic_error( "Object is not a normalize function constructor. See log." );
-				}
-				else
-				{
-					try {
-						m_programs.defineNormalizeFunctionType( constructor->identifier(), constructor->function());
-						LOG_TRACE << "registered '" << constructor->objectClassName() << "' normalize function '" << constructor->identifier() << "'";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_FATAL << "Error loading normalize function object '" << constructor->objectClassName() << "':" << e.what();
-					}
+					boost::shared_ptr<types::NormalizeFunctionType> objref( obj);
+					m_programs.defineNormalizeFunctionType( obj->name(), objref);
+					LOG_TRACE << "ProcessorProvider: registered normalize function type '" << constructor->className() << ")";
 				}
 				break;
 			}
 
-			case module::ObjectConstructorBase::CUSTOM_DATA_TYPE_OBJECT:
+			case module::ObjectDescription::CUSTOM_DATA_TYPE_OBJECT:
 			{
-				module::ObjectConstructorBaseR constructorRef( (*it)->constructor());
-				module::CustomDataTypeConstructor* constructor = dynamic_cast< module::CustomDataTypeConstructor* >(constructorRef.get());
-				if (!constructor)
+				types::CustomDataType* obj = createSimpleProviderObject<types::CustomDataType>( "ProcessorProvider: ", constructor);
+				if (obj)
 				{
-					LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-						  << "' is not a custom data type constructor";
-					throw std::logic_error( "Object is not a custom data type constructor. See log." );
-				}
-				else
-				{
-					try {
-						types::CustomDataTypeR dt( constructor->object());
-						m_programs.defineCustomDataType( constructor->identifier(), dt);
-						LOG_TRACE << "registered '" << constructor->objectClassName() << "' custom data type '" << constructor->identifier() << "'";
-					}
-					catch (const std::runtime_error& e)
-					{
-						LOG_FATAL << "Error loading custom data type '" << constructor->objectClassName() << "':" << e.what();
-					}
+					boost::shared_ptr<types::CustomDataType> objref( obj);
+					m_programs.defineCustomDataType( obj->name(), objref);
+					LOG_TRACE << "ProcessorProvider: registered custom data type '" << constructor->className() << ")";
 				}
 				break;
 			}
 
-			case module::ObjectConstructorBase::AUDIT_OBJECT:
-			case module::ObjectConstructorBase::AUTHENTICATION_OBJECT:
-			case module::ObjectConstructorBase::AUTHORIZATION_OBJECT:
-			case module::ObjectConstructorBase::JOB_SCHEDULE_OBJECT:
-			case module::ObjectConstructorBase::DATABASE_OBJECT:
-			case module::ObjectConstructorBase::CMD_HANDLER_OBJECT:
-			case module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT:
-			case module::ObjectConstructorBase::TEST_OBJECT:
-				LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
-					  << "' is marked as '" << module::ObjectConstructorBase::objectTypeName( (*it)->objectType())
+			case module::ObjectDescription::AUDIT_OBJECT:
+			case module::ObjectDescription::AUTHENTICATION_OBJECT:
+			case module::ObjectDescription::AUTHORIZATION_OBJECT:
+			case module::ObjectDescription::JOB_SCHEDULE_OBJECT:
+			case module::ObjectDescription::DATABASE_OBJECT:
+			case module::ObjectDescription::CMD_HANDLER_OBJECT:
+			case module::ObjectDescription::RUNTIME_ENVIRONMENT_OBJECT:
+			case module::ObjectDescription::TEST_OBJECT:
+				LOG_ERROR << "ProcessorProvider: object '" << constructor->className()
+					  << "' is marked as '" << constructor->typeIdName()
 					  << "' object but has a simple object constructor";
-				throw std::logic_error( "Object is not a valid simple object. See log." );
+				success = false;
 				break;
 			default:
-				LOG_ALERT << "Wolframe Processor Provider: '" << (*it)->objectClassName()
+				LOG_ERROR << "ProcessorProvider: object '" << constructor->className()
 					  << "' is of an unknown object type";
-				throw std::logic_error( "Object is not a valid simple object. See log." );
+				success = false;
+				break;
 		}
+	}
+	if (!success)
+	{
+		throw std::runtime_error("failed to create processor provider context (see logs)");
 	}
 }
 
@@ -466,8 +366,8 @@ bool ProcessorProviderImpl::loadPrograms()
 				types::keymap<std::size_t>::const_iterator ci = m_cmdMap.find( *cmdIt);
 				if (ci != m_cmdMap.end())
 				{
-					const char* c1 = m_cmd.at(ci->second).configuration->className();
-					const char* c2 = di->configuration->className();
+					const std::string& c1 = m_cmd.at(ci->second).configuration->className();
+					const std::string& c2 = di->configuration->className();
 					LOG_ERROR << "duplicate definition of command '" << *cmdIt << "' (in '" << c1 << "' and in '" << c2 << "')";
 					throw std::runtime_error( "duplicate command definition");
 				}

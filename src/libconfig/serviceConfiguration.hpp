@@ -35,7 +35,7 @@
 
 #ifndef _Wolframe_CONFIG_SERVICE_HPP_INCLUDED
 #define _Wolframe_CONFIG_SERVICE_HPP_INCLUDED
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 #include <string>
 
@@ -44,7 +44,8 @@ namespace config {
 
 /// \class ServiceConfiguration
 /// \brief Daemon / service configuration
-class ServiceConfiguration : public _Wolframe::config::ConfigurationBase
+class ServiceConfiguration
+	:public ConfigurationObject
 {
 public:
 #if !defined( _WIN32 )
@@ -68,9 +69,6 @@ public:
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
-
-//	Not implemented yet, inherited from base for the time being
-//	bool test() const;
 
 #if !defined( _WIN32 )
 	void setCanonicalPathes( const std::string& referencePath );

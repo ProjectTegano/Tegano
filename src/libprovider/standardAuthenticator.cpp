@@ -111,7 +111,7 @@ bool StandardAuthenticator::setMech( const std::string& mech )
 		AuthenticatorSlice* slice = (*it)->slice( mech, m_client );
 		if ( slice != NULL )	{
 			LOG_TRACE << "StandardAuthenticator: authentication mechanism '"
-				  << mech << "' provided by '" << (*it)->className();
+				  << mech << "' provided by '" << (*it)->id();
 			m_slices.push_back( slice );
 		}
 	}

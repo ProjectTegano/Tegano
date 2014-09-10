@@ -10,13 +10,13 @@
 namespace _Wolframe {
 
 	/// echo configuration
-	struct EchoConfiguration : public config::ConfigurationBase
+	struct EchoConfiguration : public config::ConfigurationObject
 	{
 	public:
 		unsigned short		timeout;
 
 		/// constructor
-		EchoConfiguration() : ConfigurationBase( "Echo Server", NULL, "Echo Server configuration" )
+		EchoConfiguration() : ConfigurationObject( "EchoServer", "", "" )
 								{ timeout = 0; }
 		/// methods
 		bool parse( const config::ConfigurationNode& pt, const std::string& node,

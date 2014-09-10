@@ -41,6 +41,7 @@
 
 #include "authorizer.hpp"
 #include "database/databaseProviderInterface.hpp"
+#include "module/objectDescription.hpp"
 
 namespace _Wolframe {
 namespace aaaa {
@@ -50,6 +51,9 @@ namespace aaaa {
 class AuthorizationUnit
 {
 public:
+	explicit AuthorizationUnit( const std::string& id_)
+		:m_id(id_){}
+
 	enum Result	{
 		AUTHZ_DENIED,
 		AUTHZ_ALLOWED,
@@ -57,23 +61,23 @@ public:
 		AUTHZ_ERROR
 	};
 
-	AuthorizationUnit( const std::string& Identifier )
-		: m_identifier( Identifier )	{}
-
-	virtual ~AuthorizationUnit()		{}
-
-	const std::string& identifier() const	{ return m_identifier; }
+	virtual ~AuthorizationUnit(){}
 
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
 						{ return true; }
-	virtual const char* className() const = 0;
 
 	virtual Result allowed( const Information& ) = 0;
 
+	const std::string& id() const
+	{
+		return m_id;
+	}
+
+private:
+	std::string m_id;
+
 private:
 	void operator=( const AuthorizationUnit&){}
-private:
-	const std::string	m_identifier;
 };
 
 }} // namespace _Wolframe::aaaa

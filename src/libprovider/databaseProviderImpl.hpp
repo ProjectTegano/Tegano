@@ -35,7 +35,7 @@
 #ifndef _DATABASE_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 #define _DATABASE_PROVIDER_IMPLEMENTATION_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "database/databaseProviderInterface.hpp"
 #include <vector>
 
@@ -48,7 +48,7 @@ class DatabaseProviderImpl
 	,private boost::noncopyable
 {
 public:
-	DatabaseProviderImpl( const std::vector<config::NamedConfiguration*>& config,
+	DatabaseProviderImpl( const std::vector<config::ConfigurationObject*>& config,
 				const module::ModuleDirectory* modules );
 	virtual ~DatabaseProviderImpl();
 	virtual Database* database( const std::string& ID ) const;

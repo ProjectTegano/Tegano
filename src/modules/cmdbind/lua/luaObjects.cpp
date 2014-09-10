@@ -895,7 +895,7 @@ LUA_FUNCTION_THROWS( "provider.type()", function_type)
 	const types::NormalizeFunctionType* functype = ctx->provider()->normalizeFunctionType( typeName);
 	if (functype)
 	{
-		LuaObject<types::NormalizeFunctionR>::push_luastack( ls, types::NormalizeFunctionR( functype->createFunction( initializerList)));
+		LuaObject<types::NormalizeFunctionR>::push_luastack( ls, types::NormalizeFunctionR( functype->create( initializerList)));
 		lua_pushcclosure( ls, function_normalizer_call, 1);
 		return 1;
 	}

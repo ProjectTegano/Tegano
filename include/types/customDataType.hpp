@@ -201,9 +201,5 @@ private:
 
 typedef boost::shared_ptr<CustomDataType> CustomDataTypeR;
 
-
-typedef CustomDataType* (*CreateCustomDataType)( const std::string& name);
-
-
 }}//namespace
 #endif

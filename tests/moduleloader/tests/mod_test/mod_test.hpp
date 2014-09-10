@@ -51,13 +51,15 @@ namespace test {
 extern "C" DLLEXPORT ModuleEntryPoint entryPoint;
 
 // the implementation of a plugin full-filling the TestUnit interface
-class TestUnitImpl : public TestUnit
+class TestUnitImpl
+	:public TestUnit
+	,public module::BaseObject
 {
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /* db */ );
 
 public:
 	// test unit has no configuration, so have an empty constructor
-	TestUnitImpl( );
+	TestUnitImpl( const TestModuleConfig* config);
 	
 	virtual ~TestUnitImpl( );
 

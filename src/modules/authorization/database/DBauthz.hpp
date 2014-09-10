@@ -37,23 +37,19 @@
 #ifndef _DB_AUTHORIZATION_HPP_INCLUDED
 #define _DB_AUTHORIZATION_HPP_INCLUDED
 
+#include "config/configurationObject.hpp"
 #include "aaaa/authorizationUnit.hpp"
 #include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
 namespace aaaa {
 
-static const char* DB_AUTHORIZATION_CLASS_NAME = "DatabaseAuthorization";
-
 //***  Database authorizer configuration  *******************************
-class DatabaseAuthzConfig : public config::NamedConfiguration
+class DatabaseAuthzConfig : public config::ConfigurationObject
 {
-	friend class DBauthzConstructor;
 public:
-	DatabaseAuthzConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName )	{}
-
-	virtual const char* className() const		{ return DB_AUTHORIZATION_CLASS_NAME; }
+	DatabaseAuthzConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
@@ -61,6 +57,10 @@ public:
 	bool check() const;
 
 	void print( std::ostream& os, size_t indent ) const;
+
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& dbConfig() const	{return m_dbConfig;}
+
 private:
 	std::string	m_identifier;
 	std::string	m_dbConfig;
@@ -71,13 +71,13 @@ private:
 class DBauthorizer : public AuthorizationUnit
 {
 public:
-	DBauthorizer( const std::string& Identifier, const std::string& DbLabel );
+	DBauthorizer( const DatabaseAuthzConfig* config);
 	~DBauthorizer();
-	const char* className() const		{ return DB_AUTHORIZATION_CLASS_NAME; }
 
 	bool resolveDB( const db::DatabaseProviderInterface& db );
 
 	AuthorizationUnit::Result allowed( const Information& );
+
 private:
 	const std::string	m_dbLabel;
 	const db::Database*	m_db;
@@ -86,17 +86,5 @@ private:
 						     const net::RemoteEndpoint& remote );
 };
 
-
-//***  Database authorizer constructor  ***********************************
-class DBauthzConstructor : public module::ConfiguredObjectConstructor< AuthorizationUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return AUTHORIZATION_OBJECT; }
-	const char* objectClassName() const	{ return DB_AUTHORIZATION_CLASS_NAME; }
-	DBauthorizer* object( const config::NamedConfiguration& conf ) const;
-};
-
-}} // namespace _Wolframe::aaaa
-
-#endif // _DB_AUTHORIZATION_HPP_INCLUDED
+}}
+#endif

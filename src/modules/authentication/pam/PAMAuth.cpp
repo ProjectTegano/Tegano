@@ -59,7 +59,7 @@ bool PAMAuthConfig::check() const
 void PAMAuthConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Identifier: " << m_identifier << std::endl;
 	os << indStr << "   Service: " << m_service << std::endl;
 }
@@ -239,9 +239,10 @@ error:
 
 //*********   PAM Authentication Unit   *************************************
 
-PAMAuthUnit::PAMAuthUnit( const std::string& Identifier,
-				    const std::string& service )
-	: AuthenticationUnit( Identifier ), m_service( service )
+PAMAuthUnit::PAMAuthUnit( const PAMAuthConfig* config)
+	: AuthenticationUnit( config->identifier())
+	, m_identifier( config->identifier())
+	, m_service( config->service())
 {
 	LOG_DEBUG << "PAM authentication unit created with PAM service '" << m_service << "'";
 }
@@ -361,10 +362,10 @@ void PAMAuthSlice::messageIn( const std::string& message )
 		case SLICE_INITIALIZED:
 			m_appdata.login = message.c_str( );
 			// TODO: the service name must be a CONSTANT due to security reasons!
-			rc = pam_start( m_backend.m_service.c_str( ), m_appdata.login.c_str( ), &m_conv, &m_appdata.h );
+			rc = pam_start( m_backend.service().c_str( ), m_appdata.login.c_str( ), &m_conv, &m_appdata.h );
 			if( rc != PAM_SUCCESS ) {
 				LOG_ERROR << "PAM auth slice: "
-					<< "pam_start failed with service " << m_backend.m_service << ": "
+					  << "pam_start failed with service " << m_backend.service() << ": "
 					<< pam_strerror( m_appdata.h, rc ) << " in state '"
 					<< m_sliceStateToString[m_state] << "'";
 				m_state = SLICE_SYSTEM_FAILURE;
@@ -385,7 +386,7 @@ void PAMAuthSlice::messageIn( const std::string& message )
 			} else if( rc == PAM_AUTH_ERR ) {
 				m_state = SLICE_INVALID_CREDENTIALS;
 			} else if( rc != PAM_SUCCESS ) {
-				LOG_ERROR << "pam_authenticate failed with service '" << m_backend.m_service << "': "
+				LOG_ERROR << "pam_authenticate failed with service '" << m_backend.service() << "': "
 					<< pam_strerror( m_appdata.h, rc ) << ", "
 					<< m_appdata.errmsg;
 				m_state = SLICE_SYSTEM_FAILURE;
@@ -394,7 +395,7 @@ void PAMAuthSlice::messageIn( const std::string& message )
 			if( rc == PAM_SUCCESS ) {
 				rc = pam_acct_mgmt( m_appdata.h, 0 );
 				if( rc != PAM_SUCCESS ) {
-					LOG_ERROR << "pam_acct_mgmt failed with service '" << m_backend.m_service << "': "
+					LOG_ERROR << "pam_acct_mgmt failed with service '" << m_backend.service() << "': "
 						<< pam_strerror( m_appdata.h, rc ) << ", "
 						<< m_appdata.errmsg;
 					m_state = SLICE_SYSTEM_FAILURE;
@@ -419,7 +420,7 @@ void PAMAuthSlice::messageIn( const std::string& message )
 
 			// terminate PAM session with last exit code
 			if( pam_end( m_appdata.h, rc ) != PAM_SUCCESS ) {
-				LOG_ERROR << "pam_end failed with service '" << m_backend.m_service << "': "
+				LOG_ERROR << "pam_end failed with service '" << m_backend.service() << "': "
 					<< pam_strerror( m_appdata.h, rc ) << ", "
 					<< m_appdata.errmsg;
 				m_state = SLICE_SYSTEM_FAILURE;

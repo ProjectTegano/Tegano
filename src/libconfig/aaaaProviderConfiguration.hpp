@@ -35,7 +35,7 @@
 #ifndef _CONFIG_AAAA_PROVIDER_CONFIGURATION_HPP_INCLUDED
 #define _CONFIG_AAAA_PROVIDER_CONFIGURATION_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include <string>
 #include <vector>
 
@@ -44,7 +44,7 @@ namespace config {
 
 /// \brief Configuration for AAAA (Authentication, Authorization, Audit, Accounting)
 class AaaaProviderConfiguration
-	:public config::ConfigurationBase
+	:public config::ConfigurationObject
 {
 public:
 	/// x-structor
@@ -59,19 +59,19 @@ public:
 	void setCanonicalPathes( const std::string& referencePath );
 
 	const std::string& randomDevice() const					{return m_randomDevice;}
-	const std::vector<config::NamedConfiguration*>& authConfig() const	{return m_authConfig;}
+	const std::vector<config::ConfigurationObject*>& authConfig() const	{return m_authConfig;}
 	bool authzDefault() const						{return m_authzDefault;}
-	const std::vector<config::NamedConfiguration*>& authzConfig() const	{return m_authzConfig;}
+	const std::vector<config::ConfigurationObject*>& authzConfig() const	{return m_authzConfig;}
 	bool mandatoryAudit() const						{return m_mandatoryAudit;}
-	const std::vector<config::NamedConfiguration*>&	auditConfig() const	{return m_auditConfig;}
+	const std::vector<config::ConfigurationObject*>&	auditConfig() const	{return m_auditConfig;}
 	
 private:
 	std::string					m_randomDevice;
-	std::vector< config::NamedConfiguration* >	m_authConfig;
+	std::vector< config::ConfigurationObject* >	m_authConfig;
 	bool						m_authzDefault;
-	std::vector< config::NamedConfiguration* >	m_authzConfig;
+	std::vector< config::ConfigurationObject* >	m_authzConfig;
 	bool						m_mandatoryAudit;
-	std::vector< config::NamedConfiguration* >	m_auditConfig;
+	std::vector< config::ConfigurationObject* >	m_auditConfig;
 };
 
 }}//namespace

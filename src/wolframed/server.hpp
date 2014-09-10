@@ -45,7 +45,7 @@
 #include "system/serverEndpoint.hpp"
 #include "acceptor.hpp"
 #include "system/connectionHandler.hpp"	// for server handler
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 
 namespace _Wolframe {
 namespace config {

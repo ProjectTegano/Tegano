@@ -36,6 +36,7 @@
 
 #include "aaaa/authorizer.hpp"
 #include "database/databaseProviderInterface.hpp"
+#include "config/configurationObject.hpp"
 
 #include <string>
 #include <vector>
@@ -49,7 +50,7 @@ class StandardAuthorizer;
 class AuthorizationProvider
 {
 public:
-	AuthorizationProvider( const std::vector< config::NamedConfiguration* >& confs,
+	AuthorizationProvider( const std::vector< config::ConfigurationObject* >& confs,
 			       bool authzDefault,
 			       const module::ModuleDirectory* modules );
 	~AuthorizationProvider();

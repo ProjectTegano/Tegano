@@ -36,7 +36,7 @@
 #ifndef _Wolframe_CONFIG_BANNER_HPP_INCLUDED
 #define _Wolframe_CONFIG_BANNER_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 #include <string>
 
@@ -45,7 +45,7 @@ namespace config	{
 
 /// \class BannerConfiguration
 /// \brief Service signature configuration
-class BannerConfiguration : public _Wolframe::config::ConfigurationBase
+class BannerConfiguration : public _Wolframe::config::ConfigurationObject
 {
 	friend class ConfigurationParser;
 public:
@@ -61,8 +61,8 @@ public:
 	};
 
 	/// \brief Constructor
-	BannerConfiguration() : ConfigurationBase( "Service Banner", NULL, "Service banner" ),
-		m_tokens( UNDEFINED )	{}
+	BannerConfiguration() : ConfigurationObject( "ServiceBanner", "", ""),
+		m_tokens( UNDEFINED ){}
 	/// \brief Get the banner as string
 	std::string toString() const;
 

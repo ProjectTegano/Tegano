@@ -53,7 +53,7 @@ const serialize::StructDescriptionBase* OracleConfig::getStructDescription()
 	ThisDescription()
 	{
 		(*this)
-		( "identifier", &OracleConfig::m_ID)		.mandatory()
+		( "identifier", &OracleConfig::m_id)		.mandatory()
 		( "host", &OracleConfig::m_host )		.optional()
 		( "port", &OracleConfig::m_port )		.optional()
 		( "database", &OracleConfig::m_dbName )		.optional()
@@ -94,9 +94,9 @@ void OracleConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
 
-	os << indStr << sectionName() << ":" << std::endl;
-	if ( ! m_ID.empty() )
-		os << indStr << "   ID: " << m_ID << std::endl;
+	os << indStr << configSection() << ":" << std::endl;
+	if ( ! m_id.empty() )
+		os << indStr << "   ID: " << m_id << std::endl;
 	if ( m_host.empty())
 		os << indStr << "   Database host: local unix domain socket" << std::endl;
 	else

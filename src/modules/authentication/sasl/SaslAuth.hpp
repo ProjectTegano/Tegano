@@ -38,6 +38,8 @@
 #define _SASL_AUTHENTICATION_HPP_INCLUDED
 
 #include "aaaa/authenticationUnit.hpp"
+#include "aaaa/authenticationSlice.hpp"
+#include "config/configurationObject.hpp"
 #include "module/configuredObjectConstructor.hpp"
 
 #include <string>
@@ -48,14 +50,11 @@ namespace aaaa {
 
 static const char* SASL_AUTHENTICATION_CLASS_NAME = "SASLAuth";
 
-class SaslAuthConfig :  public config::NamedConfiguration
+class SaslAuthConfig :  public config::ConfigurationObject
 {
-	friend class SaslAuthConstructor;
 public:
-	SaslAuthConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName ) {}
-
-	virtual const char* className() const	{ return SASL_AUTHENTICATION_CLASS_NAME; }
+	SaslAuthConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		: config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
 	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
@@ -63,18 +62,22 @@ public:
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
+
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& service() const	{return m_service;}
+	const std::string& confPath() const	{return m_confPath;}
+
 private:
-	std::string		m_identifier;
-	std::string		m_service;
-	std::string		m_confPath;
+	std::string	m_identifier;
+	std::string	m_service;
+	std::string	m_confPath;
 };
 
 
 class SaslAuthUnit : public AuthenticationUnit
 {
 public:
-	SaslAuthUnit( const std::string& Identifier,
-			   const std::string& service, const std::string& confpath );
+	SaslAuthUnit( const SaslAuthConfig* config);
 	~SaslAuthUnit();
 	virtual const char* className() const	{ return SASL_AUTHENTICATION_CLASS_NAME; }
 
@@ -85,22 +88,17 @@ public:
 
 	User* authenticatePlain( const std::string& username, const std::string& password ) const;
 
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& service() const	{return m_service;}
+	const std::string& confPath() const	{return m_confPath;}
+
 private:
 	static const std::string	m_mechs[];	///<	list of mechs for the unit
-	const std::string		m_service;	///<	registered name of the service,
+	std::string			m_identifier;
+	std::string			m_service;	///<	registered name of the service,
 							///	should maybe be fixed (or default to) 'wolframe'
-	const std::string		m_confPath;	///<	a SASL configuration path for optional config
+	std::string			m_confPath;	///<	a SASL configuration path for optional config
 							///	(overridding system-wide one)
-};
-
-
-class SaslAuthConstructor : public ConfiguredObjectConstructor< AuthenticationUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return AUTHENTICATION_OBJECT; }
-	virtual const char* objectClassName() const	{ return SASL_AUTHENTICATION_CLASS_NAME; }
-	virtual SaslAuthUnit* object( const config::NamedConfiguration& conf );
 };
 
 class SaslAuthSlice : public AuthenticatorSlice
@@ -143,7 +141,6 @@ public:
 
 private:
 	const SaslAuthUnit&	m_backend;
-//	SliceState		m_state;
 	bool			m_inputReusable;
 	std::string		m_user;
 };

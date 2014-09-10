@@ -468,6 +468,6 @@ bool TransactionExecStatemachine_sqlite3::next()
 
 const std::string& TransactionExecStatemachine_sqlite3::databaseID() const
 {
-	return m_database->ID();
+	return m_database->id();
 }
 

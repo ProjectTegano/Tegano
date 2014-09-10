@@ -37,7 +37,7 @@
 #include "testAuthentication.hpp"
 
 WF_MODULE_BEGIN( "testAuthentication", "fake authentication to test the protocol")
- WF_AUTHENTICATOR(Test, _Wolframe::aaaa::TestAuthenticationUnit, _Wolframe::aaaa::TestAuthenticationConfig)
+ WF_AUTHENTICATOR("Test", _Wolframe::aaaa::TestAuthenticationUnit, _Wolframe::aaaa::TestAuthenticationConfig)
 WF_MODULE_END
 
 

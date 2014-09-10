@@ -65,8 +65,6 @@ public:
 	virtual void defineAuthorizationFunction( const std::string& name, const langbind::AuthorizationFunctionR& f)=0;
 	/// \brief Define an audit function
 	virtual void defineAuditFunction( const std::string& name, const langbind::AuditFunctionR& f)=0;
-	/// \brief Define a C++ form function
-	virtual void defineCppFormFunction( const std::string& name, const serialize::CppFormFunction& f)=0;
 	/// \brief Define an ordinary form function
 	virtual void defineFormFunction( const std::string& name, const langbind::FormFunctionR& f)=0;
 	/// \brief Define a runtime environment
@@ -78,7 +76,7 @@ public:
 	/// \brief Define a normalization function
 	virtual void defineNormalizeFunction( const std::string& name, const types::NormalizeFunctionR& f)=0;
 	/// \brief Define a normalization function type
-	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionType& ftype)=0;
+	virtual void defineNormalizeFunctionType( const std::string& name, const types::NormalizeFunctionTypeR& ftype)=0;
 	/// \brief Define a custom data type
 	virtual void defineCustomDataType( const std::string& name, const types::CustomDataTypeR& t)=0;
 	/// \brief Define a data definition language

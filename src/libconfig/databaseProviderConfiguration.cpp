@@ -33,11 +33,13 @@
 /// \brief Database provider configuration functions
 
 #include "databaseProviderConfiguration.hpp"
+#include "moduleConfigParseUtils.hpp"
 #include "config/valueParser.hpp"
 #include "config/configurationTree.hpp"
+#include "config/configurationObject.hpp"
 #include "module/moduleDirectory.hpp"
-#include "module/simpleBuilder.hpp"
-#include "module/configuredBuilder.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -59,41 +61,28 @@ bool DatabaseProviderConfiguration::parse(
 	using namespace _Wolframe::config;
 	bool retVal = true;
 
-	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )	{
-		if ( modules )	{
-			const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "database", L1it->first );
-			if ( builder )	{
-				config::NamedConfiguration* conf = builder->configuration( logPrefix().c_str());
-				if ( conf->parse( L1it->second, L1it->first, modules ))	{
-					m_config.push_back( conf );
-				} else	{
-					delete conf;
-					retVal = false;
-				}
-			}
-			else
-				LOG_WARNING << logPrefix() << "unknown configuration option: '"
-					    << L1it->first << "'";
+	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )
+	{
+		if (modules)
+		{
+			retVal &= parseModuleConfiguration( "Database", L1it->first, L1it->second, m_config, modules);
 		}
-		else
-			LOG_WARNING << logPrefix() << "unknown configuration option: '"
-				    << L1it->first << "'";
 	}
 	return retVal;
 }
 
 DatabaseProviderConfiguration::~DatabaseProviderConfiguration()
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_config.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_config.begin();
 								it != m_config.end(); it++ )
 		delete *it;
 }
 
 void DatabaseProviderConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 	if ( m_config.size() > 0 )	{
-		for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_config.begin();
+		for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_config.begin();
 								it != m_config.end(); it++ )	{
 			(*it)->print( os, 3 );
 		}
@@ -107,7 +96,7 @@ void DatabaseProviderConfiguration::print( std::ostream& os, size_t /* indent */
 bool DatabaseProviderConfiguration::check() const
 {
 	bool correct = true;
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_config.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_config.begin();
 								it != m_config.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
@@ -117,7 +106,7 @@ bool DatabaseProviderConfiguration::check() const
 
 void DatabaseProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_config.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_config.begin();
 								it != m_config.end(); it++ )	{
 		(*it)->setCanonicalPathes( refPath );
 	}

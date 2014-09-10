@@ -6,8 +6,9 @@
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "gtest/gtest.h"
 #include "wtest/testReport.hpp"
-#include "module/configuredBuilder.hpp"
-#include "module/simpleBuilder.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 
 #include "tests/mod_test/common.hpp"
 #include "tests/mod_test_containers/common.hpp"
@@ -55,17 +56,16 @@ TEST_F( ModuleFixture, LoadingModuleFromDir )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	const ConfiguredBuilder* builder = modDir.getConfiguredBuilder( "TestObject" );
+	const ConfiguredObjectConstructor* builder = modDir.getConfiguredObjectConstructor( "TestObject" );
 	ASSERT_TRUE( builder != NULL );
 
-	config::NamedConfiguration* configuration = builder->configuration( "TestObject" );
+	config::ConfigurationObject* configuration = builder->configuration();
 	ASSERT_TRUE( configuration != NULL );
 
-	ConfiguredObjectConstructor< test::TestUnit >* cnstrctr = dynamic_cast< ConfiguredObjectConstructor< test::TestUnit >* >( builder->constructor( ) );
-	ASSERT_TRUE( cnstrctr != NULL );
-	test::TestUnit* unit = cnstrctr->object( *configuration );
+	module::BaseObject* baseobj = builder->object( *configuration );
+	test::TestUnit* unit = dynamic_cast<test::TestUnit*>(baseobj);
 
-	string s = unit->hello( );
+	string s = unit?unit->hello( ):"";
 	ASSERT_EQ( s, "hello" );
 
 	delete configuration;
@@ -85,30 +85,28 @@ TEST_F( ModuleFixture, LoadingModuleWithMultipleContainers )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	const ConfiguredBuilder* builder1 = modDir.getConfiguredBuilder( "TestObject1" );
+	const ConfiguredObjectConstructor* builder1 = modDir.getConfiguredObjectConstructor( "TestObject1" );
 	ASSERT_TRUE( builder1 != NULL );
 
-	const ConfiguredBuilder* builder2 = modDir.getConfiguredBuilder( "TestObject2" );
+	const ConfiguredObjectConstructor* builder2 = modDir.getConfiguredObjectConstructor( "TestObject2" );
 	ASSERT_TRUE( builder2 != NULL );
 
-	config::NamedConfiguration* configuration1 = builder1->configuration( "TestObject1" );
+	config::ConfigurationObject* configuration1 = builder1->configuration();
 	ASSERT_TRUE( configuration1 != NULL );
 
-	config::NamedConfiguration* configuration2 = builder2->configuration( "TestObject2" );
+	config::ConfigurationObject* configuration2 = builder2->configuration();
 	ASSERT_TRUE( configuration2 != NULL );
 
-	ConfiguredObjectConstructor< test_containers::TestUnit1 >* cnstrctr1 = dynamic_cast< ConfiguredObjectConstructor< test_containers::TestUnit1 >* >( builder1->constructor( ) );
-	ASSERT_TRUE( cnstrctr1 != NULL );
-	test_containers::TestUnit1* unit1 = cnstrctr1->object( *configuration1 );
+	module::BaseObject* baseobj1 = builder1->object( *configuration1);
+	test_containers::TestUnit1* unit1 = dynamic_cast<test_containers::TestUnit1*>(baseobj1);
 
-	ConfiguredObjectConstructor< test_containers::TestUnit2 >* cnstrctr2 = dynamic_cast< ConfiguredObjectConstructor< test_containers::TestUnit2 >* >( builder2->constructor( ) );
-	ASSERT_TRUE( cnstrctr2 != NULL );
-	test_containers::TestUnit2* unit2 = cnstrctr2->object( *configuration2 );
-
-	string s1 = unit1->hello( );
+	module::BaseObject* baseobj2 = builder2->object( *configuration2);
+	test_containers::TestUnit2* unit2 = dynamic_cast<test_containers::TestUnit2*>(baseobj2);
+	
+	string s1 = unit1?unit1->hello( ):"";
 	ASSERT_EQ( s1, "hello" );
 
-	string s2 = unit2->hullo( );
+	string s2 = unit2?unit2->hullo( ):"";
 	ASSERT_EQ( s2, "hullo" );
 
 	delete unit1;
@@ -129,21 +127,20 @@ TEST_F( ModuleFixture, ModuleLogging )
 	bool res = modDir.loadModules( modFiles );
 	ASSERT_TRUE( res );
 
-	const ConfiguredBuilder* builder = modDir.getConfiguredBuilder( "TestObject" );
+	const ConfiguredObjectConstructor* builder = modDir.getConfiguredObjectConstructor( "TestObject" );
 	ASSERT_TRUE( builder != NULL );
 
-	config::NamedConfiguration* configuration = builder->configuration( "TestObject" );
+	config::ConfigurationObject* configuration = builder->configuration();
 	ASSERT_TRUE( configuration != NULL );
 
 	// Redirect stderr
 	std::streambuf *sbuf = std::cerr.rdbuf();	// Save stderr's buffer here
 	std::cerr.rdbuf( buffer.rdbuf() );
 
-	ConfiguredObjectConstructor< test::TestUnit >* cnstrctr = dynamic_cast< ConfiguredObjectConstructor< test::TestUnit >* >( builder->constructor( ) );
-	ASSERT_TRUE( cnstrctr != NULL );
-	test::TestUnit* unit = cnstrctr->object( *configuration );
+	module::BaseObject* baseobj = builder->object( *configuration);
+	test::TestUnit* unit = dynamic_cast<test::TestUnit*>(baseobj);
 
-	string s = unit->hello( );
+	string s = unit?unit->hello( ):"";
 	ASSERT_EQ( s, "hello" );
 	ASSERT_EQ( buffer.rdbuf()->str(), "DEBUG: Module: testUnit object created\n"
 					"DEBUG: Module: test module object created\n"

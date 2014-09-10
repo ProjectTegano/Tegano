@@ -18,8 +18,8 @@ public:
 	{
 		// ... return your introspection description reference of the configuration here
 	}
-	MyRuntimeEnvironmentConfig( const char* classname, const char* title, const char* logprefix, const char* subsection)
-		:_Wolframe::serialize::DescriptiveConfiguration( title, "authentication", logprefix, getStructDescription())
+	MyRuntimeEnvironmentConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 	{
 		setBasePtr( (void*)this); // ... mandatory to set pointer to start of configuration
 	}

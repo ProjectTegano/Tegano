@@ -70,11 +70,8 @@ public:
 			bool foreignKeys_, bool profiling_,
 			unsigned short connections_,
 			const std::vector<std::string>& extensionFiles_ );
-	SQLiteDatabase( const SQLiteConfig& config);
+	SQLiteDatabase( const SQLiteConfig* config);
 	 ~SQLiteDatabase();
-
-	const std::string& ID() const		{ return m_ID; }
-	const char* className() const		{ return "SQLite"; }
 
 	Transaction* transaction( const std::string& name_);
 
@@ -94,7 +91,7 @@ private:
 	void init( const SQLiteConfig& config);
 
 private:
-	const std::string	m_ID;
+	const std::string	m_id;
 	const std::string	m_filename;
 	types::ObjectPool<sqlite3> m_connPool;		///< pool of connections
 	std::vector<std::string> m_extensionFiles;	///< Sqlite extensions

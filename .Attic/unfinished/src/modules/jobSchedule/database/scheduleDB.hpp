@@ -36,6 +36,7 @@
 
 #include "processor/jobSchedule.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include "database/databaseProvider.hpp"
 
 #ifndef _SCHEDULE_DATABASE_HPP_INCLUDED
@@ -46,12 +47,12 @@ namespace processor {
 
 static const char* JOB_SCHEDULE_CLASS_NAME = "JobSchedule";
 
-class JobScheduleDBconfig : public config::NamedConfiguration
+class JobScheduleDBconfig : public config::ConfigurationObject
 {
 	friend class JobScheduleDBconstructor;
 public:
 	JobScheduleDBconfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName )
+		: config::ConfigurationObject( cfgName, logParent, logName )
 	{ }
 
 	const char* className() const		{ return JOB_SCHEDULE_CLASS_NAME; }
@@ -86,7 +87,7 @@ public:
 	virtual ObjectConstructorBase::ObjectType objectType() const
 						{ return JOB_SCHEDULE_OBJECT; }
 	const char* objectClassName() const	{ return JOB_SCHEDULE_CLASS_NAME; }
-	JobScheduleDB* object( const config::NamedConfiguration& conf );
+	JobScheduleDB* object( const config::ConfigurationObject& conf );
 };
 
 }} // namespace _Wolframe::processor

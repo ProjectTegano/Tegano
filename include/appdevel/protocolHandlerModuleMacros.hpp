@@ -35,52 +35,30 @@
 #include "module/moduleInterface.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "cmdbind/protocolHandler.hpp"
-#include "processor/procProviderInterface.hpp"
 
 /// \brief Defines a Wolframe protocol handler module after the includes section.
 #define WF_PROTOCOL_HANDLER(NAME,CLASSDEF)\
 {\
-	class ProtocolHandlerConstructor\
-		:public _Wolframe::module::SimpleObjectConstructor<_Wolframe::cmdbind::ProtocolHandlerUnit>\
+	class ModuleObjectEnvelope \
+		:public CLASSDEF \
+		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		ProtocolHandlerConstructor(){}\
-		virtual ~ProtocolHandlerConstructor(){}\
-		virtual _Wolframe::cmdbind::ProtocolHandlerUnit* object() const\
-		{\
-			return new CLASSDEF();\
-		}\
-		virtual const char* objectClassName() const\
-		{\
-			return NAME "ProtocolHandler";\
-		}\
-		virtual ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return ObjectConstructorBase::CMD_HANDLER_OBJECT;\
-		}\
+		ModuleObjectEnvelope(){}\
 	};\
-	class ProtocolHandlerBuilder\
-		:public _Wolframe::module::SimpleBuilder\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
 	{\
 	public:\
-		ProtocolHandlerBuilder()\
-			:_Wolframe::module::SimpleBuilder(NAME)\
-		{}\
-		virtual ~ProtocolHandlerBuilder(){}\
-		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::DOCTYPE_DETECTOR_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			return _Wolframe::module::ObjectConstructorBase::PROTOCOL_HANDLER_OBJECT;\
+			return new ModuleObjectEnvelope();\
 		}\
-		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			return new ProtocolHandlerConstructor();\
-		}\
-	};\
-	struct Constructor\
-	{\
-		static const _Wolframe::module::BuilderBase* impl()\
-		{\
-			static const ProtocolHandlerBuilder rt;\
+			static const Constructor rt( NAME "DocTypeDetection");\
 			return &rt;\
 		}\
 	};\

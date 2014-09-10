@@ -27,7 +27,6 @@ DYNAMIC_MODULE = \
 
 CPP_OBJS = \
 	DBauthConfig.obj \
-	DBauthConstructor.obj \
 	DBauth.obj
 
 all: $(DYNAMIC_MODULE)

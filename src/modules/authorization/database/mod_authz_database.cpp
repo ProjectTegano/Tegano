@@ -30,30 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Database authorization module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "DBauthz.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "databaseAuthorization", "database authorization module")
+ WF_AUDIT( "database", _Wolframe::aaaa::DBauthorizer, _Wolframe::aaaa::DatabaseAuthzConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::DBauthzConstructor,
-			aaaa::DatabaseAuthzConfig > mod( "Authorization database", "authorization",
-							 "database", "DatabaseAuthorization" );
-	return &mod;
-}
 
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Database authorization", containers);
-
-}} // namespace _Wolframe::module

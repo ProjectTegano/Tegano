@@ -36,7 +36,7 @@
 #ifndef _Wolframe_CONFIG_SERVER_HPP_INCLUDED
 #define _Wolframe_CONFIG_SERVER_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 #include "system/serverEndpoint.hpp"
 #include <list>
@@ -47,7 +47,7 @@ namespace config {
 
 /// \class ServerConfiguration
 /// \brief Server configuration (listeners and dimensions)
-class ServerConfiguration : public _Wolframe::config::ConfigurationBase
+class ServerConfiguration : public _Wolframe::config::ConfigurationObject
 {
 public:
 	unsigned short		threads;

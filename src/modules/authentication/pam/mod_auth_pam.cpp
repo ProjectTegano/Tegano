@@ -30,30 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// PAM Authentication module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "PAMAuth.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "PAMAuthentication", "PAM authentication module")
+ WF_AUDIT( "PAM", _Wolframe::aaaa::PAMAuthUnit, _Wolframe::aaaa::PAMAuthConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::PAMAuthConstructor,
-			aaaa::PAMAuthConfig > mod( "PAM authentication", "Authentication",
-							"PAM", "PAMAuth" );
-	return &mod;
-}
 
-static const BuilderBase* (*containers[])() = {
-	getModule
-};
-
-ModuleEntryPoint entryPoint( 0, "PAM authentication", containers );
-
-}} // namespace _Wolframe::module

@@ -101,11 +101,11 @@ void TestAuthenticationConfig::print( std::ostream& os, size_t indent) const
 }
 
 
-TestAuthenticationUnit::TestAuthenticationUnit( const TestAuthenticationConfig& cfg)
-	:AuthenticationUnit(cfg.structure.m_identifier)
+TestAuthenticationUnit::TestAuthenticationUnit( const TestAuthenticationConfig* cfg)
+	:AuthenticationUnit(cfg->structure.m_identifier)
 {
 	std::vector<std::string> entries;
-	utils::splitString( entries, utils::readBinaryFileContent( cfg.structure.m_filename), "\r\n");
+	utils::splitString( entries, utils::readBinaryFileContent( cfg->structure.m_filename), "\r\n");
 	std::vector<std::string>::const_iterator ei = entries.begin(), ee = entries.end();
 	for (; ei != ee; ++ei)
 	{
@@ -125,7 +125,7 @@ AuthenticatorSlice* TestAuthenticationUnit::slice( const std::string& mech, cons
 {
 	if (boost::algorithm::iequals( mech, "TEST"))
 	{
-		TestAuthenticatorSlice* rt = new TestAuthenticatorSlice( identifier(), &m_usrpwdmap);
+		TestAuthenticatorSlice* rt = new TestAuthenticatorSlice( id(), &m_usrpwdmap);
 		LOG_DEBUG << "[test authentication] unit creates new slice in state " << TestAuthenticatorSlice::stateName(rt->state());
 		return rt;
 	}

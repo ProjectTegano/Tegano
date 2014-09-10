@@ -45,8 +45,9 @@ using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
 //****  Text File Audit   ***************************************************
-TextFileAuditor::TextFileAuditor( const std::string& filename )
-	: m_file( filename )
+TextFileAuditor::TextFileAuditor( const TextFileAuditConfig* config)
+	: m_required( config->required())
+	, m_file( config->file())
 {
 	LOG_DEBUG << "Text file auditor created with file '" << m_file << "'";
 }

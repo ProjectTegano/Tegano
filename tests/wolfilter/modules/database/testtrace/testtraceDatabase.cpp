@@ -116,17 +116,24 @@ void TesttraceDatabaseConfig::setCanonicalPathes( const std::string& referencePa
 }
 
 
-TesttraceDatabase::TesttraceDatabase( const std::string& id_, const std::string& resultfilename_, const std::string& outfilename_)
-	:m_id(id_)
-	,m_outfilename(outfilename_)
+TesttraceDatabase::TesttraceDatabase( const TesttraceDatabaseConfig* config)
+	:Database("TestTrace", config->id())
+	,m_id(config->id())
+	,m_outfilename(config->outfilename())
 {
-	if (!resultfilename_.empty())
+	if (!config->resultfilename().empty())
 	{
-		utils::splitString( m_result, utils::readSourceFileContent( resultfilename_), "\n");
+		utils::splitString( m_result, utils::readSourceFileContent( config->resultfilename()), "\n");
 		std::vector<std::string>::iterator ri = m_result.begin(), re = m_result.end();
 		for (;ri != re; ++ri) boost::trim(*ri);
 	}
 }
+
+TesttraceDatabase::TesttraceDatabase( const TesttraceDatabase& o)
+	:Database("TestTrace", o.id())
+	,m_id(o.m_id)
+	,m_outfilename(o.m_outfilename)
+	,m_result(o.m_result){}
 
 Transaction* TesttraceDatabase::transaction(const std::string& /*name*/ )
 {

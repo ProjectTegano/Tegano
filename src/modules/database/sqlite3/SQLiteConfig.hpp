@@ -37,7 +37,7 @@
 #ifndef _SQLITE_CONFIG_HPP_INCLUDED
 #define _SQLITE_CONFIG_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include <vector>
 
@@ -51,8 +51,8 @@ class SQLiteConfig
 	:public _Wolframe::serialize::DescriptiveConfiguration
 {
 public:
-	explicit SQLiteConfig( const char* sectionName_="sqlite", const char* logName_="Sqlite")
-		:_Wolframe::serialize::DescriptiveConfiguration( sectionName_, "database" /*log parent*/, logName_, getStructDescription())
+	explicit SQLiteConfig( const std::string& className_="SQLiteDatabase", const std::string& configSection_="Database", const std::string& configKeyword_="SQLite")
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 		,m_foreignKeys(true)
 		,m_profiling(false)
 		,m_connections(DEFAULT_SQLITE_CONNECTIONS)
@@ -65,7 +65,7 @@ public:
 			unsigned short connections_,
 			const std::vector<std::string>& extensionFiles_ )
 		:_Wolframe::serialize::DescriptiveConfiguration( "sqlite" /*section name*/, "database" /*log prefix*/, "sqlite" /*log name*/, getStructDescription())
-		,m_ID(id_)
+		,m_id(id_)
 		,m_filename(filename_)
 		,m_foreignKeys(foreignKeys_)
 		,m_profiling(profiling_)
@@ -76,7 +76,7 @@ public:
 	virtual void print( std::ostream& os, size_t indent ) const;
 	virtual void setCanonicalPathes( const std::string& referencePath );
 
-	const std::string& ID() const				{ return m_ID; }
+	const std::string& id() const				{ return m_id; }
 	const std::string& filename() const			{ return m_filename; }
 	bool foreignKeys() const				{ return m_foreignKeys; }
 	bool profiling() const					{ return m_profiling; }
@@ -88,7 +88,7 @@ public:
 	static const serialize::StructDescriptionBase* getStructDescription();
 
 private:
-	std::string	m_ID;
+	std::string	m_id;
 	std::string	m_filename;
 	bool		m_foreignKeys;
 	bool		m_profiling;

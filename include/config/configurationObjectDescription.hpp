@@ -30,41 +30,62 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \brief Builder for objects with configuration defined by template parameter classes
-/// \file module/configuredBuilderTemplate.hpp
+/// \brief Base class for object properties used for identifying an object
+/// \file module/objectDescription.hpp
 
-#ifndef _MODULE_CONFIGURED_BUILDER_TEMPLATE_HPP_INCLUDED
-#define _MODULE_CONFIGURED_BUILDER_TEMPLATE_HPP_INCLUDED
-#include "module/configuredBuilder.hpp"
+#ifndef _CONFIGURATION_OBJECT_DESCRIPTION_HPP_INCLUDED
+#define _CONFIGURATION_OBJECT_DESCRIPTION_HPP_INCLUDED
+#include <string>
 
 namespace _Wolframe {
-namespace module {
+namespace config {
 
-/// \class ConfiguredBuilderTemplate
-/// \tparam Tconstructor
-/// \tparam Tconf
-/// \brief Template for constructing a configured builder.
-template < class Tconstructor, class Tconf >
-class ConfiguredBuilderTemplate : public ConfiguredBuilder
+/// \class ConfigurationObjectDescription
+/// \brief Description of a configuration object
+class ConfigurationObjectDescription
 {
 public:
-	ConfiguredBuilderTemplate( const char* title_, const char* section_,
-				      const char* keyword_, const char* className_ )
-		: ConfiguredBuilder( title_, section_, keyword_, className_ )	{}
+	ConfigurationObjectDescription( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:m_className(className_)
+		,m_configKeyword(configKeyword_)
+		,m_configSection(configSection_)
+		,m_logPrefix(configSection_ + "/" + configKeyword_)
+	{}
 
-	virtual ~ConfiguredBuilderTemplate()		{}
+	ConfigurationObjectDescription( const ConfigurationObjectDescription& o)
+		:m_className(o.m_className)
+		,m_configKeyword(o.m_configKeyword)
+		,m_configSection(o.m_configSection)
+		,m_logPrefix(o.m_logPrefix)
+	{}
 
-	virtual config::NamedConfiguration* configuration( const char* logPrefix ) const {
-		return new Tconf( title(), logPrefix, keyword() );
+	~ConfigurationObjectDescription(){}
+
+	const std::string& className() const
+	{
+		return m_className;
 	}
-	virtual ObjectConstructorBase::ObjectType objectType() const	{
-		return m_constructor.objectType();
+
+	const std::string& logPrefix() const
+	{
+		return m_logPrefix;
 	}
-	virtual ObjectConstructorBase* constructor() const	{
-		return new Tconstructor();
+
+	const std::string& configSection() const
+	{
+		return m_configSection;
 	}
+
+	const std::string& configKeyword() const
+	{
+		return m_configKeyword;
+	}
+
 private:
-	Tconstructor m_constructor;
+	std::string m_className;
+	std::string m_configKeyword;
+	std::string m_configSection;
+	std::string m_logPrefix;
 };
 
 }}//namespace

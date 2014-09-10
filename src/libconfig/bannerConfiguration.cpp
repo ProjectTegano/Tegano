@@ -122,7 +122,7 @@ bool BannerConfiguration::check() const
 
 void BannerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 	os << "   Service banner: ";
 	switch ( m_tokens )	{
 	case PRODUCT_NAME:	os << "product name only"; break;

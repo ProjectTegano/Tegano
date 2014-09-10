@@ -79,7 +79,7 @@ bool DatabaseAuthzConfig::check() const
 void DatabaseAuthzConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Identifier: " << m_identifier << std::endl;
 	os << indStr << "   Database: " << m_dbConfig << std::endl;
 }

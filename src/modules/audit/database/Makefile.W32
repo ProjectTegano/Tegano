@@ -27,7 +27,6 @@ DYNAMIC_MODULE = \
 
 CPP_OBJS = \
 	DBaudit.obj \
-	DBauditConstructor.obj \
 	DBauditConfig.obj
 
 all: $(DYNAMIC_MODULE)

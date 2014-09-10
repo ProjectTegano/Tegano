@@ -51,13 +51,12 @@ namespace test_containers {
 extern "C" DLLEXPORT ModuleEntryPoint entryPoint;
 
 // the implementation of a plugin full-filling the TestUnit interface
-class TestUnitImpl1 : public TestUnit1
+class TestUnitImpl1 : public TestUnit1, public module::BaseObject
 {
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /* db */ );
 
 public:
-	// test unit has no configuration, so have an empty constructor
-	TestUnitImpl1( );
+	TestUnitImpl1( const TestModuleConfig*);
 	
 	virtual ~TestUnitImpl1( );
 
@@ -65,13 +64,12 @@ public:
 };
 
 // the implementation of a plugin full-filling the TestUnit interface
-class TestUnitImpl2 : public TestUnit2
+class TestUnitImpl2 : public TestUnit2, public module::BaseObject
 {
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /* db */ );
 
 public:
-	// test unit has no configuration, so have an empty constructor
-	TestUnitImpl2( );
+	TestUnitImpl2( const TestModuleConfig*);
 	
 	virtual ~TestUnitImpl2( );
 

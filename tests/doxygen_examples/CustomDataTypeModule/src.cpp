@@ -91,13 +91,8 @@ public:
 		// ... the implementation of the addition operator operating on operand with arg as argument comes here
 		return _Wolframe::types::Variant();
 	}
-
-	static _Wolframe::types::CustomDataType* create( const std::string& name)
-	{
-		return new MyType( name);
-	}
 };
 
 WF_MODULE_BEGIN( "mydatatype", "my custom data type module")
- WF_CUSTOM_DATATYPE( "mydatatype", MyType::create)
+ WF_CUSTOM_DATATYPE( "mydatatype", MyType)
 WF_MODULE_END

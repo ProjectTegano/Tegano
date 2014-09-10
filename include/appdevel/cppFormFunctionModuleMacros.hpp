@@ -31,21 +31,38 @@
 
 ************************************************************************/
 /// \file appdevel/cppFormFunctionModuleMacros.hpp
-/// \brief Macros and templates for building C++ an application form function module
-
+/// \brief Macros and templates for building C++ an application form function module object
+#include "module/moduleInterface.hpp"
+#include "module/baseObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "appdevel/module/cppFormFunctionTemplate.hpp"
-#include "appdevel/module/cppFormFunctionBuilder.hpp"
-#include "appdevel/module/cppFormFunctionTemplate.hpp"
+#include "serialize/cppFormFunction.hpp"
 
 /// \brief Defines normalization function
 #define WF_FORM_FUNCTION(NAME,FUNCTION,OUTPUT,INPUT)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public _Wolframe::appdevel::CppFormFunctionTemplate<OUTPUT,INPUT,FUNCTION>\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static const _Wolframe::module::BuilderBase* impl()\
+	public:\
+		ModuleObjectEnvelope()\
+			:_Wolframe::appdevel::CppFormFunctionTemplate<OUTPUT,INPUT,FUNCTION>(NAME)\
+		{}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			:_Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::FORM_FUNCTION_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			static _Wolframe::serialize::CppFormFunction func = _Wolframe::appdevel::CppFormFunction<OUTPUT,INPUT,FUNCTION>::declaration();\
-			static const _Wolframe::module::CppFormFunctionBuilder rt( "CppFormFunction_" NAME, NAME, func);\
+			return new ModuleObjectEnvelope();\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt( NAME "FormFunction");\
 			return &rt;\
 		}\
 	};\
@@ -55,14 +72,31 @@
 /// \brief Defines normalization function without return value (empty result)
 #define WF_FORM_PROCEDURE(NAME,PROCEDURE,INPUT)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public _Wolframe::appdevel::CppFormFunctionTemplate<_Wolframe::serialize::EmptyStruct,INPUT,PROCEDURE>\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static const _Wolframe::module::BuilderBase* impl()\
+	public:\
+		ModuleObjectEnvelope()\
+			:_Wolframe::appdevel::CppFormFunctionTemplate<_Wolframe::serialize::EmptyStruct,INPUT,PROCEDURE>(NAME)\
+		{}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			:_Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::FORM_FUNCTION_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			static _Wolframe::serialize::CppFormFunction func = _Wolframe::appdevel::CppFormFunction<_Wolframe::serialize::EmptyStruct,INPUT,PROCEDURE>::declaration();\
-			static const _Wolframe::module::CppFormFunctionBuilder rt( "CppFormFunction_" NAME, NAME, func);\
+			return new ModuleObjectEnvelope();\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt( NAME "FormFunction");\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
+

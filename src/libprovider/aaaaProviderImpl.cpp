@@ -32,6 +32,7 @@
 ************************************************************************/
 /// \brief AAAA provider implementation
 
+#include "config/configurationObject.hpp"
 #include "aaaaProviderImpl.hpp"
 #include "logger/logger-v1.hpp"
 #include "authenticationFactory.hpp"
@@ -44,10 +45,10 @@ using namespace _Wolframe::aaaa;
 
 AaaaProviderImpl::AaaaProviderImpl(
 		system::RandomGenerator* randomGenerator_,
-		const std::vector<config::NamedConfiguration*>& authConfig_,
-		const std::vector<config::NamedConfiguration*>& authzConfig_,
+		const std::vector<config::ConfigurationObject*>& authConfig_,
+		const std::vector<config::ConfigurationObject*>& authzConfig_,
 		bool authzDefault_,
-		const std::vector<config::NamedConfiguration*>& auditConfig_,
+		const std::vector<config::ConfigurationObject*>& auditConfig_,
 		const module::ModuleDirectory* modules_)
 	:m_randomGenerator(randomGenerator_)
 	,m_authenticator( authConfig_, randomGenerator_, modules_)

@@ -35,6 +35,7 @@ Project Wolframe.
 #define _Wolframe_DIRECTMAP_COMMAND_HANDLER_CONFIG_HPP_INCLUDED
 #include "processor/execContext.hpp"
 #include "config/configurationTree.hpp"
+#include "config/configurationObject.hpp"
 #include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include <string>
@@ -46,12 +47,11 @@ namespace cmdbind {
 /// \class DirectmapCommandHandlerConfig
 /// \brief Standard command handler configuration definition
 class DirectmapCommandHandlerConfig
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 public:
-	DirectmapCommandHandlerConfig( const char* classname_, const char* sectionName_, const char* logParent_, const char* logName_)
-		:config::NamedConfiguration( sectionName_, logParent_, logName_)
-		,m_classname(classname_){}
+	DirectmapCommandHandlerConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_){}
 	virtual ~DirectmapCommandHandlerConfig(){}
 
 	/// \brief Parse the configuration
@@ -69,11 +69,6 @@ public:
 
 	virtual void print( std::ostream& os, size_t indent) const;
 
-	virtual const char* className() const
-	{
-		return m_classname;
-	}
-
 	const std::vector<std::string>& programfiles() const
 	{
 		return m_programfiles;
@@ -87,7 +82,6 @@ public:
 private:
 	std::vector<std::string> m_programfiles;
 	types::keymap<std::string> m_filtermap;
-	const char* m_classname;
 };
 
 }}//namespace

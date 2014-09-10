@@ -37,31 +37,30 @@
 #ifndef _PAM_AUTHENTICATION_HPP_INCLUDED
 #define _PAM_AUTHENTICATION_HPP_INCLUDED
 
-#include <string>
+#include "config/configurationObject.hpp"
 #include "aaaa/authenticationUnit.hpp"
+#include "aaaa/authenticationSlice.hpp"
 #include "module/configuredObjectConstructor.hpp"
-
 #include <security/pam_appl.h>
+#include <string>
 
 namespace _Wolframe {
 namespace aaaa {
 
-static const char* PAM_AUTHENTICATION_CLASS_NAME = "PAMAuth";
-
-class PAMAuthConfig :  public config::NamedConfiguration
+class PAMAuthConfig :  public config::ConfigurationObject
 {
-	friend class PAMAuthConstructor;
 public:
-	PAMAuthConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName ) {}
+	PAMAuthConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		: config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
-	virtual const char* className() const	{ return PAM_AUTHENTICATION_CLASS_NAME; }
-
-	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
+
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& service() const	{return m_service;}
+
 private:
 	std::string	m_identifier;
 	std::string	m_service;
@@ -81,10 +80,8 @@ typedef struct {
 class PAMAuthUnit : public AuthenticationUnit
 {
 public:
-	PAMAuthUnit( const std::string& Identifier,
-			  const std::string& service );
+	PAMAuthUnit( const PAMAuthConfig* config);
 	~PAMAuthUnit();
-	virtual const char* className() const	{ return PAM_AUTHENTICATION_CLASS_NAME; }
 
 	const char** mechs() const;
 
@@ -92,20 +89,14 @@ public:
 				   const net::RemoteEndpoint& /*client*/ );
 
 	User* authenticatePlain( const std::string& username, const std::string& password ) const;
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& service() const	{return m_service;}
 
 private:
-	friend class PAMAuthSlice;
-	const std::string		m_service;	///< name of the PAM service
+	std::string m_identifier;
+	std::string m_service;		///< name of the PAM service
 };
 
-class PAMAuthConstructor : public ConfiguredObjectConstructor< AuthenticationUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return AUTHENTICATION_OBJECT; }
-	const char* objectClassName() const		{ return PAM_AUTHENTICATION_CLASS_NAME; }
-	PAMAuthUnit* object( const config::NamedConfiguration& conf );
-};
 
 class PAMAuthSlice : public AuthenticatorSlice
 {
@@ -125,8 +116,6 @@ public:
 	~PAMAuthSlice();
 
 	void dispose();
-
-	virtual const char* className() const		{ return m_backend.className(); }
 
 	virtual const std::string& identifier() const	{ return m_backend.identifier(); }
 

@@ -25,7 +25,6 @@ DYNAMIC_MODULE = mod_auth_sasl.so
 
 CPP_OBJS = \
 	SaslAuthConfig.o \
-	SaslAuthConstructor.o \
 	SaslAuth.o
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk

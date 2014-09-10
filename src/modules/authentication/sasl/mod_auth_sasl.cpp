@@ -30,30 +30,13 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Text File Authentication module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "SaslAuth.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "SaslAuthentication", "SASL authentication module")
+ WF_AUDIT( "SASL", _Wolframe::aaaa::SaslAuthUnit, _Wolframe::aaaa::SaslAuthConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::SaslAuthConstructor,
-			aaaa::SaslAuthConfig > mod( "SASL authentication", "Authentication",
-							"SASL", "SaslAuth" );
-	return &mod;
-}
-
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "SASL authentication", containers);
-
-}} // namespace _Wolframe::module

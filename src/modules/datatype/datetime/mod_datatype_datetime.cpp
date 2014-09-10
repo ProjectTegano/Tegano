@@ -37,5 +37,5 @@
 #include "datatypeDate.hpp"
 
 WF_MODULE_BEGIN( "datetime", "custom data types for date and time arithmetics")
- WF_CUSTOM_DATATYPE( "date", _Wolframe::types::DateDataType::create)
+ WF_CUSTOM_DATATYPE( "date", _Wolframe::types::DateDataType)
 WF_MODULE_END

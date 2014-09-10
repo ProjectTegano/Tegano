@@ -48,7 +48,7 @@ typedef std::vector<std::pair<std::string,langbind::FormFunctionR> > TdlTransact
 TdlTransactionFunctionList loadTransactionProgramFile(
 		const std::string& filename,
 		const std::string& databaseId,
-		const std::string& databaseClassName,
+		const std::string& databaseName,
 		const LanguageDescription* langdescr);
 	
 }}//namespace

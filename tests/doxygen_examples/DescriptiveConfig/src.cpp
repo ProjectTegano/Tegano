@@ -1,4 +1,4 @@
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/descriptiveConfiguration.hpp"
 #include "serialize/struct/structDescription.hpp"
 #include "config/configurationTree.hpp"

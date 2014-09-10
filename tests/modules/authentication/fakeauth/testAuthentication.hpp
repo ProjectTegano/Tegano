@@ -39,6 +39,7 @@
 #include "module/configuredObjectConstructor.hpp"
 #include "types/secureString.hpp"
 #include "config/configurationTree.hpp"
+#include "config/configurationObject.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
 #include "aaaa/authenticator.hpp"
 #include "aaaa/authenticationUnit.hpp"
@@ -49,12 +50,12 @@ namespace _Wolframe {
 namespace aaaa {
 
 class TestAuthenticationConfig
-	:public config::NamedConfiguration
+	:public config::ConfigurationObject
 {
 	friend class TestAuthenticationConstructor;
 public:
 	TestAuthenticationConfig( const char* cfgName, const char* logParent, const char* logName)
-		:config::NamedConfiguration( cfgName, logParent, logName) {}
+		:config::ConfigurationObject( cfgName, logParent, logName) {}
 
 	virtual const char* className() const	
 		{return "TestAuthentication";}
@@ -90,7 +91,7 @@ class TestAuthenticationUnit
 	:public AuthenticationUnit
 {
 public:
-	TestAuthenticationUnit( const TestAuthenticationConfig& cfg);
+	TestAuthenticationUnit( const TestAuthenticationConfig* cfg);
 
 	~TestAuthenticationUnit(){}
 

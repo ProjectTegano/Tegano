@@ -30,30 +30,13 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Text File Audit module
-//
-
+///\file mod_audit_textfile.cpp
+///\brief Module for textfile audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "TextFileAudit.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "textfileAudit", "textfile audit")
+ WF_AUDIT( "textfile", _Wolframe::aaaa::TextFileAuditor, _Wolframe::aaaa::TextFileAuditConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static module::ConfiguredBuilderTemplate< aaaa::TextFileAuditConstructor,
-			aaaa::TextFileAuditConfig > mod( "Audit - text file", "audit",
-						     "TextFile", "FileAudit" );
-	return &mod;
-}
-
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Text file audit", containers );
-
-}} // namespace _Wolframe::module

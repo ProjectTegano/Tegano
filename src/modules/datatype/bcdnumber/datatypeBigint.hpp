@@ -124,11 +124,6 @@ public:
 		define( ToDouble, &toDouble);
 	}
 
-	static CustomDataType* create( const std::string& name)
-	{
-		return new BigintDataType( name);
-	}
-
 private:
 	static types::Variant add( const CustomDataValue& operand, const Variant& arg);
 	static types::Variant subtract( const CustomDataValue& operand, const Variant& arg);

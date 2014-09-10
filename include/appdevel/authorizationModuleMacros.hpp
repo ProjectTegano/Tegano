@@ -30,38 +30,53 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appdevel/filterModuleMacros.hpp
-/// \brief Macros for a filter modules
+/// \file appdevel/authorizationModuleMacros.hpp
+/// \brief Macros for a module for defining an authorization methods
 #include "module/moduleInterface.hpp"
-#include "module/baseObject.hpp"
-#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
+#include <boost/lexical_cast.hpp>
+#include "aaaa/authorizationUnit.hpp"
+#include "logger/logger-v1.hpp"
 
-/// \brief Defines a Wolframe filter module after the includes section.
-#define WF_FILTER_TYPE( FILTERNAME, FILTERTYPECLASS)\
+/// \brief Defines an authorizer
+#define WF_AUTHORIZER(NAME,UNITCLASS,CONFIGCLASS)\
 {\
 	class ModuleObjectEnvelope \
-		:public FILTERTYPECLASS\
+		:public UNITCLASS \
 		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		ModuleObjectEnvelope(){}\
+		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :UNITCLASS(cfg){}\
 	};\
 	class Constructor\
-		:public _Wolframe::module::SimpleObjectConstructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
 	{\
 	public:\
-		Constructor( const std::string& className_)\
-			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::FILTER_OBJECT, className_){}\
-		virtual _Wolframe::module::BaseObject* object() const\
+		Constructor()\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::AUTHORIZATION_OBJECT, NAME "Authorizer", "authorization", NAME){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
-			return new ModuleObjectEnvelope();\
+			const CONFIGCLASS* cfg = dynamic_cast<const CONFIGCLASS*>(&cfgi);\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " AuthorizationUnit constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
+		}\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
+		{\
+			return new CONFIGCLASS( NAME "Authorization", "Authorization", NAME);\
 		}\
 		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const Constructor rt( FILTERNAME "Filter");\
+			static const Constructor rt;\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
+
+
 

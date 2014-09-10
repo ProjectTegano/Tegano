@@ -30,30 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-//
-// Text File Authentication module
-//
-
+///\file mod_audit_database.cpp
+///\brief Module for database audit
+#include "appdevel/auditModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "TextFileAuth.hpp"
-#include "module/configuredBuilderTemplate.hpp"
-#include "module/moduleInterface.hpp"
-#include "logger/logger-v1.hpp"
 
-namespace _Wolframe {
-namespace module {
+WF_MODULE_BEGIN( "TextFileAuthentication", "textfile authentication module")
+ WF_AUDIT( "TextFile", _Wolframe::aaaa::TextFileAuthUnit, _Wolframe::aaaa::TextFileAuthConfig)
+WF_MODULE_END
 
-static const BuilderBase* getModule( void )
-{
-	static const module::ConfiguredBuilderTemplate< aaaa::TextFileAuthConstructor,
-			aaaa::TextFileAuthConfig > mod( "Authentication file", "Authentication",
-							"TextFile", "TextFileAuth" );
-	return &mod;
-}
 
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
-};
-
-ModuleEntryPoint entryPoint( 0, "Text File authentication", containers);
-
-}} // namespace _Wolframe::module

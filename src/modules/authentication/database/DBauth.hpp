@@ -39,6 +39,7 @@
 
 #include "aaaa/authenticationUnit.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
 
 namespace _Wolframe {
@@ -46,23 +47,23 @@ namespace aaaa {
 
 static const char* DB_AUTHENTICATION_CLASS_NAME = "DBAuth";
 
-class DBAuthConfig : public config::NamedConfiguration
+class DBAuthConfig : public config::ConfigurationObject
 {
-	friend class DBauthConstructor;
 public:
-	DBAuthConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName )	{}
+	DBAuthConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_){}
 
-	virtual const char* className() const		{ return DB_AUTHENTICATION_CLASS_NAME; }
-
-	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 
 	void print( std::ostream& os, size_t indent ) const;
 
-	void setCanonicalPathes( const std::string& /*refPath*/ )	{}
+	void setCanonicalPathes( const std::string& /*refPath*/ ){}
+
+	const std::string& identifier() const	{return m_identifier;}
+	const std::string& dbLabel() const	{return m_dbLabel;}
+
 private:
 	std::string	m_identifier;
 	std::string	m_dbLabel;
@@ -72,7 +73,7 @@ private:
 class DBauthUnit : public AuthenticationUnit
 {
 public:
-	DBauthUnit( const std::string& Identifier, const std::string& dbLabel );
+	DBauthUnit( const DBAuthConfig* config);
 	~DBauthUnit();
 
 	const char* className() const			{ return DB_AUTHENTICATION_CLASS_NAME; }
@@ -83,20 +84,11 @@ public:
 
 	AuthenticatorSlice* slice( const std::string& mech,
 				   const net::RemoteEndpoint& client );
+
 private:
 	const std::string		m_dbLabel;
 	const db::Database*		m_db;
 };
 
-class DBauthConstructor : public module::ConfiguredObjectConstructor< AuthenticationUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-							{ return AUTHENTICATION_OBJECT; }
-	const char* objectClassName() const		{ return DB_AUTHENTICATION_CLASS_NAME; }
-	DBauthUnit* object( const config::NamedConfiguration& conf ) const;
-};
-
-}} // namespace _Wolframe::aaaa
-
-#endif // _DB_AUTHENTICATION_HPP_INCLUDED
+}}
+#endif

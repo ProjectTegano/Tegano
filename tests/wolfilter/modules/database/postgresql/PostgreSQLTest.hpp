@@ -46,8 +46,8 @@ namespace db {
 class PostgreSQLTestConfig : public PostgreSQLConfig
 {
 public:
-	PostgreSQLTestConfig( const char* sectionName_, const char* logName_)
-		:PostgreSQLConfig( sectionName_, logName_){}
+	PostgreSQLTestConfig( const std::string& className_="PostgreSQLDatabase", const std::string& configSection_="Database", const std::string& configKeyword_="PostgreSQL")
+		:PostgreSQLConfig( className_, configSection_, configKeyword_){}
 
 	virtual ~PostgreSQLTestConfig(){}
 
@@ -80,14 +80,14 @@ private:
 class PostgreSQLTestDatabaseInitializer
 {
 public:
-	PostgreSQLTestDatabaseInitializer( const PostgreSQLTestConfig& config)
-		:m_host(config.host())
-		,m_port(config.port())
-		,m_dbname(config.dbName())
-		,m_user(config.user())
-		,m_password(config.password())
-		,m_dump_filename(config.dump_filename())
-		,m_input_filename(config.input_filename())
+	PostgreSQLTestDatabaseInitializer( const PostgreSQLTestConfig* config)
+		:m_host(config->host())
+		,m_port(config->port())
+		,m_dbname(config->dbName())
+		,m_user(config->user())
+		,m_password(config->password())
+		,m_dump_filename(config->dump_filename())
+		,m_input_filename(config->input_filename())
 	{
 		initDatabase();
 	}

@@ -147,11 +147,6 @@ public:
 		define( "unixdate", &toUnixDate);
 	}
 
-	static CustomDataType* create( const std::string& name)
-	{
-		return new DateDataType( name);
-	}
-
 private:
 	static types::Variant getYear( const CustomDataValue& operand, const std::vector<types::Variant>& arg);
 	static types::Variant getMonth( const CustomDataValue& operand, const std::vector<types::Variant>& arg);

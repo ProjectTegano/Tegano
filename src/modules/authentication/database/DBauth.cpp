@@ -42,14 +42,15 @@
 using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
-DBauthUnit::DBauthUnit( const std::string& Identifier, const std::string& dbLabel )
-	: AuthenticationUnit( Identifier ), m_dbLabel( dbLabel )
+DBauthUnit::DBauthUnit( const DBAuthConfig* config)
+	: AuthenticationUnit( config->identifier() )
+	, m_dbLabel( config->dbLabel() )
 {
 	m_db = NULL;
 	if ( m_dbLabel.empty() )
 		throw std::logic_error( "Empty database reference in DBauthContainer" );
 
-	LOG_DEBUG << "Database authentication unit '" << identifier()
+	LOG_DEBUG << "Database authentication unit '" << config->identifier()
 		  << "' created with database reference '" << m_dbLabel << "'";
 }
 

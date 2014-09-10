@@ -33,7 +33,10 @@
 //
 // a test module
 //
-#include "module/configuredBuilderTemplate.hpp"
+#include "config/configurationObject.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "module/configuredObjectConstructorTemplate.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "module/moduleInterface.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test.hpp"
@@ -42,8 +45,8 @@ namespace _Wolframe {
 namespace module {
 namespace test {
 
-TestModuleConfig::TestModuleConfig( const char* cfgName, const char* logParent, const char* logName )
-	: config::NamedConfiguration( cfgName, logParent, logName )
+TestModuleConfig::TestModuleConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+	: config::ConfigurationObject( className_, configSection_, configKeyword_)
 {
 	LOG_DEBUG << "Module: test module config created";
 }
@@ -67,21 +70,14 @@ bool TestModuleConfig::check( ) const
 void TestModuleConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << ": no config " << std::endl;
+	os << indStr << configSection() << ": no config " << std::endl;
 }
 
 void TestModuleConfig::setCanonicalPathes( const std::string& /*refPath*/ )
 {
 }
 
-TestUnit* TestModuleConstructor::object( const config::NamedConfiguration& /* conf */ ) const
-{
-	TestUnit* m_test = new TestUnitImpl( /* conf */ );
-	LOG_DEBUG << "Module: test module object created";
-	return m_test;
-}
-
-TestUnitImpl::TestUnitImpl( )
+TestUnitImpl::TestUnitImpl( const TestModuleConfig*)
 {
 	LOG_DEBUG << "Module: testUnit object created";
 }
@@ -102,16 +98,14 @@ bool TestUnitImpl::resolveDB( const db::DatabaseProviderInterface& /* db */ )
 	return true;
 }
 
-static const BuilderBase* getModule( void )
+static const ObjectConstructor* getObject()
 {
-	static const module::ConfiguredBuilderTemplate< test::TestModuleConstructor,
-		test::TestModuleConfig > mod( "Test Module", "Test", "test", "TestObject" );
+	static const ConfiguredObjectConstructorTemplate<module::ObjectDescription::TEST_OBJECT, test::TestUnitImpl, test::TestModuleConfig> mod( "TestObject", "Test", "test");
 	return &mod;
 }
 
-
-static const BuilderBase* (*containers[])() = {
-	getModule, NULL
+static const ObjectConstructor* (*containers[])() = {
+	getObject, 0
 };
 
 ModuleEntryPoint entryPoint( 0, "Test Module", containers );

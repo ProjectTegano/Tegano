@@ -30,47 +30,47 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appdevel/module/authenticationConstructor.hpp
-/// \brief Interface to constructors of authenticators
-#ifndef _Wolframe_MODULE_AUTHENTICATION_CONSTRUCTOR_HPP_INCLUDED
-#define _Wolframe_MODULE_AUTHENTICATION_CONSTRUCTOR_HPP_INCLUDED
+/// \file module/configuredObjectConstructorTemplate.hpp
+/// \brief Template to define a configured object constructor by type
+
 #include "module/configuredObjectConstructor.hpp"
-#include "aaaa/authenticationUnit.hpp"
-#include <boost/lexical_cast.hpp>
-#include <string>
+#include "config/configurationObject.hpp"
+#include <boost/shared_ptr.hpp>
+#include <stdexcept>
+
+#ifndef _CONFIGURED_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
+#define _CONFIGURED_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
 
 namespace _Wolframe {
 namespace module {
 
-/// \class AuthenticationConstructor
-/// \brief Constructor of an authentication unit
-template<class UNIT, class CONFIG>
-class AuthenticationConstructor
-	:public _Wolframe::module::ConfiguredObjectConstructor<aaaa::AuthenticationUnit>
+/// \brief Template to define a constructor of a configured object by type
+template <ObjectDescription::TypeId TYPEID, class OBJECT, class CONFIG>
+struct ConfiguredObjectConstructorTemplate
+	:public ConfiguredObjectConstructor
 {
-public:
-	AuthenticationConstructor(){}
+	ConfiguredObjectConstructorTemplate( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:ConfiguredObjectConstructor( TYPEID, className_, configSection_, configKeyword_){}
 
-	virtual ~AuthenticationConstructor(){}
-	virtual UNIT* object( const _Wolframe::config::NamedConfiguration& cfgi) const
+	virtual BaseObject* object( const config::ConfigurationObject& cfg_) const
 	{
-		const CONFIG* cfg = dynamic_cast<const CONFIG*>(&cfgi);
-		if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to authentication constructor");
-		UNIT* rt = new UNIT( *cfg);
-		return rt;
+		const CONFIG* cfg = dynamic_cast<const CONFIG*>(&cfg_);
+		if (!cfg) throw std::logic_error( std::string("RTTI cast erron in configured object constructor of '") + className() + "'");
+		return new OBJECT( cfg);
 	}
 
-	virtual ObjectConstructorBase::ObjectType objectType() const
+	virtual config::ConfigurationObject* configuration() const 
 	{
-		return ObjectConstructorBase::AUTHENTICATION_OBJECT;
+		const module::ObjectDescription* description = this;
+		return new CONFIG( description->className(), description->configSection(), description->configKeyword());
 	}
-	
-	virtual const char* objectClassName() const
+
+	static const ObjectConstructor* create()
 	{
-		return "AuthenticationConstructor";
+		static const ConfiguredObjectConstructorTemplate<TYPEID,OBJECT,CONFIG> rt;
+		return &rt;
 	}
 };
 
-}} //namespace
+}}// namespace
 #endif
-

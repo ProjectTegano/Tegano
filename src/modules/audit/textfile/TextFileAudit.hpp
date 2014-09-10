@@ -40,29 +40,30 @@
 #include <string>
 
 #include "config/configurationTree.hpp"
+#include "config/configurationObject.hpp"
 #include "aaaa/auditUnit.hpp"
 #include "module/configuredObjectConstructor.hpp"
 
 namespace _Wolframe {
 namespace aaaa {
 
-static const char* FILE_AUDIT_CLASS_NAME = "FileAudit";
-
-class TextFileAuditConfig : public config::NamedConfiguration
+class TextFileAuditConfig : public config::ConfigurationObject
 {
-	friend class TextFileAuditConstructor;
 public:
-	TextFileAuditConfig( const char* cfgName, const char* logParent, const char* logName )
-		: config::NamedConfiguration( cfgName, logParent, logName ) {}
+	TextFileAuditConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_)
+		,m_required(true)
+	{}
 
-	const char* className() const		{ return FILE_AUDIT_CLASS_NAME; }
-
-	/// methods
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
 		    const module::ModuleDirectory* modules );
 	bool check() const;
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
+
+	bool required() const			{return m_required;}
+	const std::string& file() const		{return m_file;}
+
 private:
 	bool		m_required;
 	std::string	m_file;
@@ -73,9 +74,8 @@ private:
 class TextFileAuditor : public AuditUnit
 {
 public:
-	TextFileAuditor( const std::string& filename );
+	TextFileAuditor( const TextFileAuditConfig* config);
 	~TextFileAuditor();
-	const char* className() const		{ return FILE_AUDIT_CLASS_NAME; }
 
 	bool required()				{ return m_required; }
 	bool audit( const Information& auditObject );
@@ -84,16 +84,5 @@ private:
 	std::string	m_file;
 };
 
-
-class TextFileAuditConstructor : public module::ConfiguredObjectConstructor< AuditUnit >
-{
-public:
-	virtual ObjectConstructorBase::ObjectType objectType() const
-						{ return AUDIT_OBJECT; }
-	const char* objectClassName() const	{ return FILE_AUDIT_CLASS_NAME; }
-	TextFileAuditor* object( const config::NamedConfiguration& conf ) const;
-};
-
-}} // namespace _Wolframe::aaaa
-
-#endif // _FILE_AUDIT_HPP_INCLUDED
+}}
+#endif

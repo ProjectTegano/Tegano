@@ -33,14 +33,15 @@
 /// \brief Audit provider
 
 #include "auditProvider.hpp"
+#include "providerUtils.hpp"
 #include "standardAudit.hpp"
 #include "aaaa/information.hpp"
 #include "aaaa/auditor.hpp"
 #include "aaaa/auditUnit.hpp"
 #include "module/moduleDirectory.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/configuredBuilder.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include "boost/algorithm/string.hpp"
 #include <stdexcept>
@@ -48,27 +49,12 @@
 using namespace _Wolframe;
 using namespace _Wolframe::aaaa;
 
-AuditProvider::AuditProvider( const std::vector< config::NamedConfiguration* >& confs,
+AuditProvider::AuditProvider( const std::vector< config::ConfigurationObject* >& config,
 			const module::ModuleDirectory* modules )
 {
-	for ( std::vector<config::NamedConfiguration*>::const_iterator it = confs.begin();
-								it != confs.end(); it++ )	{
-		const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder((*it)->className());
-		if ( builder )	{
-			module::ConfiguredObjectConstructor< AuditUnit >* audit =
-					dynamic_cast< module::ConfiguredObjectConstructor< AuditUnit >* >( builder->constructor());
-			if ( audit == NULL )	{
-				LOG_ALERT << "AuditProvider: '" << builder->objectClassName()
-					  << "' is not an Audit Unit builder";
-				throw std::logic_error( "object is not an AuditUnit builder" );
-			}
-			m_auditors.push_back( audit->object( **it ) );
-			LOG_TRACE << "'" << audit->objectClassName() << "' audit unit registered";
-		}
-		else	{
-			LOG_ALERT << "AuditProvider: unknown audit type '" << (*it)->className() << "'";
-			throw std::domain_error( "Unknown auditing mechanism type in AuditProvider constructor. See log" );
-		}
+	if (!createConfiguredProviderObjects( "AuditProvider: ", m_auditors, config, modules))
+	{
+		throw std::runtime_error( "could not load audit provider module objects");
 	}
 }
 

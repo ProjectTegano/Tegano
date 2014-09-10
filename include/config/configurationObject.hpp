@@ -30,12 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file configurationBase.hpp
+/// \file config/configurationObject.hpp
 /// \brief Base classes for the configuration structures
 
-#ifndef _CONFIGURATION_BASE_HPP_INCLUDED
-#define _CONFIGURATION_BASE_HPP_INCLUDED
+#ifndef _CONFIGURATION_OBJECT_HPP_INCLUDED
+#define _CONFIGURATION_OBJECT_HPP_INCLUDED
 
+#include "config/configurationObject.hpp"
+#include "config/configurationObjectDescription.hpp"
 #include "config/configurationTree.hpp"
 #include <string>
 #include <ostream>
@@ -49,38 +51,23 @@ namespace _Wolframe { namespace module {
 namespace _Wolframe {
 namespace config {
 
-
-/// Base class for the configuration structures
-class ConfigurationBase
+/// \brief Base class for the configuration structures
+class ConfigurationObject
+	:public ConfigurationObjectDescription
 {
 public:
 	/// Class constructor.
-	/// \param[in]	sectionName_	the name that will be displayed for this
-	///				configuration section in messages (log, print ...)
-	///				It has no other processing purpose
-	/// \param[in]	logParent_	 the logging prefix of the parent.
-	/// \param[in]	logName_	the logging name of this section. Combined with
-	///				the logParent parameter will form the whole logging
-	///				prefix for of the section.
-	ConfigurationBase( const char* sectionName_, const char* logParent_, const char* logName_ )
-	{
-		m_sectionName = sectionName_ ? sectionName_ : "";
-		m_logPrefix = logParent_ ? logParent_ : "";
-		if ( logName_ && *logName_ != '\0' )	{
-			m_logPrefix += logName_;
-			m_logPrefix += ": ";
-		}
-	}
+	/// \param[in] className_ 
+	/// \param[in] configSection_ 
+	/// \param[in] configKeyword_ 
+	ConfigurationObject( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:ConfigurationObjectDescription( className_, configSection_, configKeyword_)
+	{}
+	ConfigurationObject( const ConfigurationObjectDescription& d)
+		:ConfigurationObjectDescription( d)
+	{}
 
-	virtual ~ConfigurationBase()			{}
-
-	/// \brief The display string (name) for the configuration section
-	/// \return	a reference to the name set by the constructor
-	const std::string& sectionName() const		{ return m_sectionName; }
-
-	/// The prefix for logging messages for this configuration section
-	/// \return	a reference to the prefix set by the constructor
-	const std::string& logPrefix() const		{ return m_logPrefix; }
+	virtual ~ConfigurationObject(){}
 
 	/// \brief Parse the configuration section
 	/// \param[in]	pt		property tree node
@@ -92,7 +79,7 @@ public:
 	/// Set the pathes in the configuration to absolute values
 	/// \param[in]	refPath	use this path as reference when computing
 	///			the absolute pathes
-	virtual void setCanonicalPathes( const std::string& /* refPath */ )	{}
+	virtual void setCanonicalPathes( const std::string& /* refPath */ ){}
 
 	/// Check if the server configuration makes sense
 	///
@@ -101,11 +88,7 @@ public:
 	/// This function will log errors / warnings
 	/// \return	true if the configuration has no errors, false
 	///		otherwise
-	virtual bool check() const			{ return true; }
-
-	// these functions are not implemented / implementable yet
-	// and I am not sure if it should be here or not
-	// virtual bool test() const = 0;
+	virtual bool check() const { return true; }
 
 	/// Print the configuration
 	/// This function is supposed to print the running configuration, this means
@@ -114,27 +97,8 @@ public:
 	/// \param[in]	os	stream to use for printing
 	/// \param[in]	indent	print indented with this number of spaces
 	virtual void print( std::ostream& os, size_t indent = 0 ) const = 0;
-
-private:
-	std::string			m_sectionName;
-	std::string			m_logPrefix;
 };
 
+}}
+#endif
 
-/// \brief A named configuration is a normal configuration that provides
-/// also an className function.
-class NamedConfiguration : public ConfigurationBase
-{
-public:
-	/// Class constructor.
-	NamedConfiguration( const char* sectionName_, const char* logParent_, const char* logPrefix_ )
-		: ConfigurationBase( sectionName_, logParent_, logPrefix_ )	{}
-
-	virtual ~NamedConfiguration()				{}
-
-	virtual const char* className() const = 0;
-};
-
-}} // namespace _Wolframe::config
-
-#endif // _CONFIGURATION_BASE_HPP_INCLUDED

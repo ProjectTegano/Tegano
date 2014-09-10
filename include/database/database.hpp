@@ -50,20 +50,22 @@ namespace db {
 class Database
 {
 public:
+	Database( const::std::string& name_, const::std::string& id_)
+		:m_name(name_),m_id(id_){}
+
 	virtual ~Database()			{}
-
-	/// \brief Database identification.
-	/// All databases must have an identifier as they are referenced using this identifier.
-	/// The identifier must be unique (of course).
-	virtual const std::string& ID() const = 0;
-
-	/// \brief Database type identification.
-	virtual const char* className() const = 0;
 
 	/// \brief Get a database transaction object
 	virtual Transaction* transaction( const std::string& name ) = 0;
 
 	virtual const LanguageDescription* getLanguageDescription() const=0;
+
+	const std::string& name() const	{return m_name;}
+	const std::string& id() const	{return m_id;}
+
+private:
+	std::string m_name;
+	std::string m_id;
 };
 
 
@@ -74,13 +76,8 @@ class DatabaseUnit
 public:
 	virtual ~DatabaseUnit()			{}
 
-	/// \brief Database type identification
-	/// \remark All database implementations need a class name.
-	/// \remark Class names must be unique.
-	virtual const char* className() const = 0;
-
 	/// \brief The database identifier. This is the configured name.
-	virtual const std::string& ID() const = 0;
+	virtual const std::string& id() const = 0;
 
 	/// \brief The actual database object.
 	virtual Database* database() = 0;

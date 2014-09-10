@@ -32,10 +32,12 @@
 ************************************************************************/
 
 #include "aaaaProviderConfiguration.hpp"
+#include "moduleConfigParseUtils.hpp"
+#include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include "module/moduleDirectory.hpp"
-#include "module/simpleBuilder.hpp"
-#include "module/configuredBuilder.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "module/configuredObjectConstructor.hpp"
 #include "config/valueParser.hpp"
 #include <boost/algorithm/string.hpp>
 
@@ -44,27 +46,26 @@ using namespace _Wolframe::config;
 
 /// constructor
 AaaaProviderConfiguration::AaaaProviderConfiguration()
-	: config::ConfigurationBase( "AAAA", NULL, "AAAA configuration"  ),
+	: config::ConfigurationObject( "AaaaProvider", "AAAA", ""),
 	  m_authzDefault( false ), m_mandatoryAudit( true )
 {}
 
 /// destructor
 AaaaProviderConfiguration::~AaaaProviderConfiguration()
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )
 		delete *it;
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authzConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authzConfig.begin();
 								it != m_authzConfig.end(); it++ )
 		delete *it;
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it =m_auditConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it =m_auditConfig.begin();
 								it != m_auditConfig.end(); it++ )
 		delete *it;
 }
 
-/// methods
 bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, const std::string& /*node*/,
 			       const module::ModuleDirectory* modules )
 {
@@ -74,9 +75,8 @@ bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 	bool mandatoryDefined = false;
 
 	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )	{
-		if ( boost::algorithm::iequals( L1it->first, "Authentication" ) ||
-				boost::algorithm::iequals( L1it->first, "Auth" ))	{
-			std::string logStr = logPrefix() + "authentication: ";
+		if ( boost::algorithm::iequals( L1it->first, "Authentication" )){
+			std::string logStr = logPrefix() + "-authentication: ";
 			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
 									L2it != L1it->second.end(); L2it++ )	{
 				if ( boost::algorithm::iequals( "randomDevice", L2it->first ))	{
@@ -84,111 +84,71 @@ bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 					if ( ! Parser::getValue( logStr.c_str(), *L2it, m_randomDevice, &isDefined ))
 						retVal = false;
 				}
-				else if ( modules )	{
-					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Authentication", L2it->first );
-					if ( builder )	{
-						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
-						if ( conf->parse( L2it->second, L2it->first, modules ))
-							m_authConfig.push_back( conf );
-						else	{
-							delete conf;
-							retVal = false;
-						}
-					}
-					else
-						LOG_WARNING << logStr << "authentication: unknown configuration option: '"
-							    << L2it->first << "'";
+				else if (modules)
+				{
+					retVal &= parseModuleConfiguration( "Authentication", L2it->first, L2it->second, m_authConfig, modules);
 				}
-				else
-					LOG_WARNING << logStr << "authentication: unknown configuration option: '"
-						    << L2it->first << "'";
 			}
 		}
-		else if ( boost::algorithm::iequals( L1it->first, "Authorization" ))	{
-			std::string logStr = logPrefix() + "authorization: ";
-			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
-									L2it != L1it->second.end(); L2it++ )	{
+		else if (boost::algorithm::iequals( L1it->first, "Authorization"))	{
+			std::string logStr = logPrefix() + "-authorization: ";
+			for (config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
+									L2it != L1it->second.end(); L2it++ )
+			{
 				if ( boost::algorithm::iequals( "default", L2it->first ))	{
 					if ( ! Parser::getValue( logStr.c_str(), *L2it, m_authzDefault,
 								 Parser::BoolDomain(), &authzDfltDefined ))
 						retVal = false;
 				}
-				else if ( modules )	{
-					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Authorization", L2it->first );
-					if ( builder )	{
-						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
-						if ( conf->parse( L2it->second, L2it->first, modules ))
-							m_authzConfig.push_back( conf );
-						else	{
-							delete conf;
-							retVal = false;
-						}
-					}
-					else
-						LOG_WARNING << logStr << "unknown configuration option: '"
-							    << L2it->first << "'";
+				else if (modules)
+				{
+					retVal &= parseModuleConfiguration( "Authorization", L2it->first, L2it->second, m_authConfig, modules);
 				}
-				else
-					LOG_WARNING << logStr << "unknown configuration option: '"
-						    << L2it->first << "'";
 			}
 		}
 		else if ( boost::algorithm::iequals( L1it->first, "Audit" ))	{
-			std::string logStr = logPrefix() + "audit: ";
+			std::string logStr = logPrefix() + "-audit: ";
 			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
-									L2it != L1it->second.end(); L2it++ )	{
+									L2it != L1it->second.end(); L2it++)
+			{
 				if ( boost::algorithm::iequals( "mandatory", L2it->first ))	{
 					if ( ! Parser::getValue( logStr.c_str(), *L2it, m_mandatoryAudit,
 								 Parser::BoolDomain(), &mandatoryDefined ))
 						retVal = false;
 				}
-				else if ( modules )	{
-					const module::ConfiguredBuilder* builder = modules->getConfiguredBuilder( "Audit", L2it->first );
-					if ( builder )	{
-						config::NamedConfiguration* conf = builder->configuration( logStr.c_str());
-						if ( conf->parse( L2it->second, L2it->first, modules ))
-							m_auditConfig.push_back( conf );
-						else	{
-							delete conf;
-							retVal = false;
-						}
-					}
-					else
-						LOG_WARNING << logStr << "unknown configuration option: '"
-							    << L2it->first << "'";
+				else if (modules)
+				{
+					retVal &= parseModuleConfiguration( "Audit", L2it->first, L2it->second, m_authConfig, modules);
 				}
-				else
-					LOG_WARNING << logStr << "unknown configuration option: '"
-						    << L2it->first << "'";
 			}
 		}
 		else
-			LOG_WARNING << logPrefix() << "unknown configuration option: '"
-				    << L1it->first << "'";
+		{
+			LOG_ERROR << logPrefix() << "unknown configuration option: '" << L1it->first << "'";
+		}
 	}
-
 	return retVal;
 }
 
 
 void AaaaProviderConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 {
-	os << sectionName() << std::endl;
+	os << configSection() << std::endl;
 	os << "   Authentication" << std::endl;
 	os << "      Random number device: " << m_randomDevice << std::endl;
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )
 		(*it)->print( os, 6 );
 
 	os << "   Authorization" << std::endl;
 	os << "      Default: " << (m_authzDefault ? "allow" : "deny") << std::endl;
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authzConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authzConfig.begin();
 								it != m_authzConfig.end(); it++ )
 		(*it)->print( os, 6 );
 
 	os << "   Audit" << std::endl;
 	os << "      Audit is mandatory: " << (m_mandatoryAudit ? "yes" : "no") << std::endl;
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_auditConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_auditConfig.begin();
 								it != m_auditConfig.end(); it++ )
 		(*it)->print( os, 6 );
 
@@ -199,19 +159,19 @@ bool AaaaProviderConfiguration::check() const
 {
 	bool correct = true;
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
 	}
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authzConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authzConfig.begin();
 								it != m_authzConfig.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
 	}
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_auditConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_auditConfig.begin();
 								it != m_auditConfig.end(); it++ )	{
 		if ( !(*it)->check() )
 			correct = false;
@@ -222,16 +182,16 @@ bool AaaaProviderConfiguration::check() const
 
 void AaaaProviderConfiguration::setCanonicalPathes( const std::string& refPath )
 {
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authConfig.begin();
 								it != m_authConfig.end(); it++ )
 		(*it)->setCanonicalPathes( refPath );
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_authzConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_authzConfig.begin();
 								it != m_authzConfig.end(); it++ )
 		(*it)->setCanonicalPathes( refPath );
 
 
-	for ( std::vector< config::NamedConfiguration* >::const_iterator it = m_auditConfig.begin();
+	for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_auditConfig.begin();
 								it != m_auditConfig.end(); it++ )
 		(*it)->setCanonicalPathes( refPath );
 }

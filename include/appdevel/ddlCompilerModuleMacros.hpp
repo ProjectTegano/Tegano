@@ -33,20 +33,33 @@
 /// \file appdevel/ddlCompilerModuleMacros.hpp
 /// \brief Macros for a module implementing a DDL compiler
 #include "module/moduleInterface.hpp"
-#include "appdevel/module/ddlcompilerBuilder.hpp"
+#include "module/simpleObjectConstructor.hpp"
+#include "langbind/ddlCompilerInterface.hpp"
 
-/// \brief Defines a Wolframe DDL compiler
+
+/// \brief Defines a form data definition language compiler
 #define WF_DDLCOMPILER( LANGUAGE, COMPILERCLASS)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public COMPILERCLASS\
+		,public _Wolframe::module::BaseObject\
 	{\
-		static _Wolframe::langbind::DDLCompiler* create()\
+	public:\
+		ModuleObjectEnvelope(){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::DDL_COMPILER_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			return new COMPILERCLASS();\
+			return new ModuleObjectEnvelope();\
 		}\
-		static const _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const _Wolframe::module::DDLCompilerBuilder rt( "DDLCompiler_" #LANGUAGE, #LANGUAGE, create);\
+			static const Constructor rt( LANGUAGE "Compiler");\
 			return &rt;\
 		}\
 	};\

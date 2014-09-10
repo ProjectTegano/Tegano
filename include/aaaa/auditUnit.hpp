@@ -36,6 +36,7 @@
 #ifndef _AUDIT_UNIT_HPP_INCLUDED
 #define _AUDIT_UNIT_HPP_INCLUDED
 #include "database/databaseProviderInterface.hpp"
+#include "module/objectDescription.hpp"
 
 namespace _Wolframe {
 namespace aaaa {
@@ -43,13 +44,11 @@ namespace aaaa {
 class Information;
 
 /// \class AuditUnit
-/// \brief This is the base class for audit unit implementations
+/// \brief This is the interface for audit unit implementations
 class AuditUnit
 {
 public:
-	virtual ~AuditUnit()				{}
-
-	virtual const char* className() const = 0;
+	virtual ~AuditUnit(){}
 
 	virtual bool resolveDB( const db::DatabaseProviderInterface& /*db*/ )
 							{ return true; }

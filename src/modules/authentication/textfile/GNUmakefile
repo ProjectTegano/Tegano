@@ -29,7 +29,6 @@ PASSWD_OBJS = \
 
 CPP_OBJS = \
 	TextFileAuthConfig.o \
-	TextFileAuthConstructor.o \
 	TextFileAuth.o \
 	$(PASSWD_OBJS)
 
@@ -45,7 +44,7 @@ PASSWD_LIBS = \
 CPP_BINS = \
 	wolfpasswd$(EXE)
 
-wolfpasswd$(EXE): wolfpasswd.o $(PASSWD_OBJS)
+wolfpasswd$(EXE): wolfpasswd.o $(PASSWD_OBJS) $(DYNAMIC_MODULE)
 	$(CXX_LINK) -o $@ $(ALL_LDFLAGS) $(PASSWD_LDFLAGS) $(PASSWD_OBJS) $< $(PASSWD_LIBS) $(LIBS_LT)
 
 -include $(TOPDIR)/makefiles/gmake/sub.mk

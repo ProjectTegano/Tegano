@@ -32,27 +32,51 @@
 ************************************************************************/
 /// \file appdevel/authenticationModuleMacros.hpp
 /// \brief Macros for a module for defining an authentication mechanism
-#include "appdevel/module/authenticationConstructor.hpp"
-#include "module/configuredBuilderTemplate.hpp"
 #include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
 #include <boost/lexical_cast.hpp>
+#include "aaaa/authenticationUnit.hpp"
+#include "logger/logger-v1.hpp"
 
-/// \brief Defines a an authentication mechanism
-#define WF_AUTHENTICATOR(NAME,UNITCLASS,CONFIGCLASS) \
+/// \brief Defines an authenticator
+#define WF_AUTHENTICATOR(NAME,UNITCLASS,CONFIGCLASS)\
 {\
-	struct Builder \
+	class ModuleObjectEnvelope \
+		:public UNITCLASS \
+		,public _Wolframe::module::BaseObject\
 	{\
-		static const _Wolframe::module::BuilderBase* impl()\
+	public:\
+		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :UNITCLASS(cfg){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
+	{\
+	public:\
+		Constructor()\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::AUTHENTICATION_OBJECT, NAME "Authenticator", "authentication", NAME){}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
-			static const _Wolframe::module::ConfiguredBuilderTemplate<\
-					_Wolframe::module::AuthenticationConstructor<UNITCLASS, CONFIGCLASS>,\
-					CONFIGCLASS >\
-				mod( "Authentication " #NAME, "Authentication", #NAME, #NAME "Authentication");\
-			return &mod;\
+			const CONFIGCLASS* cfg = dynamic_cast<const CONFIGCLASS*>(&cfgi);\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " AuthenticationUnit constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
+		}\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
+		{\
+			return new CONFIGCLASS( NAME "Authentication", "Authentication", NAME);\
+		}\
+		static const _Wolframe::module::ObjectConstructor* impl()\
+		{\
+			static const Constructor rt;\
+			return &rt;\
 		}\
 	};\
-	(*this)(&Builder::impl);\
+	(*this)(&Constructor ::impl);\
 }
+
 
 

@@ -37,7 +37,7 @@
 #include <vector>
 #include <string>
 #include "execProtocolHandler.hpp"
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include "standardConfigs.hpp"
 
 namespace _Wolframe {
@@ -45,36 +45,36 @@ namespace tproc {
 
 ///\class Configuration
 ///\brief Configuration structure
-class Configuration :public config::ConfigurationBase
+class Configuration :public config::ConfigurationObject
 {
 public:
 	Configuration()
-		:ConfigurationBase( "tproc", 0, "tproc")
+		:ConfigurationObject( "tproc", 0, "tproc")
 		,m_input_bufsize(1024)
 		,m_output_bufsize(1024) {}
 
 	Configuration( const std::vector<cmdbind::ExecProtocolHandler::Command>& cc, std::size_t ib, std::size_t ob)
-		:config::ConfigurationBase("tproc", 0, "tproc")
+		:config::ConfigurationObject("tproc", 0, "tproc")
 		,m_commands(cc)
 		,m_input_bufsize(ib)
 		,m_output_bufsize(ob){}
 
 	Configuration( const Configuration& o)
-		:config::ConfigurationBase(o)
+		:config::ConfigurationObject(o)
 		,m_commands(o.m_commands)
 		,m_input_bufsize(o.m_input_bufsize)
 		,m_output_bufsize(o.m_output_bufsize){}
 
-	///\brief interface implementation of ConfigurationBase::parse( const config::ConfigurationNode&, const std::string&, const module::ModuleDirectory*)
+	///\brief interface implementation of ConfigurationObject::parse( const config::ConfigurationNode&, const std::string&, const module::ModuleDirectory*)
 	bool parse( const config::ConfigurationNode& pt, const std::string& node, const module::ModuleDirectory* modules );
 
-	///\brief interface implementation of ConfigurationBase::test() const
+	///\brief interface implementation of ConfigurationObject::test() const
 	virtual bool test() const;
 
-	///\brief interface implementation of ConfigurationBase::check() const
+	///\brief interface implementation of ConfigurationObject::check() const
 	virtual bool check() const;
 
-	///\brief interface implementation of ConfigurationBase::print(std::ostream& os, size_t indent) const
+	///\brief interface implementation of ConfigurationObject::print(std::ostream& os, size_t indent) const
 	virtual void print( std::ostream&, size_t indent=0) const;
 
 	///\brief return size of the buffer used for input network messages in bytes

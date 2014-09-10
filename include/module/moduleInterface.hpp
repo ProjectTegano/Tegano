@@ -35,14 +35,13 @@
 #ifndef _MODULE_INTERFACE_HPP_INCLUDED
 #define _MODULE_INTERFACE_HPP_INCLUDED
 #include <cstring>
-#include "module/builderBase.hpp"
+#include "module/objectConstructor.hpp"
 
 namespace _Wolframe {
 namespace module {
 
-/// \brief Function that constructs a builder.
-///	This function is specific for each of the configured builders in the module.
-typedef const BuilderBase* (*getBuilderFunc)();
+/// \brief Function type to get an object constructor.
+typedef const ObjectConstructor* (*GetObjectConstructorFunc)();
 
 /// \class ModuleEntryPoint
 /// \brief The module entry point structure. Only one entry point per module.
@@ -55,11 +54,11 @@ struct ModuleEntryPoint
 	char signature[ MODULE_SIGN_SIZE];		///< module entry point signature
 	unsigned short ifaceVersion;			///< version of the module loader interface
 	const char* name;				///< name of the module
-	getBuilderFunc* getBuilder;			///< NULL terminated array of functions that return the builders
+	GetObjectConstructorFunc* constructors;		///< NULL terminated array of functions that return the object constructors
 
 public:
-	ModuleEntryPoint( unsigned short iVer, const char* modName, getBuilderFunc* getBuilder_)
-		: ifaceVersion( iVer ), name( modName ), getBuilder( getBuilder_ )
+	ModuleEntryPoint( unsigned short iVer, const char* modName, GetObjectConstructorFunc* constructors_)
+		: ifaceVersion( iVer ), name( modName ), constructors( constructors_ )
 	{
 		std::memset ( signature, 0, MODULE_SIGN_SIZE);
 		std::memcpy ( signature, "Wolframe Module", std::strlen("Wolframe Module"));

@@ -46,8 +46,8 @@ namespace db {
 class OracleTestConfig : public OracleConfig
 {
 public:
-	OracleTestConfig( const char* sectionName_, const char* logName_ )
-		: OracleConfig( sectionName_, logName_ )	{}
+	OracleTestConfig( const std::string& className_="OracleDatabase", const std::string& configSection_="Database", const std::string& configKeyword_="Oracle")
+		:OracleConfig( className_, configSection_, configKeyword_){}
 
 	virtual bool parse( const config::ConfigurationNode& pt, const std::string& node,
 			    const module::ModuleDirectory* modules )
@@ -77,14 +77,14 @@ private:
 class OracleTestDatabaseInitializer
 {
 public:
-	OracleTestDatabaseInitializer( const OracleTestConfig& config)
-		:m_host(config.host())
-		,m_port(config.port())
-		,m_dbname(config.dbName())
-		,m_user(config.user())
-		,m_password(config.password())
-		,m_dump_filename(config.dump_filename())
-		,m_input_filename(config.input_filename())
+	OracleTestDatabaseInitializer( const OracleTestConfig* config)
+		:m_host(config->host())
+		,m_port(config->port())
+		,m_dbname(config->dbName())
+		,m_user(config->user())
+		,m_password(config->password())
+		,m_dump_filename(config->dump_filename())
+		,m_input_filename(config->input_filename())
 	{
 		initDatabase();
 	}

@@ -46,8 +46,8 @@ namespace db {
 class SQLiteTestConfig : public SQLiteConfig
 {
 public:
-	SQLiteTestConfig( const char* sectionName_, const char* logName_)
-		:SQLiteConfig( sectionName_, logName_){}
+	SQLiteTestConfig( const std::string& className_="SQLiteDatabase", const std::string& configSection_="Database", const std::string& configKeyword_="SQLite")
+		:SQLiteConfig( className_, configSection_, configKeyword_){}
 
 	virtual bool parse( const config::ConfigurationNode& pt, const std::string& node,
 				const module::ModuleDirectory* modules )
@@ -77,10 +77,10 @@ private:
 class SQLiteTestDatabaseInitializer
 {
 public:
-	SQLiteTestDatabaseInitializer( const SQLiteTestConfig& config)
-		:m_db_filename(config.filename())
-		,m_input_filename(config.input_filename())
-		,m_dump_filename(config.dump_filename())
+	SQLiteTestDatabaseInitializer( const SQLiteTestConfig* config)
+		:m_db_filename(config->filename())
+		,m_input_filename(config->input_filename())
+		,m_dump_filename(config->dump_filename())
 	{
 		initDatabase();
 	}

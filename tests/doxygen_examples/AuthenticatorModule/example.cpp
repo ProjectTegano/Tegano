@@ -73,7 +73,11 @@ class MyAuthenticationUnit
 	:public _Wolframe::aaaa::AuthenticationUnit
 {
 public:
-	MyAuthenticationUnit( const MyAuthenticationConfig& cfg);
+	MyAuthenticationUnit( const MyAuthenticationConfig* cfg)
+		:_Wolframe::aaaa::AuthenticationUnit("MyAuthenticationId")
+	{
+		// ... initialize this authentication unit here
+	}
 
 	virtual const char* className() const
 	{

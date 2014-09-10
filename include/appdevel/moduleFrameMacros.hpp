@@ -32,7 +32,9 @@
 ************************************************************************/
 /// \file appdevel/moduleFrameMacros.hpp
 /// \brief Macros for defining the frame of a Wolframe application extension module
-#include "appdevel/module/customDataTypeBuilder.hpp"
+#include "module/moduleInterface.hpp"
+#include "module/baseObject.hpp"
+#include "module/objectConstructor.hpp"
 
 /// \brief Marks the start of the Wolframe C++ custom datatype module after the includes section.
 #define WF_MODULE_BEGIN(NAME,DESCRIPTION)\
@@ -44,14 +46,14 @@
 	struct CreateBuilderArray\
 	{\
 		enum {MaxNofBuilders=64};\
-		_Wolframe::module::getBuilderFunc ar[ MaxNofBuilders];\
+		_Wolframe::module::GetObjectConstructorFunc ar[ MaxNofBuilders];\
 		std::size_t size;\
 		CreateBuilderArray()\
 			:size(0)\
 		{\
 			ar[0] = 0;\
 		}\
-		CreateBuilderArray operator()( _Wolframe::module::getBuilderFunc func)\
+		CreateBuilderArray operator()( _Wolframe::module::GetObjectConstructorFunc func)\
 		{\
 			if (size +1 >= MaxNofBuilders) throw std::logic_error("too many builder objects defined in module '" #NAME "' (maximum of 64 objects)");\
 			ar[ size] = func;\

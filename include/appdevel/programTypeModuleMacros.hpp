@@ -33,25 +33,37 @@
 /// \file appdevel/programTypeModuleMacros.hpp
 /// \brief Macros for a module for a program type for a binding language
 #include "module/moduleInterface.hpp"
-#include "appdevel/module/programTypeBuilder.hpp"
+#include "module/baseObject.hpp"
+#include "module/simpleObjectConstructor.hpp"
 #include "processor/program.hpp"
-#include "processor/programLibrary.hpp"
 
 /// \brief Defines a Wolframe program type
 #define WF_PROGRAM_TYPE( LANGNAME, PROGRAMCLASS)\
 {\
-	struct Constructor\
+	class ModuleObjectEnvelope \
+		:public PROGRAMCLASS \
+		,public _Wolframe::module::BaseObject\
 	{\
-		static _Wolframe::proc::Program* create()\
+	public:\
+		ModuleObjectEnvelope(){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::SimpleObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_)\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::PROGRAM_TYPE_OBJECT, className_){}\
+		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			return new PROGRAMCLASS();\
+			return new ModuleObjectEnvelope();\
 		}\
-		static const _Wolframe::module::BuilderBase* impl()\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const _Wolframe::module::ProgramTypeBuilder rt( LANGNAME "ProgramType", LANGNAME "Language", create);\
+			static const Constructor rt( LANGNAME "Program");\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
+
 

@@ -32,70 +32,52 @@
 ************************************************************************/
 /// \file appdevel/runtimeEnvironmentModuleMacros.hpp
 /// \brief Macros for a module for a configurable runtime environment for a binding language or a binding language universe
-#include "appdevel/module/runtimeEnvironmentConstructor.hpp"
 #include "module/moduleInterface.hpp"
-#include "module/configuredBuilder.hpp"
-#include "processor/procProviderInterface.hpp"
+#include "module/configuredObjectConstructor.hpp"
+#include "config/configurationObject.hpp"
+#include "langbind/runtimeEnvironment.hpp"
 #include <boost/lexical_cast.hpp>
 
 /// \brief Defines a program type with a runtime environment (e.g. program with shared resource context)
-#define WF_RUNTIME_ENVIRONMENT(DESCRIPTION,CONFIG_SECTION,CONFIG_TITLE,CLASSDEF,CONFIGDEF,INITFUNCTION) \
+#define WF_RUNTIME_ENVIRONMENT(NAME,CONFIG_SECTION,CONFIG_KEYWORD,CLASSDEF,CONFIGDEF,INITFUNCTION) \
 {\
-	class RuntimeEnvConstructor\
-		:public _Wolframe::module::RuntimeEnvironmentConstructor\
+	class ModuleObjectEnvelope \
+		:public CLASSDEF \
+		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		RuntimeEnvConstructor(){}\
-		virtual ~RuntimeEnvConstructor(){}\
-		virtual CLASSDEF* object( const _Wolframe::config::NamedConfiguration& cfgi) const\
+		ModuleObjectEnvelope( const CONFIGDEF* cfg) :CLASSDEF(cfg){}\
+	};\
+	class Constructor\
+		:public _Wolframe::module::ConfiguredObjectConstructor\
+	{\
+	public:\
+		Constructor( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)\
+			:_Wolframe::module::ConfiguredObjectConstructor( _Wolframe::module::ObjectDescription::CMD_HANDLER_OBJECT, className_, configSection_, configKeyword_)\
+		{\
+			int err=INITFUNCTION();\
+			if (!err) throw std::runtime_error(std::string("failed to initialize runtime environment (error code ") + boost::lexical_cast<std::string>(err) + ")");\
+		}\
+		virtual _Wolframe::module::BaseObject* object( const _Wolframe::config::ConfigurationObject& cfgi) const\
 		{\
 			const CONFIGDEF* cfg = dynamic_cast<const CONFIGDEF*>(&cfgi);\
-			if (!cfg) throw std::logic_error( "internal: wrong configuration interface passed to runtime environment constructor " CONFIG_TITLE);\
-			CLASSDEF* rt = new CLASSDEF( cfg);\
-			return rt;\
+			if (!cfg)\
+			{\
+				LOG_ERROR << "internal: wrong configuration interface passed to " NAME " runtime environment constructor";\
+				return 0;\
+			}\
+			return new ModuleObjectEnvelope( cfg);\
 		}\
-		virtual const char* objectClassName() const\
+		virtual _Wolframe::config::ConfigurationObject* configuration() const\
 		{\
-			return CONFIG_TITLE "RuntimeEnvironment";\
+			return new CONFIGDEF( NAME "RuntimeEnvironment", CONFIG_SECTION, CONFIG_KEYWORD);\
 		}\
-		virtual bool checkReferences( const _Wolframe::config::NamedConfiguration&, const _Wolframe::proc::ProcessorProviderInterface*) const\
+		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			return true;\
-		}\
-	};\
-	class RuntimeEnvBuilder\
-		:public _Wolframe::module::ConfiguredBuilder\
-	{\
-	public:\
-		RuntimeEnvBuilder()\
-			:_Wolframe::module::ConfiguredBuilder( DESCRIPTION, CONFIG_SECTION, CONFIG_TITLE, CONFIG_TITLE "RuntimeEnvironment")\
-		{\
-			int err;\
-			if (0!=(err=INITFUNCTION())) throw std::runtime_error(std::string("failed to initialize runtime environment (error code ") + boost::lexical_cast<std::string>(err) + ")");\
-		}\
-		virtual ~RuntimeEnvBuilder(){}\
-		virtual _Wolframe::module::ObjectConstructorBase::ObjectType objectType() const\
-		{\
-			return _Wolframe::module::ObjectConstructorBase::RUNTIME_ENVIRONMENT_OBJECT;\
-		}\
-		virtual _Wolframe::config::NamedConfiguration* configuration( const char* logPrefix) const\
-		{\
-			return new CONFIGDEF( CONFIG_TITLE "RuntimeEnvironment", title(), logPrefix, keyword());\
-		}\
-		virtual _Wolframe::module::ObjectConstructorBase* constructor() const\
-		{\
-			return new RuntimeEnvConstructor();\
-		}\
-	};\
-	struct Constructor\
-	{\
-		static const _Wolframe::module::BuilderBase* impl()\
-		{\
-			static const RuntimeEnvBuilder rt;\
+			static const Constructor rt( NAME "RuntimeEnvironment", CONFIG_SECTION, CONFIG_KEYWORD);\
 			return &rt;\
 		}\
 	};\
 	(*this)(&Constructor ::impl);\
 }
-
 

@@ -35,7 +35,7 @@
 #ifndef _CONFIG_DATABASE_PROVIDER_CONFIGURATION_HPP_INCLUDED
 #define _CONFIG_DATABASE_PROVIDER_CONFIGURATION_HPP_INCLUDED
 
-#include "config/configurationBase.hpp"
+#include "config/configurationObject.hpp"
 #include <string>
 #include <vector>
 
@@ -44,11 +44,11 @@ namespace config {
 
 /// \brief Database provider configuration
 class DatabaseProviderConfiguration
-	:public config::ConfigurationBase
+	:public config::ConfigurationObject
 {
 public:
 	DatabaseProviderConfiguration()
-		:ConfigurationBase( "Database(s)", NULL, "Database configuration"){}
+		:ConfigurationObject( "DatabaseProvider", "Database", ""){}
 	~DatabaseProviderConfiguration();
 
 	bool parse( const config::ConfigurationNode& pt, const std::string& node,
@@ -57,13 +57,13 @@ public:
 	void print( std::ostream& os, size_t indent ) const;
 	virtual void setCanonicalPathes( const std::string& referencePath );
 
-	const std::vector<config::NamedConfiguration*>& config() const
+	const std::vector<config::ConfigurationObject*>& config() const
 	{
 		return m_config;
 	}
 
 private:
-	std::vector<config::NamedConfiguration*>	m_config;
+	std::vector<config::ConfigurationObject*>	m_config;
 };
 
 }}//namespace

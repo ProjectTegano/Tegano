@@ -33,35 +33,21 @@
 ///\file mod_printer_harupdf.cpp
 ///\brief Module for printing PDFs with a simple command interpreter calling functions of libhpdf
 
-#include "appdevel/module/programTypeBuilder.hpp"
+#include "appdevel/programTypeModuleMacros.hpp"
+#include "appdevel/moduleFrameMacros.hpp"
 #include "pdfPrinter.hpp"
 #include "pdfPrinterDocumentImpl.hpp"
 #include "pdfPrintProgramType.hpp"
-#include "logger/logger-v1.hpp"
 
-using namespace _Wolframe;
-using namespace _Wolframe::module;
-
-namespace {
-struct PdfPrinter
+class SimplePdfPrintProgram
+	:public _Wolframe::prnt::SimplePdfPrintProgram
 {
-	static proc::Program* createProgram()
-	{
-		return new prnt::SimplePdfPrintProgram( prnt::createLibHpdfDocument);
-	}
-	static const BuilderBase* constructor()
-	{
-		static const ProgramTypeBuilder rt( "HaruPdfPrintFunction", "simplepdf", PdfPrinter::createProgram);
-		return &rt;
-	}
-};
-}//anonymous namespace
-
-static getBuilderFunc objdef[] =
-{
-	PdfPrinter::constructor, NULL
+public:
+	SimplePdfPrintProgram()
+		:_Wolframe::prnt::SimplePdfPrintProgram( _Wolframe::prnt::createLibHpdfDocument){}
 };
 
-extern "C" {
-	ModuleEntryPoint entryPoint( 0, "simple PDF print function based on libhpdf", objdef);
-}
+WF_MODULE_BEGIN( "HaruPdfPrinterProgramType", "PDF printer module base on libharu")
+ WF_PROGRAM_TYPE( "HaruPdfPrinter", SimplePdfPrintProgram)
+WF_MODULE_END
+

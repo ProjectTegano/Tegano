@@ -123,16 +123,19 @@ public:
 	/// \brief Copy constructor
 	/// \param[in] o copied item
 	CppFormFunction( const CppFormFunction& o)
-		:m_function(o.m_function)
+		:m_name(o.m_name)
+		,m_function(o.m_function)
 		,m_api_param(o.m_api_param)
 		,m_api_result(o.m_api_result){}
 
 	/// \brief Constructor
+	/// \param[in] n name of the function
 	/// \param[in] f function to call
 	/// \param[in] p part of the api describing the input
 	/// \param[in] r part of the api describing the function result
-	CppFormFunction( Function f, const serialize::StructDescriptionBase* p, const serialize::StructDescriptionBase* r)
-		:m_function(f)
+	CppFormFunction( const std::string& n, Function f, const serialize::StructDescriptionBase* p, const serialize::StructDescriptionBase* r)
+		:m_name(n)
+		,m_function(f)
 		,m_api_param(p)
 		,m_api_result(r)
 	{}
@@ -161,7 +164,14 @@ public:
 		return new CppFormFunctionClosure( *this);
 	}
 
+	/// \brief Get the name of the function
+	const std::string& name() const
+	{
+		return m_name;
+	}
+
 private:
+	std::string m_name;
 	Function m_function;						///< form function implementation
 	const serialize::StructDescriptionBase* m_api_param;		///< parameter structure description
 	const serialize::StructDescriptionBase* m_api_result;		///< result structure description

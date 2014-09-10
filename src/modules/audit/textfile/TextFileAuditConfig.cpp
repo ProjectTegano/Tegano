@@ -84,7 +84,7 @@ bool TextFileAuditConfig::check() const
 void TextFileAuditConfig::print( std::ostream& os, size_t indent ) const
 {
 	std::string indStr( indent, ' ' );
-	os << indStr << sectionName() << std::endl;
+	os << indStr << configSection() << std::endl;
 	os << indStr << "   Required: " << (m_required ? "yes" : "no") << std::endl;
 	os << indStr << "   File: " << m_file << std::endl;
 }
