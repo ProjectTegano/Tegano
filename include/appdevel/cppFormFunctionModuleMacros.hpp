@@ -35,7 +35,7 @@
 #include "module/moduleInterface.hpp"
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
-#include "appdevel/module/cppFormFunctionTemplate.hpp"
+#include "appdevel/templates/cppFormFunctionTemplate.hpp"
 #include "serialize/cppFormFunction.hpp"
 
 /// \brief Defines normalization function

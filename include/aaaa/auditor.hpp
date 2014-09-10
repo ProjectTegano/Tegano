@@ -41,7 +41,7 @@ namespace aaaa {
 
 class Information;
 
-/// Virtual base (interface) for auditor classes
+/// \brief Virtual base (interface) for auditor classes
 class Auditor {
 public:
 	virtual ~Auditor(){}

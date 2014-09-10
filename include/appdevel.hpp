@@ -45,10 +45,10 @@
 #include "appdevel/runtimeEnvironmentModuleMacros.hpp"	///< modules implementing a program type needing a configurable runtime environment
 #include "appdevel/commandHandlerModuleMacros.hpp"	///< modules implementing a command handler and optionally also a program type without configuration
 #include "appdevel/programTypeModuleMacros.hpp"		///< modules implementing a program type without configuration
+#include "appdevel/protocolHandlerModuleMacros.hpp"	///< modules implementing a network protocol
 #include "appdevel/ddlCompilerModuleMacros.hpp"		///< modules implementing a DDL compiler for forms
 #include "appdevel/filterModuleMacros.hpp"		///< modules implementing a filer
 #include "appdevel/doctypeModuleMacros.hpp"		///< modules implementing a document type/format detector
 #include "appdevel/moduleFrameMacros.hpp"		///< frame (begin,end) for a wolframe module
 #include "appdevel/databaseModuleMacros.hpp"		///< module implementing a database interface
 #endif
-

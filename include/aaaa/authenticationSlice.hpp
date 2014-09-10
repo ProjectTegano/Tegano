@@ -81,43 +81,42 @@ public:
 	/// The virtual destructor
 	virtual ~AuthenticatorSlice()	{}
 
-	/// Dispose of the authenticator
-	///
+	/// \brief Dispose of the authenticator
 	/// \note	In many cases this is a suicidal function (delete this),
 	///		so you should be very careful how you use it.
 	///		You should use this function instead of delete
 	///		because not all authentication instances are created with new.
 	virtual void dispose() = 0;
 
-	/// The identifier of the authentication unit / slice
-	///\note	This is the identifier of the authentication unit / slice
+	/// \brief The identifier of the authentication unit / slice
+	/// \note	This is the identifier of the authentication unit / slice
 	virtual const std::string& identifier() const = 0;
 
-	/// The input message
+	/// \brief The input message
 	/// \param [in]	message	the input message
 	virtual void messageIn( const std::string& message ) = 0;
 
-	/// The output message
+	/// \brief The output message
 	/// \returns		the output message
 	virtual std::string messageOut() = 0;
 
-	/// The current status of the authenticator
+	/// \brief The current status of the authenticator
 	virtual Status status() const = 0;
 
-	/// Is the last input message reusable for this mech ?
+	/// \brief Is the last input message reusable for this mech ?
 	/// If true then the last input message will be used also
 	/// for the next slice in case of an USER_NOT_FOUND status
 	/// otherwise a CLIENT_RESET will be issued
 	virtual bool inputReusable() const	{ return false; }
 
-	/// Tell the slice that it is the last one in the current authenticator.
+	/// \brief Tell the slice that it is the last one in the current authenticator.
 	/// In this case, if the user is not found, the slice will not make
 	/// the transition to USER_NOT_FOUND. Instead it will continue
 	/// the operations normally, using fake data and will end up in the
 	/// INVALID_CREDENTIALS state.
 	virtual void lastSlice()		{ }
 
-	/// The authenticated user or NULL if not authenticated
+	/// \brief The authenticated user or NULL if not authenticated
 	/// \note	It is intended that this function can be called only once
 	///		As a security precaution, all the instance information regarding
 	///		the current authentication operation should be destroyed after

@@ -62,7 +62,6 @@ UTIL_OBJS = \
 	utils/asciiCharParser.o \
 	utils/fileLineInfo.o \
 	utils/sourceLineInfo.o \
-	utils/typeSignature.o \
 	utils/allocators.o \
 	utils/malloc.o \
 	utils/stringUtils.o \

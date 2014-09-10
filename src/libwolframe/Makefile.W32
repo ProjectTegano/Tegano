@@ -56,7 +56,6 @@ UTIL_OBJS = \
 	utils\asciiCharParser.obj \
 	utils\fileLineInfo.obj \
 	utils\sourceLineInfo.obj \
-	utils\typeSignature.obj \
 	utils\allocators.obj \
 	utils\malloc.obj \
 	utils\stringUtils.obj \
