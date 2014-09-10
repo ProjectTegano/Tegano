@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/normalizeModuleMacros.hpp
 /// \brief Macros for defining normalization and validaton function module
-#include "module/moduleInterface.hpp"
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "types/normalizeFunction.hpp"

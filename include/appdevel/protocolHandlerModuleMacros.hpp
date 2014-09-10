@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/protocolHandlerModuleMacros.hpp
 /// \brief Macros for a module for a protocol handler
-#include "module/moduleInterface.hpp"
+
 #include "module/simpleObjectConstructor.hpp"
 #include "cmdbind/protocolHandler.hpp"
 

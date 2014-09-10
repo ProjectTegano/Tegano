@@ -37,7 +37,7 @@
 #ifndef _MODULE_LOADER_HPP_INCLUDED
 #define _MODULE_LOADER_HPP_INCLUDED
 #include <string>
-#include "module/moduleInterface.hpp"
+#include "module/moduleEntryPoint.hpp"
 
 namespace _Wolframe {
 namespace module {

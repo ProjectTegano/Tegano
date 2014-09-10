@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/databaseModuleMacros.hpp
 /// \brief Macros for a module for defining a database interface
-#include "module/moduleInterface.hpp"
+
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"

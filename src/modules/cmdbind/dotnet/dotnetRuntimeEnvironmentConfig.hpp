@@ -35,7 +35,6 @@ Project Wolframe.
 #define _Wolframe_DOTNET_RUNTIME_ENVIRONMENT_CONFIGURATION_HPP_INCLUDED
 #include "config/configurationTree.hpp"
 #include "config/configurationObject.hpp"
-#include "module/moduleInterface.hpp"
 #include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
 #include <string>

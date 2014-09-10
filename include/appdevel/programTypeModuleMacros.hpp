@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/programTypeModuleMacros.hpp
 /// \brief Macros for a module for a program type for a binding language
-#include "module/moduleInterface.hpp"
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "processor/program.hpp"

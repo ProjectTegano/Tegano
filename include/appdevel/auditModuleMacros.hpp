@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/auditModuleMacros.hpp
 /// \brief Macros for a module for defining auditing of some sort
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include <boost/lexical_cast.hpp>

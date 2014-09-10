@@ -33,10 +33,10 @@ Project Wolframe.
 /// \brief Interface directmap command handler configuration
 #ifndef _Wolframe_DIRECTMAP_COMMAND_HANDLER_CONFIG_HPP_INCLUDED
 #define _Wolframe_DIRECTMAP_COMMAND_HANDLER_CONFIG_HPP_INCLUDED
+
 #include "processor/execContext.hpp"
 #include "config/configurationTree.hpp"
 #include "config/configurationObject.hpp"
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include <string>
 #include <map>

@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/moduleFrameMacros.hpp
 /// \brief Macros for defining the frame of a Wolframe application extension module
-#include "module/moduleInterface.hpp"
+#include "module/moduleEntryPoint.hpp"
 #include "module/baseObject.hpp"
 #include "module/objectConstructor.hpp"
 

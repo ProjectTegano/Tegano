@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/customDataTypeModuleMacros.hpp
 /// \brief Macros for defining a custom datatype module
-#include "module/moduleInterface.hpp"
+
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "types/customDataType.hpp"

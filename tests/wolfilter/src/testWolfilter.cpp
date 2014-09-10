@@ -38,7 +38,6 @@
 #include "gtest/gtest.h"
 #include "wtest/testDescription.hpp"
 #include "wtest/testReport.hpp"
-#include "module/moduleInterface.hpp"
 #include "utils/parseUtils.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"

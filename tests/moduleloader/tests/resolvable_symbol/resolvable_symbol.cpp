@@ -34,7 +34,7 @@
 // a Wolframe module
 //
 
-#include "module/moduleInterface.hpp"
+#include "module/moduleEntryPoint.hpp"
 #include "module/objectConstructor.hpp"
 
 extern void bar( );

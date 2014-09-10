@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/doctypeModuleMacros.hpp
 /// \brief Macros for a document type/format module definition
-#include "module/moduleInterface.hpp"
+
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "cmdbind/doctypeDetector.hpp"

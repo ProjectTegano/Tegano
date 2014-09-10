@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/cppFormFunctionModuleMacros.hpp
 /// \brief Macros and templates for building C++ an application form function module object
-#include "module/moduleInterface.hpp"
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "appdevel/templates/cppFormFunctionTemplate.hpp"

@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/runtimeEnvironmentModuleMacros.hpp
 /// \brief Macros for a module for a configurable runtime environment for a binding language or a binding language universe
-#include "module/moduleInterface.hpp"
+
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include "langbind/runtimeEnvironment.hpp"

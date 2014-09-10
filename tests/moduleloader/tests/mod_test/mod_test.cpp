@@ -37,7 +37,7 @@
 #include "module/configuredObjectConstructor.hpp"
 #include "module/configuredObjectConstructorTemplate.hpp"
 #include "module/simpleObjectConstructor.hpp"
-#include "module/moduleInterface.hpp"
+#include "module/moduleEntryPoint.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test.hpp"
 

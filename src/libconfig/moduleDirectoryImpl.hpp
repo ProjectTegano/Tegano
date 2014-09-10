@@ -36,7 +36,6 @@
 #ifndef _MODULE_DIRECTORY_IMPLEMENTATION_HPP_INCLUDED
 #define _MODULE_DIRECTORY_IMPLEMENTATION_HPP_INCLUDED
 #include "module/moduleDirectory.hpp"
-#include "module/moduleInterface.hpp"
 #include "module/simpleObjectConstructor.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include <string>

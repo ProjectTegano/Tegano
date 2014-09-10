@@ -35,7 +35,6 @@
 #ifndef _Wolframe_MODULE_AUTH_TEST_AUTHENTICATION_HPP_INCLUDED
 #define _Wolframe_MODULE_AUTH_TEST_AUTHENTICATION_HPP_INCLUDED
 
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "types/secureString.hpp"
 #include "config/configurationTree.hpp"

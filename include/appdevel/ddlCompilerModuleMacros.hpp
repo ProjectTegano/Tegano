@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/ddlCompilerModuleMacros.hpp
 /// \brief Macros for a module implementing a DDL compiler
-#include "module/moduleInterface.hpp"
+
 #include "module/simpleObjectConstructor.hpp"
 #include "langbind/ddlCompilerInterface.hpp"
 

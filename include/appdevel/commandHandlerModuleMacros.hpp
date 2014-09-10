@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/commandHandlerModuleMacros.hpp
 /// \brief Macros for a module for a configurable command handler
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include "cmdbind/commandHandler.hpp"

@@ -35,7 +35,6 @@
 #include "wolfilterCommandLine.hpp"
 #include "filter/ptreefilter.hpp"
 #include "filter/tostringfilter.hpp"
-#include "module/moduleInterface.hpp"
 #include "config/configurationTree.hpp"
 #include "types/propertyTree.hpp"
 #include "serialize/structOptionParser.hpp"

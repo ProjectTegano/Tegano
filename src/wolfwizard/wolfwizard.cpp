@@ -34,7 +34,6 @@
 #include "processor/programLibrary.hpp"
 #include "wolframe.hpp"
 #include "wolfwizardCommandLine.hpp"
-#include "module/moduleInterface.hpp"
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "libconfig/procProviderConfiguration.hpp"
 #include "libprovider/procProviderImpl.hpp"

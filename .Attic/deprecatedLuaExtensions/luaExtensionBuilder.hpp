@@ -33,7 +33,7 @@ Project Wolframe.
 ///\brief Interface template for object builder of form functions
 #ifndef _Wolframe_MODULE_LUA_LANGUAGE_EXTENSION_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
 #define _Wolframe_MODULE_LUA_LANGUAGE_EXTENSION_OBJECT_BUILDER_TEMPLATE_HPP_INCLUDED
-#include "processor/moduleInterface.hpp"
+
 #include "module/simpleObjectConstructor.hpp"
 #include <string>
 #include <cstring>

@@ -33,8 +33,6 @@
 //
 // common part which has to be known to Wolframe and the loadable module
 //
-
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 

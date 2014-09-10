@@ -32,7 +32,7 @@
 ************************************************************************/
 /// \file appdevel/filterModuleMacros.hpp
 /// \brief Macros for a filter modules
-#include "module/moduleInterface.hpp"
+
 #include "module/baseObject.hpp"
 #include "module/simpleObjectConstructor.hpp"
 

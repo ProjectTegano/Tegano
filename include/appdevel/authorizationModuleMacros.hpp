@@ -32,7 +32,6 @@
 ************************************************************************/
 /// \file appdevel/authorizationModuleMacros.hpp
 /// \brief Macros for a module for defining an authorization methods
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include <boost/lexical_cast.hpp>

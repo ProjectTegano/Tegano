@@ -30,10 +30,10 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \brief Basic interface classes that to build objects and the Wolframe module interface
-/// \file module/moduleInterface.hpp
-#ifndef _MODULE_INTERFACE_HPP_INCLUDED
-#define _MODULE_INTERFACE_HPP_INCLUDED
+/// \brief Entry point as pointer to structure, that is the root of all data structures and information exported by a module
+/// \file module/moduleEntryPoint.hpp
+#ifndef _MODULE_ENTRY_POINT_HPP_INCLUDED
+#define _MODULE_ENTRY_POINT_HPP_INCLUDED
 #include <cstring>
 #include "module/objectConstructor.hpp"
 

@@ -39,7 +39,6 @@
 #include "aaaa/auditor.hpp"
 #include "aaaa/auditUnit.hpp"
 #include "module/moduleDirectory.hpp"
-#include "module/moduleInterface.hpp"
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
