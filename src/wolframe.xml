@@ -1,248 +1,578 @@
 <?xml version="1.0"?>
 
-<!--
+<!-- Wolframe main configuration file
 
-Copyright (C) 2011 - 2014 Project Wolframe.
-All rights reserved.
-
-This file is part of Project Wolframe.
-
-Commercial Usage
-   Licensees holding valid Project Wolframe Commercial licenses may
-   use this file in accordance with the Project Wolframe
-   Commercial License Agreement provided with the Software or,
-   alternatively, in accordance with the terms contained
-   in a written agreement between the licensee and Project Wolframe.
-
-GNU General Public License Usage
-   Alternatively, you can redistribute this file and/or modify it
-   under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   Wolframe is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with Wolframe.  If not, see <http://www.gnu.org/licenses/>.
-
-If you have questions regarding the use of this file, please contact
-Project Wolframe.
-
+     Note: this configuration is for development only, used by the 'nmake run'
+     'nmake check', 'nmake print' targets in this directory. Deployed
+     configuration files are in 'config'.
 -->
 
-<!-- Wolframe configuration file -->
-<configuration>
+<Configuration>
 
-	<!-- modules to be loaded by the server -->
-	<LoadModules>
-		<module>modules\database\postgresql\mod_db_postgresql.dll</module>
-		<module>modules\database\sqlite3\mod_db_sqlite3.dll</module>
-		<module>modules\audit\database\mod_audit_database.dll</module>
-		<module>modules\audit\textfile\mod_audit_textfile.dll</module>
-		<module>modules\authentication\database\mod_auth_database.dll</module>
-<!--		<module>modules\authentication\textfile\mod_auth_textfile.dll</module>-->
-		<module>modules\authorization\database\mod_authz_database.dll</module>
+    <!-- Modules to be loaded -->
+    <LoadModules>
 
-<!--		<module>modules\processor\echo\mod_proc_echo.dll</module>-->
-
-	<module>modules\filter\char\mod_filter_char.dll</module>
-	<module>modules\filter\libxml2\mod_filter_libxml2.dll</module>
-	<module>modules\filter\line\mod_filter_line.dll</module>
-		<module>modules\filter\textwolf\mod_filter_textwolf.dll</module>
-		<module>modules\filter\token\mod_filter_token.dll</module>
-	</LoadModules>
-
-	<ServerTokens>OS</ServerTokens>		<!--    Print the application name and version
-							in the initial greeting.
-							Allowed values are:
-							   ProductOnly, Major, Minor, Revision, OS, None -->
-	<ServerSignature>None</ServerSignature>	<!--	Print the name of the server as first element
-							of the greeting -->
-
-	<!--	Windows service parameters (for service registration).
-		This section is not valid on non-Windows OSes -->
-	<service>
-		<serviceName>wolframe</serviceName>
-		<displayName>Wolframe Daemon</displayName>
-		<description>Wolframe Daemon</description>
-	</service>
-
-	<!--	Ports 7649-7671 and 7934-7966 are unassigned according to IANA (last updated 2010-03-11).
-		Let's use 7660 for unencrypted connections and 7960 for SSL connections.
-		Note that 7654 seems to be used by Winamp. -->
-	<server>
-		<maxConnections>3</maxConnections>	<!--	Maximum number of simultaneous connections (clients).
-								Default is the OS limit. This is the global (total) value.
-								Set it to 0 to disable (to use the system limit) -->
-		<threads>7</threads>			<!--	Number of threads for serving client connections.
-								Default is 4 -->
-		<listen>
-			<address>*</address>
-			<port>7661</port>
-			<maxConnections>2</maxConnections><!--	Maximum number of simultaneous connections (clients)
-								for this socket. Default is the OS limit. -->
-		</listen>
-		<listen>
-			<address>localhost</address>
-			<port>7662</port>
-			<identifier>Interface 1</identifier><!--	Interfaces can be named for AAA purposes -->
-		</listen>
-		<listenSsl>
-			<address>0.0.0.0</address>
-			<port>7961</port>
-			<identifier>Interface 1</identifier><!--	Many interfaces can have the same name and
-								they can be refered as one group in AAAA -->
-			<!--	SSL parameters: required if listenSsl is defined -->
-			<certificate>../tests/SSL/wolframed.crt</certificate><!-- Server certificate file (PEM) -->
-			<key>../tests/SSL/wolframed.key</key>		<!-- Server key file (PEM) -->
-			<CAdirectory>../tests/SSL/CAdir</CAdirectory>	<!-- Directory holding CA certificate files -->
-			<CAchainFile>../tests/SSL/CAchain.pem</CAchainFile><!-- SSL CA chain file -->
-			<verify>ON</verify>				<!--	Require and verify client certificate -->
-		</listenSsl>
-		<listenSsl>
-			<address>127.0.0.1</address>
-			<port>7962</port>
-			<identifier>Interface 2</identifier>
-			<maxConnections>2</maxConnections>
-			<!--	SSL parameters: required if listenSsl is defined -->
-			<certificate>../tests/SSL/wolframed.crt</certificate>
-			<key>../tests/SSL/wolframed.key</key>
-			<!-- <CAdirectory>../tests/SSL/CAdir</CAdirectory> -->
-								<!--	It's not necessary to define both
-									CAdirectory and CAchainFile. -->
-			<CAchainFile>../tests/SSL/CAchain.pem</CAchainFile>
-			<verify>OFF</verify>
-		</listenSsl>
-	</server>
-
-
-	<!--	Database configuration -->
-	<database>
+        <!-- Search also for modules in the following directory additionally to
+             the default load dir (with lower priority). Can be absolute or relative,
+             if relative it has this configuration file as basis to compute the path
+          -->
 <!--
-		<PostgreSQL>
-			<identifier>pgdb</identifier>
-			<host>localhost</host>
-			<port>5432</port>
-			<database>wolframe</database>
-			<user>wolframe</user>
-			<password>blabla</password>
-			<connectionTimeout>10</connectionTimeout>
-			<connections>5</connections>
-			<acquireTimeout>10</acquireTimeout>
-		</PostgreSQL>
+        <Directory>modules</Directory>
 -->
-		<SQLite>
-			<identifier>sqlitedb</identifier>
-			<filename>primary.db</filename>
-<!--			<filename>/var/lib/wolframe/primary.db</filename> -->
-		</SQLite>
+
+        <!-- protocol modules -->
+        <Module>modules\protocol\wolframe\mod_protocol_wolframe</Module>
+        
+        <!-- database modules -->        
+<!--
+        <Module>modules\database\postgresql\mod_db_postgresql</Module>
+-->
+<!--
+        <Module>modules\database\sqlite3\mod_db_sqlite3</Module>
+-->
+<!--
+        <Module>modules\database\oracle\mod_db_oracle</Module>
+-->
+
+        <!-- authentication modules -->        
+        <Module>modules\authentication\textfile\mod_auth_textfile</Module>
+        <Module>modules\authentication\database\mod_auth_database</Module>
+
+        <!-- authorization modules -->        
+        <Module>modules\authorization\database\mod_authz_database</Module>
+        <Module>modules\cmdbind\aamap\mod_command_aamap</Module>
+
+        <!-- audit modules -->
+        <Module>modules\audit\textfile\mod_audit_textfile</Module>
+        <Module>modules\audit\database\mod_audit_database</Module>
+
+        <!-- modules for detecting document types -->
+        <Module>modules\doctype\xml\mod_doctype_xml</Module>
+        <Module>modules\doctype\json\mod_doctype_json</Module>
+
+        <!-- modules for XML processing -->
+
+        <!-- XML processing using textwolf -->
+        <Module>modules\filter\textwolf\mod_filter_textwolf</Module>
+
+        <!-- XML processing using libxml2 -->
+        <Module>modules\filter\libxml2\mod_filter_libxml2</Module>
+
+        <!-- modules for JSON processing -->
+
+        <!-- JSON processing using cjson -->
+        <Module>modules\filter\cjson\mod_filter_cjson</Module>
+
+        <!-- data normalization modules -->
+        <Module>modules\normalize\base64\mod_normalize_base64</Module>
+        <Module>modules\normalize\number\mod_normalize_number</Module>
+        <Module>modules\normalize\locale\mod_normalize_locale</Module>
+
+        <!-- data types modules	-->
+        <Module>modules\datatype\datetime\mod_datatype_datetime</Module>
+        <Module>modules\datatype\bcdnumber\mod_datatype_bcdnumber</Module>
+	
+        <!-- business layer modules -->
+        <Module>modules\cmdbind\directmap\mod_command_directmap</Module>
+        <Module>modules\ddlcompiler\simpleform\mod_ddlcompiler_simpleform</Module>
+        <Module>modules\cmdbind\tdl\mod_command_tdl</Module>
+
+        <!-- scripting language modules -->
+        <Module>modules\cmdbind\lua\mod_command_lua</Module>
+<!--
+        <Module>modules\cmdbind\python\mod_command_python</Module>
+-->
+
+        <!-- various filtering modules -->
+        <Module>modules\filter\char\mod_filter_char</Module>
+        <Module>modules\filter\line\mod_filter_line</Module>
+        <Module>modules\filter\token\mod_filter_token</Module>
+        <Module>modules\normalize\string\mod_normalize_string</Module>
+        <Module>modules\filter\blob\mod_filter_blob</Module>
+
+        <!-- various other modules -->
+<!--
+        <Module>modules\jobSchedule\database\mod_job_schedule_db</Module>
+-->
+<!--
+        <Module>modules\prnt\harupdfprint\mod_print_harupdf</Module>
+-->
+<!--
+        <Module>modules\functions\graphix\mod_graphix</Module>
+-->
+
+    </LoadModules>
+
+    <!-- Print the application name and version in the initial greeting
+         allowed values are: ProductOnly, Major, Minor, Revision, Build, OS, None
+         Default: None
+      -->
+    <ServerTokens>OS</ServerTokens>
+
+    <!-- Print the name of the server as first element of the greeting
+         Default: empty
+      -->
+    <ServerSignature>Wolframe</ServerSignature> 
+
+    <!-- Windows service parameters (for manual service registration) -->
+    <Service>
+        <ServiceName>wolframe</ServiceName>
+        <DisplayName>Wolframe Daemon</DisplayName>
+        <Description>Wolframe Daemon</Description>
+    </Service>
+    
+    <!-- Logging -->
+
+    <Logging>
+    
+        <!-- logging to stderr (console) is when running in a terminal -->
+        <Stderr>
+            <Level>INFO</Level>
+        </Stderr>
+
+        <!-- logging to a file -->
+        <LogFile>
+            <Filename>C:\TEMP\wolframed.log</Filename>
+            <Level>INFO</Level>
+        </LogFile>
+
+        <!-- logging to syslog -->
+        <Syslog>
+            <Ident>wolframed</Ident>
+            <Facility>LOCAL2</Facility>
+            <Level>INFO</Level>
+        </Syslog>
+
+        <!--    eventlog source and log level. Valid only on Windows -->
+        <Eventlog>
+            <Name>Application</Name>
+            <Source>Wolframe</Source>
+            <Level>INFO</Level>
+        </Eventlog>
+
+    </Logging>
+    
+    <!-- network configuration -->
+
+    <Server>
 		
+        <!-- Maximum number of simultaneous connections (clients).
+             Default is the OS limit. This is the global (total) value.
+             Set it to 0 to disable (to use the system limit) -->
+             
+        <MaxConnections>4</MaxConnections>
+
+        <!-- Number of threads for serving client connections.
+             Default: 4 -->
+             
+        <Threads>4</Threads>
+
+        <Listen>
+
+            <!-- Interfaces can be named for later reference -->
+
+            <Identifier>insecure loopback</Identifier>
+            
+            <!-- The address to listen to
+                 can be an IPv4 of the form x.x.x.x or 0.0.0.0 (for any address)
+                 can be an IPv6 of the form x:x:x:x:x:x:x:x or :: (for any address) -->
+
+            <Address>*</Address>
+            
+            <!-- Ports 7649-7671 and 7934-7966 are unassigned according to IANA (last updated 2010-03-11).
+                 Use 7661 for unencrypted connections and 7961 for SSL connections.
+                 Note that 7654 is used by Winamp. -->
+            
+            <Port>7661</Port>
+            
+            <!-- Maximum number of simultaneous connections (clients)								
+                 for this socket.
+                 Default is the OS limit. -->
+                 
+            <MaxConnections>4</MaxConnections>
+
+            <!-- Access restriction by IP
+                 Default: Allow all -->
+            
+            <Restrictions>
+
+                <!-- Allow IP -->
+
+                <Allow>all</Allow>
+
+                <!-- Deny IP -->
+                
 <!--
-		<Oracle>
-			<identifier>oracledb</identifier>
-			<host>localhost</host>
-			<port>1521</port>
-			<database>orcl</database>
-			<user>wolframe</user>
-			<password>wolfpwd</password>
-		</Oracle>
+                <Deny>127.0.0.1</Deny>
 -->
-	</database>
+            
+            </Restrictions>
+            
+        </Listen>
+        
+        <ListenSsl>
 
-	<!--	Logging parameters -->
-	<logging>
-		<!--	log level for console (stderr) logging -->
-		<stderr>
-			<level>INFO</level>
-		</stderr>
+            <!-- Interfaces can be named for later reference -->
 
-		<!--	log level for file logging -->
-		<logFile>
-			<filename>C:\TEMP\wolframed.log</filename>
-			<level>INFO</level>
-		</logFile>
+            <Identifier>secure public</Identifier>
 
-		<!--	syslog facility, identifier and log level -->
-		<syslog>
-			<ident>wolframed</ident>
-			<facility>LOCAL2</facility>
-			<level>INFO</level>
-		</syslog>
+            <!-- The address to listen to
+                 can be an IPv4 of the form x.x.x.x or 0.0.0.0 (for any address)
+                 can be an IPv6 of the form x:x:x:x:x:x:x:x or :: (for any address) -->
 
-		<!--	eventlog source and log level. Valid only on Windows -->
-		<eventlog>
-			<name>Application</name>
-			<source>Wolframe</source>
-			<level>INFO</level>
-		</eventlog>
-	</logging>
+            <Address>*</Address>
+            
+            <!-- Ports 7649-7671 and 7934-7966 are unassigned according to IANA (last updated 2010-03-11).
+                 Use 7661 for unencrypted connections and 7961 for SSL connections.
+                 Note that 7654 is used by Winamp. -->
+            
+            <Port>7961</Port>
+            
+            <!-- Maximum number of simultaneous connections (clients)								
+                 for this socket.
+                 Default is the OS limit. -->
+                 
+            <MaxConnections>4</MaxConnections>
 
-	<!-- Authentication, authorization, auditing and accounting configuration -->
-	<AAAA>
+            <!-- Access restriction by IP
+                 Default: Allow all -->
+            
+            <Restrictions>
 
-		<authentication>
-			<database>
-				<identifier>SQLite database authentication</identifier>
-				<database>sqlitedb</database>
-			</database>
+                <!-- Allow IP -->
+
+                <Allow>all</Allow>
+
+                <!-- Deny IP -->
+                
+                <Deny>127.0.0.1</Deny>
+            
+            </Restrictions>
+            
+            <!-- Server certificate file (PEM) -->
+            
+            <Certificate>..\tests\SSL\wolframed.crt</Certificate>
+
+            <!-- Server key file (PEM) -->
+            
+            <Key>..\tests\SSL\wolframed.key</Key>
+            
+            <!--SSL CA chain file -->
+            
+            <CAChainFile>..\tests\SSL\CAchain.pem</CAChainFile>
+            
+            <!-- Directory holding CA certificate files
+                 Define one of CADirectory or CAChainFile, there is no need
+                 to define both -->
+                 
+            <CADirectory>..\tests\SSL\CAdir</CADirectory>
+
+            <!-- Require and verify client certificate -->
+
+            <Verify>On</Verify>
+            
+        </ListenSsl>
+
+    </Server>
+
+    <Database>
+        
+        <!-- SQLite3 database configuration -->
+        
 <!--
-			<database>
-				<identifier>PostgreSQL database authentication</identifier>
-				<database>pgdb</database>
-			</database>
+        <SQLite>
 -->
-			<TextFile>
-				<identifier>Text file authentication</identifier>
-				<file>wolframe.auth</file>
-			</TextFile>
-		</authentication>
+            
+            <!-- the database name for referencing in other configuration options -->
+            
+<!--
+            <Identifier>db</Identifier>
+-->
 
-		<Authorization>
-			<default>deny</default> <!-- what to do when there is no authorization information -->
+            <!-- SQLite database file -->
+            
+<!--
+            <File>C:\Temp\data.db</File>
+-->
+
+            <!-- enable / disable referential integrity
+                 Default: yes -->
+                 
+<!--
+            <ForeignKeys>yes</ForeignKeys>
+-->
+
+            <!-- enable disable profiling on database operations
+                 Default: no -->
+                 
+<!--
+            <Profiling>no</Profiling>
+-->
+
+            <!-- number of parallel connections to the database
+                 Default: 4 -->
 
 <!--
-			<database>
-				<identifier>"PostgreSQL database authorization"</identifier>
-				<database>pgdb</database>
-			</database>
-
-			<database>
-				<identifier>"SQLite database authorization"</identifier>
-				<database>sqlitedb</database>
-			</database>
+            <Connections>4</Connections>
 -->
-		</Authorization>
 
-		<Audit>
-			<!-- Audit is mandatory ? If set to yes operations will fail if audit fails -->
-			<mandatory>yes</mandatory>
-
-			<TextFile>
-				<required>yes</required>
-				<file>wolframe.audit</file>
-			</TextFile>
-
-			<Database>
-				<required>no</required>
-				<database>sqlitedb</database>
-			</Database>
-		</Audit>
-	<!-- There is no configuration for accounting as it
-	     should be derived from audit information -->
-	</AAAA>
-
-	<!-- The thing that does the real job ;) -->
-	<Processor>
-	<!--	<database>pgdb</database> -->
-		<database>sqlitedb</database>
-<!--		<EchoProcessor>
-			<timeout>10</timeout>
-		</EchoProcessor>
+            <!-- extensions to be loaded -->
+            
+<!--
+            <Extension>extension_module.dll</Extension>
 -->
-	</Processor>
 
-</configuration>
+<!--
+        </SQLite>
+-->
 
+        <!-- Postgresql database configuration -->
+        
+<!--
+        <PostgreSQL>
+-->
+
+            <!-- the database name for referencing in other configuration options -->
+            
+<!--
+            <Identifier>db</Identifier>
+-->
+
+            <!-- database host
+                 default: use Unix domain socket -->
+                 
+<!--
+            <Host>localhost</Host>
+-->
+            
+            <!-- database port
+                 default: 5432 -->
+            
+<!--
+            <Port>5432</Port>
+-->
+            
+            <!-- database name -->
+            
+<!--
+            <Database>wolframe</Database>
+-->
+
+            <!-- database user -->
+            
+<!--
+            <User>wolfusr</User>
+-->
+            
+            <!-- password for the database user -->
+            
+<!--
+            <Password>wolfpwd</Password>
+-->
+            
+            <!-- timeout when connecting to the database (in seconds),
+                 use 0 to disable it
+                 Default: 30 -->
+
+<!--
+            <ConnectionTimeout>30</ConnectionTimeout>
+-->
+
+            <!-- number of parallel connections to the database
+                 Default: 4 -->
+
+<!--
+            <Connections>4</Connections>
+-->
+
+            <!-- maximum time allowed to acquire a database connection in seconds
+                 Default: 0 (no timeout, wait forever) -->
+            
+<!--
+            <AcquireTimeout>10</AcquireTimeout>
+-->
+            
+            <!-- maximum allowed time to execute a statement in milliseconds
+                 Default: 30000 -->
+                 
+<!--
+            <StatementTimeout>30000</StatementTimeout>
+-->
+
+             <!-- encryption of the database connection
+            
+             Default: prefer
+            
+             Possible values:
+            
+             disable   only try a non-SSL connection
+             allow     first try a non-SSL connection;
+                       if that fails, try an SSL connection
+             prefer    first try an SSL connection;
+                       if that fails, try a non-SSL connection
+             require   only try an SSL connection.
+             If a root CA file is present, verify the certificate
+            
+             how should a SSL TCP/IP connection be negotiated with the server
+            
+             verify-ca   only try an SSL connection, and verify that the server
+                         certificate is issued by a trusted CA
+             verify-full only try an SSL connection, verify that the server
+                         certificate is issued by a trusted CA and that
+                         the server hostname matches that in the certificate
+             -->
+             
+<!--
+             <SslMode>prefer</SslMode>
+-->
+
+             <!-- the file name of the client SSL certificate -->
+             
+<!--
+             <SslCert>..\tests\SSL\wolframed.crt</SslCert>
+-->
+
+             <!-- the secret key used for the client certificate -->
+             
+<!--
+             <SslKey>..\tests\SSL\wolframed.key</SslKey>
+-->
+             
+             <!-- file name of the root SSL CA certificate -->
+             
+<!--
+             <SslRootCert>..\tests\SSL\CAchain.pem</SslRootCert>
+-->
+             
+             <!-- file name of the SSL certificate revocation list (CRL) -->
+             
+<!--
+             <SslCrl>..\tests\SSL\CRL.pem</SslCrl>
+-->
+
+<!--
+        </PostgreSQL>
+-->
+        
+    </Database>
+
+
+
+    <!-- Authentication, authorization, auditing and accounting configuration 
+
+         simple setup, allow access from everywhere and everybody -->
+
+    <AAAA>
+        
+        <Authentication>
+        
+            <!-- random device
+                 default: system default, usually /dev/urandom -->
+
+            <RandomDevice>/dev/urandom</RandomDevice>
+            
+        </Authentication>
+        
+        <Authorization>
+            
+            <!-- Allow all operations -->
+            
+            <Default>allow</Default>
+            
+        </Authorization>
+        
+        <Audit>
+            
+            <!-- operations only succeed when auditing was successfull
+                 default: no -->
+            
+<!--
+            <Mandatory>yes</Mandatory>
+-->
+            
+        </Audit>
+        
+    </AAAA>
+         
+    <!-- data processing -->
+    
+    <Processor>
+        
+        <!-- database to use in all processors as standard database -->
+        
+<!--
+        <Database>db</Database>
+-->
+
+        <!-- normalization program -->
+        
+<!--
+        <Program>program\example.wnmp</Program>
+-->
+
+        <!-- form validation program using simpleform language -->
+        
+<!--
+        <Program>program\example.sfrm</Program>
+-->
+
+        <!-- database transactions using the TDL language -->
+
+<!--
+        <Program>program\example.tdl</Program>
+-->
+
+        <!-- implementation of functions in various scripting languages -->
+
+<!--
+        <Program>program\example.lua</Program>
+        <Program>program\example.py</Program>
+-->
+    
+        <!-- command handler program mapping requests to functions handling them -->
+
+        <CmdHandler>
+
+            <!-- the standard command handler using the directmap language -->
+    
+<!--
+            <Directmap>
+-->
+
+                <!-- the list of command mappings -->
+                
+<!--
+                <Program>program\example.dmap</Program>
+-->
+
+                <!-- filter to use for serialization of data (format and implementation
+                     of the filter) -->
+
+<!--
+                <Filter>XML=textwolf</Filter>
+                <Filter>XML=libml2</Filter>
+                <Filter>JSON=cjson</Filter>
+-->
+            
+<!--
+            </Directmap>
+-->
+
+            <!-- command handlers written in scripting languages -->
+
+            <!-- command handlers written in Lua -->
+            
+<!--
+            <Lua>
+                <Program>program\example.lua</Program>            
+                <Filter>XML=textwolf</Filter>
+                <Filter>XML=libml2</Filter>
+                <Filter>JSON=cjson</Filter>
+            </Lua>
+-->
+
+        </CmdHandler>
+
+    </Processor>
+
+</Configuration>
