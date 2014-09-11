@@ -143,7 +143,6 @@ TEST_F( ModuleFixture, ModuleLogging )
 	string s = unit?unit->hello( ):"";
 	ASSERT_EQ( s, "hello" );
 	ASSERT_EQ( buffer.rdbuf()->str(), "DEBUG: Module: testUnit object created\n"
-					"DEBUG: Module: test module object created\n"
 					"ALERT: MODULE: hello() called\n" );
 
 	std::cout << buffer.rdbuf();

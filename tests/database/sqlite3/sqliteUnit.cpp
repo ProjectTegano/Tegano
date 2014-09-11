@@ -42,16 +42,16 @@ TEST_F( SQLiteModuleFixture, CreateSQLiteUnit_0 )
 {
 	SQLiteDatabase db( "testDB", "test.db", true, false, 3,
 			 std::vector<std::string>() );
-	EXPECT_STREQ( "SQLite", db.className());
-	EXPECT_STREQ( "testDB", db.ID().c_str());
+	EXPECT_EQ( "SQLite", db.name());
+	EXPECT_EQ( "testDB", db.id());
 }
 
 TEST_F( SQLiteModuleFixture, CreateSQLiteUnit_1 )
 {
 	SQLiteDatabase db( "testDB", "test.db", true, false, 3,
 			 std::vector<std::string>() );
-	EXPECT_STREQ( "SQLite", db.className());
-	EXPECT_STREQ( "testDB", db.ID().c_str());
+	EXPECT_EQ( "SQLite", db.name());
+	EXPECT_EQ( "testDB", db.id());
 }
 
 TEST_F( SQLiteModuleFixture, OpenGarbage )

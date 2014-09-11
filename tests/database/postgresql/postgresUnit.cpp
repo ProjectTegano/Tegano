@@ -33,8 +33,8 @@ TEST_F( PQmoduleFixture, CreatePostgreSQLunit )
 	PostgreSQLDatabase db( "testDB", "localhost", 0, "wolframe",
 				"wolfusr", "wolfpwd", "", "", "", "", "",
 				3, 4, 3, 30000);
-	ASSERT_STREQ( "PostgreSQL", db.className());
-	ASSERT_STREQ( "testDB", db.ID().c_str());
+	EXPECT_EQ( "PostgreSQL", db.name());
+	EXPECT_EQ( "testDB", db.id());
 }
 
 TEST_F( PQmoduleFixture, WrongHost )
@@ -43,8 +43,8 @@ TEST_F( PQmoduleFixture, WrongHost )
 	PostgreSQLDatabase db( "testDB", "blabla", 0, "wolframe",
 				"wolfusr", "wolfpwd", "", "", "", "", "",
 				3, 4, 3, 30000);
-	ASSERT_STREQ( "PostgreSQL", db.className());
-	ASSERT_STREQ( "testDB", db.ID().c_str());
+	EXPECT_EQ( "PostgreSQL", db.name());
+	EXPECT_EQ( "testDB", db.id());
 }
 
 TEST_F( PQmoduleFixture, WrongPassword )

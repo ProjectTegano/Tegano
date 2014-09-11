@@ -31,8 +31,8 @@ TEST_F( OracleFixture, CreateOracleUnit )
 {
 	OracleDatabase db( "testDB", "andreasbaumann.dyndns.org", 1521, "orcl",
 			     "wolfusr", "wolfpwd", 4, 3 );
-	ASSERT_STREQ( "Oracle", db.className());
-	ASSERT_STREQ( "testDB", db.ID().c_str());
+	EXPECT_EQ( "Oracle", db.name());
+	EXPECT_EQ( "testDB", db.id());
 }
 
 TEST_F( OracleFixture, WrongHost )
