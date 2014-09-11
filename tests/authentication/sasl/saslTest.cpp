@@ -53,7 +53,6 @@ protected:
 		logBack( LogBackend::instance( ) )
 	{
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_DATA );
-//		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 	}
 };
 

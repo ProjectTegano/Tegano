@@ -78,7 +78,9 @@ class SaslAuthUnit : public AuthenticationUnit
 {
 public:
 	SaslAuthUnit( const SaslAuthConfig* config);
+	SaslAuthUnit( const std::string& identifier_, const std::string& service_, const std::string& confPath_);
 	~SaslAuthUnit();
+
 	virtual const char* className() const	{ return SASL_AUTHENTICATION_CLASS_NAME; }
 
 	const char** mechs() const;

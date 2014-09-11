@@ -97,6 +97,18 @@ SaslAuthUnit::SaslAuthUnit( const SaslAuthConfig* config)
 	}
 }
 
+SaslAuthUnit::SaslAuthUnit( const std::string& identifier_, const std::string& service_, const std::string& confPath_)
+	: AuthenticationUnit( identifier_)
+	, m_identifier( identifier_)
+	, m_service( service_)
+	, m_confPath( confPath_ )
+{
+	LOG_DEBUG << "SASL authentication unit created for service '" << m_service << "'";
+	if( !m_confPath.empty( ) ) {
+		LOG_DEBUG << "     and with SASL configuration '" << m_confPath << "'";
+	}
+}
+
 SaslAuthUnit::~SaslAuthUnit()
 {
 }

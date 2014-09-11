@@ -71,8 +71,8 @@ protected:
 
 TEST_F( AuthenticationFixture, typeName )
 {
-	TextFileAuthUnit authenticator( "", "passwd" );
-	EXPECT_STREQ( authenticator.className( ), "TextFileAuth" );
+	TextFileAuthUnit authenticator( "TextFileAuth", "passwd" );
+	EXPECT_EQ( authenticator.identifier( ), "TextFileAuth" );
 }
 
 TEST_F( AuthenticationFixture, fileWithoutNewLine )

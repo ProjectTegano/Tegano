@@ -247,6 +247,14 @@ PAMAuthUnit::PAMAuthUnit( const PAMAuthConfig* config)
 	LOG_DEBUG << "PAM authentication unit created with PAM service '" << m_service << "'";
 }
 
+PAMAuthUnit::PAMAuthUnit( const std::string& identifier_, const std::string& service_)
+	: AuthenticationUnit( identifier_)
+	, m_identifier( identifier_)
+	, m_service( service_)
+{
+	LOG_DEBUG << "PAM authentication unit created with PAM service '" << m_service << "'";
+}
+
 PAMAuthUnit::~PAMAuthUnit()
 {
 }

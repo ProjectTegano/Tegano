@@ -63,6 +63,15 @@ TextFileAuthUnit::TextFileAuthUnit( const TextFileAuthConfig* config)
 		      << "' created with file '" << m_pwdFile.filename() << "'";
 }
 
+TextFileAuthUnit::TextFileAuthUnit( const std::string& identifier_, const std::string& pwdFile_)
+	: AuthenticationUnit( identifier_)
+	, m_identifier( identifier_)
+	, m_pwdFile( pwdFile_)
+{
+	LOG_DEBUG << "Text file authenticator '" << m_identifier
+		      << "' created with file '" << m_pwdFile.filename() << "'";
+}
+
 TextFileAuthUnit::~TextFileAuthUnit()
 {
 }

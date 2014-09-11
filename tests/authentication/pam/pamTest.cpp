@@ -53,15 +53,14 @@ protected:
 		logBack( LogBackend::instance( ) )
 	{
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_DATA );
-//		logBack.setConsoleLevel( LogLevel::LOGLEVEL_INFO );
 	}
 };
 
 
 TEST_F( AuthenticationFixture, typeName )
 {
-	PAMAuthUnit authenticator( "", "wolframe" );
-	EXPECT_STREQ( authenticator.className( ), "PAMAuth" );
+	PAMAuthUnit authenticator( "PAMAuth", "wolframe" );
+	EXPECT_EQ( authenticator.identifier(), "PAMAuth" );
 }
 
 TEST_F( AuthenticationFixture, validUserAndPassword )

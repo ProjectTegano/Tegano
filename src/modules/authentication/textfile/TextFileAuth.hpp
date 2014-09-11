@@ -42,6 +42,7 @@
 #include "aaaa/authenticationSlice.hpp"
 #include "aaaa/passwordChanger.hpp"
 #include "module/configuredObjectConstructor.hpp"
+#include "module/baseObjectEnvelopeTemplates.hpp"
 #include "aaaa/user.hpp"
 #include "aaaa/CRAM.hpp"
 #include "passwdFile.hpp"
@@ -76,6 +77,7 @@ class TextFileAuthUnit : public AuthenticationUnit
 {
 public:
 	TextFileAuthUnit( const TextFileAuthConfig* config);
+	TextFileAuthUnit( const std::string& identifier_, const std::string& pwdFile_);
 
 	~TextFileAuthUnit();
 

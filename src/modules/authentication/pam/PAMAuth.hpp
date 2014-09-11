@@ -81,6 +81,7 @@ class PAMAuthUnit : public AuthenticationUnit
 {
 public:
 	PAMAuthUnit( const PAMAuthConfig* config);
+	PAMAuthUnit( const std::string& identifier_, const std::string& service_);
 	~PAMAuthUnit();
 
 	const char** mechs() const;
