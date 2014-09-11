@@ -8,7 +8,7 @@ package require Expect
 set config wolframe.conf
 
 set timeout 5
-set serverpid [spawn ../../src/wolframed -c $config -f]
+set serverpid [spawn ../../src/wolframed/wolframed -c $config -f]
 
 puts "wolframed started with configuration file: $config (pid: $serverpid)"
 # allow the server to start

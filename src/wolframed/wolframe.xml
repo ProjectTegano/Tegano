@@ -16,9 +16,7 @@
              the default load dir (with lower priority). Can be absolute or relative,
              if relative it has this configuration file as basis to compute the path
           -->
-<!--
-        <Directory>modules</Directory>
--->
+        <Directory>..</Directory>
 
         <!-- protocol modules -->
         <Module>modules\protocol\wolframe\mod_protocol_wolframe</Module>
@@ -251,21 +249,21 @@
             
             <!-- Server certificate file (PEM) -->
             
-            <Certificate>..\tests\SSL\wolframed.crt</Certificate>
+            <Certificate>..\..\tests\SSL\wolframed.crt</Certificate>
 
             <!-- Server key file (PEM) -->
             
-            <Key>..\tests\SSL\wolframed.key</Key>
+            <Key>..\..\tests\SSL\wolframed.key</Key>
             
             <!--SSL CA chain file -->
             
-            <CAChainFile>..\tests\SSL\CAchain.pem</CAChainFile>
+            <CAChainFile>..\..\tests\SSL\CAchain.pem</CAChainFile>
             
             <!-- Directory holding CA certificate files
                  Define one of CADirectory or CAChainFile, there is no need
                  to define both -->
                  
-            <CADirectory>..\tests\SSL\CAdir</CADirectory>
+            <CADirectory>..\..\tests\SSL\CAdir</CADirectory>
 
             <!-- Require and verify client certificate -->
 
@@ -429,25 +427,25 @@
              <!-- the file name of the client SSL certificate -->
              
 <!--
-             <SslCert>..\tests\SSL\wolframed.crt</SslCert>
+             <SslCert>..\..\tests\SSL\wolframed.crt</SslCert>
 -->
 
              <!-- the secret key used for the client certificate -->
              
 <!--
-             <SslKey>..\tests\SSL\wolframed.key</SslKey>
+             <SslKey>..\..\tests\SSL\wolframed.key</SslKey>
 -->
              
              <!-- file name of the root SSL CA certificate -->
              
 <!--
-             <SslRootCert>..\tests\SSL\CAchain.pem</SslRootCert>
+             <SslRootCert>..\..\tests\SSL\CAchain.pem</SslRootCert>
 -->
              
              <!-- file name of the SSL certificate revocation list (CRL) -->
              
 <!--
-             <SslCrl>..\tests\SSL\CRL.pem</SslCrl>
+             <SslCrl>..\..\tests\SSL\CRL.pem</SslCrl>
 -->
 
 <!--

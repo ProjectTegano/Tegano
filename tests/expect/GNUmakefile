@@ -6,7 +6,7 @@ SUBDIRS =
 
 include $(TOPDIR)/makefiles/gmake/sub.mk
 
-configTest: $(TOPDIR)/src/wolframed
+configTest: $(TOPDIR)/src/wolframed/wolframed
 
 local_all:
 
