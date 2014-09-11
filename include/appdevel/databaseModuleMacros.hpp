@@ -91,6 +91,7 @@
 			return &rt;\
 		}\
 	};\
+	(*this)(&Constructor ::impl);\
 }
 
 
@@ -148,5 +149,6 @@
 			return &rt;\
 		}\
 	};\
+	(*this)(&Constructor ::impl);\
 }
 

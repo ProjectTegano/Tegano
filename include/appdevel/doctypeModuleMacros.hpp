@@ -40,12 +40,17 @@
 /// \brief Defines a Wolframe document format with a document type detector after the module includes section and module declaration header.
 #define WF_DOCUMENT_FORMAT(NAME,CLASSDEF)\
 {\
-	class ModuleObjectEnvelope\
-		:public CLASSDEF\
+	class DetectorType\
+		:public _Wolframe::cmdbind::DoctypeDetectorType\
 		,public _Wolframe::module::BaseObject\
 	{\
 	public:\
-		ModuleObjectEnvelope(){}\
+		DetectorType()\
+			:_Wolframe::cmdbind::DoctypeDetectorType(NAME){}\
+		virtual _Wolframe::cmdbind::DoctypeDetector* create() const\
+		{\
+			return new CLASSDEF();\
+		}\
 	};\
 	class Constructor\
 		:public _Wolframe::module::SimpleObjectConstructor\
@@ -55,7 +60,7 @@
 			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::DOCTYPE_DETECTOR_OBJECT, className_){}\
 		virtual _Wolframe::module::BaseObject* object() const\
 		{\
-			return new ModuleObjectEnvelope();\
+			return new DetectorType();\
 		}\
 		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\

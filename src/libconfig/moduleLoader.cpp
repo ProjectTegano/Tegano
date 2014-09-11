@@ -159,7 +159,7 @@ ModuleEntryPoint* module::loadModuleEntryPoint( const std::string& absoluteModul
 	}
 
 	g_handleList.addHandle( hndl );
-	LOG_DEBUG << "Module '" << entry->name << "' loaded";
+	LOG_DATA << "Got entry point of module '" << entry->name << "'";
 	return entry;
 }
 

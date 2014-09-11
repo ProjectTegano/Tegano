@@ -66,6 +66,7 @@
 			return &rt;\
 		}\
 	};\
+	(*this)(&Constructor ::impl);\
 }
 
 

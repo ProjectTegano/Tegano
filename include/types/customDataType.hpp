@@ -150,6 +150,7 @@ public:
 	{
 		std::memset( &m_vmt, 0, sizeof( m_vmt));
 	}
+	virtual ~CustomDataType(){}
 
 	/// \brief Constructor
 	/// \param[in] name_ name of the type

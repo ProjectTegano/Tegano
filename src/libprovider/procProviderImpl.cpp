@@ -54,13 +54,13 @@ class CombinedDoctypeDetector
 	:public cmdbind::DoctypeDetector
 {
 public:
-	CombinedDoctypeDetector( const std::vector<cmdbind::DoctypeDetectorType>& dtlist)
+	CombinedDoctypeDetector( const std::vector<cmdbind::DoctypeDetectorTypeR>& dtlist)
 		:m_doctypes(&dtlist),m_nof_finished(0)
 	{
-		std::vector<cmdbind::DoctypeDetectorType>::const_iterator di = dtlist.begin(), de = dtlist.end();
+		std::vector<cmdbind::DoctypeDetectorTypeR>::const_iterator di = dtlist.begin(), de = dtlist.end();
 		for (; di != de; ++di)
 		{
-			m_detectors.push_back( cmdbind::DoctypeDetectorR( di->create()));
+			m_detectors.push_back( cmdbind::DoctypeDetectorR( (*di)->create()));
 			m_finished.push_back( false);
 		}
 	}
@@ -97,14 +97,14 @@ public:
 						if ((*di)->info().get())
 						{
 							//... we got a positive result
-							LOG_DEBUG << "document type/format detection matches for '" << m_doctypes->at(idx).name() << "'";
+							LOG_DEBUG << "document type/format detection matches for '" << m_doctypes->at(idx)->name() << "'";
 							m_info = (*di)->info();
 							return true;
 						}
 						else
 						{
 							//... we got a negative result
-							LOG_DEBUG << "document type/format detection for '" << m_doctypes->at(idx).name() << "' returned negative result";
+							LOG_DEBUG << "document type/format detection for '" << m_doctypes->at(idx)->name() << "' returned negative result";
 							++m_nof_finished;
 							m_finished[ idx] = true;
 
@@ -149,7 +149,7 @@ public:
 	}
 
 private:
-	const std::vector<cmdbind::DoctypeDetectorType>* m_doctypes;	///< list of sub document type detectors
+	const std::vector<cmdbind::DoctypeDetectorTypeR>* m_doctypes;	///< list of sub document type detectors
 	std::vector<cmdbind::DoctypeDetectorR> m_detectors;		///< list of all detector instances
 	std::string m_lastError;					///< last error occurred
 	std::vector<bool> m_finished;					///< bit field marking document type recognition termination
@@ -238,7 +238,7 @@ ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
 				if (obj)
 				{
 					boost::shared_ptr<cmdbind::DoctypeDetectorType> objref( obj);
-					m_doctypes.push_back( *obj);
+					m_doctypes.push_back( objref);
 					LOG_TRACE << "ProcessorProvider: registered document type/format detection '" << constructor->className() << ")";
 				}
 				break;

@@ -10,8 +10,8 @@ CPP_INCLUDE_SUBDIRS = \
 	. \
 	langbind cmdbind database database/vm config \
 	logger utils serialize serialize/struct \
-	serialize/ddl processor filter types AAAA module \
-	prgbind crypto system appdevel appdevel/module
+	serialize/ddl processor filter types aaaa module \
+	crypto system appdevel appdevel/templates
 
 C_INCLUDE_SUBDIRS = \
 	types crypto

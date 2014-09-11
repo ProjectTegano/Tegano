@@ -45,8 +45,7 @@ namespace cmdbind {
 /// \brief Interface to document type and format detection.
 class DoctypeDetector
 {
-	public:
-	
+public:
 	/// \brief Destructor
 	virtual ~DoctypeDetector(){}
 
@@ -73,8 +72,6 @@ class DoctypeDetector
 /// \brief Shared doctype detector reference
 typedef boost::shared_ptr<DoctypeDetector> DoctypeDetectorR;
 
-/// \brief Constructor function for doctype detector instance
-typedef DoctypeDetector* (*CreateDoctypeDetector)();
 
 
 /// \class DoctypeDetectorType
@@ -82,21 +79,13 @@ typedef DoctypeDetector* (*CreateDoctypeDetector)();
 class DoctypeDetectorType
 {
 public:
-	/// \brief Default constructor
-	DoctypeDetectorType()
-		:m_create(0){}
 	/// \brief Constructor
-	DoctypeDetectorType( const std::string& name_, CreateDoctypeDetector create_)
-		:m_name(name_),m_create(create_){}
-
-	DoctypeDetectorType( const DoctypeDetectorType& o)
-		:m_name(o.m_name),m_create(o.m_create){}
+	DoctypeDetectorType( const std::string& name_)
+		:m_name(name_){}
+	virtual ~DoctypeDetectorType(){}
 
 	/// \brief Create an instance
-	DoctypeDetector* create() const
-	{
-		return m_create();
-	}
+	virtual DoctypeDetector* create() const=0;
 
 	/// \brief Get the doctype detector name (usually docformat name)
 	const std::string& name() const
@@ -106,8 +95,9 @@ public:
 
 private:
 	std::string m_name;
-	CreateDoctypeDetector m_create;
 };
+
+typedef boost::shared_ptr<DoctypeDetectorType> DoctypeDetectorTypeR;
 
 }}//namespace
 #endif

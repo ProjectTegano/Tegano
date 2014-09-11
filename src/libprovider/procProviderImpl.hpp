@@ -156,7 +156,7 @@ private:
 	types::keymap<std::size_t> m_cmdMap;				///< map of command names to indices in 'm_cmd'
 
 	types::keymap<cmdbind::ProtocolHandlerUnitR> m_protocols;	///< map protocol identifiers to handler units
-	std::vector<cmdbind::DoctypeDetectorType> m_doctypes;		///< list of document type detectors loaded from modules
+	std::vector<cmdbind::DoctypeDetectorTypeR> m_doctypes;		///< list of document type detectors loaded from modules
 	std::vector<std::string> m_programfiles;			///< list of all programs to load
 	proc::ProgramLibraryImpl m_programs;				///< program library
 	std::string m_referencePath;					///< application reference path
