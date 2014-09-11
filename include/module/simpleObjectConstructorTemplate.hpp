@@ -43,6 +43,8 @@ namespace _Wolframe {
 namespace module {
 
 /// \brief Template to define a constructor of a simple object by type
+/// \remark OBJECT has to be derived from module::BaseObject
+/// \todo Concept checks to verify conditions on OBJECT
 template <ObjectDescription::TypeId TYPEID, class OBJECT>
 struct SimpleObjectConstructorTemplate
 	:public SimpleObjectConstructor

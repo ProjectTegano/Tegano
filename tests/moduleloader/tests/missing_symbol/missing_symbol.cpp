@@ -35,6 +35,8 @@
 //
 
 #include "module/baseObject.hpp"
+#include "module/objectConstructor.hpp"
+#include "module/moduleEntryPoint.hpp"
 
 extern void bar( );
 

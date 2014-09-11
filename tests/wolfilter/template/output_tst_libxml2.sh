@@ -18,6 +18,7 @@
 # - docout		output document name
 # - dumpout		(optional) file to dump to expected output too
 # - csetlist		list of character set encodings
+# - csetsize		number of selected character set encodings
 # - testdata		(optional) additionaly defined test data
 #
 TESTCMD="$testcmd"
@@ -35,11 +36,14 @@ fi
 
 testname="$TESTNAME""_libxml2"
 
+if [ x"$csetsize" = "x" ]; then
+	csetsize="2"
+fi
 cc=`echo $csetlist | sed 's/UTF-8//'`
 if [ x"$cc" != x"$csetlist" ]; then
-	csetselect="UTF-8 `cmd/SELECTS $testname 2 $cc`"
+	csetselect="UTF-8 `cmd/SELECTS $testname $csetsize $cc`"
 else
-	csetselect=`cmd/SELECTS $testname 2 $cc`
+	csetselect=`cmd/SELECTS $testname $csetsize $cc`
 fi
 
 for cset in $csetselect

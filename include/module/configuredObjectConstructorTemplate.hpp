@@ -45,6 +45,10 @@ namespace _Wolframe {
 namespace module {
 
 /// \brief Template to define a constructor of a configured object by type
+/// \remark OBJECT has to be derived from module::BaseObject
+/// \remark OBJECT has to constructable as OBJECT( const CONFIG*)
+/// \remark CONFIG has to be derived from config::ConfigurationObject
+/// \todo Concept checks to verify conditions on OBJECT and CONFIG
 template <ObjectDescription::TypeId TYPEID, class OBJECT, class CONFIG>
 struct ConfiguredObjectConstructorTemplate
 	:public ConfiguredObjectConstructor
