@@ -30,8 +30,8 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_auth_test.cpp
-///\brief Module for dummy (test) authentication mechanism
+/// \file mod_auth_test.cpp
+/// \brief Module for dummy (test) authentication mechanism
 #include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "testAuthentication.hpp"

@@ -226,7 +226,7 @@ int MainProtocolHandler::doMech( int argc, const char** argv, std::ostream& out)
 	}
 	else
 	{
-		if (!m_authenticator->setMech( argv[0] ))
+		if (!m_authenticator->setMech( argv[0]))
 		{
 			out << "ERR denied" << endl();
 			std::string mechlist = boost::algorithm::join( m_authenticator->mechs(), " ");

@@ -30,14 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_database.cpp
-///\brief Module for database audit
-#include "appdevel/auditModuleMacros.hpp"
+/// \file mod_auth_sasl.cpp
+/// \brief Module for authentication with Wolframe-CRAM on a password file (as textfile)
+#include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "TextFileAuth.hpp"
 
 WF_MODULE_BEGIN( "TextFileAuthentication", "textfile authentication module")
- WF_AUDIT( "TextFile", _Wolframe::aaaa::TextFileAuthUnit, _Wolframe::aaaa::TextFileAuthConfig)
+ WF_AUTHENTICATOR( "TextFile", _Wolframe::aaaa::TextFileAuthUnit, _Wolframe::aaaa::TextFileAuthConfig)
 WF_MODULE_END
 
 

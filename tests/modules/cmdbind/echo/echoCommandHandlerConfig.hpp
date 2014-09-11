@@ -45,9 +45,8 @@ class EchoCommandHandlerConfig
 	:public serialize::DescriptiveConfiguration
 {
 public:
-	EchoCommandHandlerConfig( const char* title_="Echo", const char* sectionName_="Echo", const char* logParent_="CmdHandler", const char* logName_="Echo")
-		:_Wolframe::serialize::DescriptiveConfiguration( sectionName_, logParent_, logName_, getStructDescription())
-		,m_title(title_)
+	explicit EchoCommandHandlerConfig( const std::string& className_="EchoCommandHandler", const std::string& configSection_="cmdhandler", const std::string& configKeyword_="echo")
+		:_Wolframe::serialize::DescriptiveConfiguration( className_, configSection_, configKeyword_, getStructDescription())
 	{
 		setBasePtr( (void*)this); // ... mandatory to set pointer to start of configuration
 	}
@@ -64,7 +63,6 @@ public:
 
 private:
 	std::vector<std::string> m_commands;
-	std::string m_title;
 };
 
 }}//namespace

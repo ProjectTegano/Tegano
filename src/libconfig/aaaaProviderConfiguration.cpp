@@ -80,9 +80,10 @@ bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 			for ( config::ConfigurationNode::const_iterator L2it = L1it->second.begin();
 									L2it != L1it->second.end(); L2it++ )	{
 				if ( boost::algorithm::iequals( "randomDevice", L2it->first ))	{
-					bool isDefined = ( !m_randomDevice.empty() );
-					if ( ! Parser::getValue( logStr.c_str(), *L2it, m_randomDevice, &isDefined ))
-						retVal = false;
+					LOG_WARNING << "Using deprecated configuration option 'randomDevice' (no effect)";
+				}
+				else if ( boost::algorithm::iequals( "allowAnonymous", L2it->first ))	{
+					LOG_WARNING << "Using deprecated configuration option 'allowAnonymous' (no effect)";
 				}
 				else if (modules)
 				{
@@ -102,7 +103,7 @@ bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 				}
 				else if (modules)
 				{
-					retVal &= parseModuleConfiguration( "Authorization", L2it->first, L2it->second, m_authConfig, modules);
+					retVal &= parseModuleConfiguration( "Authorization", L2it->first, L2it->second, m_authzConfig, modules);
 				}
 			}
 		}
@@ -118,7 +119,7 @@ bool AaaaProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 				}
 				else if (modules)
 				{
-					retVal &= parseModuleConfiguration( "Audit", L2it->first, L2it->second, m_authConfig, modules);
+					retVal &= parseModuleConfiguration( "Audit", L2it->first, L2it->second, m_auditConfig, modules);
 				}
 			}
 		}

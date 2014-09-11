@@ -30,13 +30,13 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_db_postgresqltest.cpp
-///\brief Database interface test module for PostgreSQL
+///\file mod_db_testtrace.cpp
+///\brief Database interface for fake database working on text files for testing
 #include "appdevel/databaseModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "testtraceDatabase.hpp"
 
 WF_MODULE_BEGIN( "TestTraceDatabase", "Database interface module for PostgreSQL")
- WF_DATABASE( "TestTrace", _Wolframe::db::TesttraceDatabase, _Wolframe::db::TesttraceDatabaseConfig)
+ WF_DATABASE( "Test", _Wolframe::db::TesttraceDatabase, _Wolframe::db::TesttraceDatabaseConfig)
 WF_MODULE_END
 

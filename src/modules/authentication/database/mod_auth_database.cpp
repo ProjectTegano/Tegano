@@ -30,14 +30,15 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_database.cpp
-///\brief Module for database audit
-#include "appdevel/auditModuleMacros.hpp"
+/// \file mod_auth_sasl.cpp
+/// \brief Module for authentication with Wolframe-CRAM with a database as storage
+/// \remark NOT IMPLEMENTED YET
+#include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "DBauth.hpp"
 
-WF_MODULE_BEGIN( "databaseAuthentication", "database authentication module")
- WF_AUDIT( "database", _Wolframe::aaaa::DBauthUnit, _Wolframe::aaaa::DBAuthConfig)
+WF_MODULE_BEGIN( "DatabaseAuthentication", "database authentication module")
+ WF_AUTHENTICATOR( "Database", _Wolframe::aaaa::DBauthUnit, _Wolframe::aaaa::DBAuthConfig)
 WF_MODULE_END
 
 

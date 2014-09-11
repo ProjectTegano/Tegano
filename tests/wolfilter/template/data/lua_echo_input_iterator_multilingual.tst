@@ -1,6 +1,6 @@
 #!/bin/sh
 testname=`basename $0 ".tst"`				# name of the test
-luascript=`echo $testname | sed 's/lua_//'`.lua
+luascript="echo_input_iterator.lua"
 docin=multilingual					# input document name
 docout=$docin						# output document name
 testcmd="-c wolframe.conf run"				# command to execute by the test

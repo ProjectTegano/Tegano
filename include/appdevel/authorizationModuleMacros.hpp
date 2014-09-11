@@ -66,7 +66,7 @@
 		}\
 		virtual _Wolframe::config::ConfigurationObject* configuration() const\
 		{\
-			return new CONFIGCLASS( NAME "Authorization", "Authorization", NAME);\
+			return new CONFIGCLASS( NAME "Authorizer", "Authorization", NAME);\
 		}\
 		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\

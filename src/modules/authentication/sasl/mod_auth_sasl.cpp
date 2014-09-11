@@ -30,13 +30,13 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_database.cpp
-///\brief Module for database audit
-#include "appdevel/auditModuleMacros.hpp"
+/// \file mod_auth_sasl.cpp
+/// \brief Module for authentication with SASL
+#include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "SaslAuth.hpp"
 
 WF_MODULE_BEGIN( "SaslAuthentication", "SASL authentication module")
- WF_AUDIT( "SASL", _Wolframe::aaaa::SaslAuthUnit, _Wolframe::aaaa::SaslAuthConfig)
+ WF_AUTHENTICATOR( "SASL", _Wolframe::aaaa::SaslAuthUnit, _Wolframe::aaaa::SaslAuthConfig)
 WF_MODULE_END
 

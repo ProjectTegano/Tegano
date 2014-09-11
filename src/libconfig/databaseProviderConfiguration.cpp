@@ -61,7 +61,7 @@ bool DatabaseProviderConfiguration::parse(
 	using namespace _Wolframe::config;
 	bool retVal = true;
 
-	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )
+	for (config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++)
 	{
 		if (modules)
 		{

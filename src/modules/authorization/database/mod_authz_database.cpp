@@ -30,14 +30,15 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_database.cpp
-///\brief Module for database audit
-#include "appdevel/auditModuleMacros.hpp"
+/// \file mod_authz_database.cpp
+/// \brief Module for database authorization
+/// \remark NOT IMPLEMENTED YET
+#include "appdevel/authorizationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "DBauthz.hpp"
 
-WF_MODULE_BEGIN( "databaseAuthorization", "database authorization module")
- WF_AUDIT( "database", _Wolframe::aaaa::DBauthorizer, _Wolframe::aaaa::DatabaseAuthzConfig)
+WF_MODULE_BEGIN( "DatabaseAuthorization", "database authorization module")
+ WF_AUTHORIZER( "Database", _Wolframe::aaaa::DBauthorizer, _Wolframe::aaaa::DatabaseAuthzConfig)
 WF_MODULE_END
 
 

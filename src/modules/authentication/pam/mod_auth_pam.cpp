@@ -30,14 +30,14 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_database.cpp
-///\brief Module for database audit
-#include "appdevel/auditModuleMacros.hpp"
+/// \file mod_auth_sasl.cpp
+/// \brief Module for authentication with PAM
+#include "appdevel/authenticationModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "PAMAuth.hpp"
 
 WF_MODULE_BEGIN( "PAMAuthentication", "PAM authentication module")
- WF_AUDIT( "PAM", _Wolframe::aaaa::PAMAuthUnit, _Wolframe::aaaa::PAMAuthConfig)
+ WF_AUTHENTICATOR( "PAM", _Wolframe::aaaa::PAMAuthUnit, _Wolframe::aaaa::PAMAuthConfig)
 WF_MODULE_END
 
 

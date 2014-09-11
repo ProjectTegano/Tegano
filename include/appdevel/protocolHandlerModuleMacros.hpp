@@ -51,14 +51,14 @@
 	{\
 	public:\
 		Constructor( const std::string& className_)\
-			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::DOCTYPE_DETECTOR_OBJECT, className_){}\
+			: _Wolframe::module::SimpleObjectConstructor( _Wolframe::module::ObjectDescription::PROTOCOL_HANDLER_OBJECT, className_){}\
 		virtual _Wolframe::module::BaseObject* object() const\
 		{\
 			return new ModuleObjectEnvelope();\
 		}\
 		static const _Wolframe::module::ObjectConstructor* impl()\
 		{\
-			static const Constructor rt( NAME "DocTypeDetection");\
+			static const Constructor rt( NAME "Protocol");\
 			return &rt;\
 		}\
 	};\

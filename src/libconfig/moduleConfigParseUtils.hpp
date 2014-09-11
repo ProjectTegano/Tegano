@@ -67,7 +67,7 @@ static bool parseModuleConfiguration( const std::string& configSection, const st
 		}
 		else
 		{
-			LOG_ERROR << "configuration error in sub section " << configSection << ": unknown option: '" << configKeyword << "' " << subconfig.position().logtext();
+			LOG_ERROR << "configuration error in sub section " << configSection << ": unknown option or structure: '" << configKeyword << "' " << subconfig.position().logtext();
 			return false;
 		}
 	}

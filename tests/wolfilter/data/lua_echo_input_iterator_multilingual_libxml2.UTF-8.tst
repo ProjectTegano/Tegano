@@ -183,6 +183,12 @@ Processor
 	}
 }
 **file:script.lua
+function run()
+	for v,t in input:get()
+	do
+		output:print( v,t)
+	end
+end
 **output
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <list><book id="1" dsc="Aina Jushi: Idle Talk under Beaus Trellis" language="CN"><author>Aina Jushi</author><title>抱歉，没有找到与您查询的</title><release><date>2008/05/05</date><publisher>The Project Gutenberg</publisher><code>#25328</code></release><excerpt>

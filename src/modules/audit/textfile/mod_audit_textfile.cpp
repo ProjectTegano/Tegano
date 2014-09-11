@@ -30,8 +30,8 @@
  Project Wolframe.
 
 ************************************************************************/
-///\file mod_audit_textfile.cpp
-///\brief Module for textfile audit
+/// \file mod_audit_textfile.cpp
+/// \brief Module for textfile audit
 #include "appdevel/auditModuleMacros.hpp"
 #include "appdevel/moduleFrameMacros.hpp"
 #include "TextFileAudit.hpp"
