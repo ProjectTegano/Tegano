@@ -30,7 +30,7 @@ INCLUDE_LIBS = \
 	$(TOPDIR)\3rdParty\gtest\gtest-all.obj \
 	$(TOPDIR)\wtest\wtest.lib \
 	$(TOPDIR)\src\libconfig\wfconfig.lib \
-	$(TOPDIR)\src\libconfig\wfprovider.lib \
+	$(TOPDIR)\src\libprovider\wfprovider.lib \
 	$(TOPDIR)\src\libwolframe\wolframe.lib \
 	$(TOPDIR)\src\libwolframe_serialize\wolframe_serialize.lib \
 	$(TOPDIR)\src\libwolframe_database\wolframe_database.lib \
