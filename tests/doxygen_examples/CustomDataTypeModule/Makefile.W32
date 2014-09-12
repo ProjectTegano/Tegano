@@ -35,7 +35,7 @@ all: $(OBJS) $(TEST_CPP_BINS)
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-src.exe: src.obj $(TOPDIR)\src\wolframe.lib
+src.exe: src.obj
 
 local_all:
 

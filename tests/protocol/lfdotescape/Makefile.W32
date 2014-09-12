@@ -38,7 +38,7 @@ all: $(TEST_OBJS) $(TEST_CPP_BINS)
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-protocolLFdotEscaping.exe: protocolLFdotEscaping.obj protocolLFdotEscapingFiles.obj $(TOPDIR)\src\wolframe.lib
+protocolLFdotEscaping.exe: protocolLFdotEscaping.obj protocolLFdotEscapingFiles.obj
 
 local_all:
 

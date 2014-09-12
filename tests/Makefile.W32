@@ -114,8 +114,8 @@ testDateTime.exe: testDateTime.obj
 testBigNumber.exe: testBigNumber.obj
 testRand.exe: testRand.obj
 testTimestamp.exe: testTimestamp.obj
-testVariantTypes.exe: testVariantTypes.obj $(TOPDIR)\src\wolframe.lib
-testIntegers.exe: testIntegers.obj $(TOPDIR)\src\wolframe.lib
+testVariantTypes.exe: testVariantTypes.obj $(TOPDIR)\src\libwolframe\wolframe.lib
+testIntegers.exe: testIntegers.obj $(TOPDIR)\src\libwolframe\wolframe.lib
 
 local_all:
 

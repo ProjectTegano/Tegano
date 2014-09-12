@@ -37,9 +37,9 @@ TEST_CPP_BINS = \
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-textFileThrow.exe: textFileThrow.obj $(CPP_OBJS) $(TOPDIR)\src\wolframe.lib
-textFileTest.exe: textFileTest.obj $(CPP_OBJS) $(TOPDIR)\src\wolframe.lib
-textFilePwdChange.exe: textFilePwdChange.obj $(CPP_OBJS) $(TOPDIR)\src\wolframe.lib
+textFileThrow.exe: textFileThrow.obj $(CPP_OBJS)
+textFileTest.exe: textFileTest.obj $(CPP_OBJS)
+textFilePwdChange.exe: textFilePwdChange.obj $(CPP_OBJS)
 passwdHashTest.exe: passwdHashTest.obj $(CPP_OBJS)
 passwdFileTest.exe: passwdFileTest.obj $(CPP_OBJS)
 

@@ -14,7 +14,7 @@ INCLUDE_DIRS = \
 	/I$(TOPDIR)\src\wolfilter \
 	/I$(TOPDIR)\include \
 	/I$(TOPDIR)\3rdParty\gtest\include \
-	/I$(TOPDIR)\wtest\include
+	/I$(TOPDIR)\wtest\include \
 	/I"$(BOOST_INCLUDE_DIR)"
 
 INCLUDE_LDFLAGS = \
@@ -61,6 +61,8 @@ all: $(CPP_OBJS) $(CPP_BINS)
 modules: libwolframe
 testWolfilter.exe: testWolfilter.obj $(CPP_OBJS) $(TOPDIR)\src\libwfsingleton\logger\wolframemsg.res
 
+local_all:
+
 local_clean:
 	@-erase $(CPP_BINS) 2>NUL
 	@-erase $(CPP_OBJS) 2>NUL
@@ -71,28 +73,29 @@ local_test:
 	@-copy $(TOPDIR)\src\libwfsingleton\wfsingleton.dll . >NUL
 	@-if not exist temp mkdir temp 
 	@-erase /q temp 2>NUL
-	!IFDEF WITH_LIBXML2
+!IFDEF WITH_LIBXML2
 	@-copy "$(ZLIB_DIR)\bin\zlib1.dll" . >NUL
 	@-copy "$(ICONV_DIR)\bin\iconv.dll" . >NUL
 	@-copy "$(LIBXML2_DIR)\bin\libxml2.dll" . >NUL
-	!ENDIF
-	!IFDEF WITH_LIBXSLT
+!ENDIF
+!IFDEF WITH_LIBXSLT
 	@-copy "$(LIBXSLT_DIR)\bin\libxslt.dll" . >NUL 
-	!ENDIF
-	!IFDEF WITH_SSL
+!ENDIF
+!IFDEF WITH_SSL
 	@-copy "$(OPENSSL_DIR)\bin\libeay32.dll" . >NUL 
 	@-copy "$(OPENSSL_DIR)\bin\ssleay32.dll" . >NUL 
-	!ENDIF
-	!IFDEF WITH_PGSQL
+!ENDIF
+!IFDEF WITH_PGSQL
 	@-copy "$(PGSQL_DIR)\lib\libpq.dll" . >NUL 
-	!IFDEF PGDLL_WITH_I18N
+!IFDEF PGDLL_WITH_I18N
 	@-copy "$(PGSQL_DIR)\bin\libintl*.dll" . >NUL 
 	@-copy "$(PGSQL_DIR)\bin\libiconv*.dll" . >NUL 
-	!ENDIF
-	!ENDIF
-	!IFDEF WITH_ORACLE
+!ENDIF
+!ENDIF
+!IFDEF WITH_ORACLE
 	@-copy "$(ORACLE_DIR)\*.dll" . >NUL 
-	!ENDIF
+!ENDIF
 	@-.\testWolfilter 
+
 
 

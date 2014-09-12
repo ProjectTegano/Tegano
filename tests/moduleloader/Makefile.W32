@@ -34,7 +34,7 @@ OBJS =
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-moduleTest.exe: moduleTest.obj $(TOPDIR)\src\wolframe.lib
+moduleTest.exe: moduleTest.obj
 
 local_all:
 

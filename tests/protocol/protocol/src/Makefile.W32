@@ -42,7 +42,7 @@ all: $(TEST_OBJS) $(TEST_CPP_BINS)
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-testProtocol.exe: testProtocol.obj $(TOPDIR)\src\wolframe.lib
+testProtocol.exe: testProtocol.obj
 
 local_all:
 

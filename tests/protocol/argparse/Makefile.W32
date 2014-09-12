@@ -38,7 +38,7 @@ all: $(TEST_OBJS) $(TEST_CPP_BINS)
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
-protocolArgumentParsing.exe: protocolArgumentParsing.obj protocolArgumentParsingFiles.obj $(TOPDIR)\src\wolframe.lib
+protocolArgumentParsing.exe: protocolArgumentParsing.obj protocolArgumentParsingFiles.obj
 
 local_all:
 
