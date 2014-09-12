@@ -50,7 +50,7 @@ TYP_OBJS = \
 	types\variant.obj \
 	types\variantStructDescription.obj \
 	types\variantStruct.obj \
-	types\form.o
+	types\form.obj
 
 UTIL_OBJS = \
 	utils\asciiCharParser.obj \
@@ -62,14 +62,14 @@ UTIL_OBJS = \
 	utils\fileUtils.obj \
 	utils\parseUtils.obj \
 	utils\printFormats.obj \
-	utils\getPassword.o
+	utils\getPassword.obj
 
 AAAA_OBJS = \
 	aaaa\user.obj \
 	aaaa\passwordHash.obj \
 	aaaa\usernameHash.obj \
 	aaaa\CRAM.obj \
-	aaaa\passwordChangeMessage.o
+	aaaa\passwordChangeMessage.obj
 
 CPP_OBJS = \
 	$(TYP_OBJS) \
