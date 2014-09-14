@@ -48,7 +48,7 @@
 
 namespace _Wolframe {
 namespace utils {
-	struct PrintFormat;
+	class PrintFormat;
 }
 namespace types {
 
