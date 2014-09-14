@@ -461,7 +461,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 		_Wolframe::system::RandomGeneratorImpl randomGenerator;
 
 		_Wolframe::config::ApplicationConfiguration::ConfigFileType cfgType =
-				_Wolframe::config::ApplicationConfiguration::fileType( configFile, cmdLineCfg.cfgType );
+				_Wolframe::config::ApplicationConfiguration::fileType( configFile, _Wolframe::config::ApplicationConfiguration::configFileType( cmdLineCfg.cfgType));
 		if ( cfgType == _Wolframe::config::ApplicationConfiguration::CONFIG_UNDEFINED )
 			return _Wolframe::ErrorCode::FAILURE;
 		if ( !conf.parseModules( configFile, cfgType ))
