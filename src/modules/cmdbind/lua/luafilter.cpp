@@ -331,7 +331,7 @@ std::string LuaTableInputFilter::stackDump( const std::vector<FetchState>& stk)
 
 bool LuaTableInputFilter::getNext( ElementType& type, types::VariantConst& element)
 {
-	if (!lua_checkstack( m_ls, 10))
+	if (!lua_checkstack( m_ls, 16))
 	{
 		setState( InputFilter::Error, "lua stack overflow");
 		return false;
