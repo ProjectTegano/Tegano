@@ -37,9 +37,14 @@
 #define _WOLFRAME_STRING_UTILS_HPP_INCLUDED
 #include <string>
 #include <vector>
+#include <iostream>
 
 namespace _Wolframe {
+namespace langbind {
+class TypedInputFilter;
+}
 namespace utils {
+class PrintFormat;
 
 /// \brief Split the string, ingoring empty parts of the result (susequent split characters treated as one)
 /// \param[out] res result of the split
@@ -54,6 +59,19 @@ void splitString( std::vector<std::string>& res, const std::string& inp, const c
 /// \param[in] splitchr set of characters to split with (each of them is one separating character)
 void splitString( std::vector<std::string>& res, std::string::const_iterator begin, std::string::const_iterator end, const char* splitchr);
 
-}} //namespace _Wolframe::utils
+/// \brief Iterate on a filter and return its contents as string
+/// \remark Interface does not allow chunkwise processing. Content of input filter has to be complete
+/// \param[in,out] flt filter to iterate on to print the contents
+/// \param[in] format format to print with
+/// \return the printed content of filter 'flt' as string
+std::string filterToString( langbind::TypedInputFilter& flt, const PrintFormat* format);
 
-#endif // _MISC_UTILS_HPP_INCLUDED
+/// \brief Iterate on a filter and print its contents to an STL stream
+/// \param[out] dest stream to print to
+/// \param[in,out] flt filter to iterate on to print the contents
+/// \param[in] format format to print with
+/// \return true on success, false if error or input of filter is not complete (inspect state of 'flt')
+bool printFilterToStream( std::ostream& dest, langbind::TypedInputFilter& flt, const PrintFormat* format);
+
+}} //namespace
+#endif

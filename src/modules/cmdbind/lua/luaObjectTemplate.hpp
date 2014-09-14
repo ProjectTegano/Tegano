@@ -46,7 +46,6 @@ Project Wolframe.
 #include "filter/typingfilter.hpp"
 #include "filter/typedfilterScope.hpp"
 #include "filter/inputfilterScope.hpp"
-#include "filter/tostringfilter.hpp"
 #include "filter/redirectFilterClosure.hpp"
 #include "serialize/ddlFormParser.hpp"
 #include "serialize/ddlFormSerializer.hpp"

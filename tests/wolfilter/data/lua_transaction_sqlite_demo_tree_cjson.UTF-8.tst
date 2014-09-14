@@ -282,7 +282,7 @@ END
 **outputfile:DBDUMP
 **output
 {
-	"result":	["", "ID { '2' } ", "ID { '3' } ", "ID { '4' } ", "ID { '5' } ", "ID { '6' } "]
+	"result":	["", " ID{ '2'}", " ID{ '3'}", " ID{ '4'}", " ID{ '5'}", " ID{ '6'}"]
 }
 tree:
 '1', NULL, 'Albert', '1', '12'

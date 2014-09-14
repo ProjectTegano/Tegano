@@ -48,15 +48,20 @@ StructSerializer::StructSerializer( const ObjectReference& obj, const StructDesc
 	,m_ptr(obj.get())
 	,m_obj(obj)
 	,m_descr(descr_)
+	,m_finalCloseFetched(false)
 	,m_ctx()
 {
-	m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
+	if (m_descr)
+	{
+		m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
+	}
 }
 
 StructSerializer::StructSerializer( const void* obj, const StructDescriptionBase* descr_)
 	:TypedInputFilter("serializer")
 	,m_ptr(obj)
 	,m_descr(descr_)
+	,m_finalCloseFetched(false)
 	,m_ctx()
 {
 	if (m_descr)
@@ -70,6 +75,7 @@ StructSerializer::StructSerializer( const StructSerializer& o)
 	,m_ptr(o.m_ptr)
 	,m_obj(o.m_obj)
 	,m_descr(o.m_descr)
+	,m_finalCloseFetched(o.m_finalCloseFetched)
 	,m_ctx(o.m_ctx)
 	,m_out(o.m_out)
 	,m_stk(o.m_stk){}
@@ -80,6 +86,7 @@ void StructSerializer::init( const langbind::TypedOutputFilterR& out, serialize:
 	m_ctx.setFlags(flags_);
 	m_stk.clear();
 	m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
+	m_finalCloseFetched = false;
 	m_out = out;
 }
 
@@ -88,6 +95,7 @@ void StructSerializer::reset()
 	m_ctx.clear();
 	m_stk.clear();
 	m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
+	m_finalCloseFetched = false;
 }
 
 langbind::TypedInputFilter* StructSerializer::copy() const
@@ -141,8 +149,18 @@ bool StructSerializer::getNext( langbind::FilterBase::ElementType& type, types::
 	{
 		m_stk.back().fetch()( m_ctx, m_stk);
 	}
-	if (!m_stk.size()) return false;
-
+	if (!m_stk.size())
+	{
+		if (m_finalCloseFetched)
+		{
+			return false;
+		}
+		m_finalCloseFetched = true;
+		type = langbind::FilterBase::CloseTag;
+		value.init();
+		LOG_DATA << "[C++ structure serialization get] final close";
+		return true;
+	}
 	type = elem->m_type;
 	value = elem->m_value;
 	setState( langbind::InputFilter::Open);

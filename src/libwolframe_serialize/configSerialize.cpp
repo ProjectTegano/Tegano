@@ -33,7 +33,8 @@ Project Wolframe.
 ///\brief Defines functions for serialization/deserialization of configuration
 
 #include "serialize/configSerialize.hpp"
-#include "filter/tostringfilter.hpp"
+#include "utils/printFormats.hpp"
+#include "utils/stringUtils.hpp"
 
 using namespace _Wolframe;
 using namespace _Wolframe::serialize;
@@ -60,12 +61,8 @@ void serialize::parseConfigStructureVP( void* stptr, const serialize::StructDesc
 
 std::string serialize::structureToStringVP( const void* stptr, const serialize::StructDescriptionBase* descr)
 {
-	langbind::ToStringFilter* res;
-	langbind::TypedOutputFilterR out( res = new langbind::ToStringFilter( "\t"));
 	serialize::StructSerializer serializer( stptr, descr);
-	serializer.init( out);
-	if (!serializer.call()) throw std::runtime_error( "illegal state in structure serializer");
-	return res->content();
+	return utils::filterToString( serializer, utils::ptreePrintFormat());
 }
 
 

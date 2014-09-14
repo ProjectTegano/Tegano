@@ -42,8 +42,9 @@ Project Wolframe.
 #include "filter/typingfilter.hpp"
 #include "filter/typedfilterScope.hpp"
 #include "filter/inputfilterScope.hpp"
-#include "filter/tostringfilter.hpp"
 #include "utils/fileUtils.hpp"
+#include "utils/stringUtils.hpp"
+#include "utils/printFormats.hpp"
 #include "cmdbind/doctypeDetector.hpp"
 #include <limits>
 #include <fstream>
@@ -517,27 +518,14 @@ LUA_FUNCTION_THROWS( "form:__tostring()", function_form_tostring)
 	types::FormR* form = LuaObject<types::FormR>::getSelf( ls, "form", "__tostring");
 	check_parameters( ls, 1, 0);
 
-	ToStringFilter* flt = new ToStringFilter();
-	TypedOutputFilterR out( flt);
-
 	serialize::DDLFormSerializer ser( *form);
-	ser.init( out, serialize::Flags::SerializeWithIndices);
-	if (!ser.call())
-	{
-		if (out->state() == OutputFilter::EndOfBuffer)
-		{
-			throw std::logic_error( "internal: tostring serialization with yield");
-		}
-		else
-		{
-			throw std::runtime_error( ser.getError());
-		}
-	}
+	ser.setFlags( langbind::FilterBase::SerializeWithIndices);
+
 	std::string content;
 	content.append( "FORM ");
 	content.append( (*form)->description()->name());
 	content.append( "\n");
-	content.append( flt->content());
+	content.append( utils::filterToString( ser, utils::logPrintFormat()));
 
 	LuaExceptionHandlerScope escope(ls);
 	{
@@ -929,21 +917,8 @@ LUA_FUNCTION_THROWS( "<structure>:__tostring()", function_struct_tostring)
 	LuaObject<serialize::StructSerializer>::push_luastack( ls, *obj);
 	obj = LuaObject<serialize::StructSerializer>::get( ls, -1);
 
-	ToStringFilter* flt = new ToStringFilter();
-	TypedOutputFilterR out( flt);
-	obj->init( out, serialize::Flags::SerializeWithIndices);
-	if (!obj->call())
-	{
-		if (out->state() == OutputFilter::EndOfBuffer)
-		{
-			throw std::logic_error( "internal: tostring serialization with yield");
-		}
-		else
-		{
-			throw std::runtime_error( out->getError());
-		}
-	}
-	std::string content = flt->content();
+	obj->setFlags( langbind::FilterBase::SerializeWithIndices);
+	std::string content( utils::filterToString( *obj, utils::logPrintFormat()));
 	LuaExceptionHandlerScope escope(ls);
 	{
 		lua_pushlstring( ls, content.c_str(), content.size());
@@ -1010,14 +985,7 @@ LUA_FUNCTION_THROWS( "<structure>:__tostring()", function_typedinputfilter_tostr
 	obj->resetIterator();
 	obj->setFlags( TypedInputFilter::SerializeWithIndices);
 
-	ToStringFilter* flt = new ToStringFilter();
-	TypedOutputFilterR out( flt);
-	RedirectFilterClosure exc( obj, out, false);
-	if (!exc.call())
-	{
-		throw std::logic_error( "internal: tostring serialization with yield");
-	}
-	std::string content = flt->content();
+	std::string content( utils::filterToString( *obj, utils::logPrintFormat()));
 	LuaExceptionHandlerScope escope(ls);
 	{
 		lua_pushlstring( ls, content.c_str(), content.size());

@@ -83,6 +83,7 @@ private:
 	const void* m_ptr;
 	const ObjectReference m_obj;
 	const StructDescriptionBase* m_descr;
+	bool m_finalCloseFetched;
 	Context m_ctx;
 	langbind::TypedOutputFilterR m_out;
 	SerializeStateStack m_stk;

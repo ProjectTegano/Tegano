@@ -34,12 +34,12 @@
 ///\brief Implementation of the options of a wolfilter call
 #include "wolfilterCommandLine.hpp"
 #include "filter/ptreefilter.hpp"
-#include "filter/tostringfilter.hpp"
 #include "config/configurationTree.hpp"
 #include "types/propertyTree.hpp"
 #include "serialize/structOptionParser.hpp"
 #include "serialize/configSerialize.hpp"
 #include "utils/fileUtils.hpp"
+#include "utils/stringUtils.hpp"
 #include "filter/redirectFilterClosure.hpp"
 #include "logger/logger-v1.hpp"
 #include <boost/program_options.hpp>
@@ -75,11 +75,9 @@ static const char* getDefaultConfigFile()
 static std::string configurationTree_tostring( const types::PropertyTree::Node& pt)
 {
 	langbind::TypedInputFilterR inp( new langbind::PropertyTreeInputFilter( pt));
-	langbind::ToStringFilter* res;
-	langbind::TypedOutputFilterR out( res = new langbind::ToStringFilter( "\t"));
-	langbind::RedirectFilterClosure redirect( inp, out, false);
-	if (!redirect.call()) throw std::runtime_error( "can't map configuration tree to string");
-	return res->content();
+	inp->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
+
+	return utils::filterToString( *inp, utils::ptreePrintFormat());
 }
 
 config::ConfigurationNode WolfilterCommandLine::getConfigNode( const std::string& name) const

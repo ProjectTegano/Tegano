@@ -36,16 +36,19 @@ Project Wolframe.
 #ifdef _WIN32
 #pragma warning(disable:4996)
 #endif
+#include "utils/printFormats.hpp"
 #include "utils/stringUtils.hpp"
+#include "filter/typedfilter.hpp"
 #include <cstring>
 #include <sstream>
 #include <string>
 #include <boost/algorithm/string.hpp>
 #include <boost/range/iterator_range.hpp>
 
+using namespace _Wolframe;
 using namespace _Wolframe::utils;
 
-void _Wolframe::utils::splitString( std::vector<std::string>& res, const std::string& inp, const char* splitchrs)
+void utils::splitString( std::vector<std::string>& res, const std::string& inp, const char* splitchrs)
 {
 	res.clear();
 	std::vector<std::string> imm;
@@ -54,7 +57,7 @@ void _Wolframe::utils::splitString( std::vector<std::string>& res, const std::st
 	for (; vi != ve; ++vi) if (!vi->empty()) res.push_back( *vi);
 }
 
-void _Wolframe::utils::splitString( std::vector<std::string>& res, std::string::const_iterator begin, std::string::const_iterator end, const char* splitchrs)
+void utils::splitString( std::vector<std::string>& res, std::string::const_iterator begin, std::string::const_iterator end, const char* splitchrs)
 {
 	res.clear();
 	std::vector<std::string> imm;
@@ -64,3 +67,158 @@ void _Wolframe::utils::splitString( std::vector<std::string>& res, std::string::
 	std::vector<std::string>::const_iterator vi=imm.begin(), ve=imm.end();
 	for (; vi != ve; ++vi) if (!vi->empty()) res.push_back( *vi);
 }
+
+
+static std::string substquot( const std::string& o, const utils::PrintFormat* format)
+{
+	if (!format->endvalue || !format->endvalue[0] || !format->escvalue || !format->escvalue[0])
+	{
+		return o;
+	}
+	if (format->endvalue[1] || format->escvalue[1])
+	{
+		std::size_t endvaluelen = std::strlen( format->endvalue);
+		std::string rt;
+		char const* ii = const_cast<char const*>( o.c_str());
+		char const* ee = ii+o.size();
+		for (; ii+endvaluelen <= ee; ++ii)
+		{
+			if (*ii != *format->endvalue
+			||  0!=std::memcmp( ii, format->endvalue, endvaluelen))
+			{
+				continue;
+			}
+			rt.append( format->escvalue);
+			rt.append( format->endvalue);
+			ii += endvaluelen-1;
+		}
+		return rt;
+	}
+	else
+	{
+		char endch = *format->endvalue;
+		char escch = *format->escvalue;
+		std::string rt;
+		char const* ii = const_cast<char const*>( o.c_str());
+		char const* ee = ii+o.size();
+		for (; ii != ee; ++ii)
+		{
+			if (*ii == endch)
+			{
+				rt.push_back( escch);
+			}
+			rt.push_back( *ii);
+		}
+		return rt;
+	}
+}
+
+struct PrintContext
+{
+	int taglevel;
+	std::string indent;
+	langbind::FilterBase::ElementType lasttype;
+
+	PrintContext()
+		:taglevel(0),lasttype(langbind::FilterBase::CloseTag)
+	{}
+};
+
+static void printElement( std::ostream& dest, langbind::FilterBase::ElementType type, const types::VariantConst& element, const utils::PrintFormat* format, PrintContext& ctx)
+{
+	if (ctx.taglevel < 0)
+	{
+		throw std::runtime_error("illegal print operation in tostring filter (print atfter final close)");
+	}
+	switch (type)
+	{
+		case langbind::FilterBase::OpenTag:
+			++ctx.taglevel;
+			dest << format->newitem;
+			if (format->indent)
+			{
+				dest << ctx.indent;
+				ctx.indent.append( format->indent);
+			}
+			dest << element.tostring();
+			dest << format->openstruct;
+			ctx.lasttype = type;
+			break;
+		case langbind::FilterBase::CloseTag:
+			--ctx.taglevel;
+			if (ctx.taglevel < 0)
+			{
+				break;
+			}
+			if (format->indent)
+			{
+				std::size_t indentsize = std::strlen(format->indent);
+				if (ctx.indent.size() >= indentsize)
+				{
+					ctx.indent.resize( ctx.indent.size() - indentsize);
+				}
+			}
+			dest << format->closestruct;
+			ctx.lasttype = type;
+			break;
+		case langbind::FilterBase::Attribute:
+			dest << format->newitem;
+			dest << ctx.indent;
+			dest << element.tostring();
+			ctx.lasttype = type;
+			break;
+		case langbind::FilterBase::Value:
+			if (ctx.lasttype == langbind::FilterBase::Attribute)
+			{
+				dest << format->assign;
+				if (format->startvalue) dest << format->startvalue;
+				dest << substquot( element.tostring(), format);
+				if (format->endvalue) dest << format->endvalue;
+				ctx.lasttype = langbind::FilterBase::OpenTag;
+			}
+			else
+			{
+				dest << format->newitem;
+				dest << ctx.indent;
+				if (format->startvalue) dest << format->startvalue;
+				dest << substquot( element.tostring(), format);
+				if (format->endvalue) dest << format->endvalue;
+				ctx.lasttype = type;
+			}
+			break;
+	}
+}
+
+
+bool utils::printFilterToStream( std::ostream& dest, langbind::TypedInputFilter& flt, const PrintFormat* format)
+{
+	PrintContext ctx;
+	langbind::FilterBase::ElementType type;
+	types::VariantConst element;
+	while (flt.getNext( type, element))
+	{
+		printElement( dest, type, element, format, ctx);
+		if (ctx.taglevel < 0) return true;
+	}
+	return false;
+}
+
+std::string utils::filterToString( langbind::TypedInputFilter& flt, const PrintFormat* format)
+{
+	std::stringstream out;
+	if (!printFilterToStream( out, flt, format))
+	{
+		const char* err = flt.getError();
+		if (err)
+		{
+			throw std::runtime_error(std::string("error iterating on filter to string: ") + err);
+		}
+		else
+		{
+			throw std::runtime_error( "filter to string not possible for filter on incomplete content");
+		}
+	}
+	return out.str();
+}
+
+

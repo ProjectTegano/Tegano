@@ -25,7 +25,6 @@ CPP_OBJS = \
 	filterdef.obj \
 	input.obj \
 	output.obj \
-	tostringfilter.obj \
 	ptreefilter.obj \
 	typingfilter.obj \
 	typedfilterScope.obj \

@@ -40,8 +40,7 @@ Project Wolframe.
 namespace _Wolframe {
 namespace serialize {
 
-std::string ddlStructureToString( const types::VariantStruct& st);
-std::string typedInputFilterToString( const langbind::TypedInputFilterR& inp);
+std::string variantStructToString( const types::VariantStruct& st);
 
 }}//namespace
 #endif

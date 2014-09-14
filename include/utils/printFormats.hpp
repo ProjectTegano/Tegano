@@ -51,6 +51,7 @@ struct PrintFormat
 	const char* endheader;		///< string to print as end marker of a header
 	const char* startvalue;		///< string to print as start marker of a value
 	const char* endvalue;		///< string to print as end marker of a value
+	const char* escvalue;		///< string to prefix start value or end value for escaping
 	const char* decldelimiter;	///< string to print as delimiter of declarations
 	const char* itemdelimiter;	///< string to print as delimiter of values
 	const char* assign;		///< assignment operator for attributes
