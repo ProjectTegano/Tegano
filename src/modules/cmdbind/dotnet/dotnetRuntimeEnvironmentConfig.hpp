@@ -61,9 +61,9 @@ public:
 	};
 
 public:
-	DotnetRuntimeEnvironmentConfig( const char* className_, const char* name, const char* logParent, const char* logName)
-		:config::ConfigurationObject( name, logParent, logName)
-		,m_className(className_){}
+	DotnetRuntimeEnvironmentConfig( const std::string& className_, const std::string& configSection_, const std::string& configKeyword_)
+		:config::ConfigurationObject( className_, configSection_, configKeyword_)
+	{}
 	virtual ~DotnetRuntimeEnvironmentConfig(){}
 
 	///\brief Parse the configuration
@@ -80,11 +80,6 @@ public:
 	virtual bool checkReferences( const proc::ProcessorProviderInterface*) const {return true;}
 
 	virtual void print( std::ostream& os, size_t indent ) const;
-
-	virtual const char* className() const
-	{
-		return m_className;
-	}
 
 	const std::vector<AssemblyDescription>& assemblylist() const
 	{
@@ -106,7 +101,6 @@ private:
 	std::string m_typelibpath;
 
 	std::vector<AssemblyDescription> m_assemblylist;
-	const char* m_className;
 	config::ConfigurationTree::Position m_config_pos;
 };
 

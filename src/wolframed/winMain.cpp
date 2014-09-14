@@ -42,18 +42,19 @@
 #include "wolframedCommandLine.hpp"
 
 #include "libconfig/version.hpp"
-#include "libconfig/appProperties.hpp"
 #include "libconfig/applicationInfo.hpp"
+#include "libconfig/applicationProperties.hpp"
 #include "libconfig/applicationConfiguration.hpp"
 #include "libconfig/cmdLineConfiguration.hpp"
 #include "libconfig/loggerConfiguration.hpp"
 #include "libconfig/serviceConfiguration.hpp"
 #include "libconfig/serverConfiguration.hpp"
+#include "libconfig/moduleDirectoryImpl.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
+
 #include "server.hpp"
 #include "errorCode.hpp"
 #include "logger/logger-v1.hpp"
-#include "libprovider/moduleDirectory.hpp"
 #include "system/connectionHandler.hpp"
 
 #if !defined(_WIN32)
@@ -300,7 +301,7 @@ static void WINAPI service_main( DWORD argc, LPTSTR *argv ) {
 		const char *configFile = serviceConfig.c_str( ); // configuration comes from main thread
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModuleDirectory modDir( configurationPath);
+		_Wolframe::module::ModuleDirectoryImpl modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
 		_Wolframe::system::RandomGeneratorImpl randomGenerator;
@@ -454,7 +455,7 @@ int _Wolframe_winMain( int argc, char* argv[] )
 
 		std::string configurationPath = boost::filesystem::path( configFile).branch_path().string();
 
-		_Wolframe::module::ModuleDirectory modDir( configurationPath);
+		_Wolframe::module::ModuleDirectoryImpl modDir( configurationPath);
 		_Wolframe::config::ApplicationConfiguration conf;
 		conf.addModules( &modDir );
 		_Wolframe::system::RandomGeneratorImpl randomGenerator;
