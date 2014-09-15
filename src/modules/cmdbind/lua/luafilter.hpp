@@ -116,7 +116,7 @@ private:
 		std::size_t tagsize;		///< size of tag
 		int idx;			///< array index
 
-		void getTagElement( types::VariantConst& e);
+		std::string getTagElement() const;
 	};
 	/// \brief Fetch the element with index 'idx' as atomic value from lua stack
 	bool getLuaStackValue( int idx, types::VariantConst& e);
@@ -133,9 +133,10 @@ private:
 	static std::string stackDump( const std::vector<FetchState>& stk);
 
 private:
-	lua_State* m_ls;			//< lua state
-	std::vector<FetchState> m_stk;		//< stack of iterator states
-	bool m_logtrace;			//< true, if logging of stack trace is enabled
+	lua_State* m_ls;			///< lua state
+	std::vector<FetchState> m_stk;		///< stack of iterator states
+	std::string m_tagbuf;			///< buffer for tag name
+	bool m_logtrace;			///< true, if logging of stack trace is enabled
 };
 
 

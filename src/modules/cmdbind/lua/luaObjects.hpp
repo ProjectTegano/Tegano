@@ -39,6 +39,7 @@ Project Wolframe.
 #include "langbind/output.hpp"
 #include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
+#include "types/keymap.hpp"
 #include <map>
 #include <list>
 #include <boost/shared_ptr.hpp>
@@ -186,7 +187,7 @@ private:
 private:
 	std::vector<LuaScriptR> m_ar;
 	std::map<std::string,std::size_t> m_pathmap;
-	std::map<std::string,std::size_t> m_procmap;
+	types::keymap<std::size_t> m_procmap;
 	const LuaModuleMap* m_modulemap;
 };
 

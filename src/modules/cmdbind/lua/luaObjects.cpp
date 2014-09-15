@@ -2847,22 +2847,18 @@ bool LuaModuleMap::getLuaModule( const std::string& name, LuaModule& rt) const
 
 void LuaFunctionMap::defineLuaFunction( const std::string& name, const LuaScript& script)
 {
-	std::string nam( name);
-	std::transform( nam.begin(), nam.end(), nam.begin(), ::tolower);
-	{
-		std::map<std::string,std::size_t>::const_iterator ii=m_procmap.find( nam),ee=m_procmap.end();
-		if (ii != ee)
-		{
-			std::ostringstream buf;
-			buf << "duplicate definition of function '" << nam << "'";
-			throw std::runtime_error( buf.str());
-		}
-	}
-	std::size_t scriptId;
-	std::map<std::string,std::size_t>::const_iterator ii=m_pathmap.find( script.path()),ee=m_pathmap.end();
+	types::keymap<std::size_t>::const_iterator ii=m_procmap.find( name),ee=m_procmap.end();
 	if (ii != ee)
 	{
-		scriptId = ii->second;
+		std::ostringstream buf;
+		buf << "duplicate definition of function '" << name << "'";
+		throw std::runtime_error( buf.str());
+	}
+	std::size_t scriptId;
+	std::map<std::string,std::size_t>::const_iterator pi=m_pathmap.find( script.path()),pe=m_pathmap.end();
+	if (pi != pe)
+	{
+		scriptId = pi->second;
 	}
 	else
 	{
@@ -2870,18 +2866,15 @@ void LuaFunctionMap::defineLuaFunction( const std::string& name, const LuaScript
 		m_ar.push_back( LuaScriptR( new LuaScript( script)));
 		m_pathmap[ script.path()] = scriptId;
 	}
-	m_procmap[ nam] = scriptId;
+	m_procmap[ name] = scriptId;
 }
 
 LuaScriptInstance* LuaFunctionMap::createLuaScriptInstance( const std::string& procname) const
 {
-	std::string nam( procname);
-	std::transform( nam.begin(), nam.end(), nam.begin(), ::tolower);
-
-	std::map<std::string,std::size_t>::const_iterator ii=m_procmap.find( nam),ee=m_procmap.end();
+	types::keymap<std::size_t>::const_iterator ii=m_procmap.find( procname),ee=m_procmap.end();
 	if (ii == ee)
 	{
-		throw std::runtime_error( std::string("function '") + nam + "' is not defined in script");
+		throw std::runtime_error( std::string("function '") + procname + "' is not defined in script");
 	}
 	return new LuaScriptInstance( m_ar[ ii->second].get(), m_modulemap);
 }
@@ -2889,7 +2882,7 @@ LuaScriptInstance* LuaFunctionMap::createLuaScriptInstance( const std::string& p
 std::vector<std::string> LuaFunctionMap::commands() const
 {
 	std::vector<std::string> rt;
-	std::map<std::string,std::size_t>::const_iterator ii = m_procmap.begin(), ee = m_procmap.end();
+	types::keymap<std::size_t>::const_iterator ii = m_procmap.begin(), ee = m_procmap.end();
 	for (; ii != ee; ++ii) rt.push_back( ii->first);
 	return rt;
 }

@@ -119,6 +119,7 @@ LuaTableInputFilter::LuaTableInputFilter( const LuaTableInputFilter& o)
 	,LuaExceptionHandlerScope(o)
 	,m_ls(o.m_ls)
 	,m_stk(o.m_stk)
+	,m_tagbuf(o.m_tagbuf)
 	,m_logtrace(o.m_logtrace)
 {
 	if (m_stk.size() > 0)
@@ -140,9 +141,9 @@ LuaTableInputFilter::LuaTableInputFilter( lua_State* ls)
 	m_stk.push_back( fs);
 }
 
-void LuaTableInputFilter::FetchState::getTagElement( types::VariantConst& element)
+std::string LuaTableInputFilter::FetchState::getTagElement() const
 {
-	element.init( tag, tagsize);
+	return std::string( tag, tagsize);
 }
 
 bool LuaTableInputFilter::tryGetLuaStackValue( int idx, types::VariantConst& element, const char*& errelemtype)
@@ -386,7 +387,7 @@ bool LuaTableInputFilter::getNext( ElementType& type, types::VariantConst& eleme
 					m_stk.back().id = FetchState::VectorIterReopen;
 					if (!m_stk.back().tag) continue;
 
-					m_stk.back().getTagElement( element);
+					element.init();
 					type = CloseTag;
 					return true;
 				}
@@ -404,7 +405,8 @@ bool LuaTableInputFilter::getNext( ElementType& type, types::VariantConst& eleme
 				m_stk.back().id = FetchState::VectorIterValue;
 				if (!m_stk.back().tag) continue;
 
-				m_stk.back().getTagElement( element);
+				m_tagbuf = m_stk.back().getTagElement();
+				element = m_tagbuf;
 				type = OpenTag;
 				return true;
 
