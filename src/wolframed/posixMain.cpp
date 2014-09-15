@@ -140,7 +140,7 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 		appInfo.version( _Wolframe::Version( _Wolframe::applicationVersion() ));
 
 		_Wolframe::config::CmdLineConfiguration   cmdLineCfg;
-		const char *configFile;
+		std::string configFile;
 
 		if ( !cmdLineCfg.parse( argc, argv ))	{	// there was an error parsing the command line
 			LOG_ERROR << cmdLineCfg.errMsg();
@@ -180,11 +180,13 @@ int _Wolframe_posixMain( int argc, char* argv[] )
 			configFile = _Wolframe::config::ApplicationConfiguration::chooseFile( _Wolframe::config::defaultMainConfig(),
 											      _Wolframe::config::defaultUserConfig(),
 											      _Wolframe::config::defaultLocalConfig() );
-		if ( configFile == NULL )	{	// there is no configuration file
+		if (configFile.empty())
+		{	// there is no configuration file
 			LOG_FATAL << gettext ( "no configuration file found !" );
 			return _Wolframe::ErrorCode::FAILURE;
 		}
-		if ( ! boost::filesystem::is_regular_file( configFile ))	{
+		if ( ! boost::filesystem::is_regular_file( configFile ))
+		{
 			LOG_FATAL << "'" << configFile << "' is not a regular file";
 			return _Wolframe::ErrorCode::FAILURE;
 		}
