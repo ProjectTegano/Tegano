@@ -36,6 +36,7 @@
 #include "module/configuredObjectConstructor.hpp"
 #include "config/configurationObject.hpp"
 #include "langbind/runtimeEnvironment.hpp"
+#include "logger/logger-v1.hpp"
 #include <boost/lexical_cast.hpp>
 
 /// \brief Defines a program type with a runtime environment (e.g. program with shared resource context)

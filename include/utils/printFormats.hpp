@@ -42,8 +42,9 @@ namespace utils {
 
 /// \class PrintFormat
 /// \brief Structure with info for uniform printing for a type of message (log format as compact one liner, text as multi liner)
-struct PrintFormat
+class PrintFormat
 {
+public:
 	const char* indent;		///< string to print for indentiation per level of hierarchy for a new item (after 'newitem')
 	const char* newitem;		///< string to print for a new item
 	const char* openstruct;		///< string to print as start marker of a structure

@@ -48,6 +48,8 @@ dependencies:
 modules: libwolframe
 wolfwizard.exe: wolfwizard.obj $(CPP_OBJS) $(TOPDIR)\src\libwfsingleton\logger\wolframemsg.res
 
+local_all:
+
 local_clean:
 	@-erase wolfwizard.exe 2>NUL
 	@-erase $(CPP_OBJS) 2>NUL

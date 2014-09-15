@@ -94,7 +94,7 @@ bool DotnetRuntimeEnvironmentConfig::check() const
 void DotnetRuntimeEnvironmentConfig::print( std::ostream& os, size_t indent) const
 {
 	std::string indentstr( indent, ' ');
-	os << indentstr << "Configuration of '" << m_className << "'" << std::endl;
+	os << indentstr << "Configuration of '" << className() << "'" << std::endl;
 	os << indentstr << "Version CLR: " << m_clrversion << std::endl;
 	os << indentstr << "Path of Type Library Descriptions: " << m_typelibpath << std::endl;
 	

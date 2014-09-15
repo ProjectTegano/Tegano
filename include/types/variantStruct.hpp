@@ -44,7 +44,7 @@ Project Wolframe.
 namespace _Wolframe {
 namespace utils {
 	/// \brief Forward declaration
-	struct PrintFormat;
+	class PrintFormat;
 }
 namespace types {
 

@@ -67,18 +67,18 @@ const char* MODULE_SECTION_MSG = "Module list:";
 using namespace _Wolframe;
 using namespace _Wolframe::config;
 
-const char* ApplicationConfiguration::chooseFile( const char *globalFile, const char *userFile, const char *localFile )
+std::string ApplicationConfiguration::chooseFile( const std::string& globalFile, const std::string& userFile, const std::string& localFile )
 {
-	if ( globalFile != NULL )
-		if ( boost::filesystem::exists( globalFile ))
+	if ( !globalFile.empty())
+		if ( boost::filesystem::exists( globalFile))
 			return globalFile;
-	if ( userFile != NULL )
-		if ( boost::filesystem::exists( userFile ))
+	if ( !userFile.empty())
+		if ( boost::filesystem::exists( userFile))
 			return userFile;
-	if ( localFile != NULL )
-		if ( boost::filesystem::exists( localFile ))
+	if ( !localFile.empty())
+		if ( boost::filesystem::exists( localFile))
 			return localFile;
-	return NULL;
+	return std::string();
 }
 
 
@@ -111,7 +111,7 @@ bool ApplicationConfiguration::addConfig( const std::string& nodeName,
 }
 
 
-ApplicationConfiguration::ConfigFileType ApplicationConfiguration::fileType ( const char *filename, ConfigFileType type )
+ApplicationConfiguration::ConfigFileType ApplicationConfiguration::fileType ( const std::string& filename, ConfigFileType type )
 {
 	std::string file = utils::resolvePath( boost::filesystem::absolute( filename ).string() );
 	if ( !boost::filesystem::exists( file ))	{
@@ -193,7 +193,7 @@ ApplicationConfiguration::ConfigFileType ApplicationConfiguration::configFileTyp
 	return _Wolframe::config::ApplicationConfiguration::CONFIG_UNDEFINED;
 }
 
-bool ApplicationConfiguration::parseModules ( const char *filename, ConfigFileType type )
+bool ApplicationConfiguration::parseModules ( const std::string& filename, ConfigFileType type )
 {
 	m_type = type;
 	configFile = utils::resolvePath( boost::filesystem::absolute( filename ).string() );
@@ -301,7 +301,7 @@ bool ApplicationConfiguration::parseModules ( const char *filename, ConfigFileTy
 	}
 }
 
-bool ApplicationConfiguration::parse ( const char *filename, ConfigFileType type )
+bool ApplicationConfiguration::parse ( const std::string& filename, ConfigFileType type )
 {
 	configFile = utils::resolvePath( boost::filesystem::absolute( filename ).string() );
 	assert( boost::filesystem::exists( configFile ));

@@ -82,16 +82,16 @@ public:
 	ApplicationConfiguration();
 	~ApplicationConfiguration();
 
-	static ConfigFileType fileType( const char *filename, ConfigFileType type );
+	static ConfigFileType fileType( const std::string& filename, ConfigFileType type );
 
-	bool parseModules( const char *filename, ConfigFileType type );
+	bool parseModules( const std::string& filename, ConfigFileType type );
 	const std::vector< std::string >& moduleList() const
 						{ return m_modFiles; }
 	const std::string& moduleFolder() const	{ return m_modFolder; }
 
 	void addModules( const module::ModuleDirectory* modules )
 						{ m_modDir = modules; }
-	bool parse( const char *filename, ConfigFileType type );
+	bool parse( const std::string& filename, ConfigFileType type );
 	///\brief Finalize configuration for daemon
 	void finalize( const CmdLineConfiguration& cmdLine );
 	///\brief Finalize configuration for simple program (tests, wolfilter) running in foreground
@@ -101,9 +101,9 @@ public:
 	bool test() const;
 	void print( std::ostream& os ) const;
 
-	static const char* chooseFile( const char *globalFile,
-				       const char *userFile,
-				       const char *localFile );
+	static std::string chooseFile( const std::string& globalFile,
+					const std::string& userFile,
+					const std::string& localFile );
 private:
 	ConfigFileType				m_type;
 	std::vector<ConfigurationObject*>	m_conf;
