@@ -51,7 +51,7 @@ bool DoctypeDetectorTest::run()
 	unsigned char ch = m_charparser.getNext();
 	for (; ch != 0; ch = m_charparser.getNext())
 	{
-		if (ch == '\n')
+		if (ch == (unsigned char)'\n' || ch == (unsigned char)'\r')
 		{
 			if (m_itembuf.size())
 			{

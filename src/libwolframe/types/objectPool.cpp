@@ -34,7 +34,6 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/bind.hpp>
-/*[-]*/#include <iostream>
 
 using namespace _Wolframe;
 using namespace _Wolframe::types;
