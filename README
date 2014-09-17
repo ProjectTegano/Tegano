@@ -1,10 +1,9 @@
-Wolframe is a modular 3-tier application server framework written in C++.
+Tegano is a fork of the Wolframe project (https://github.com/Wolframe/Wolframe).
+Tegano is a modular application framework written in C++, that can be used 
+as processing part of an appliation server with a single threaded processing model.
 
-It runs natively on Windows, Linux, Mac OSX, BSDs and Solaris.
+An application server as unix deamon or windows service is implemented as example.
 
-Its modular structure allows the system to be extended with new languages
-for the business logic layer (Python, Lua), new SQL database drivers (SQLite3,
-PostgreSQL, Oracle), document formats (XML, JSON), printing, etc.
+Tegano runs natively on Windows, Linux, Mac OSX, BSDs and Solaris.
 
-The project started as idea in 2008, the GitGub repository was created on
-Feb 11, 2010. 
+
