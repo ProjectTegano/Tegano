@@ -1079,9 +1079,6 @@ LUA_FUNCTION_THROWS( "<formfunction>(..)", function_formfunction_call)
 	typedef langbind::EnvelopeInputFilter<langbind::FormFunctionClosure> ResultWithContext;
 	langbind::TypedInputFilterR result( new ResultWithContext((*closure)->result(), *closure));
 
-	result->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
-	// ... result should provide indices of arrays is possible (for further preprocessing function calls)
-
 	LuaObject<TypedInputFilterR>::push_luastack( ls, result);
 	return 1;
 }
