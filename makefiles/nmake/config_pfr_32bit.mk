@@ -44,7 +44,7 @@ PGSQL_DIR = C:\Program Files (x86)\PostgreSQL\9.3
 
 # OpenSSL
 ###########
-OPENSSL_DIR=C:\OpenSSL-Win32\include
+OPENSSL_DIR=C:\OpenSSL-Win32
 
 # win_iconv
 ###########
