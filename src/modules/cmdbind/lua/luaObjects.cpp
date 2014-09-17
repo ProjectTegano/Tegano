@@ -42,6 +42,7 @@ Project Wolframe.
 #include "filter/typingfilter.hpp"
 #include "filter/typedfilterScope.hpp"
 #include "filter/inputfilterScope.hpp"
+#include "filter/envelopefilter.hpp"
 #include "utils/fileUtils.hpp"
 #include "utils/stringUtils.hpp"
 #include "utils/printFormats.hpp"
@@ -1075,7 +1076,13 @@ LUA_FUNCTION_THROWS( "<formfunction>(..)", function_formfunction_call)
 	{
 		lua_yieldk( ls, 0, 1, function_formfunction_call);
 	}
-	LuaObject<TypedInputFilterR>::push_luastack( ls, (*closure)->result());
+	typedef langbind::EnvelopeInputFilter<langbind::FormFunctionClosure> ResultWithContext;
+	langbind::TypedInputFilterR result( new ResultWithContext((*closure)->result(), *closure));
+
+	result->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
+	// ... result should provide indices of arrays is possible (for further preprocessing function calls)
+
+	LuaObject<TypedInputFilterR>::push_luastack( ls, result);
 	return 1;
 }
 
