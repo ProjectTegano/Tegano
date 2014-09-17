@@ -319,7 +319,7 @@ void TdlTransactionPreprocStep::call( proc::ExecContext* context, vm::InputStruc
 					// we create an envelope containing both 'result' and context (reference to 'fc').
 					// This way it is ensured that 'fc' is released after 'result':
 					typedef langbind::EnvelopeInputFilter<langbind::FormFunctionClosure> ResultWithContext;
-					langbind::TypedInputFilterR result = langbind::TypedInputFilterR( new ResultWithContext( fc->result(), fc));
+					langbind::TypedInputFilterR result( new ResultWithContext( fc->result(), fc));
 					
 					result->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
 					// ... result should provide indices of arrays is possible (for further preprocessing function calls)
