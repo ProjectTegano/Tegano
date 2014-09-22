@@ -134,7 +134,8 @@ public:
 				}
 				else if (m_stk.back().idx >= 0)
 				{
-					m_buf.push_back( BufElem( InputFilter::OpenTag, types::Variant(++m_stk.back().idx)));
+					m_buf.push_back( BufElem( InputFilter::OpenTagArray, m_stk.back().tag));
+					++m_stk.back().idx;
 				}
 				else
 				{
@@ -252,27 +253,14 @@ public:
 				{
 					switch (type)
 					{
+						case InputFilter::OpenTagArray:
+						{
+							m_inputbuilder.openArrayElement( elem.tostring());
+							break;
+						}
 						case InputFilter::OpenTag:
 						{
-							if (elem.type() == types::Variant::UInt || elem.type() == types::Variant::Int)
-							{
-								unsigned int idx = elem.touint();
-								unsigned int lastidx = m_inputbuilder.lastArrayIndex();
-								if (lastidx == 0 && idx != 1) throw std::runtime_error( "elements in array not starting from 1");
-								if (idx <= lastidx) throw std::runtime_error( "elements in array not ascending");
-								for (++lastidx; lastidx < idx; ++lastidx)
-								{
-									// add elements for holes in the array
-									m_inputbuilder.openArrayElement();
-									m_inputbuilder.setValue( types::Variant());
-									m_inputbuilder.closeElement();
-								}
-								m_inputbuilder.openArrayElement();
-							}
-							else
-							{
-								m_inputbuilder.openElement( elem.tostring());
-							}
+							m_inputbuilder.openElement( elem.tostring());
 							break;
 						}
 						case InputFilter::Attribute:

@@ -120,20 +120,9 @@ public:
 			}
 			if (m_stk.back().itr->atomic())
 			{
-				if (m_stk.back().tag.defined())
-				{
-					m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().tag));
-				}
-				else if (m_stk.back().idx >= 0)
-				{
-					m_buf.push_back( BufElem( InputFilter::OpenTag, types::Variant(++m_stk.back().idx)));
-				}
-				else
-				{
-					m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().itr->key));
-				}
-				m_buf.push_back( BufElem( InputFilter::Value, m_stk.back().itr->getValue()));
-				m_buf.push_back( BufElem( InputFilter::CloseTag, types::Variant()));
+				m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().itr->key));
+				m_buf.push_back( BufElem( InputFilter::Value, m_stk.back().itr->val->getValue()));
+				m_buf.push_back( BufElem( InputFilter::CloseTag, m_stk.back().itr->key));
 				m_stk.back().itr++;
 			}
 			else
@@ -144,34 +133,21 @@ public:
 					{
 						throw std::runtime_error("illegal structure: array of array");
 					}
-					if (flag( TypedInputFilter::SerializeWithIndices))
-					{
-						m_stk.push_back( StackElem( m_stk.back().itr->val, types::Variant(), 0));
-						m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().itr->key));
-					}
-					else
-					{
-						types::Variant tag = m_stk.back().itr->key;
-						// ... if tag is defined then Open/Close will be printed with every (array-) element
-						//	and here we do not print an 'Open'
-						m_stk.push_back( StackElem( m_stk.back().itr->val, tag, -1));
-					}
+					types::Variant tag = m_stk.back().itr->key;
+					m_stk.push_back( StackElem( m_stk.back().itr->val, tag, -1));
 				}
 				else
 				{
 					if (m_stk.back().tag.defined())
 					{
-						m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().tag));
-					}
-					else if (m_stk.back().idx >= 0)
-					{
-						m_buf.push_back( BufElem( InputFilter::OpenTag, types::Variant(++m_stk.back().idx)));
+						m_buf.push_back( BufElem( InputFilter::OpenTagArray, m_stk.back().tag));
+						m_stk.push_back( StackElem( m_stk.back().itr->val, types::Variant(), -1));
 					}
 					else
 					{
 						m_buf.push_back( BufElem( InputFilter::OpenTag, m_stk.back().itr->key));
+						m_stk.push_back( StackElem( m_stk.back().itr->val, types::Variant(), -1));
 					}
-					m_stk.push_back( StackElem( m_stk.back().itr->val, types::Variant(), -1));
 				}
 			}
 		}
@@ -222,29 +198,12 @@ public:
 				{
 					switch (type)
 					{
-						case InputFilter::OpenTag:
-						{
-							if (elem.type() == types::Variant::UInt || elem.type() == types::Variant::Int)
-							{
-								unsigned int idx = elem.touint();
-								unsigned int lastidx = m_inputbuilder.lastArrayIndex();
-								if (lastidx == 0 && idx != 1) throw std::runtime_error( "elements in array not starting from 1");
-								if (idx <= lastidx) throw std::runtime_error( "elements in array not ascending");
-								for (++lastidx; lastidx < idx; ++lastidx)
-								{
-									// add elements for holes in the array
-									m_inputbuilder.openArrayElement();
-									m_inputbuilder.setValue( types::Variant());
-									m_inputbuilder.closeElement();
-								}
-								m_inputbuilder.openArrayElement();
-							}
-							else
-							{
-								m_inputbuilder.openElement( elem.tostring());
-							}
+						case InputFilter::OpenTagArray:
+							m_inputbuilder.openArrayElement( elem.tostring());
 							break;
-						}
+						case InputFilter::OpenTag:
+							m_inputbuilder.openElement( elem.tostring());
+							break;
 						case InputFilter::Attribute:
 							m_tagbuf = elem.tostring();
 							if (m_tagbuf.empty()) throw std::runtime_error( "illegal attribute name ''");
@@ -293,7 +252,7 @@ public:
 		try
 		{
 			m_output = m_instance->call( m_context, m_input);
-			LOG_TRACE << "Calling function '" << m_name << "' with argument: " << m_input->tostring() << "returns " << m_output->tostring();
+			LOG_TRACE << "Calling function '" << m_name << "' with argument: " << m_input->tostring() << " returns " << m_output->tostring();
 			m_result.reset( new MyLangResult( m_output));
 		}
 		catch (const std::runtime_error& e)
@@ -307,9 +266,9 @@ public:
 	{
 		m_context = ctx;
 		m_arg = arg;
-		if (!m_arg->setFlags( TypedInputFilter::SerializeWithIndices))
+		if (m_arg->flag( TypedInputFilter::PropagateNoArray))
 		{
-			throw std::runtime_error( "calling mylang without input structure info");
+			LOG_ERROR << "calling mylang without input structure info";
 		}
 		m_initialized = false;
 		m_inputbuilder.clear();

@@ -93,6 +93,10 @@ void StructParser::init( const langbind::TypedInputFilterR& i, serialize::Flags:
 	{
 		m_ctx.unsetFlags( serialize::Flags::ValidateAttributes);
 	}
+	if (i->flag( langbind::FilterBase::PropagateNoArray))
+	{
+		m_ctx.unsetFlags( serialize::Flags::ValidateArray);
+	}
 	m_stk.clear();
 	m_stk.push_back( ParseState( 0, m_descr->parse(), m_ptr));
 }

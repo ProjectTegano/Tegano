@@ -82,7 +82,7 @@ public:
 
 	///\brief Find out if we can use the function in this state as argument of a function
 	///\return true, if yes
-	bool isValidAsScope() const				{return (m_type==InputFilter::OpenTag);}
+	bool isValidAsScope() const				{return (m_type==InputFilter::OpenTag || m_type==InputFilter::OpenTagArray);}
 
 	InputFilterClosure scope()
 	{
@@ -134,7 +134,7 @@ public:
 
 	///\brief Find out if we can use the function in this state as argument of a function
 	///\return true, if yes
-	bool isValidAsScope() const				{return (m_type==InputFilter::OpenTag);}
+	bool isValidAsScope() const				{return (m_type==InputFilter::OpenTag || m_type==InputFilter::OpenTagArray);}
 
 	TypedInputFilterClosure scope()
 	{

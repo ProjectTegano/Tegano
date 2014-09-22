@@ -55,7 +55,11 @@ struct OutputFilterImpl :public OutputFilter
 	OutputFilterImpl( const types::DocMetaDataR& inheritedMetaData, const IOCharset& iocharset_=IOCharset())
 		:OutputFilter("line", inheritedMetaData)
 		,m_elemitr(0)
-		,m_output(iocharset_){}
+		,m_output(iocharset_)
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
+	}
 
 	/// \brief Copy constructor
 	/// \param [in] o output filter to copy
@@ -63,7 +67,11 @@ struct OutputFilterImpl :public OutputFilter
 		:OutputFilter(o)
 		,m_elembuf(o.m_elembuf)
 		,m_elemitr(o.m_elemitr)
-		,m_output(o.m_output){}
+		,m_output(o.m_output)
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
+	}
 
 	/// \brief self copy
 	/// \return copy of this
@@ -265,20 +273,6 @@ struct InputFilterImpl :public InputFilter
 	virtual const types::DocMetaData* getMetaData()
 	{
 		return getMetaDataRef().get();
-	}
-
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-	}
-
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
 	}
 
 private:

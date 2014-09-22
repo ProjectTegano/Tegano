@@ -190,6 +190,7 @@ public:
 		switch (type)
 		{
 			case langbind::FilterBase::OpenTag:
+			case langbind::FilterBase::OpenTagArray:
 				xtype = textwolf::XMLScannerBase::OpenTag;
 				m_variableScope.push( elemstr);
 				++m_taglevel;

@@ -79,12 +79,6 @@ public:
 	/// \brief Set the iterator to the start (if implemented)
 	virtual void resetIterator();
 
-	/// \brief Implementation of TypedInputFilter::setFlags(Flags)
-	virtual bool setFlags( Flags f);
-
-	/// \brief Implements FilterBase::checkSetFlags()const
-	virtual bool checkSetFlags( Flags f) const;
-
 	/// \brief Get the last error
 	virtual const char* getError() const;
 

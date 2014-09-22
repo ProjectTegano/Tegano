@@ -365,7 +365,8 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 				processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);
 				continue;
 			}
-			if (etype == FilterBase::OpenTag)
+			if (etype == FilterBase::OpenTag
+			||  etype == FilterBase::OpenTagArray)
 			{
 				taglevel++;
 			}
@@ -478,7 +479,7 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 			while (!closure.call()) processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);
 
 			serialize::DDLStructSerializer res( &df);
-			res.init( outp, serialize::Flags::None);
+			res.init( outp);
 
 			while (!res.call()) processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);
 			while (!flt.outputfilter()->close()) processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);

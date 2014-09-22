@@ -67,7 +67,7 @@ public:
 
 	///\brief Create an element in an array and puts the focus on it
 	///\remark Throws on error
-	void openArrayElement();
+	void openArrayElement( const std::string& elemid_);
 
 	///\brief Setter for element value in case of this representing an atom
 	///\param[in] value value or content element of 'this'

@@ -66,7 +66,9 @@ struct InputFilterImpl :public InputFilter
 		,m_endofcontent(false)
 		,m_rootAttributeIdx(0)
 		,m_rootAttributeState(0)
-		{}
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+	}
 
 	/// \brief Default constructor
 	InputFilterImpl()
@@ -80,7 +82,9 @@ struct InputFilterImpl :public InputFilter
 		,m_endofcontent(false)
 		,m_rootAttributeIdx(0)
 		,m_rootAttributeState(0)
-		{}
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+	}
 
 	/// \brief Copy constructor
 	InputFilterImpl( const InputFilterImpl& o)
@@ -122,12 +126,6 @@ struct InputFilterImpl :public InputFilter
 
 	/// \brief implement interface member InputFilter::getNext( typename FilterBase::ElementType&,const void*&,std::size_t&)
 	virtual bool getNext( InputFilter::ElementType& type, const void*& element, std::size_t& elementsize);
-
-	/// \brief Implements FilterBase::setFlags()
-	virtual bool setFlags( Flags f);
-
-	/// \brief Implements FilterBase::checkSetFlags()const
-	virtual bool checkSetFlags( Flags f) const;
 
 	/// \brief Implement InputFilter::checkMetaData(const types::DocMetaData&) const
 	virtual bool checkMetaData( const types::DocMetaData& md);

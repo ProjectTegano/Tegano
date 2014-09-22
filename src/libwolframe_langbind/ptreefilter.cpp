@@ -39,21 +39,6 @@
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;
 
-bool PropertyTreeInputFilter::checkSetFlags( Flags f) const
-{
-	return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-}
-
-bool PropertyTreeInputFilter::setFlags( Flags f)
-{
-	langbind::TypedInputFilter::setFlags( f);
-	if (flag( langbind::TypedInputFilter::SerializeWithIndices))
-	{
-		return false;
-	}
-	return true;
-}
-
 bool PropertyTreeInputFilter::getNext( ElementType& type, types::VariantConst& element)
 {
 	while (m_stk.size())
@@ -119,6 +104,7 @@ bool PropertyTreeOutputFilter::print( ElementType type, const types::VariantCons
 	switch (type)
 	{
 		case FilterBase::OpenTag:
+		case FilterBase::OpenTagArray:
 		{
 			m_stk.push_back( State( elem));
 			if (!m_attribute.empty())

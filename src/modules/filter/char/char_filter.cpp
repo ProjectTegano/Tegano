@@ -65,6 +65,8 @@ struct InputFilterImpl :public InputFilter
 		,m_srcsize(0)
 		,m_srcend(false)
 	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
 		setAttribute( "encoding", encoding);
 		m_itr.setSource( textwolf::SrcIterator( m_src, m_srcsize, &m_eom));
 	}
@@ -80,6 +82,8 @@ struct InputFilterImpl :public InputFilter
 		,m_srcsize(0)
 		,m_srcend(false)
 	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
 		m_itr.setSource( textwolf::SrcIterator( m_src, m_srcsize, &m_eom));
 	}
 
@@ -144,20 +148,6 @@ struct InputFilterImpl :public InputFilter
 		return getMetaDataRef().get();
 	}
 	
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-	}
-
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
-	}
-
 private:
 	IOCharset m_charset;			///< character set encoding
 	TextScanner m_itr;			///< iterator on input

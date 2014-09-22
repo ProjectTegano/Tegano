@@ -54,14 +54,18 @@ public:
 	EnvelopeInputFilter( const TypedInputFilterR& i, const ContextR& c)
 		:TypedInputFilter(i->name())
 		,m_context(c)
-		,m_input(i){}
+		,m_input(i)
+	{
+		setFlags( i->flags());
+	}
 
 	/// \brief Copy constructor
 	/// \param[in] o typed output filter to copy
 	EnvelopeInputFilter( const EnvelopeInputFilter& o)
 		:TypedInputFilter(o)
 		,m_context(o.m_context)
-		,m_input(o.m_input){}
+		,m_input(o.m_input)
+	{}
 
 	/// \brief Destructor
 	virtual ~EnvelopeInputFilter()
@@ -81,7 +85,6 @@ public:
 	/// \param [out] element reference to element returned
 	/// \return true, if success, false, if not.
 	/// \remark Check the state when false is returned
-	/// \remark If type is OpenTag then element is either 1) a string (tag) or 2) a number convertible to an uint (array index counted from 1)
 	virtual bool getNext( ElementType& type, types::VariantConst& element)
 	{
 		return m_input->getNext( type, element);
@@ -91,22 +94,6 @@ public:
 	virtual void resetIterator()
 	{
 		m_input->resetIterator();
-	}
-
-	/// \brief Set a flag (or a set of flags)
-	virtual bool setFlags( Flags f)
-	{
-		if (m_input->setFlags(f))
-		{
-			return TypedInputFilter::setFlags(f);
-		}
-		return false;
-	}
-
-	/// \brief Test if a flag can be set (allowed)
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return m_input->checkSetFlags(f);
 	}
 
 	/// \brief Get the last error

@@ -261,6 +261,7 @@ bool OutputFilterImpl::print( ElementType type, const void* element, std::size_t
 	switch (type)
 	{
 		case FilterBase::OpenTag:
+		case FilterBase::OpenTagArray:
 			m_attribname.clear();
 			if (0>xmlTextWriterStartElement( xmlout, getElement( element, elementsize)))
 			{

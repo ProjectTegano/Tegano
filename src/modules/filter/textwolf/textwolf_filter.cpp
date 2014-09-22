@@ -269,7 +269,11 @@ struct InputFilterImpl
 		,m_lasttype(textwolf::XMLScannerBase::None)
 		,m_rootAttributeIdx(0)
 		,m_rootAttributeState(0)
-	{}
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
+	}
+
 	/// \brief Copy constructor
 	/// \param [in] o output filter to copy
 	InputFilterImpl( const InputFilterImpl& o)
@@ -836,24 +840,6 @@ struct InputFilterImpl
 	}
 
 private:
-	
-	/// \brief Implements FilterBase::setFlags()
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
-	}
-
-	/// \brief Implements FilterBase::checkSetFlags()const
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-	}
-
-private:
 	textwolf::XmlHdrParser m_hdrparser;	///< XML header parser
 	Encoding m_encoding;			///< encoding of content parsed
 	int m_codepage;				///< code page of encoding
@@ -1184,6 +1170,7 @@ struct OutputFilterImpl :public OutputFilter
 		switch (type)
 		{
 			case FilterBase::OpenTag:
+			case FilterBase::OpenTagArray:
 				DOWITH_XMLPrinter(
 					res = ((XMLPrinter*)m_printer)->printOpenTag( (const char*)element, elementsize, m_elembuf);
 				);

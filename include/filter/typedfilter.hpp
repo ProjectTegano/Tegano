@@ -74,7 +74,6 @@ public:
 	/// \param [out] element reference to element returned
 	/// \return true, if success, false, if not.
 	/// \remark Check the state when false is returned
-	/// \remark If type is OpenTag then element is either 1) a string (tag) or 2) a number convertible to an uint (array index counted from 1)
 	virtual bool getNext( ElementType& type, types::VariantConst& element)=0;
 
 	/// \brief Get the current state

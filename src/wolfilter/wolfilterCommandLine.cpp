@@ -75,8 +75,6 @@ static const char* getDefaultConfigFile()
 static std::string configurationTree_tostring( const types::PropertyTree::Node& pt)
 {
 	langbind::TypedInputFilterR inp( new langbind::PropertyTreeInputFilter( pt));
-	inp->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
-
 	return utils::filterToString( *inp, utils::ptreePrintFormat());
 }
 

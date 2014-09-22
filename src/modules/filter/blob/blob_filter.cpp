@@ -51,7 +51,11 @@ struct InputFilterImpl :public InputFilter
 	InputFilterImpl()
 		:InputFilter("blob")
 		,m_end(false)
-		,m_done(false){}
+		,m_done(false)
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
+	}
 
 	///\brief Copy constructor
 	///\param [in] o output filter to copy
@@ -59,7 +63,11 @@ struct InputFilterImpl :public InputFilter
 		:InputFilter( o)
 		,m_elembuf( o.m_elembuf)
 		,m_end(o.m_end)
-		,m_done(o.m_done){}
+		,m_done(o.m_done)
+	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
+	}
 
 	///\brief Implement InputFilter::copy()
 	virtual InputFilter* copy() const
@@ -101,20 +109,6 @@ struct InputFilterImpl :public InputFilter
 	virtual const types::DocMetaData* getMetaData()
 	{
 		return getMetaDataRef().get();
-	}
-
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-	}
-
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
 	}
 
 private:

@@ -43,24 +43,27 @@ static void mapStructure( mylang::StructureBuilder& dest, const mylang::Structur
 				throw std::runtime_error( std::string("cannot handle this type '") + element.typeName() + "'");
 		}
 	}
-	else if (src->array())
-	{
-		mylang::Structure::const_iterator si = src->begin(), se = src->end();
-		for (; si != se; ++si)
-		{
-			dest.openArrayElement();
-			mapStructure( dest, si->val);
-			dest.closeElement();
-		}
-	}
 	else
 	{
 		mylang::Structure::const_iterator si = src->begin(), se = src->end();
 		for (; si != se; ++si)
 		{
-			dest.openElement( si->key.tostring());
-			mapStructure( dest, si->val);
-			dest.closeElement();
+			if (si->val->array())
+			{
+				mylang::Structure::const_iterator ai = si->val->begin(), ae = si->val->end();
+				for (; ai != ae; ++ai)
+				{
+					dest.openArrayElement( si->key.tostring());
+					mapStructure( dest, ai->val);
+					dest.closeElement();
+				}
+			}
+			else
+			{
+				dest.openElement( si->key.tostring());
+				mapStructure( dest, si->val);
+				dest.closeElement();
+			}
 		}
 	}
 }

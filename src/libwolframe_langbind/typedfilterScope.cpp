@@ -59,6 +59,7 @@ bool TypedInputFilterScope::getNext( TypedInputFilter::ElementType& type, types:
 		switch (type)
 		{
 			case TypedInputFilter::OpenTag:
+			case TypedInputFilter::OpenTagArray:
 				++m_taglevel;
 				break;
 			case TypedInputFilter::CloseTag:

@@ -126,7 +126,8 @@ static void mapResult( langbind::TypedInputFilter* in, langbind::TypedOutputFilt
 			const char* err = in->getError();
 			throw std::runtime_error( err?err:"unexpected end of message in result");
 		}
-		if (et == langbind::InputFilter::OpenTag)
+		if (et == langbind::InputFilter::OpenTag
+		||  et == langbind::InputFilter::OpenTagArray)
 		{
 			++taglevel;
 		}
@@ -253,7 +254,8 @@ void TdlTransactionPreprocStep::call( proc::ExecContext* context, vm::InputStruc
 
 				if (argfilter->getNext( et, ev))
 				{
-					if (et == langbind::InputFilter::OpenTag)
+					if (et == langbind::InputFilter::OpenTag
+					||  et == langbind::InputFilter::OpenTagArray)
 					{
 						// we have a structure with one tag with content value, so we run the function with the value as argument:
 						ev = expectArg( argfilter.get(), langbind::InputFilter::Value, errmsg);
@@ -321,9 +323,6 @@ void TdlTransactionPreprocStep::call( proc::ExecContext* context, vm::InputStruc
 					typedef langbind::EnvelopeInputFilter<langbind::FormFunctionClosure> ResultWithContext;
 					langbind::TypedInputFilterR result( new ResultWithContext( fc->result(), fc));
 					
-					result->setFlags( langbind::TypedInputFilter::SerializeWithIndices);
-					// ... result should provide indices of arrays is possible (for further preprocessing function calls)
-
 					mapResult( result.get(), resfilter.get());
 					LOG_DATA << "[transaction preprocess] call function " << m_function << " => " << structure.tostring( resultnode, utils::logPrintFormat());
 				}

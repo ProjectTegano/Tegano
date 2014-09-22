@@ -120,6 +120,7 @@ static bool parseAtom( types::Variant& val, langbind::TypedInputFilter& inp, Con
 	switch (typ)
 	{
 		case langbind::InputFilter::OpenTag:
+		case langbind::InputFilter::OpenTagArray:
 			throw SerializationErrorException( "atomic value expected instead of tag", element.tostring(), getElementPath( stk));
 
 		case langbind::InputFilter::Attribute:
@@ -174,6 +175,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 	switch (typ)
 	{
 		case langbind::InputFilter::OpenTag:
+		case langbind::InputFilter::OpenTagArray:
 		{
 			int idx;
 			if (ctx.flag( Flags::CaseInsensitiveCompare))
@@ -205,6 +207,24 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 			{
 				throw SerializationErrorException( "duplicate structure element definition", element.tostring(), getElementPath( stk));
 			}
+			if (ctx.flag( Flags::ValidateArray))
+			{
+				if (typ == langbind::InputFilter::OpenTagArray)
+				{
+					if (type != types::VariantStruct::Array)
+					{
+						throw SerializationErrorException( "single element expected instead of array", element.tostring(), getElementPath( stk));
+					}
+				}
+				else
+				{
+					if (type == types::VariantStruct::Array)
+					{
+						throw SerializationErrorException( "array expected instead of single element", element.tostring(), getElementPath( stk));
+					}
+				}
+			}
+
 			elem->setInitialized();
 			stk.push_back( DDLParseState( ei->name, elem, ei->normalizer));
 			if (elem->atomic())
@@ -414,6 +434,10 @@ void DDLStructParser::init( const langbind::TypedInputFilterR& i, Flags::Enum fl
 	if (i->flag( langbind::FilterBase::PropagateNoAttr))
 	{
 		m_ctx.unsetFlags( Flags::ValidateAttributes);
+	}
+	if (i->flag( langbind::FilterBase::PropagateNoArray))
+	{
+		m_ctx.unsetFlags( Flags::ValidateArray);
 	}
 	m_stk.clear();
 	m_stk.push_back( DDLParseState( 0, m_st, 0));

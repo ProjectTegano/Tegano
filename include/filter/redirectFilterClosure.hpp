@@ -61,9 +61,7 @@ public:
 		,m_inputfilter(i)
 		,m_outputfilter(o)
 		,m_elemtype(InputFilter::Value)
-		{
-			m_inputfilter->setFlags( m_outputfilter->flags());
-		}
+		{}
 
 	/// \brief Copy constructor
 	RedirectFilterClosure( const RedirectFilterClosure& o)
@@ -106,7 +104,8 @@ public:
 					}
 				}
 				m_state = 1;
-				if (m_elemtype == InputFilter::OpenTag)
+				if (m_elemtype == InputFilter::OpenTag
+				||  m_elemtype == InputFilter::OpenTagArray)
 				{
 					++m_taglevel;
 				}

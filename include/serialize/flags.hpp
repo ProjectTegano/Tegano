@@ -49,7 +49,7 @@ struct Flags
 		None=0x00,				///< Empty flag set (no flags set)
 		ValidateAttributes=0x01,		///< Do validate if attribute value pairs are serialized as such in the input filter serialization (and not as open content close) and the input filter does not declare itself as not knowing about attributes (PropagateNoAttr)
 		ValidateInitialization=0x02,		///< Do validate if all declared elements in the structure were initilized by the input stream (if not explicitely declared as optional)
-		SerializeWithIndices=0x04,		///< Do produce array elements with indices to help the receiver to distinguish between arrays with one element and single elements 
+		ValidateArray=0x04,			///< Do validate if array elements are mapped to arrays and single elements not
 		CaseInsensitiveCompare=0x08		///< Do validate with case insensitive compare
 	};
 };

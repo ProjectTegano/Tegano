@@ -101,7 +101,7 @@ bool InputStructure::check( const InputNodeVisitor& nv) const
 		const InputNode* pn = node( nd->m_parent);
 		if (ci != pn->m_lastchild)
 		{
-			std::cout << "HALLY GALLY AT " << (int)__LINE__ << " DIFF " << nv.m_nodeidx << " " << pn->m_lastchild << std::endl;
+			LOG_ERROR << "internal: check input structure node failed " << (int)__LINE__ << " diff " << nv.m_nodeidx << " " << pn->m_lastchild;
 			rt = false;
 		}
 	}
@@ -299,28 +299,10 @@ InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const type
 	InputNodeVisitor rt = createChildNode( nv);
 	InputNode*nd = node( rt);
 
-	if (tag.type() == types::Variant::String)
-	{
-		std::string tagstr( tag.tostring());
-		nd->m_tag = (int)m_tagmap->find( tagstr);
-		if (nd->m_tag == 0) nd->m_tag = (int)m_tagmap->unused();
-		nd->m_tagstr = (int)m_privatetagmap.get( tagstr);
-	}
-	else
-	{
-		try
-		{
-			nd->m_arrayindex = (int)tag.toint();
-		}
-		catch (const std::runtime_error& e)
-		{
-			throw std::runtime_error( std::string("array index cannot be converted to integer at '") + nodepath(nv) + "'");
-		}
-		if (nd->m_arrayindex < 0)
-		{
-			throw std::runtime_error( std::string( "array index is negative at '") + nodepath(nv) + "'");
-		}
-	}
+	std::string tagstr( tag.tostring());
+	nd->m_tag = (int)m_tagmap->find( tagstr);
+	if (nd->m_tag == 0) nd->m_tag = (int)m_tagmap->unused();
+	nd->m_tagstr = (int)m_privatetagmap.get( tagstr);
 	return rt;
 }
 
@@ -637,15 +619,17 @@ public:
 
 					// push children (first child node) on the stack:
 					const InputNode* cnod = m_structure->node( m_stack.back().node->m_firstchild);
-					type = TypedInputFilter::OpenTag;
 					element = m_structure->tagname( cnod);
 					m_stack.push_back( StackElement( cnod, true));
 					++m_stack.back().closetagcnt;
 
 					if (cnod->m_arrayindex >= 0)
 					{
-						++m_stack.back().closetagcnt;
-						m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, cnod->m_arrayindex));
+						type = TypedInputFilter::OpenTagArray;
+					}
+					else
+					{
+						type = TypedInputFilter::OpenTag;
 					}
 					return true;
 				}
@@ -667,58 +651,8 @@ public:
 				{
 					// replace current node on the stack by its next neighbour
 					const InputNode* snod = m_structure->node( m_stack.back().node->m_next);
-					if (flag( SerializeWithIndices))
-					{
-						const InputNode* tnod = m_stack.back().node;
-						if (snod->m_arrayindex >= 0)
-						{
-							// ... element is in array
-							if (snod->m_arrayindex > tnod->m_arrayindex
-								&&  snod->m_tag == tnod->m_tag
-								&&  snod->m_tagstr == tnod->m_tagstr)
-							{
-								// ... next element is in same array than element before: close <index>; open <index>
-								type = TypedInputFilter::CloseTag; element.init();
-								m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, snod->m_arrayindex));
-							}
-							else if (tnod->m_arrayindex == -1)
-							{
-								// ... new array after single element: close <tag>; open <tag>; open <index>
-								type = TypedInputFilter::CloseTag; element.init();
-								m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
-								m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, snod->m_arrayindex));
-								++m_stack.back().closetagcnt;
-							}
-							else
-							{
-								// ... new array after array element of previous array: close <index>; close <tag>; open <tag>; open <index>
-								type = TypedInputFilter::CloseTag; element.init();
-								m_elementbuf.push_back( Element( TypedInputFilter::CloseTag, types::Variant()));
-								m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
-								m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, snod->m_arrayindex));
-							}
-						}
-						else if (tnod->m_arrayindex >= 0)
-						{
-							// ... new single element after array: close <index>; close <tag>; open <tag>
-							type = TypedInputFilter::CloseTag; element.init();
-							m_elementbuf.push_back( Element( TypedInputFilter::CloseTag, types::Variant()));
-							m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
-							-- m_stack.back().closetagcnt;
-						}
-						else
-						{
-							// ... new single element after single element: close <tag>; open <tag>
-							type = TypedInputFilter::CloseTag; element.init();
-							m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
-						}
-					}
-					else//if (!flag( SerializeWithIndices))
-					{
-						// ... any case is the same: close <tag>; open <tag>
-						type = TypedInputFilter::CloseTag; element.init();
-						m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
-					}
+					type = TypedInputFilter::CloseTag; element.init();
+					m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
 					m_stack.back().node = snod;			//... skip to next element
 					m_stack.back().childrenvisited = false;		//... and its children
 					m_stack.back().valuevisited = false;		//... and its value
@@ -817,6 +751,7 @@ public:
 		switch (type)
 		{
 			case langbind::TypedInputFilter::OpenTag:
+			case langbind::TypedInputFilter::OpenTagArray:
 				++m_taglevel;
 				m_visitor = m_structure->openTag( m_visitor, element);
 				if (m_taglevel == 1 && m_sourccetagmap.find( m_structure->node(m_visitor)->m_tagstr) != m_sourccetagmap.end())

@@ -52,6 +52,7 @@ std::string comauto::variantToString( const comauto::TypeLib* typelib_, const IT
 		switch (type)
 		{
 			case langbind::FilterBase::OpenTag:
+			case langbind::FilterBase::OpenTagArray:
 				stk.push_back( element.tostring());
 				out << "<" << stk.back() << ">";
 				break;

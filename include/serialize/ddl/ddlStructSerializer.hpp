@@ -66,7 +66,7 @@ public:
 	DDLStructSerializer& operator =( const DDLStructSerializer& o);
 
 	/// \brief Serialize start initialization
-	void init( const langbind::TypedOutputFilterR& out, serialize::Flags::Enum flags=serialize::Flags::None);
+	void init( const langbind::TypedOutputFilterR& out);
 
 	/// \brief Call of one processing step the serializer
 	/// \remark The processing is finished when the call returns true. In case of false returned you have to inspect the output filter state to determine what is to do next.
@@ -80,9 +80,6 @@ public:
 	/// \brief Get the next element of the serialization
 	/// \remark Do not mix 'call()' with 'init(const langbind::TypedOutputFilterR&,Flags::Enum)' and 'getNext(langbind::FilterBase::ElementType&,types::VariantConst&)'. Use either one or the other
 	virtual bool getNext( langbind::FilterBase::ElementType& type, types::VariantConst& value);
-	/// \brief Set the flags stearing the serialization
-	/// \return false, if not all flags have the behaviour implemented and are accepted 
-	virtual bool setFlags( Flags f);
 
 private:
 	const types::VariantStruct* m_st;

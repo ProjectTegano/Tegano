@@ -173,6 +173,7 @@ AGAIN:
 			cur = &m_stk.back();
 			switch (elemtype)
 			{
+				case langbind::FilterBase::OpenTagArray:
 				case langbind::FilterBase::OpenTag:
 				{
 					if (!cur->key.empty()) throw std::runtime_error("illegal filter input sequence (value instead of open tag expected after attribute)");

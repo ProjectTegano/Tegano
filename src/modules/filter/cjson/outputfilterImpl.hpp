@@ -62,7 +62,6 @@ public:
 		,m_lastelemtype(FilterBase::OpenTag)
 	{
 		m_stk.push_back( StackElement(""));
-		setFlags( FilterBase::SerializeWithIndices);
 	}
 
 	OutputFilterImpl( const OutputFilterImpl& o)
@@ -114,14 +113,13 @@ private:
 	std::size_t m_elemitr;					///< iterator on current element
 	types::String::EncodingAttrib m_encattr;		///< character set encoding attributes
 	bool m_headerprinted;					///< true if the header has already been printed
-//	bool m_flushing;					///< true, if we are flushing the buffer to output
 
 	struct StackElement
 	{
-		explicit StackElement( const std::string& name_)
-			:m_state(Init),m_node(0),m_name(name_){}
+		explicit StackElement( const std::string& name_, bool array_=false)
+			:m_state(Init),m_node(0),m_name(name_),m_array(array_){}
 		StackElement( const StackElement& o)
-			:m_state(o.m_state),m_node(o.m_node?cJSON_Duplicate(o.m_node,1):0),m_name(o.m_name){}
+			:m_state(o.m_state),m_node(o.m_node?cJSON_Duplicate(o.m_node,1):0),m_name(o.m_name),m_array(o.m_array){}
 		~StackElement()
 		{
 			if (m_node) cJSON_Delete( m_node);
@@ -131,6 +129,7 @@ private:
 		State m_state;
 		cJSON* m_node;
 		std::string m_name;
+		bool m_array;
 	};
 	std::vector<StackElement> m_stk;
 	FilterBase::ElementType m_lastelemtype;			///< last element type

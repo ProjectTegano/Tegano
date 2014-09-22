@@ -56,8 +56,7 @@ public:
 	/// \param[in] o input filter to copy
 	TypingInputFilter( const TypingInputFilter& o)
 		:TypedInputFilter(o)
-		,m_inputfilter(o.m_inputfilter)
-		,m_stack(o.m_stack){}
+		,m_inputfilter(o.m_inputfilter){}
 
 	/// \brief Destructor
 	virtual ~TypingInputFilter(){}
@@ -69,29 +68,11 @@ public:
 	/// \brief Implementation of TypedInputFilter::getNext(ElementType&,types::VariantConst&)
 	virtual bool getNext( ElementType& type, types::VariantConst& element);
 
-	/// \brief Implementation of TypedInputFilter::setFlags(Flags)
-	virtual bool setFlags( Flags f);
-
-	/// \brief Implements FilterBase::checkSetFlags()const
-	virtual bool checkSetFlags( Flags f) const;
-
 	/// \brief Get the last error
 	virtual const char* getError() const;
 	
 private:
-	/// \brief Stack element of the input filter state stack
-	struct StackElement
-	{
-		bool isArrayElem;
-		unsigned int cnt;
-
-		StackElement( const StackElement& o)
-			:isArrayElem(o.isArrayElem),cnt(o.cnt){}
-		StackElement()
-			:isArrayElem(false),cnt(0){}
-	};
 	InputFilterR m_inputfilter;
-	std::vector<StackElement> m_stack;
 };
 
 

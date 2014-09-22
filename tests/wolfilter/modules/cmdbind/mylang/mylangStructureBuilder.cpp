@@ -63,26 +63,26 @@ void StructureBuilder::openElement( const std::string& elemid_)
 	m_stk.push_back( StructureR());
 }
 
-void StructureBuilder::openArrayElement()
+void StructureBuilder::openArrayElement( const std::string& elemid_)
 {
+	LOG_DATA << "[mylang structure builder] open array structure element '" << elemid_ << "'";
 	if (!m_stk.back().get())
 	{
 		m_stk.back().reset( new Structure());
 	}
-	std::vector<Structure::KeyValuePair>::const_iterator si = m_stk.back()->m_struct.begin(), se = m_stk.back()->m_struct.end();
-	if (!m_stk.back()->m_array)
+	if (m_stk.back()->m_struct.empty() || m_stk.back()->m_struct.back().first.type() != types::Variant::String || m_stk.back()->m_struct.back().first.tostring() != elemid_)
 	{
-		for (; si != se; ++si)
-		{
-			if (si->first.type() == types::Variant::String) throw std::runtime_error( "mixing array with structure");
-		}
-		m_stk.back()->m_array = true;
+		m_stk.back()->m_struct.push_back( Structure::KeyValuePair( elemid_, StructureR( new Structure())));
+		m_stk.back()->m_struct.back().second->m_array = true;
+	}
+	if (!m_stk.back()->m_struct.back().second->m_array)
+	{
+		throw std::runtime_error( "mixing array content with structure");
 	}
 	// add element at end of array:
-	unsigned int aridx = m_stk.back()->m_struct.size()+1;
-	LOG_DATA << "[mylang structure builder] open array element " << aridx;
+	unsigned int aridx = m_stk.back()->m_struct.back().second->m_struct.size()+1;
+	LOG_DATA << "[mylang structure builder] open array element " << elemid_ << "[" << aridx << "]";
 
-	m_stk.back()->m_struct.push_back( Structure::KeyValuePair( aridx, StructureR()));
 	m_stk.push_back( StructureR());
 }
 
@@ -95,11 +95,23 @@ void StructureBuilder::closeElement()
 	m_stk.pop_back();
 	if (elem.get())
 	{
-		m_stk.back()->m_struct.back().second = elem;
+		if (m_stk.back()->m_struct.back().second.get()
+		&&  m_stk.back()->m_struct.back().second->m_array)
+		{
+			unsigned int aridx = m_stk.back()->m_struct.back().second->m_struct.size() + 1;
+			m_stk.back()->m_struct.back().second->m_struct.push_back( Structure::KeyValuePair( aridx, elem));
+		}
+		else
+		{
+			m_stk.back()->m_struct.back().second = elem;
+		}
 	}
 	else
 	{
-		m_stk.back()->m_struct.pop_back();
+		if (!m_stk.back()->m_struct.back().second->m_array)
+		{
+			m_stk.back()->m_struct.pop_back();
+		}
 	}
 }
 

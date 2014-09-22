@@ -65,17 +65,18 @@ public:
 	/// \brief Content element type that describes the role of the element in the structured input
 	enum ElementType
 	{
-		OpenTag,	///< open new hierarchy level
+		OpenTag,	///< open new element
+		OpenTagArray,	///< open new element of an array
 		Attribute,	///< attribute name
 		Value,		///< content or attribute value
-		CloseTag	///< close current hierarchy level
+		CloseTag	///< close current element (opened with OpenTag or OpenTagElement)
 	};
 	/// \brief Get the name of an ElementType as string
 	/// \param[in] i an ElementType identifier
 	/// \return the name of an ElementType as string
 	static const char* elementTypeName( ElementType i)
 	{
-		static const char* ar[] = {"OpenTag","Attribute","Value","CloseTag"};
+		static const char* ar[] = {"OpenTag","OpenTagArray","Attribute","Value","CloseTag"};
 		return ar[(int)i];
 	}
 
@@ -103,12 +104,15 @@ public:
 		}
 	}
 
+	/// \brief Get the name of the filter
+	const char* name() const			{return m_name;}
+
 	enum Flags
 	{
 		None=0x00,				///< no flags set
-		SerializeWithIndices=0x01,		///< do serialization with array index elements, if implemented
-		PropagateNoCase=0x02,			///< true, if the result is propagated to be case insensitive
-		PropagateNoAttr=0x04			///< true, if the result is propagated to have no attribute support (only open/close tag and value)
+		PropagateNoCase=0x01,			///< true, if the result is propagated to be case insensitive
+		PropagateNoAttr=0x02,			///< true, if the result is propagated to have no attribute support (only Attribute element type)
+		PropagateNoArray=0x04			///< true, if the result is propagated to have no array support (no OpenTagArray element type)
 	};
 
 	/// \brief Query a flag (or a set of flags)
@@ -120,13 +124,7 @@ public:
 	Flags flags() const				{return m_flags;}
 
 	/// \brief Set a flag (or a set of flags)
-	/// \return true on success, false if the (or one of) flag is not supported
-	virtual bool setFlags( Flags f)			{int ff=(int)m_flags | (int)f; m_flags=(Flags)ff; return true;}
-	/// \brief Test if a flag can be set (allowed)
-	virtual bool checkSetFlags( Flags) const	{return true;}
-
-	/// \brief Get the name of the filter
-	const char* name() const			{return m_name;}
+	void setFlags( Flags f)				{int ff=(int)m_flags | (int)f; m_flags=(Flags)ff;}
 
 private:
 	enum {ErrorBufSize=128};		///< maximum size of error string

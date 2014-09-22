@@ -143,27 +143,13 @@ public:
 		switch (m_itr->op())
 		{
 			case vm::Output::Element::OpenArray:
-				if (langbind::FilterBase::flag(SerializeWithIndices))
-				{
-					m_stack.push_back( (types::Variant::Data::Int)0L);
-					type = langbind::FilterBase::OpenTag;
-					element = m_itr->arg();
-				}
-				else
-				{
-					m_stack.push_back( m_itr->arg());
-					++m_itr;
-					goto AGAIN;
-				}
-				break;
+				m_stack.push_back( m_itr->arg());
+				++m_itr;
+				goto AGAIN;
 
 			case vm::Output::Element::OpenArrayElement:
 				if (m_stack.empty()) throw std::runtime_error("tags in output not balanced");
-				if (langbind::FilterBase::flag(SerializeWithIndices))
-				{
-					++m_stack.back().data().value.Int;
-				}
-				type = langbind::FilterBase::OpenTag;
+				type = langbind::FilterBase::OpenTagArray;
 				element = m_stack.back();
 				break;
 
@@ -174,20 +160,9 @@ public:
 
 			case vm::Output::Element::CloseArray:
 				if (m_stack.empty()) throw std::runtime_error("tags in output not balanced");
-				if (langbind::FilterBase::flag(SerializeWithIndices))
-				{
-					type = langbind::FilterBase::CloseTag;
-					element = m_itr->arg();
-					m_stack.pop_back();
-					break;
-				}
-				else
-				{
-					m_stack.pop_back();
-					++m_itr;
-					goto AGAIN;
-				}
-				break;
+				m_stack.pop_back();
+				++m_itr;
+				goto AGAIN;
 
 			case vm::Output::Element::CloseArrayElement:
 			case vm::Output::Element::Close:

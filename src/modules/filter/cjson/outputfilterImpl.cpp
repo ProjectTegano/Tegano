@@ -240,13 +240,22 @@ void OutputFilterImpl::setContentValue( const std::string& value)
 {
 	cJSON* val = cJSON_CreateString( value.c_str());
 	if (!val) throw std::bad_alloc();
+
 	if (!m_stk.back().m_node)
 	{
-		m_stk.back().m_node = val;
-		if (!val)
+		if (m_stk.back().m_array)
 		{
-			cJSON_Delete( val);
-			throw std::bad_alloc();
+			cJSON* ar = cJSON_CreateArray();
+			if (!ar)
+			{
+				throw std::bad_alloc();
+			}
+			cJSON_AddItemToArray( ar, val);
+			m_stk.back().m_node = ar;
+		}
+		else
+		{
+			m_stk.back().m_node = val;
 		}
 	}
 	else if (m_stk.back().m_node->type == cJSON_Array)
@@ -354,8 +363,9 @@ bool OutputFilterImpl::print( ElementType type, const void* element, std::size_t
 	
 		switch (type)
 		{
+			case OutputFilter::OpenTagArray:
 			case OutputFilter::OpenTag:
-				m_stk.push_back( StackElement( std::string( (const char*)element, elementsize)));
+				m_stk.push_back( StackElement( std::string( (const char*)element, elementsize), type == OutputFilter::OpenTagArray));
 				break;
 	
 			case OutputFilter::Attribute:

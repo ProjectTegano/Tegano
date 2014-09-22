@@ -78,6 +78,7 @@ AGAIN:
 		switch (elemtype)
 		{
 			case InputFilter::OpenTag:
+			case InputFilter::OpenTagArray:
 				lua_pushboolean( ls, 0);
 				push_element( ls, element, elementsize);
 				m_type = elemtype;
@@ -192,6 +193,7 @@ AGAIN:
 		switch (elemtype)
 		{
 			case InputFilter::OpenTag:
+			case InputFilter::OpenTagArray:
 				lua_pushboolean( ls, 0);
 				push_element( ls, element);
 				m_type = elemtype;

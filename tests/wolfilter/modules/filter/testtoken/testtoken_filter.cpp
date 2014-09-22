@@ -49,6 +49,7 @@ static bool getElementType( InputFilter::ElementType& et, char ch)
 	switch ((TokenType)ch)
 	{
 		case TokenOpenTag: et = InputFilter::OpenTag; return true;
+		case TokenOpenTagArray: et = InputFilter::OpenTagArray; return true;
 		case TokenCloseTag: et = InputFilter::CloseTag; return true;
 		case TokenAttribute: et = InputFilter::Attribute; return true;
 		case TokenValue: et = InputFilter::Value; return true;
@@ -62,6 +63,7 @@ static char getElementTag( OutputFilter::ElementType tp)
 	switch (tp)
 	{
 		case InputFilter::OpenTag: return (char)TokenOpenTag;
+		case InputFilter::OpenTagArray: return (char)TokenOpenTagArray;
 		case InputFilter::CloseTag: return (char)TokenCloseTag;
 		case InputFilter::Attribute: return (char)TokenAttribute;
 		case InputFilter::Value: return (char)TokenValue;
@@ -296,7 +298,7 @@ struct InputFilterImpl :public InputFilter
 			type = m_elemtype;
 			element = m_elembuf.c_str();
 			elementsize = m_elembuf.size();
-			if (m_elemtype == OpenTag)
+			if (m_elemtype == OpenTag || m_elemtype == OpenTagArray)
 			{
 				++m_taglevel;
 			}
@@ -315,20 +317,6 @@ struct InputFilterImpl :public InputFilter
 			setState( EndOfMessage);
 		}
 		return false;
-	}
-
-	virtual bool checkSetFlags( Flags f) const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
-	}
-
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
 	}
 
 	virtual const types::DocMetaData* getMetaData()

@@ -180,7 +180,6 @@ static int function__LuaObject__index( lua_State* ls)
 			LuaExceptionHandlerScope escope(ls);
 			{
 				lua_pushlstring( ls, val.c_str(), val.size());
-				lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 				return 1;
 			}
 		}
@@ -445,7 +444,6 @@ static void pushVariantValue( lua_State* ls, const types::Variant& val)
 			{
 				std::string strval = val.tostring();
 				lua_pushlstring( ls, strval.c_str(), strval.size());
-				lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 			}
 			break;
 		}
@@ -456,7 +454,6 @@ static void pushVariantValue( lua_State* ls, const types::Variant& val)
 			{
 				std::string strval = val.tostring();
 				lua_pushlstring( ls, strval.c_str(), strval.size());
-				lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 			}
 			break;
 		}
@@ -466,7 +463,6 @@ static void pushVariantValue( lua_State* ls, const types::Variant& val)
 			LuaExceptionHandlerScope escope(ls);
 			{
 				lua_pushlstring( ls, val.charptr(), val.charsize());
-				lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 			}
 			break;
 		}
@@ -520,7 +516,6 @@ LUA_FUNCTION_THROWS( "form:__tostring()", function_form_tostring)
 	check_parameters( ls, 1, 0);
 
 	serialize::DDLFormSerializer ser( *form);
-	ser.setFlags( langbind::FilterBase::SerializeWithIndices);
 
 	std::string content;
 	content.append( "FORM ");
@@ -531,7 +526,6 @@ LUA_FUNCTION_THROWS( "form:__tostring()", function_form_tostring)
 	LuaExceptionHandlerScope escope(ls);
 	{
 		lua_pushlstring( ls, content.c_str(), content.size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		return 1;
 	}
 }
@@ -546,7 +540,6 @@ LUA_FUNCTION_THROWS( "form:name()", function_form_name)
 	{
 		const types::FormDescription* descr = (*form)->description();
 		lua_pushlstring( ls, descr->name().c_str(), descr->name().size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		return 1;
 	}
 }
@@ -649,7 +642,7 @@ LUA_FUNCTION_THROWS( "form:table()", function_form_table)
 		TypedOutputFilterR outp( new LuaTableOutputFilter( ls));
 		LuaObject<serialize::DDLFormSerializer>::push_luastack( ls, serialize::DDLFormSerializer( *form, substruct));
 		result = LuaObject<serialize::DDLFormSerializer>::get( ls, -1);
-		result->init( outp, serialize::Flags::SerializeWithIndices);
+		result->init( outp);
 	}
 	else
 	{
@@ -698,7 +691,6 @@ LUA_FUNCTION_THROWS( "form:metadata()", function_form_metadata)
 	for (; ai != ae; ++ai)
 	{
 		lua_pushlstring( ls, ai->value.c_str(), ai->value.size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		lua_setfield( ls, -2, ai->name.c_str());
 	}
 	return 1;
@@ -918,12 +910,10 @@ LUA_FUNCTION_THROWS( "<structure>:__tostring()", function_struct_tostring)
 	LuaObject<serialize::StructSerializer>::push_luastack( ls, *obj);
 	obj = LuaObject<serialize::StructSerializer>::get( ls, -1);
 
-	obj->setFlags( langbind::FilterBase::SerializeWithIndices);
 	std::string content( utils::filterToString( *obj, utils::logPrintFormat()));
 	LuaExceptionHandlerScope escope(ls);
 	{
 		lua_pushlstring( ls, content.c_str(), content.size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		return 1;
 	}
 }
@@ -939,7 +929,7 @@ LUA_FUNCTION_THROWS( "<structure>:table()", function_struct_table)
 		check_parameters( ls, 1, 0);
 		LuaObject<serialize::StructSerializer>::push_luastack( ls, *obj);
 		obj = LuaObject<serialize::StructSerializer>::get( ls, -1);
-		obj->init( TypedOutputFilterR( new LuaTableOutputFilter( ls)), serialize::Flags::SerializeWithIndices);
+		obj->init( TypedOutputFilterR( new LuaTableOutputFilter( ls)));
 	}
 	else
 	{
@@ -984,13 +974,11 @@ LUA_FUNCTION_THROWS( "<structure>:__tostring()", function_typedinputfilter_tostr
 	}
 	TypedInputFilterR obj = TypedInputFilterR( (*objref)->copy());
 	obj->resetIterator();
-	obj->setFlags( TypedInputFilter::SerializeWithIndices);
 
 	std::string content( utils::filterToString( *obj, utils::logPrintFormat()));
 	LuaExceptionHandlerScope escope(ls);
 	{
 		lua_pushlstring( ls, content.c_str(), content.size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		return 1;
 	}
 }
@@ -1010,7 +998,7 @@ LUA_FUNCTION_THROWS( "<structure>:table()", function_typedinputfilter_table)
 		}
 		TypedInputFilterR obj = TypedInputFilterR( (*objref)->copy());
 		obj->resetIterator();
-		if (!obj->setFlags( TypedInputFilter::SerializeWithIndices))
+		if (obj->flag( TypedInputFilter::PropagateNoArray))
 		{
 			LOG_WARNING << "calling table() for object without input structure info";
 		}
@@ -1414,7 +1402,6 @@ LUA_FUNCTION_THROWS( "output:opentag(..)", function_output_opentag)
 			if (newEnter)
 			{
 				lua_pushlstring( ls, tag, tagsize);
-				lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 				lua_pushlightuserdata( ls, output);
 			}
 			lua_yieldk( ls, 0, 1, function_output_opentag);
@@ -1426,7 +1413,6 @@ LUA_FUNCTION_THROWS( "output:opentag(..)", function_output_opentag)
 		if (newEnter)
 		{
 			lua_pushlstring( ls, tag, tagsize);
-			lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 			lua_pushlightuserdata( ls, output);
 		}
 		lua_yieldk( ls, 0, 1, function_output_opentag);
@@ -1607,7 +1593,6 @@ LUA_FUNCTION_THROWS( "input:docformat()", function_input_docformat)
 	else
 	{
 		lua_pushlstring( ls, input->docformat().c_str(), input->docformat().size());
-		lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 		return 1;
 	}
 }
@@ -1642,7 +1627,6 @@ LUA_FUNCTION_THROWS( "input:metadata()", function_input_metadata)
 				for (; ai != ae; ++ai)
 				{
 					lua_pushlstring( ls, ai->value.c_str(), ai->value.size());
-					lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 					lua_setfield( ls, -2, ai->name.c_str());
 				}
 				return 1;
@@ -1856,7 +1840,7 @@ LUA_FUNCTION_THROWS( "input:table()", function_input_table_DDLFormParser)
 		TypedOutputFilterR outp( new LuaTableOutputFilter( ls));
 		LuaObject<serialize::DDLFormSerializer>::push_luastack( ls, serialize::DDLFormSerializer( closure->form()));
 		serialize::DDLFormSerializer* result = LuaObject<serialize::DDLFormSerializer>::get( ls, -1);
-		result->init( outp, serialize::Flags::SerializeWithIndices);
+		result->init( outp);
 		lua_pushlightuserdata( ls, result);
 	}
 	function_input_table_DDLFormSerializer(ls);
@@ -1927,7 +1911,7 @@ static lua_CFunction get_input_struct_table_closure( lua_State* ls, Input* input
 
 					//... no form defined -> map it without structure info but issue a warning
 					TypedInputFilterR inp( new TypingInputFilter( input->getIterator()));
-					if (!inp->setFlags( TypedInputFilter::SerializeWithIndices))
+					if (inp->flag( TypedInputFilter::PropagateNoArray))
 					{
 						LOG_WARNING << "calling :table() on document type '" << doctype << "' without form defined for filter without input structure info";
 					}
@@ -1956,7 +1940,7 @@ static lua_CFunction get_input_struct_table_closure( lua_State* ls, Input* input
 			{
 				//... document is standalone -> map it without structure info but issue a warning
 				TypedInputFilterR inp( new TypingInputFilter( input->getIterator()));
-				if (!inp->setFlags( TypedInputFilter::SerializeWithIndices))
+				if (inp->flag( TypedInputFilter::PropagateNoArray))
 				{
 					LOG_WARNING << "calling table() on standalone document for filter without input structure info";
 				}
@@ -2265,7 +2249,6 @@ LUA_FUNCTION_THROWS( "custom:__tostring()", function_customtype_tostring)
 	types::CustomDataValueR* operand = LuaObject<types::CustomDataValueR>::getSelf( ls, "custom", "__tostring");
 	std::string val( (*operand)->tostring());
 	lua_pushlstring( ls, val.c_str(), val.size());
-	lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 	return 1;
 }
 
@@ -2280,7 +2263,6 @@ LUA_FUNCTION_THROWS( "custom:typename()", function_customtype_typename)
 	types::CustomDataValueR* operand = LuaObject<types::CustomDataValueR>::getSelf( ls, "custom", "typename");
 	const std::string& val( (*operand)->type()->name());
 	lua_pushlstring( ls, val.c_str(), val.size());
-	lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 	return 1;
 }
 
@@ -2313,7 +2295,6 @@ LUA_FUNCTION_THROWS( "datetime:__tostring()", function_datetime_tostring)
 	types::DateTime* operand = LuaObject<types::DateTime>::getSelf( ls, "datetime", "__tostring");
 	std::string val( operand->tostring());
 	lua_pushlstring( ls, val.c_str(), val.size());
-	lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 	return 1;
 }
 
@@ -2378,7 +2359,6 @@ LUA_FUNCTION_THROWS( "bignumber:__tostring()", function_bignumber_tostring)
 	types::BigNumber* operand = LuaObject<types::BigNumber>::getSelf( ls, "bignumber", "__tostring");
 	std::string val( operand->tostring());
 	lua_pushlstring( ls, val.c_str(), val.size());
-	lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 	return 1;
 }
 
@@ -2407,7 +2387,6 @@ LUA_FUNCTION_THROWS( "bignumber:digits()", function_bignumber_digits)
 		val.push_back( ar[ii]+'0');
 	}
 	lua_pushlstring( ls, val.c_str(), val.size());
-	lua_tostring( ls, -1); //PF:BUGFIX lua 5.1.4 needs this one
 	return 1;
 }
 

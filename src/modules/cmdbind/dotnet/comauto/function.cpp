@@ -489,6 +489,7 @@ void comauto::DotnetFunctionClosure::Impl::init( proc::ExecContext* c, const lan
 
 bool comauto::DotnetFunctionClosure::Impl::call()
 {
+	unsigned int paramcount = 0;
 	try
 	{
 AGAIN:
@@ -537,18 +538,11 @@ AGAIN:
 			{
 				case langbind::InputFilter::Attribute:
 				case langbind::InputFilter::OpenTag:
+				case langbind::InputFilter::OpenArray:
 				{
-					if (elemvalue.type() == types::Variant::Int)
+					if (elemtype == langbind::InputFilter::OpenTagArray)
 					{
-						__int64 val = elemvalue.data().value.Int;
-						if (val < 0 || (std::size_t)val >= m_func->m_impl->nofParameter()) throw std::runtime_error( "function parameter index out of range");
-						m_paramidx = (std::size_t)val;
-					}
-					else if (elemvalue.type() == types::Variant::UInt)
-					{
-						unsigned __int64 val = elemvalue.data().value.UInt;
-						if ((std::size_t)val >= m_func->m_impl->nofParameter()) throw std::runtime_error( "function parameter index out of range");
-						m_paramidx = (std::size_t)val;
+						m_paramidx = paramcount++;
 					}
 					else if (elemvalue.type() == types::Variant::String)
 					{
@@ -557,7 +551,7 @@ AGAIN:
 					}
 					else
 					{
-						throw std::runtime_error( "unexpected node type (function parameter name or index expected)");
+						throw std::runtime_error( "unexpected node type (string as function parameter name or array element reference expected)");
 					}
 					const DotnetFunction::Impl::Parameter* param = m_func->m_impl->getParameter( m_paramidx);
 

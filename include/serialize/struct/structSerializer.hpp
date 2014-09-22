@@ -75,10 +75,6 @@ public:
 	/// \remark Do not mix 'call()' with 'init(const langbind::TypedOutputFilterR&,serialize::Flags)' and 'getNext(langbind::FilterBase::ElementType&,types::VariantConst&)'. Use either one or the other
 	virtual bool getNext( langbind::FilterBase::ElementType& type, types::VariantConst& value);
 
-	/// \brief Set the flags stearing the serialization, implements FilterBase::setFlags(FilterBase::Flags)
-	/// \return false, if not all flags have the behaviour implemented and are accepted 
-	virtual bool setFlags( FilterBase::Flags f);
-
 private:
 	const void* m_ptr;
 	const ObjectReference m_obj;

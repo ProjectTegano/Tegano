@@ -118,32 +118,20 @@ static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
 		}
 		else
 		{
-			if (!*di->name)
+			if (itr->type() == types::VariantStruct::Array)
 			{
-				if (itr->type() == types::VariantStruct::Array)
-				{
-					throw SerializationErrorException( "non array element expected for content element", getElementPath( stk));
-				}
+				types::VariantConst elem( di->name);
 				stk.back().state( ++idx);
-				stk.push_back( DDLSerializeState( &*itr));
+				stk.push_back( DDLSerializeState( &*itr, elem));
 			}
 			else
 			{
-				if (itr->type() == types::VariantStruct::Array && !ctx.flag( serialize::Flags::SerializeWithIndices))
-				{
-					types::VariantConst elem( di->name);
-					stk.back().state( ++idx);
-					stk.push_back( DDLSerializeState( &*itr, elem));
-				}
-				else
-				{
-					types::VariantConst elem( di->name);
-					ctx.setElem( langbind::FilterBase::OpenTag, elem);
-					rt = true;
-					stk.back().state( ++idx);
-					stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, elem));
-					stk.push_back( DDLSerializeState( &*itr, elem));
-				}
+				types::VariantConst elem( di->name);
+				ctx.setElem( langbind::FilterBase::OpenTag, elem);
+				rt = true;
+				stk.back().state( ++idx);
+				stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, elem));
+				stk.push_back( DDLSerializeState( &*itr, elem));
 			}
 		}
 	}
@@ -170,30 +158,19 @@ static bool fetchVector( Context& ctx, std::vector<DDLSerializeState>& stk)
 		return false;
 	}
 	types::VariantStruct::const_iterator itr = obj->begin()+idx;
-	if (ctx.flag( serialize::Flags::SerializeWithIndices))
+	bool hasTag = stk.back().tag().initialized();
+	if (hasTag)
 	{
-		ctx.setElem( langbind::FilterBase::OpenTag, types::VariantConst( (unsigned int)idx+1U));
-		stk.back().state( idx+1);
-		stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, types::VariantConst( (unsigned int)idx+1U)));
-		stk.push_back( DDLSerializeState( &*itr, stk.back().tag()));
+		ctx.setElem( langbind::FilterBase::OpenTagArray, stk.back().tag());
 		rt = true;
+		stk.back().state( idx+1);
+		stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, stk.back().tag()));
+		stk.push_back( DDLSerializeState( &*itr, stk.back().tag()));
 	}
 	else
 	{
-		bool hasTag = stk.back().tag().initialized();
-		if (hasTag)
-		{
-			ctx.setElem( langbind::FilterBase::OpenTag, stk.back().tag());
-			rt = true;
-			stk.back().state( idx+1);
-			stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, stk.back().tag()));
-			stk.push_back( DDLSerializeState( &*itr, stk.back().tag()));
-		}
-		else
-		{
-			stk.back().state( idx+1);
-			stk.push_back( DDLSerializeState( &*itr, stk.back().tag()));
-		}
+		stk.back().state( idx+1);
+		stk.push_back( DDLSerializeState( &*itr, stk.back().tag()));
 	}
 	return rt;
 }
@@ -290,17 +267,6 @@ bool DDLStructSerializer::getNext( langbind::FilterBase::ElementType& type, type
 	}
 }
 
-bool DDLStructSerializer::setFlags( Flags f)
-{
-	bool rt = true;
-	rt &= langbind::TypedInputFilter::setFlags( f);
-	if (flag( langbind::TypedInputFilter::SerializeWithIndices))
-	{
-		m_ctx.setFlags( serialize::Flags::SerializeWithIndices);
-	}
-	return rt;
-}
-
 DDLStructSerializer::DDLStructSerializer( const types::VariantStruct* st)
 	:langbind::TypedInputFilter("serializer")
 	,m_st(st)
@@ -326,10 +292,9 @@ DDLStructSerializer& DDLStructSerializer::operator =( const DDLStructSerializer&
 	return *this;
 }
 
-void DDLStructSerializer::init( const langbind::TypedOutputFilterR& out, serialize::Flags::Enum flags_ )
+void DDLStructSerializer::init( const langbind::TypedOutputFilterR& out)
 {
 	m_ctx.clear();
-	m_ctx.setFlags(flags_);
 	m_stk.clear();
 	m_stk.push_back( DDLSerializeState( m_st));
 	m_out = out;

@@ -52,81 +52,9 @@ bool TypingInputFilter::getNext( ElementType& type, types::VariantConst& element
 	else
 	{
 		setState( m_inputfilter->state());
-		if (flag(FilterBase::SerializeWithIndices))
-		{
-			if (type == FilterBase::OpenTag)
-			{
-				if (charsize == 0)
-				{
-					if (m_stack.size())
-					{
-						m_stack.back().isArrayElem = true;
-						element = ++m_stack.back().cnt;
-						return true;
-					}
-					else
-					{
-						throw std::runtime_error("illegal index element in filter (SerializeWithIndices)");
-					}
-				}
-				else
-				{
-					element.init( (const char*)charptr, charsize);
-					m_stack.push_back( StackElement());
-					return true;
-				}
-			}
-			else if (type == FilterBase::CloseTag)
-			{
-				if (m_stack.size())
-				{
-					if (m_stack.back().isArrayElem)
-					{
-						m_stack.back().isArrayElem = false;
-					}
-					else
-					{
-						m_stack.pop_back();
-					}
-				}
-				else
-				{
-					element.init();
-					return true;
-				}
-				element.init();
-				return true;
-			}
-			else
-			{
-				element.init( (const char*)charptr, charsize);
-				return true;
-			}
-		}
-		else
-		{
-			element.init( (const char*)charptr, charsize);
-			return true;
-		}
+		element.init( (const char*)charptr, charsize);
+		return true;
 	}
-}
-
-bool TypingInputFilter::setFlags( Flags f)
-{
-	if (m_inputfilter.get()->setFlags( f))
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices) && m_stack.empty())
-		{
-			m_stack.push_back( StackElement());
-		}
-		return langbind::TypedInputFilter::setFlags( f);
-	}
-	return false;
-}
-
-bool TypingInputFilter::checkSetFlags( Flags f) const
-{
-	return (m_inputfilter.get()->checkSetFlags( f));
 }
 
 const char* TypingInputFilter::getError() const
@@ -166,29 +94,13 @@ bool TypingOutputFilter::print( ElementType type, const types::VariantConst& ele
 				break;
 
 			case types::Variant::Int:
-				if (type == OutputFilter::OpenTag && flag( FilterBase::SerializeWithIndices))
-				{
-					// array element marker:
-					rt = m_outputfilter->print( type, "");
-				}
-				else
-				{
-					castelement = boost::lexical_cast<std::string>( element.toint());
-					rt = m_outputfilter->print( type, castelement);
-				}
+				castelement = boost::lexical_cast<std::string>( element.toint());
+				rt = m_outputfilter->print( type, castelement);
 				break;
 
 			case types::Variant::UInt:
-				if (type == OutputFilter::OpenTag && flag( FilterBase::SerializeWithIndices))
-				{
-					// array element marker:
-					rt = m_outputfilter->print( type, "");
-				}
-				else
-				{
-					castelement = boost::lexical_cast<std::string>( element.touint());
-					rt = m_outputfilter->print( type, castelement);
-				}
+				castelement = boost::lexical_cast<std::string>( element.touint());
+				rt = m_outputfilter->print( type, castelement);
 				break;
 
 			case types::Variant::String:

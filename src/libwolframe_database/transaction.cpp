@@ -251,6 +251,7 @@ bool Transaction::executeStatement( Result& result, const std::string& stm, cons
 		switch (type)
 		{
 			case langbind::FilterBase::OpenTag:
+			case langbind::FilterBase::OpenTagArray:
 				taglevel++;
 				if (taglevel == 1)
 				{

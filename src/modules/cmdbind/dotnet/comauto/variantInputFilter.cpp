@@ -156,15 +156,8 @@ AGAIN:
 						goto AGAIN;
 					}
 					cur.state = VarClose;
-					if (((int)m_flags & serialize::Flags::SerializeWithIndices) != 0 || cur.name.empty())
-					{
-						element = types::VariantConst( cur.idx+1);
-					}
-					else
-					{
-						element = types::VariantConst( m_elembuf = cur.name);
-					}
-					type = OpenTag;
+					element = types::VariantConst( m_elembuf = cur.name);
+					type = OpenTagArray;
 					LONG idx = cur.idx++;
 					VARTYPE elemvt = cur.data.vt - VT_ARRAY;
 
@@ -248,19 +241,8 @@ AGAIN:
 					if ((data.vt & VT_ARRAY) == VT_ARRAY)
 					{
 						bool rt = false;
-						std::string elemname;
-						if (((int)m_flags & serialize::Flags::SerializeWithIndices) != 0)
-						{
-							type = OpenTag;
-							element = types::VariantConst( m_elembuf = comauto::utf8string( varname));
-							cur.state = VarClose;
-							rt = true;
-						}
-						else
-						{
-							elemname = comauto::utf8string(varname);
-							cur.state = VarOpen;
-						}
+						std::string elemname = comauto::utf8string(varname);
+						cur.state = VarOpen;
 						m_stk.push_back( StackElem( elemname, 0, 0, data));
 						std::memset( &data, 0, sizeof(data));
 						data.vt = VT_EMPTY;

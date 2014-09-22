@@ -157,7 +157,7 @@ bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, Context& 
 		}
 		else
 		{
-			if (itr->second.type() == StructDescriptionBase::Vector && !ctx.flag( serialize::Flags::SerializeWithIndices))
+			if (itr->second.type() == StructDescriptionBase::Vector)
 			{
 				stk.back().state( idx+1);
 				stk.push_back( SerializeState( itr->first.c_str(), itr->second.fetch(), (const char*)obj + itr->second.ofs()));
@@ -204,29 +204,19 @@ bool serialize::fetchObjectVectorElement( FetchElement fetchElement, const void*
 	bool rt = false;
 	std::size_t idx = stk.back().state();
 
-	if (ctx.flag( serialize::Flags::SerializeWithIndices))
+	const char* tagname = stk.back().name();
+	if (tagname)
 	{
-		ctx.setElem( langbind::FilterBase::OpenTag, types::VariantConst( (unsigned int)idx+1));
+		ctx.setElem( langbind::FilterBase::OpenTagArray, types::VariantConst( tagname));
+		rt = true;
 		stk.back().state( idx+1);
-		stk.push_back( SerializeState( 0, &fetchCloseTag, 0));
-		stk.push_back( SerializeState( stk.back().name(), fetchElement, ve));
+		stk.push_back( SerializeState( tagname, &fetchCloseTag, tagname));
+		stk.push_back( SerializeState( "", fetchElement, ve));
 	}
 	else
 	{
-		const char* tagname = stk.back().name();
-		if (tagname)
-		{
-			ctx.setElem( langbind::FilterBase::OpenTag, types::VariantConst( tagname));
-			rt = true;
-			stk.back().state( idx+1);
-			stk.push_back( SerializeState( tagname, &fetchCloseTag, tagname));
-			stk.push_back( SerializeState( "", fetchElement, ve));
-		}
-		else
-		{
-			stk.back().state( idx+1);
-			stk.push_back( SerializeState( "", fetchElement, ve));
-		}
+		stk.back().state( idx+1);
+		stk.push_back( SerializeState( "", fetchElement, ve));
 	}
 	return rt;
 }

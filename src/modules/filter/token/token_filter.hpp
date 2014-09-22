@@ -42,6 +42,7 @@ namespace langbind {
 enum TokenType
 {
 	TokenOpenTag='>',
+	TokenOpenTagArray=':',
 	TokenCloseTag='<',
 	TokenAttribute='@',
 	TokenValue='=',

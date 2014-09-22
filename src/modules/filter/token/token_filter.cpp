@@ -52,6 +52,7 @@ static bool getElementType( InputFilter::ElementType& et, char ch)
 	switch ((TokenType)ch)
 	{
 		case TokenOpenTag: et = InputFilter::OpenTag; return true;
+		case TokenOpenTagArray: et = InputFilter::OpenTagArray; return true;
 		case TokenCloseTag: et = InputFilter::CloseTag; return true;
 		case TokenAttribute: et = InputFilter::Attribute; return true;
 		case TokenValue: et = InputFilter::Value; return true;
@@ -65,6 +66,7 @@ static char getElementTag( OutputFilter::ElementType tp)
 	switch (tp)
 	{
 		case InputFilter::OpenTag: return (char)TokenOpenTag;
+		case InputFilter::OpenTagArray: return (char)TokenOpenTagArray;
 		case InputFilter::CloseTag: return (char)TokenCloseTag;
 		case InputFilter::Attribute: return (char)TokenAttribute;
 		case InputFilter::Value: return (char)TokenValue;
@@ -188,6 +190,8 @@ struct InputFilterImpl :public InputFilter
 		,m_linecomplete(false)
 		,m_eolnread(false)
 	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
 		setAttribute( "encoding", encoding_?encoding_:"UTF-8");
 		setState( Open);
 		m_itr.setSource( textwolf::SrcIterator( m_src, m_srcsize, &m_eom));
@@ -208,6 +212,8 @@ struct InputFilterImpl :public InputFilter
 		,m_linecomplete(false)
 		,m_eolnread(false)
 	{
+		setFlags( langbind::FilterBase::PropagateNoArray);
+		setFlags( langbind::FilterBase::PropagateNoAttr);
 		setState( Open);
 		m_itr.setSource( textwolf::SrcIterator( m_src, m_srcsize, &m_eom));
 	}
@@ -353,20 +359,6 @@ struct InputFilterImpl :public InputFilter
 			return true;
 		}
 		return false;
-	}
-
-	virtual bool setFlags( Flags f)
-	{
-		if (0!=((int)f & (int)langbind::FilterBase::SerializeWithIndices))
-		{
-			return false;
-		}
-		return InputFilter::setFlags( f);
-	}
-
-	virtual bool checkSetFlags( Flags f)const
-	{
-		return (0==((int)f & (int)langbind::FilterBase::SerializeWithIndices));
 	}
 
 	virtual const types::DocMetaData* getMetaData()

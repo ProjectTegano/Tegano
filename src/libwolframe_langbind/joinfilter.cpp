@@ -42,6 +42,7 @@ bool JoinInputFilter::getNextImpl( TypedInputFilter* flt, ElementType& type, typ
 	switch (type)
 	{
 		case FilterBase::OpenTag:
+		case FilterBase::OpenTagArray:
 			m_taglevel += 1;
 			break;
 		case FilterBase::CloseTag:
@@ -119,29 +120,6 @@ bool JoinInputFilter::getNext( ElementType& type, types::VariantConst& element)
 			return false;
 	}
 	throw std::logic_error("internal: illegal state in join filter");
-}
-
-bool JoinInputFilter::setFlags( Flags f)
-{
-	switch (m_joinstate)
-	{
-		case Init:
-		case ProcessFilter1:
-		case ProcessFilter2:
-			TypedInputFilter::setFlags(f);
-			m_inputfilter1->setFlags(f);
-			m_inputfilter2->setFlags(f);
-			return true;
-		case FinalClose:
-		case Done:
-			break;
-	}
-	return false;
-}
-
-bool JoinInputFilter::checkSetFlags( Flags f) const
-{
-	return m_inputfilter1->setFlags(f) && m_inputfilter2->setFlags(f);
 }
 
 void JoinInputFilter::resetIterator()

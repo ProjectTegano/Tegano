@@ -96,8 +96,10 @@ public:
 	{
 		m_interp->init( ctx);
 		m_arg = arg;
-		m_arg->setFlags( TypedInputFilter::SerializeWithIndices);
-		//... SerializeWithIndices because lua has no strict typing and needs arrays to be delivered with indices to make single element arrays to appear as arrays too
+		if (m_arg->flag( TypedInputFilter::PropagateNoArray))
+		{
+			LOG_WARNING << "Calling Lua function '" << m_name << "' without array element info";
+		}
 		m_firstcall = true;
 	}
 

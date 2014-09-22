@@ -168,6 +168,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 	switch (typ)
 	{
 		case langbind::InputFilter::OpenTag:
+		case langbind::InputFilter::OpenTagArray:
 		{
 			StructDescriptionBase::Map::const_iterator itr;
 			if (ctx.flag( serialize::Flags::CaseInsensitiveCompare))
@@ -197,6 +198,24 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 					throw SerializationErrorException( "duplicate definition", element.tostring(), StructParser::getElementPath( stk));
 				}
 			}
+			if (ctx.flag( Flags::ValidateArray))
+			{
+				if (typ == langbind::InputFilter::OpenTagArray)
+				{
+					if (itr->second.type() != StructDescriptionBase::Vector)
+					{
+						throw SerializationErrorException( "single element expected instead of array", element.tostring(), StructParser::getElementPath( stk));
+					}
+				}
+				else
+				{
+					if (itr->second.type() == StructDescriptionBase::Vector)
+					{
+						throw SerializationErrorException( "array expected instead of single element", element.tostring(), StructParser::getElementPath( stk));
+					}
+				}
+			}
+
 			void* value = (char*)stk.back().value() + itr->second.ofs();
 			if (itr->second.type() == StructDescriptionBase::Atomic)
 			{
@@ -314,6 +333,7 @@ bool serialize::parseObjectAtomic( ParseValue parseVal, langbind::TypedInputFilt
 	switch (typ)
 	{
 		case langbind::InputFilter::OpenTag:
+		case langbind::InputFilter::OpenTagArray:
 		case langbind::InputFilter::Attribute:
 			throw SerializationErrorException( "atomic value expected", StructParser::getElementPath( stk));
 

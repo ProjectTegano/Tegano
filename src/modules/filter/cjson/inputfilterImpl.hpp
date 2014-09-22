@@ -56,10 +56,10 @@ struct InputFilterImpl :public InputFilter
 	InputFilterImpl()
 		:InputFilter("cjson")
 		,m_firstnode(0)
+		,m_buffered_element(0)
+		,m_buffered_element_size(0)
 		,m_done(false)
-	{
-		setFlags( langbind::FilterBase::PropagateNoAttr);
-	}
+	{}
 
 	InputFilterImpl( const InputFilterImpl& o)
 		:InputFilter(o)
@@ -68,8 +68,10 @@ struct InputFilterImpl :public InputFilter
 		,m_root(o.m_root)
 		,m_firstnode(o.m_firstnode)
 		,m_stk(o.m_stk)
+		,m_buffered_element(o.m_buffered_element)
+		,m_buffered_element_size(o.m_buffered_element_size)
 		,m_done(o.m_done)
-		{}
+	{}
 
 	virtual ~InputFilterImpl(){}
 
@@ -94,15 +96,11 @@ struct InputFilterImpl :public InputFilter
 	/// \brief implement interface member InputFilter::getNext( typename FilterBase::ElementType&,const void*&,std::size_t&)
 	virtual bool getNext( InputFilter::ElementType& type, const void*& element, std::size_t& elementsize);
 
-	/// \brief Implements FilterBase::setFlags()
-	virtual bool setFlags( Flags f);
-
-	/// \brief Implements FilterBase::checkSetFlags()const
-	virtual bool checkSetFlags( Flags f) const;
-
 private:
 	boost::shared_ptr<cJSON> parse( const std::string& content);
-	bool getNodeValue( const void*& element, std::size_t& elementsize);
+	bool getNodeData( const cJSON* nd, const char*& eename, InputFilter::ElementType& eetype, const void*& ee, std::size_t& eesize) const;
+	
+	std::string stackdump() const;
 
 private:
 	std::string m_content;
@@ -113,21 +111,24 @@ private:
 	struct StackElement
 	{
 		explicit StackElement( const cJSON* node_, const char* tag_=0)
-			:m_state(StateOpen),m_node(node_),m_tag(tag_){}
+			:m_state(StateValue),m_node(node_),m_tag(tag_),m_visible(true){}
 		StackElement( const StackElement& o)
-			:m_state(o.m_state),m_node(o.m_node),m_tag(o.m_tag){}
+			:m_state(o.m_state),m_node(o.m_node),m_tag(o.m_tag),m_visible(o.m_visible){}
 
-		enum State {StateOpen,StateAttributeValue,StateContentValue,StateChild,StateValue,StateNext,StateCheckEnd,StateReopen,StateCloseNode};
+		enum State {StateValue,StateAttributeValue,StateContentValue,StateContentClose,StateNext,StateReopenArray};
 		static const char* stateName( State i)
 		{
-			static const char* ar[] = {"StateOpen","StateAttributeValue","StateContentValue","StateChild","StateValue","StateNext","StateCheckEnd","StateReopen","StateCloseNode"};
+			static const char* ar[] = {"StateValue","StateAttributeValue","StateContentValue","StateContentClose","StateNext","StateReopenArray"};
 			return ar[i];
 		}
 		State m_state;				///< current state
 		const cJSON* m_node;			///< current node
 		const char* m_tag;			///< current tag name
+		bool m_visible;				///< do issue CloseTag after discarding
 	};
 	std::vector<StackElement> m_stk;		///< state stack
+	const void* m_buffered_element;			///< pointer to content element
+	std::size_t m_buffered_element_size;		///< size of content element
 	bool m_done;					///< true, when final close has been returned
 };
 

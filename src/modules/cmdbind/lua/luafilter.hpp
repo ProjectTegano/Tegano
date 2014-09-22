@@ -83,53 +83,51 @@ private:
 	{
 		enum Id
 		{
-			Init,			///< init state (TopLevel first time)
-			TopLevel,		///< the element is without key the top level element on the lua stack
-			TableIterOpen,		///< the lua table iterator is on an key value pair and did not return yet the opening tag
-			TableIterValue,		///< the opening tag has been fetched and the value is to fetch next or a new iterator has to be opened and pushed on the stack
-			TableIterValueNoTag,	///< same as TableIterValue but for content value without tag ('_')
-			TableIterClose,		///< the value has been processed and the close tag is to fetch next
-			TableIterNext,		///< the close tag has been fetched and a skip to the next element has to be done
-			VectorIterValue,	///< same as TableIterValue for a vector
-			VectorIterClose,	///< close for elements except the last one
-			VectorIterReopen,	///< reopen for elements except the last one
-			Done			///< finishing operation for this state
+			Init,			///< init state (Value first time)
+			Value,			///< to fetch the next toplevel value
+			TableElemValue,		///< handle the element value
+			TableCloseElem,		///< close current table element
+			TableNextElem,		///< fetch next table element
+			Done			///< job done, discard state
 		};
-
 		static const char* idName( Id i)
 		{
-			static const char* ar[] = {"Init","TopLevel","TableIterOpen","TableIterValue","TableIterValueNoTag","TableIterClose","TableIterNext","VectorIterValue","VectorIterClose","VectorIterReopen","Done"};
-			return ar[ (int)i];
-		}
-		static const char* idShortName( Id i)
-		{
-			static const char* ar[] = {"Init","Top","T_Open","T_Value","T_ValueNoTag","T_Close","T_Next","V_Value","V_Close","V_Reopen","Done"};
+			static const char* ar[] = {"Init","Value","TableElemValue","TableCloseElem","TableNextElem","Done"};
 			return ar[ (int)i];
 		}
 
-		FetchState( const FetchState& o)				:id(o.id),tag(o.tag),tagsize(o.tagsize),idx(o.idx){}
-		explicit FetchState( Id id_)					:id(id_),tag(0),tagsize(0),idx(0){}
-		FetchState( Id id_, const char* tag_, std::size_t tagsize_)	:id(id_),tag(tag_),tagsize(tagsize_),idx(0){}
+		FetchState()								:id(Init),tagname(0),tagnamesize(0),idx(0){}
+		FetchState( const FetchState& o)					:id(o.id),tagname(o.tagname),tagnamesize(o.tagnamesize),idx(o.idx){}
+		FetchState( Id id_, const char* tagname_, std::size_t tagnamesize_)	:id(id_),tagname(tagname_),tagnamesize(tagnamesize_),idx(0){}
 
 		Id id;				///< state identifier
-		const char* tag;		///< caller tag, used enclosing tag by arrays
-		std::size_t tagsize;		///< size of tag
+		const char* tagname;		///< caller tag, used enclosing tag by arrays
+		std::size_t tagnamesize;	///< size of tag
 		int idx;			///< array index
 
 		void getTagElement( types::VariantConst& element) const;
+		bool isArray() const
+		{
+			return idx;
+		}
+		bool isTopLevel() const
+		{
+			return !tagname;
+		}
 	};
-	/// \brief Fetch the element with index 'idx' as atomic value from lua stack
-	bool getLuaStackValue( int idx, types::VariantConst& e);
-	/// \brief Same as getLuaStackValue(int,types::VariantConst&) but does set the filter state
-	bool tryGetLuaStackValue( int idx, types::VariantConst& element, const char*& errelemtype);
-	/// \brief Opens a new table iterator on an array or lua table
-	bool firstTableElem( const char* tag);
-	/// \brief Fetches the next element of the currently iterated associative (non array) lua table
-	bool nextTableElem();
-	/// \brief Fetches the next element of the currently iterated lua array (table with numbers as indices)
-	bool nextVectorElem();
 
 private:
+	/// \brief Fetch the element with index 'idx' as atomic value from lua stack
+	bool getLuaStackValue( int idx, types::VariantConst& e);
+	/// \brief Opens a new table iterator on a Lua array or Lua table
+	bool fetchFirstTableElem();
+	/// \brief Fetches the next element of the currently iterated lua table
+	bool fetchNextTableElem();
+	/// \brief Helper function to create the context of a table element
+	bool createTableElemState( FetchState& st);
+	/// \brief Helper function to check the index of an array element
+	bool checkTableArrayIndex( int idx, bool topLevel);
+	/// \brief Get dump of the iterator stack for debugging purposes (logging)
 	static std::string stackDump( const std::vector<FetchState>& stk);
 
 private:
@@ -164,7 +162,7 @@ public:
 
 private:
 	bool pushValue( const types::VariantConst& element);
-	bool openTag( const types::VariantConst& element);
+	bool openTag( const types::VariantConst& element, bool array=false);
 	bool closeTag();
 	bool closeAttribute( const types::VariantConst& element);
 
@@ -175,12 +173,22 @@ private:
 		Struct,
 		Vector
 	};
+	struct PrintState
+	{
+		ContentType m_contentType;
+		int m_idx;
 
+		PrintState()
+			:m_contentType(Vector),m_idx(0){}
+		PrintState( ContentType contentType_, int idx_=0)
+			:m_contentType(contentType_),m_idx(idx_){}
+		PrintState( const PrintState& o)
+			:m_contentType(o.m_contentType),m_idx(o.m_idx){}
+	};
 	lua_State* m_ls;				///< lua state for building the result
 	ElementType m_type;				///< last element type printed
-	bool m_hasElement;				///< flag that tells if the last open tag contained any attribute sub structure or value. Empty tags are disposed with the close and the lua table entries are not created
 	bool m_logtrace;				///< true, if logging of stack trace is enabled
-	std::vector<ContentType> m_statestk;		///< state stack that tells what substructures are build
+	std::vector<PrintState> m_statestk;		///< state stack that tells what substructures are build
 };
 
 }}//namespace

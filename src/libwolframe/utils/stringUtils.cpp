@@ -118,9 +118,11 @@ struct PrintContext
 	int taglevel;
 	std::string indent;
 	langbind::FilterBase::ElementType lasttype;
+	types::Variant m_lastarraytag;
+	std::size_t m_cnt;
 
 	PrintContext()
-		:taglevel(0),lasttype(langbind::FilterBase::CloseTag)
+		:taglevel(0),lasttype(langbind::FilterBase::CloseTag),m_cnt(0)
 	{}
 };
 
@@ -132,6 +134,13 @@ static void printElement( std::ostream& dest, langbind::FilterBase::ElementType 
 	}
 	switch (type)
 	{
+		case langbind::FilterBase::OpenTagArray:
+			++ctx.m_cnt;
+			if (ctx.m_lastarraytag != element)
+			{
+				ctx.m_cnt = 1;
+			}
+			/*no break here!*/
 		case langbind::FilterBase::OpenTag:
 			++ctx.taglevel;
 			dest << format->newitem;
@@ -141,6 +150,10 @@ static void printElement( std::ostream& dest, langbind::FilterBase::ElementType 
 				ctx.indent.append( format->indent);
 			}
 			dest << element.tostring();
+			if (type == langbind::FilterBase::OpenTagArray)
+			{
+				dest << "[" << ctx.m_cnt << "]";
+			}
 			dest << format->openstruct;
 			ctx.lasttype = type;
 			break;

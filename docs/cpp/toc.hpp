@@ -34,54 +34,28 @@ WF_MODULE_END
          (_Wolframe::langbind::OutputFilter). The unified representation 
          for filters is a structure with the document meta data as key/value
          pairs and a sequence of content elements of the following types:
-            - OpenTag: Open a substructure. The value is the name of the structure opened or if empty, defining a new array element
-            - CloseTag: Close a substructure or an array element or it is marking the end of content (final close)
+	    - OpenTag: Open a substructure. The value is the name of the structure opened or if empty, defining a new array element
+	    - OpenTagArray: Open a substructure that is an element of an array. The value is the name of the array the element opened belongs to.
+            - CloseTag: Close a substructure or an array element or it is marking the end of content (final close) - the interpretation is depending on the context
             - Value: Defines an atomic element
             - Attribute: Defines an attribute name, the following element is the attribute value (as type value).
             .
          Filters define flags (_Wolframe::langbind::FilterBase::Flags)
          to level out language differences between producer and consumer of
-         the filter element sequence.
-         The initialization of the flags define a contract between producer and 
-         consumer. The idea behind is that not the weakest peer involved defines
-         globally what information is transmitted with an filter. The 
-         consumer and the producer set some flags of the filter that describe the
-         requirements of the consumer and the capabilities of the producer.
-         There are two flags set by the producer:
-            - PropagateNoCase tells the consumer that the tag names used are case insensitive
-            - PropagateNoAttr tells the consumer that producer does not know about attributes (only OpenTag,CloseTag,Value are used)
+         the filter element sequence. A filter (producer) describes with its 
+         flags, what information it can provide. The consumer can react on 
+         the capabilities of the producer.
+         There are three flags defined:
+            - PropagateNoCase tells that the tag names used are case insensitive
+            - PropagateNoAttr tells that the filter does not know about attributes (the sequence OpenTag/OpenTagArray,Value,CloseTag is used for attributes instead)
+            - PropagateNoArray tells that the filter does not know about arrays (elements of arrays are defined as OpenTag,CloseTag substructures). This has implications on the consumer. If the needs to distinguish between an array with one element or a single element, it has to get this information elsewhere.
             .
-         There is one flag set by the consumer:
-            - SerializeWithIndices tells the producer that the consumer has no 
-              structure description that helps to distinguish between an array
-              with one element or a single element. Therefore the consumer has
-              to produce a sequence that contains the information if an element
-              belongs to an array. This is done by having one named tag for
-              the array structure and one tag without name for every array element.
-              Lets take an array with name "Colors" two atomic elements "Red" and 
-              "Blue" as example. Instead of producing a sequence like this, 
-              if SerializeWithIndices is not set
-              \code
-               OpenTag "Colors",Value "Red",CloseTag,OpenTag "Colors",Value "Blue",CloseTag
-              \endcode
-              the following sequence has to be produced
-              \code
-               OpenTag "Colors",OpenTag,Value "Red",CloseTag,OpenTag,Value "Blue",CloseTag,CloseTag
-              \endcode
-            .
-         Unfortunately we cannot define a format with array indices as
-         unified format, because there are languages that do not have the
-         capability to produce this information (like for example XML).
-         So we take the weakest form as base and provide an upgrade if required 
-         and if the model behind allows it. 
-         The method _Wolframe::langbind::InputFilter::setFlags( Flags f)
-         can return false if it cannot provide the required information.
          See \ref FilterModule. As a real example we suggest to have a look at src/modules/filter/cjson/.
     - \b Form \b Function:
          Form functions (_Wolframe::langbind::FormFunction) are functions with a structure 
          as input and a structure as output. The input structure is represented by an 
          iterator implementing the input filter interface
-         (iterator on OpenTag,CloseTag,Attribute,Value elements) with typed 
+         (iterator on OpenTag,OpenTagArray,CloseTag,Attribute,Value elements) with typed 
          values instead of strings (_Wolframe::langbind::TypedInputFilter). 
          In Wolframe any function in any language used for processing is 
          implemented as form function. With this object type it is also 

@@ -60,6 +60,7 @@ bool InputFilterScope::getNext( ElementType& type, const void*& element, std::si
 		switch (type)
 		{
 			case InputFilter::OpenTag:
+			case InputFilter::OpenTagArray:
 				++m_taglevel;
 				break;
 			case InputFilter::CloseTag:

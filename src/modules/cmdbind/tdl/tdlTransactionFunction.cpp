@@ -112,6 +112,7 @@ bool TdlTransactionFunctionClosure::InputStructure::print( ElementType type, con
 	switch (type)
 	{
 		case langbind::TypedInputFilter::OpenTag:
+		case langbind::TypedInputFilter::OpenTagArray:
 			m_structure->openTag( element);
 		break;
 		case langbind::TypedInputFilter::CloseTag:
@@ -240,6 +241,7 @@ std::string inputfilter_logtext( const langbind::TypedInputFilterR& inp)
 		switch (type)
 		{
 			case langbind::FilterBase::OpenTag:
+			case langbind::FilterBase::OpenTagArray:
 				taglevel++;
 				out << " " << element.tostring() << " {";
 				break;

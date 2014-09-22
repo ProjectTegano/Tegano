@@ -168,14 +168,3 @@ bool StructSerializer::getNext( langbind::FilterBase::ElementType& type, types::
 	return true;
 }
 
-bool StructSerializer::setFlags( FilterBase::Flags f)
-{
-	bool rt = true;
-	rt &= langbind::TypedInputFilter::setFlags( f);
-	if (flag( langbind::TypedInputFilter::SerializeWithIndices))
-	{
-		m_ctx.setFlags( serialize::Flags::SerializeWithIndices);
-	}
-	return rt;
-}
-
