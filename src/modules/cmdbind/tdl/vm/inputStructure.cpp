@@ -58,7 +58,6 @@ InputStructure::InputStructure( const TagTable* tagmap)
 {
 	m_nodemem.alloc( 1);
 	InputNode* nd = m_nodemem.base();
-	nd->m_arrayindex = -1;
 	nd->m_parent = -1;
 	m_content.push_back( types::Variant());
 }
@@ -128,7 +127,7 @@ void InputStructure::print( std::ostream& out, const utils::PrintFormat* pformat
 			std::size_t indent = stk.size() -1;
 			while (indent--) out << pformat->indent;
 
-			if (nd->m_tagstr) out << tagname(nd) << pformat->endheader;
+			if (nd->m_tagstr) out << tagname(nd) << (nd->isArrayElem()?"[]":"") << pformat->endheader;
 			stk.back().headerprinted = true;
 		}
 		if (nd->m_firstchild && !stk.back().childrenvisited)
@@ -203,7 +202,7 @@ std::string InputStructure::nodepath( const InputNode* nd) const
 	return nodepath( visitor( nd));
 }
 
-InputNodeVisitor InputStructure::createChildNode( const InputNodeVisitor& nv)
+InputNodeVisitor InputStructure::createChildNode( const InputNodeVisitor& nv, bool isArrayElem)
 {
 	int idx = (int)m_nodemem.alloc( 1);
 	InputNode*nd = node( nv);
@@ -217,15 +216,15 @@ InputNodeVisitor InputStructure::createChildNode( const InputNodeVisitor& nv)
 		lc->m_next = nd->m_lastchild = idx;
 	}
 	InputNode*chld = node( idx);
-	chld->m_arrayindex = -1;
+	chld->isArrayElem( isArrayElem);
 	chld->m_parent = nv.m_nodeidx;
 	return InputNodeVisitor(idx);
 }
 
-InputNodeVisitor InputStructure::createSiblingNode( const InputNodeVisitor& nv)
+InputNodeVisitor InputStructure::createSiblingNode( const InputNodeVisitor& nv, bool isArrayNode)
 {
 	if (!nv.m_nodeidx) throw std::runtime_error( "try to create sibling node of root");
-	return createChildNode( InputNodeVisitor( node( nv.m_nodeidx)->m_parent));
+	return createChildNode( InputNodeVisitor( node( nv.m_nodeidx)->m_parent), isArrayNode);
 }
 
 InputNodeVisitor InputStructure::visitTag( const InputNodeVisitor& nv, const std::string& tag) const
@@ -256,9 +255,9 @@ InputNodeVisitor InputStructure::visitTag( const InputNodeVisitor& nv, const std
 InputNodeVisitor InputStructure::visitOrOpenUniqTag( const InputNodeVisitor& nv, const std::string& tag)
 {
 	InputNode*nd = node( nv);
-	if (!nd->m_firstchild) return openTag( nv, tag);
+	if (!nd->m_firstchild) return openTag( nv, tag, false);
 	int tgs = (int)m_privatetagmap.get( tag);
-	if (!tgs) return openTag( nv, tag);
+	if (!tgs) return openTag( nv, tag, false);
 	InputNode*cd = node( nd->m_firstchild);
 	InputNodeVisitor rt;
 	for (;;)
@@ -271,17 +270,17 @@ InputNodeVisitor InputStructure::visitOrOpenUniqTag( const InputNodeVisitor& nv,
 		if (!cd->m_next) break;
 		cd = node( cd->m_next);
 	}
-	if (!rt.m_nodeidx) return openTag( nv, tag);
+	if (!rt.m_nodeidx) return openTag( nv, tag, false);
 	return rt;
 }
 
-InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const std::string& tag)
+InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const std::string& tag, bool isArrayElem)
 {
 	if (m_done)
 	{
 		throw std::runtime_error( "tags not balanced in input (open tag after final close)");
 	}
-	InputNodeVisitor rt = createChildNode( nv);
+	InputNodeVisitor rt = createChildNode( nv, isArrayElem);
 	InputNode*nd = node( rt);
 
 	nd->m_tag = (int)m_tagmap->find( tag);
@@ -290,13 +289,13 @@ InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const std:
 	return rt;
 }
 
-InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const types::Variant& tag)
+InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const types::Variant& tag, bool isArrayElem)
 {
 	if (m_done)
 	{
 		throw std::runtime_error( "tags not balanced in input (open tag after final close)");
 	}
-	InputNodeVisitor rt = createChildNode( nv);
+	InputNodeVisitor rt = createChildNode( nv, isArrayElem);
 	InputNode*nd = node( rt);
 
 	std::string tagstr( tag.tostring());
@@ -304,24 +303,6 @@ InputNodeVisitor InputStructure::openTag( const InputNodeVisitor& nv, const type
 	if (nd->m_tag == 0) nd->m_tag = (int)m_tagmap->unused();
 	nd->m_tagstr = (int)m_privatetagmap.get( tagstr);
 	return rt;
-}
-
-bool InputStructure::isArrayNode( const InputNodeVisitor& nv) const
-{
-	const InputNode* nd = node( nv);
-	if (!nd->m_firstchild) return false;
-	const InputNode* cd = node( nd->m_firstchild);
-	int arrayindex = -1;
-	for (;;)
-	{
-		if (cd->m_tagstr) return false;
-		if (cd->m_arrayindex <= arrayindex) return false;
-		arrayindex = cd->m_arrayindex;
-
-		if (!cd->m_next) break;
-		cd = node( cd->m_next);
-	}
-	return true;
 }
 
 InputNodeVisitor InputStructure::closeTag( const InputNodeVisitor& nv)
@@ -339,55 +320,6 @@ InputNodeVisitor InputStructure::closeTag( const InputNodeVisitor& nv)
 	if (nv.m_nodeidx != pn->m_lastchild)
 	{
 		throw std::logic_error("internal: illegal call of closeTag");
-	}
-
-	if (isArrayNode( nv))
-	{
-		// In case of an array the granparent of the array parent takes over the children of the array
-		// and the parent is deleted from the tree.
-		if (!nd->m_firstchild)
-		{
-			//... if there are no children then the empty array reference is deleted:
-			if (pn->m_lastchild == pn->m_firstchild)
-			{
-				pn->m_lastchild = pn->m_firstchild = 0;
-			}
-			else
-			{
-				int ni = pn->m_firstchild;
-				InputNode*cd = node(ni);
-				while (cd->m_next && cd->m_next != nv.m_nodeidx)
-				{
-					cd = node( ni=cd->m_next);
-				}
-				if (!cd->m_next) throw std::logic_error("internal: corrupt tree");
-				cd->m_next = 0;
-				pn->m_lastchild = ni;
-			}
-		}
-		else
-		{
-			// ... there are children, so they inherit parent attributes and get added as granparents children
-			InputNode*cd = node( nd->m_firstchild);
-			for (;;)
-			{
-				cd->m_tag = nd->m_tag;
-				cd->m_tagstr = nd->m_tagstr;	//... tag names taken from father that will disappear
-				cd->m_parent = nd->m_parent;	//... parent line to granparent from father that will disappear
-				if (!cd->m_next) break;
-				cd = node( cd->m_next);
-			}
-			if (nd->m_lastchild == nd->m_firstchild)
-			{
-				*nd = *node( nd->m_firstchild);
-			}
-			else
-			{
-				int lastchild = nd->m_lastchild;
-				*nd = *node( nd->m_firstchild);
-				pn->m_lastchild = lastchild;
-			}
-		}
 	}
 	return rt;
 }
@@ -606,8 +538,8 @@ public:
 					// ... empty tag = embedded content
 					++m_nodeitr;
 				}
-				// ! The case that the parameter node is an array node (m_arrayindex) is not respected.
-				//	It is treated as a single node.
+				// ! The case that the parameter node is an array node is not respected.
+				//	It is always treated as a single node.
 			}
 			// [3] structure element fetching statemachine:
 			if (m_stack.back().node)
@@ -623,7 +555,7 @@ public:
 					m_stack.push_back( StackElement( cnod, true));
 					++m_stack.back().closetagcnt;
 
-					if (cnod->m_arrayindex >= 0)
+					if (cnod->isArrayElem())
 					{
 						type = TypedInputFilter::OpenTagArray;
 					}
@@ -652,7 +584,8 @@ public:
 					// replace current node on the stack by its next neighbour
 					const InputNode* snod = m_structure->node( m_stack.back().node->m_next);
 					type = TypedInputFilter::CloseTag; element.init();
-					m_elementbuf.push_back( Element( TypedInputFilter::OpenTag, m_structure->tagname( snod)));
+					TypedInputFilter::ElementType reopen = snod->isArrayElem()?TypedInputFilter::OpenTagArray:TypedInputFilter::OpenTag;
+					m_elementbuf.push_back( Element( reopen, m_structure->tagname( snod)));
 					m_stack.back().node = snod;			//... skip to next element
 					m_stack.back().childrenvisited = false;		//... and its children
 					m_stack.back().valuevisited = false;		//... and its value
@@ -752,22 +685,25 @@ public:
 		{
 			case langbind::TypedInputFilter::OpenTag:
 			case langbind::TypedInputFilter::OpenTagArray:
+			{
+				bool isArrayElem = (type == langbind::TypedInputFilter::OpenTagArray);
 				++m_taglevel;
-				m_visitor = m_structure->openTag( m_visitor, element);
+				m_visitor = m_structure->openTag( m_visitor, element, isArrayElem);
 				if (m_taglevel == 1 && m_sourccetagmap.find( m_structure->node(m_visitor)->m_tagstr) != m_sourccetagmap.end())
 				{
-					throw std::runtime_error( "forbidden assignment ot result to tag that already exists in input");
+					throw std::runtime_error( "forbidden assignment or result to tag that already exists in input");
 				}
+			}
 			break;
 			case langbind::TypedInputFilter::CloseTag:
 				-- m_taglevel;
 				m_visitor = m_structure->closeTag( m_visitor);
 			break;
 			case langbind::TypedInputFilter::Attribute:
-				m_visitor = m_structure->openTag( m_visitor, element);
+				m_visitor = m_structure->openTag( m_visitor, element, false);
 				if (m_taglevel == 0 && m_sourccetagmap.find( m_structure->node(m_visitor)->m_tagstr) != m_sourccetagmap.end())
 				{
-					throw std::runtime_error( "forbidden assignment ot result to tag that already exists in input");
+					throw std::runtime_error( "forbidden assignment or result to tag that already exists in input");
 				}
 			break;
 			case langbind::TypedInputFilter::Value:

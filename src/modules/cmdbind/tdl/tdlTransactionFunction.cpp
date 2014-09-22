@@ -112,22 +112,24 @@ bool TdlTransactionFunctionClosure::InputStructure::print( ElementType type, con
 	switch (type)
 	{
 		case langbind::TypedInputFilter::OpenTag:
+			m_structure->openTag( element, false);
+			break;
 		case langbind::TypedInputFilter::OpenTagArray:
-			m_structure->openTag( element);
-		break;
+			m_structure->openTag( element, true);
+			break;
 		case langbind::TypedInputFilter::CloseTag:
 			m_structure->closeTag();
-		break;
+			break;
 		case langbind::TypedInputFilter::Attribute:
-			m_structure->openTag( element);
-		break;
+			m_structure->openTag( element, false);
+			break;
 		case langbind::TypedInputFilter::Value:
 			m_structure->pushValue( element);
 			if (m_lasttype == langbind::TypedInputFilter::Attribute)
 			{
 				m_structure->closeTag();
 			}
-		break;
+			break;
 	}
 	m_lasttype = type;
 	return true;

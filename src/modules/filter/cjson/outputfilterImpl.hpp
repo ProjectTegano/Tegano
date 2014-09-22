@@ -100,8 +100,8 @@ public:
 
 private:
 	void printHeader();
-	void addStructValue( const std::string name, const std::string& value);
-	void addStructItem( const std::string name, cJSON* val);
+	void addStructValue( const std::string name, const std::string& value, bool asArray);
+	void addStructItem( const std::string name, cJSON* val, bool asArray);
 	void setContentValue( const std::string& value);
 	void closeElement();
 	void printStructToBuffer();

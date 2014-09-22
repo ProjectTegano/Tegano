@@ -50,34 +50,48 @@ namespace vm {
 ///\brief Node of the structure
 struct InputNode
 {
+	enum Flags
+	{
+		NoFlags=0x0,
+		IsArrayElem=0x1
+	};
+
 	int m_parent;
 	int m_tag;
 	int m_tagstr;
-	int m_arrayindex;
 	int m_next;
 	int m_value;
 	int m_firstchild;
 	int m_lastchild;
+	int m_flags;
+
+	bool isArrayElem() const	{return (((int)m_flags&(int)IsArrayElem)!=0);}
+	void isArrayElem( bool f)	{if (f) setFlags(IsArrayElem); else unsetFlags(IsArrayElem);}
+
+	void setFlags( Flags f)		{m_flags = ((Flags)((int)m_flags | (int)f));}
+	void unsetFlags( Flags f)	{m_flags = ((Flags)((int)m_flags - ((int)m_flags & (int)f)));}
 
 	InputNode()
 		:m_parent(0)
 		,m_tag(0)
 		,m_tagstr(0)
-		,m_arrayindex(-1)
 		,m_next(0)
 		,m_value(0)
 		,m_firstchild(0)
-		,m_lastchild(0){}
+		,m_lastchild(0)
+		,m_flags(NoFlags)
+	{}
 
 	InputNode( const InputNode& o)
 		:m_parent(o.m_parent)
 		,m_tag(o.m_tag)
 		,m_tagstr(o.m_tagstr)
-		,m_arrayindex(o.m_arrayindex)
 		,m_next(o.m_next)
 		,m_value(o.m_value)
 		,m_firstchild(o.m_firstchild)
-		,m_lastchild(o.m_lastchild){}
+		,m_lastchild(o.m_lastchild)
+		,m_flags(o.m_flags)
+	{}
 };
 
 typedef int InputNodeIndex;
@@ -167,22 +181,21 @@ public://visit structure:
 	langbind::TypedOutputFilter* createOutputFilter( const InputNodeVisitor& nv, const std::map<int, bool>& sourccetagmap);
 
 public://create structure without explicit visitor context:
-	void openTag( const types::Variant& tag)		{m_visitor = openTag( m_visitor, tag);}
-	void closeTag()						{m_visitor = closeTag( m_visitor);}
-	void pushValue( const types::VariantConst& val)		{pushValue( m_visitor, val);}
+	void openTag( const types::Variant& tag, bool isArrayElem)	{m_visitor = openTag( m_visitor, tag, isArrayElem);}
+	void closeTag()							{m_visitor = closeTag( m_visitor);}
+	void pushValue( const types::VariantConst& val)			{pushValue( m_visitor, val);}
 
 public://create structure with explicit visitor context:
 	InputNodeVisitor visitTag( const InputNodeVisitor& nv, const std::string& tag) const;
 	InputNodeVisitor visitOrOpenUniqTag( const InputNodeVisitor& nv, const std::string& tag);
-	InputNodeVisitor openTag( const InputNodeVisitor& nv, const types::Variant& tag);
+	InputNodeVisitor openTag( const InputNodeVisitor& nv, const types::Variant& tag, bool isArrayElem);
 	InputNodeVisitor closeTag( const InputNodeVisitor& nv);
 	void pushValue( const InputNodeVisitor& nv, const types::VariantConst& val);
 
 private://create structure:
-	InputNodeVisitor openTag( const InputNodeVisitor& nv, const std::string& tag);
-	InputNodeVisitor createChildNode( const InputNodeVisitor& nv);
-	InputNodeVisitor createSiblingNode( const InputNodeVisitor& nv);
-	bool isArrayNode( const InputNodeVisitor& nv) const;
+	InputNodeVisitor openTag( const InputNodeVisitor& nv, const std::string& tag, bool isArrayElem);
+	InputNodeVisitor createChildNode( const InputNodeVisitor& nv, bool isArrayNode);
+	InputNodeVisitor createSiblingNode( const InputNodeVisitor& nv, bool isArrayNode);
 
 private://data:
 	utils::TypedArrayDoublingAllocator<InputNode> m_nodemem;//< tree nodes

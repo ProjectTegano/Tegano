@@ -94,7 +94,7 @@ static bool deleteNameString( cJSON*& st)
 	return true;
 }
 
-void OutputFilterImpl::addStructItem( const std::string id, cJSON* val)
+void OutputFilterImpl::addStructItem( const std::string id, cJSON* val, bool asArray)
 {
 	cJSON* item = cJSON_GetObjectItem( m_stk.back().m_node, id.c_str());
 	if (item)
@@ -132,6 +132,22 @@ void OutputFilterImpl::addStructItem( const std::string id, cJSON* val)
 			}
 		}
 	}
+	else if (asArray)
+	{
+		cJSON* ar = cJSON_CreateArray();
+		if (!ar)
+		{
+			cJSON_Delete( val);
+			throw std::bad_alloc();
+		}
+		cJSON_AddItemToArray( ar, val);
+
+		if (!cJSON_AddItemToObject( m_stk.back().m_node, id.c_str(), ar))
+		{
+			cJSON_Delete( ar);
+			throw std::bad_alloc();
+		}
+	}
 	else
 	{
 		if (!cJSON_AddItemToObject( m_stk.back().m_node, id.c_str(), val))
@@ -153,6 +169,7 @@ void OutputFilterImpl::closeElement()
 	else
 	{
 		std::string id = m_stk.back().m_name;
+		bool isArray = m_stk.back().m_array;
 		cJSON* val = m_stk.back().m_node;
 		m_stk.back().m_node = 0;
 		m_stk.pop_back();
@@ -181,10 +198,15 @@ void OutputFilterImpl::closeElement()
 			}
 			else if (m_stk.back().m_node->type == cJSON_Object)
 			{
-				addStructItem( id, val);
+				addStructItem( id, val, isArray);
 			}
 			else
 			{
+				if (isArray)
+				{
+					cJSON_Delete( val);
+					throw std::runtime_error( "internal: cannot handle content value in array");
+				}
 				cJSON* contentval = m_stk.back().m_node;
 				m_stk.back().m_node = cJSON_CreateObject();
 				if (!m_stk.back().m_node)
@@ -195,7 +217,7 @@ void OutputFilterImpl::closeElement()
 				}
 				if (val)
 				{
-					if (!cJSON_AddItemToObject( m_stk.back().m_node, id.c_str(),val))
+					if (!cJSON_AddItemToObject( m_stk.back().m_node, id.c_str(), val))
 					{
 						cJSON_Delete( val);
 						cJSON_Delete( contentval);
@@ -212,7 +234,7 @@ void OutputFilterImpl::closeElement()
 	}
 }
 
-void OutputFilterImpl::addStructValue( const std::string id, const std::string& value)
+void OutputFilterImpl::addStructValue( const std::string id, const std::string& value, bool asArray)
 {
 	if (!m_stk.back().m_node)
 	{
@@ -228,7 +250,7 @@ void OutputFilterImpl::addStructValue( const std::string id, const std::string& 
 		cJSON* val = cJSON_CreateString( value.c_str());
 		if (!val) throw std::bad_alloc();
 
-		addStructItem( id, val);
+		addStructItem( id, val, asArray);
 	}
 	else
 	{
@@ -307,15 +329,15 @@ void OutputFilterImpl::printHeader()
 			const char* doctypeattr = md.getAttribute( "doctype");
 			if (doctypeattr)
 			{
-				addStructValue( "-doctype", doctypeattr);
+				addStructValue( "-doctype", doctypeattr, false);
 			}
 		}
 		else
 		{
-			addStructValue( "-doctype", doctype);
+			addStructValue( "-doctype", doctype, false);
 		}
 	}
-	if (m_encattr.codepage) addStructValue( "-encoding", encname);
+	if (m_encattr.codepage) addStructValue( "-encoding", encname, false);
 
 	m_headerprinted = true;
 	setState( Open);
@@ -384,7 +406,7 @@ bool OutputFilterImpl::print( ElementType type, const void* element, std::size_t
 				}
 				else
 				{
-					addStructValue( m_attribname, std::string( (const char*)element, elementsize));
+					addStructValue( m_attribname, std::string( (const char*)element, elementsize), false);
 					m_attribname.clear();
 				}
 				break;

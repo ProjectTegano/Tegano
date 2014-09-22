@@ -118,7 +118,16 @@ static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
 		}
 		else
 		{
-			if (itr->type() == types::VariantStruct::Array)
+			if (!*di->name)
+			{
+				if (itr->type() == types::VariantStruct::Array)
+				{
+					throw SerializationErrorException( "non array element expected for content element", getElementPath( stk));
+				}
+				stk.back().state( ++idx);
+				stk.push_back( DDLSerializeState( &*itr));
+			}
+			else if (itr->type() == types::VariantStruct::Array)
 			{
 				types::VariantConst elem( di->name);
 				stk.back().state( ++idx);
