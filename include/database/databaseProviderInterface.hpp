@@ -37,7 +37,6 @@
 #define _DATABASE_PROVIDER_INTERFACE_HPP_INCLUDED
 
 #include "database.hpp"
-#include "config/configurationObject.hpp"
 #include <boost/noncopyable.hpp>
 
 namespace _Wolframe {

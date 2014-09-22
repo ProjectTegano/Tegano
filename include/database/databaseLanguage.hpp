@@ -34,7 +34,6 @@
 /// \brief Language definitions for embedded commands in transactions
 #ifndef _DATABASE_LANGUAGE_HPP_INCLUDED
 #define _DATABASE_LANGUAGE_HPP_INCLUDED
-#include "database/transaction.hpp"
 #include "types/keymap.hpp"
 #include <string>
 
