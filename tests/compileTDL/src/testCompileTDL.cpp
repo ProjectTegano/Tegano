@@ -83,9 +83,12 @@ static void fillInputStructure( const types::PropertyTree& ptree, vm::InputStruc
 		switch (type)
 		{
 			case langbind::FilterBase::OpenTag:
+				++taglevel;
+				input.openTag( elem, false);
+				break;
 			case langbind::FilterBase::OpenTagArray:
 				++taglevel;
-				input.openTag( elem);
+				input.openTag( elem, true);
 				break;
 			case langbind::FilterBase::CloseTag:
 				--taglevel;
