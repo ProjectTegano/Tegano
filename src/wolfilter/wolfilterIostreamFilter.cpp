@@ -438,7 +438,6 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 			if (!flt.outputfilter().get()) throw std::runtime_error( "output filter not found");
 			flt.outputfilter()->setOutputChunkSize( buf.outsize);
 
-			flt.inputfilter()->setValue( "empty", "false");
 			TypedInputFilterR inp( new TypingInputFilter( flt.inputfilter()));
 			TypedOutputFilterR outp( new TypingOutputFilter( flt.outputfilter()));
 			FormFunctionClosureR closure( func->createClosure());
@@ -470,7 +469,6 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 			flt.outputfilter()->setOutputChunkSize( buf.outsize);
 
 			types::Form df( st);
-			flt.inputfilter()->setValue( "empty", "false");
 			TypedInputFilterR inp( new TypingInputFilter( flt.inputfilter()));
 			TypedOutputFilterR outp( new TypingOutputFilter( flt.outputfilter()));
 			serialize::DDLStructParser closure( &df);

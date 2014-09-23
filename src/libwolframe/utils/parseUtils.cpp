@@ -291,3 +291,37 @@ int utils::parseNextIdentifier( std::string::const_iterator& si, const std::stri
 	return 0;
 }
 
+bool utils::getBooleanTokenValue( const std::string& tok)
+{
+	char firstch = (char)(tok[0]|32);
+	if (firstch == 'y')
+	{
+		if (boost::algorithm::iequals( tok, "yes")
+		||  boost::algorithm::iequals( tok, "y")) return true;
+	}
+	else if (firstch == 't')
+	{
+		if (boost::algorithm::iequals( tok, "true")
+		||  boost::algorithm::iequals( tok, "t")) return true;
+	}
+	else if (firstch == '1' && tok.size() == 1)
+	{
+		return true;
+	}
+	else if (firstch == 'n')
+	{
+		if (boost::algorithm::iequals( tok, "no")
+		||  boost::algorithm::iequals( tok, "n")) return true;
+	}
+	else if (firstch == 'f')
+	{
+		if (boost::algorithm::iequals( tok, "false")
+		||  boost::algorithm::iequals( tok, "f")) return true;
+	}
+	else if (firstch == '1' && tok.size() == 1)
+	{
+		return true;
+	}
+	throw std::runtime_error( std::string( "boolean value expected instead of '") + tok + "'");
+}
+

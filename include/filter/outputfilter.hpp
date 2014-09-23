@@ -47,7 +47,7 @@ namespace langbind {
 /// \class OutputFilter
 /// \brief Output filter
 class OutputFilter
-	:public ContentFilterBase
+	:public FilterBase
 {
 public:
 	/// \enum State
@@ -62,7 +62,7 @@ public:
 
 	/// \brief Constructor
 	OutputFilter( const char* name_, const types::DocMetaDataR& inheritMetadata_)
-		:ContentFilterBase(name_)
+		:FilterBase(name_)
 		,m_state(Start)
 		,m_outputChunkSize(0)
 		,m_inheritMetadata(inheritMetadata_)
@@ -70,7 +70,7 @@ public:
 
 	/// \brief Constructor
 	explicit OutputFilter( const char* name_)
-		:ContentFilterBase(name_)
+		:FilterBase(name_)
 		,m_state(Start)
 		,m_outputChunkSize(0)
 	{}
@@ -78,7 +78,7 @@ public:
 	/// \brief Copy constructor
 	/// \param[in] o output filter to copy
 	OutputFilter( const OutputFilter& o)
-		:ContentFilterBase(o)
+		:FilterBase(o)
 		,m_state(o.m_state)
 		,m_outputChunkSize(o.m_outputChunkSize)
 		,m_inheritMetadata(o.m_inheritMetadata)

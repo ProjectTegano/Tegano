@@ -92,12 +92,6 @@ public:
 	/// \brief Implementation of OutputFilter::close()
 	virtual bool close();
 
-	/// \brief Implementation of FilterBase::getValue( const char*, std::string&)
-	virtual bool getValue( const char* name, std::string& val) const;
-
-	/// \brief Implementation of FilterBase::setValue( const char*, const std::string&)
-	virtual bool setValue( const char* name, const std::string& value);
-
 private:
 	void printHeader();
 	void addStructValue( const std::string name, const std::string& value, bool asArray);

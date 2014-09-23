@@ -1,6 +1,5 @@
 function run()
-	f = provider.filter( "libxml2")
-	f.empty = false
+	f = provider.filter( "libxml2", {empty=false})
 	input:as( f)
 	output:as( provider.filter( "blob"))
 	local t = input:get()

@@ -44,11 +44,6 @@ Project Wolframe.
 using namespace _Wolframe;
 using namespace _Wolframe::langbind;
 
-bool InputFilterImpl::getValue( const char* id, std::string& val) const
-{
-	return Parent::getValue( id, val);
-}
-
 const types::DocMetaData* InputFilterImpl::getMetaData()
 {
 	if (!m_root.get())
@@ -57,11 +52,6 @@ const types::DocMetaData* InputFilterImpl::getMetaData()
 		return 0;
 	}
 	return getMetaDataRef().get();
-}
-
-bool InputFilterImpl::setValue( const char* id, const std::string& value)
-{
-	return Parent::setValue( id, value);
 }
 
 static types::String::Encoding guessCharsetEncoding( const void* content, std::size_t contentsize)

@@ -35,6 +35,7 @@ Project Wolframe.
 #include "outputfilterImpl.hpp"
 #include "xsltMapper.hpp"
 #include "types/docmetadata.hpp"
+#include "utils/parseUtils.hpp"
 #include <cstddef>
 #include <cstring>
 #include <vector>
@@ -71,9 +72,9 @@ static LibXml2Init libXml2Init;
 
 struct Libxml2Filter :public Filter
 {
-	Libxml2Filter( const char* encoding=0)
+	Libxml2Filter( const char* encoding, bool withEmpty)
 	{
-		m_inputfilter.reset( new InputFilterImpl());
+		m_inputfilter.reset( new InputFilterImpl( withEmpty));
 		OutputFilterImpl* oo = new OutputFilterImpl( m_inputfilter->getMetaDataRef());
 		m_outputfilter.reset( oo);
 		if (encoding)
@@ -83,9 +84,11 @@ struct Libxml2Filter :public Filter
 	}
 };
 
-static const char* getArgumentEncoding( const std::vector<FilterArgument>& arg)
+static void getArguments( const std::vector<FilterArgument>& arg, const char*& encoding, bool& withEmpty)
 {
-	const char* encoding = 0;
+	encoding = 0;
+	withEmpty = true; //... W3C standard
+
 	std::vector<FilterArgument>::const_iterator ai = arg.begin(), ae = arg.end();
 	for (; ai != ae; ++ai)
 	{
@@ -105,17 +108,23 @@ static const char* getArgumentEncoding( const std::vector<FilterArgument>& arg)
 			encoding = ai->second.c_str();
 			break;
 		}
+		if (boost::algorithm::iequals( ai->first, "empty"))
+		{
+			withEmpty = utils::getBooleanTokenValue( ai->second);
+		}
 		else
 		{
 			throw std::runtime_error( std::string( "unknown filter argument '") + ai->first + "'");
 		}
 	}
-	return encoding;
 }
 
 Filter* Libxml2FilterType::create( const std::vector<FilterArgument>& arg) const
 {
-	return new Libxml2Filter( getArgumentEncoding( arg));
+	const char* encoding = 0;
+	bool withEmpty = true;
+	getArguments( arg, encoding, withEmpty);
+	return new Libxml2Filter( encoding, withEmpty);
 }
 
 

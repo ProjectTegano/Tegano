@@ -107,6 +107,7 @@ public:
 	/// \brief Get the name of the filter
 	const char* name() const			{return m_name;}
 
+	/// \brief Flags that describe some properties of the filter that have implications on validation, matching of elements and how structures can be built by the consumer
 	enum Flags
 	{
 		None=0x00,				///< no flags set
@@ -131,36 +132,6 @@ private:
 	char m_errorbuf[ ErrorBufSize];		///< error string
 	Flags m_flags;				///< flags
 	const char* m_name;			///< name of the filter
-};
-
-/// \class ContentFilterBase
-/// \brief Base of a content input/ouput filter
-class ContentFilterBase
-	:public FilterBase
-{
-public:
-	ContentFilterBase( const char* name_)
-		:FilterBase( name_){}
-	ContentFilterBase( const ContentFilterBase& o)
-		:FilterBase( o){}
-
-	/// \brief Get a member value of the filter. Throws on conversion error
-	/// \param [in] name case sensitive name of the variable
-	/// \param [in] val buffer for the value returned
-	/// \return true on success, false, if the variable does not exist or we have to yield (check state)
-	virtual bool getValue( const char* /*name*/, std::string& /*val*/) const
-	{
-		return false;
-	}
-
-	/// \brief Set a member value of the filter. Throws on conversion error
-	/// \param [in] name case sensitive name of the variable
-	/// \param [in] val new value of the variable to set
-	/// \return true on success, false, if the variable does not exist or we have to yield (check state)
-	virtual bool setValue( const char* /*name*/, const std::string& /*val*/)
-	{
-		return false;
-	}
 };
 
 }}//namespace

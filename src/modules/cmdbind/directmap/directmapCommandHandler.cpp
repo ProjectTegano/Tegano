@@ -81,10 +81,6 @@ void DirectmapCommandHandler::initcall()
 	}
 
 	// Initialize filters:
-	if (inputfilter().get())
-	{
-		inputfilter()->setValue( "empty", "false");
-	}
 	outputfilter()->inheritMetaData( inputfilter()->getMetaDataRef());
 	outputfilter()->setMetaData( m_cmd->outputmetadata);
 

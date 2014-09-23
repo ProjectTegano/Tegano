@@ -74,7 +74,6 @@ local function mapFormElements( elements)
 end
 
 function filterRequests()
-	filter().empty = false
 	output:as( filter("line"))
 
 	inp = input:table()

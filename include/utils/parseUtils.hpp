@@ -136,11 +136,17 @@ std::pair<std::string,std::string> parseTokenAssignement( std::string::const_ite
 /// \param[in] end iterator marking the end of the source
 std::pair<std::string,std::string> parseTokenAssignement( std::string::const_iterator& itr, std::string::const_iterator end);
 
+/// \brief Parse the next line
 /// \remark throws exception on error
 /// \return line parsed
 /// \param[in,out] itr scanning iterator passed as start of the source to parse and returned as source position after the expression parsed)
 /// \param[in] end iterator marking the end of the source
 std::string parseNextLine( std::string::const_iterator& itr, std::string::const_iterator end);
+
+/// \brief Map a boolean value from its string representation (token parsed)
+/// \remark throws exception on error
+/// \return boolean value of the token
+bool getBooleanTokenValue( const std::string& tok);
 
 }} //namespace _Wolframe::utils
 

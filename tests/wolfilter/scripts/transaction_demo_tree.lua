@@ -1,5 +1,4 @@
 function run()
-	provider.filter().empty = false
 	output:opentag( "result")			-- top level result tag
 	local itr = input:get()
 	for v,t in itr do

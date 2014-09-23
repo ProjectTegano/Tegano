@@ -341,13 +341,3 @@ void OutputFilterImpl::getOutput( const void*& buf, std::size_t& bufsize)
 	m_elemitr = m_elembuf.size();
 }
 
-bool OutputFilterImpl::getValue( const char* id, std::string& val) const
-{
-	return Parent::getValue( id, val);
-}
-
-bool OutputFilterImpl::setValue( const char* id, const std::string& value)
-{
-	return Parent::setValue( id, value);
-}
-

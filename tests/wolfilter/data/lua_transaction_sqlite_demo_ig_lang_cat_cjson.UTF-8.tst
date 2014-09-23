@@ -734,7 +734,6 @@ function print_tree( tree, nodeid)
 end
 
 function run()
-	provider.filter().empty = false
 	local itr = input:get()
 	for v,t in itr do
 		if t == "class" then

@@ -49,7 +49,7 @@ namespace langbind {
 /// \class InputFilter
 /// \brief Input filter
 class InputFilter
-	:public ContentFilterBase
+	:public FilterBase
 {
 public:
 	/// \enum State
@@ -64,20 +64,20 @@ public:
 
 	/// \brief Constructor
 	explicit InputFilter( const char* name_)
-		:ContentFilterBase(name_)
+		:FilterBase(name_)
 		,m_state(Start)
 		,m_metadata( new types::DocMetaData()){}
 
 	/// \brief Constructor
 	InputFilter( const char* name_, const types::DocMetaData& metadata)
-		:ContentFilterBase(name_)
+		:FilterBase(name_)
 		,m_state(Start)
 		,m_metadata( new types::DocMetaData( metadata)){}
 
 	/// \brief Copy constructor
 	/// \param[in] o input filter to copy
 	InputFilter( const InputFilter& o)
-		:ContentFilterBase(o)
+		:FilterBase(o)
 		,m_state(o.m_state)
 		,m_metadata( new types::DocMetaData( *o.m_metadata)){}
 

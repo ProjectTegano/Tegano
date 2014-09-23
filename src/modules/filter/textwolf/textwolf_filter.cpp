@@ -34,6 +34,7 @@ Project Wolframe.
 #include "textwolf_filter.hpp"
 #include "types/docmetadata.hpp"
 #include "utils/fileUtils.hpp"
+#include "utils/parseUtils.hpp"
 #include "textwolf/sourceiterator.hpp"
 #include "textwolf/cstringiterator.hpp"
 #include "textwolf/xmlhdrparser.hpp"
@@ -255,11 +256,11 @@ struct InputFilterImpl
 	typedef InputFilter Parent;
 
 	/// \brief Constructor
-	InputFilterImpl()
+	explicit InputFilterImpl( bool withEmpty_)
 		:InputFilter("textwolf")
 		,m_encoding(UTF8)
 		,m_codepage(0)
-		,m_withEmpty(true)
+		,m_withEmpty(withEmpty_)
 		,m_parser(0)
 		,m_src(0)
 		,m_srcsize(0)
@@ -309,39 +310,6 @@ struct InputFilterImpl
 				delete (XMLScanner*)m_parser;
 			);
 		}
-	}
-
-	/// \brief Implementation of FilterBase::getValue( const char*, std::string&)
-	virtual bool getValue( const char* id, std::string& val) const
-	{
-		if (0==std::strcmp( id, "empty"))
-		{
-			val = m_withEmpty?"true":"false";
-			return true;
-		}
-		return Parent::getValue( id, val);
-	}
-
-	/// \brief Implementation of FilterBase::setValue( const char*, const std::string&)
-	virtual bool setValue( const char* id, const std::string& value)
-	{
-		if (0==std::strcmp( id, "empty"))
-		{
-			if (0==std::strcmp( value.c_str(), "true"))
-			{
-				m_withEmpty = true;
-			}
-			else if (0==std::strcmp( value.c_str(), "false"))
-			{
-				m_withEmpty = false;
-			}
-			else
-			{
-				return false;
-			}
-			return true;
-		}
-		return Parent::setValue( id, value);
 	}
 
 	/// \brief self copy
@@ -1226,18 +1194,6 @@ struct OutputFilterImpl :public OutputFilter
 		m_elemitr = m_elembuf.size();
 	}
 
-	/// \brief Implementation of FilterBase::getValue( const char*, std::string&)
-	virtual bool getValue( const char* id, std::string& val) const
-	{
-		return Parent::getValue( id, val);
-	}
-
-	/// \brief Implementation of FilterBase::setValue( const char*, const std::string&)
-	virtual bool setValue( const char* id, const std::string& value)
-	{
-		return Parent::setValue( id, value);
-	}
-
 private:
 	Encoding m_encoding;			///< encoding of content parsed
 	int m_codepage;				///< code page of encoding
@@ -1253,9 +1209,9 @@ private:
 class TextwolfXmlFilter :public Filter
 {
 public:
-	TextwolfXmlFilter( const char* encoding=0)
+	TextwolfXmlFilter( const char* encoding, bool withEmpty)
 	{
-		m_inputfilter.reset( new InputFilterImpl());
+		m_inputfilter.reset( new InputFilterImpl( withEmpty));
 		OutputFilterImpl* oo = new OutputFilterImpl( m_inputfilter->getMetaDataRef());
 		m_outputfilter.reset( oo);
 		if (encoding)
@@ -1266,9 +1222,11 @@ public:
 };
 
 
-static const char* getArgumentEncoding( const std::vector<FilterArgument>& arg)
+static void getArguments( const std::vector<FilterArgument>& arg, const char*& encoding, bool& withEmpty)
 {
-	const char* encoding = 0;
+	encoding = 0;
+	withEmpty = true; //... W3C standard
+
 	std::vector<FilterArgument>::const_iterator ai = arg.begin(), ae = arg.end();
 	for (; ai != ae; ++ai)
 	{
@@ -1288,17 +1246,23 @@ static const char* getArgumentEncoding( const std::vector<FilterArgument>& arg)
 			encoding = ai->second.c_str();
 			break;
 		}
+		if (boost::algorithm::iequals( ai->first, "empty"))
+		{
+			withEmpty = utils::getBooleanTokenValue( ai->second);
+		}
 		else
 		{
 			throw std::runtime_error( std::string( "unknown filter argument '") + ai->first + "'");
 		}
 	}
-	return encoding;
 }
 
 Filter* TextwolfXmlFilterType::create( const std::vector<FilterArgument>& arg) const
 {
-	return new TextwolfXmlFilter( getArgumentEncoding( arg));
+	const char* encoding = 0;
+	bool withEmpty = true;
+	getArguments( arg, encoding, withEmpty);
+	return new TextwolfXmlFilter( encoding, withEmpty);
 }
 
 

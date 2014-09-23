@@ -73,7 +73,6 @@ local function print_tree_xml( tree, nodeid, indent)
 end
 
 function treeSelectHierarchy()
-	filter().empty = false
 	output:opentag( "result")
 	for v,t in itr do
 		if t == "id" then
@@ -85,7 +84,6 @@ function treeSelectHierarchy()
 end
 
 function treeAddHierarchy()
-	filter().empty = false
 	local itr = input:get()
 	for v,t in itr do
 		if t == "class" then

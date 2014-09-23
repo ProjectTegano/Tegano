@@ -73,29 +73,6 @@ public:
 	/// \brief Get the associated output filter reference
 	OutputFilterR& outputfilter()			{return m_outputfilter;}
 
-	/// \brief Get a member value of the filter
-	/// \param [in] name case sensitive name of the variable
-	/// \param [in] val the value returned
-	/// \return true on success, false, if the variable does not exist or the operation failed
-	bool getValue( const char* name, std::string& val) const
-	{
-		if (m_inputfilter.get() && m_inputfilter->getValue( name, val)) return true;
-		if (m_outputfilter.get() && m_outputfilter->getValue( name, val)) return true;
-		return false;
-	}
-
-	/// \brief Set a member value of the filter
-	/// \param [in] name case sensitive name of the variable
-	/// \param [in] value new value of the variable to set
-	/// \return true on success, false, if the variable does not exist or the operation failed
-	bool setValue( const char* name, const std::string& value)
-	{
-		bool rt = false;
-		if (m_inputfilter.get() && m_inputfilter->setValue( name, value)) rt = true;
-		if (m_outputfilter.get() && m_outputfilter->setValue( name, value)) rt = true;
-		return rt;
-	}
-
 protected:
 	InputFilterR m_inputfilter;
 	OutputFilterR m_outputfilter;
@@ -105,6 +82,7 @@ typedef boost::shared_ptr<Filter> FilterR;
 
 
 typedef std::pair<std::string,std::string> FilterArgument;
+
 
 /// \class FilterType
 /// \brief Structure defining a type of a filter (used as virtual constructor to create filter instances)

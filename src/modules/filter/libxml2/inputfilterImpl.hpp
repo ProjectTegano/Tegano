@@ -71,14 +71,14 @@ struct InputFilterImpl :public InputFilter
 	}
 
 	/// \brief Default constructor
-	InputFilterImpl()
+	explicit InputFilterImpl( bool withEmpty_)
 		:InputFilter("libxml2")
 		,m_node(0)
 		,m_value(0)
 		,m_prop(0)
 		,m_propvalues(0)
 		,m_taglevel(0)
-		,m_withEmpty(false)
+		,m_withEmpty(withEmpty_)
 		,m_endofcontent(false)
 		,m_rootAttributeIdx(0)
 		,m_rootAttributeState(0)
@@ -111,12 +111,6 @@ struct InputFilterImpl :public InputFilter
 	{
 		return new InputFilterImpl(*this);
 	}
-
-	/// \brief Implements FilterBase::getValue(const char*,std::string&) const
-	virtual bool getValue( const char* id, std::string& val) const;
-
-	/// \brief Implements FilterBase::setValue(const char*,const std::string&)
-	virtual bool setValue( const char* id, const std::string& value);
 
 	/// \brief Implements InputFilter::putInput(const void*,std::size_t,bool)
 	virtual void putInput( const void* content, std::size_t contentsize, bool end);

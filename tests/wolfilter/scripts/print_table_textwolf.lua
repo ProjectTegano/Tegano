@@ -1,6 +1,5 @@
 function run()
-	local f = provider.filter( "textwolf")
-	f.empty = false
+	local f = provider.filter( "textwolf", {empty=false})
 	input:as( f)
 	output:as( provider.filter( "blob"))
 	local t = input:get()

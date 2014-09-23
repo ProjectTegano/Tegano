@@ -1496,16 +1496,23 @@ LUA_FUNCTION_THROWS( "provider.filter(..)", function_filter)
 				lua_pushnil( ls);
 				while (lua_next( ls, -2))
 				{
+					const char* val = 0;
+					if (lua_type( ls, -1) == LUA_TBOOLEAN)
+					{
+						val = lua_toboolean( ls, -1)?"true":"false";
+					}
+					else
+					{
+						val = lua_tostring( ls, -1);
+					}
+					if (!val) throw std::runtime_error( "illegal filter argument value");
+
 					if (lua_type( ls, -2) == LUA_TSTRING)
 					{
-						const char* val = lua_tostring( ls, -1);
-						if (!val) throw std::runtime_error( "illegal filter argument value");
 						arg.push_back( FilterArgument( lua_tostring( ls, -2), val));
 					}
 					else if (lua_type( ls, -2) == LUA_TNUMBER)
 					{
-						const char* val = lua_tostring( ls, -1);
-						if (!val) throw std::runtime_error("illegal filter argument value");
 						arg.push_back( FilterArgument( "", val));
 					}
 					else
@@ -2765,7 +2772,7 @@ void LuaScriptInstance::initbase( proc::ExecContext* ctx_, bool callMain)
 		LuaObject<Output>::createMetatable( m_ls, 0, 0, output_methodtable, 0/*typename*/);
 
 		if (ctx_) setExecContext( m_ls, ctx_);
-		LuaObject<Filter>::createMetatable( m_ls, &function__LuaObject__index<Filter>, &function__LuaObject__newindex<Filter>, 0/*mt*/, "filter");
+		LuaObject<Filter>::createMetatable( m_ls, 0, 0, 0/*mt*/, "filter");
 
 		//Register iterator context:
 		lua_newtable( m_ls);

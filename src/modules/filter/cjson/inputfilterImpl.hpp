@@ -81,12 +81,6 @@ struct InputFilterImpl :public InputFilter
 		return new InputFilterImpl(*this);
 	}
 
-	/// \brief Implements FilterBase::getValue(const char*,std::string&) const
-	virtual bool getValue( const char* name, std::string& val) const;
-
-	/// \brief Implements FilterBase::setValue(const char*,const std::string&)
-	virtual bool setValue( const char* name, const std::string& value);
-
 	/// \brief Implements InputFilter::putInput(const void*,std::size_t,bool)
 	virtual void putInput( const void* content, std::size_t contentsize, bool end);
 
