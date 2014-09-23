@@ -16,10 +16,10 @@
 			{
 				"-id": "12",
 				"name": "Eins zwei",
-				"node": {
+				"node": [{
 					"-id": "121",
 					"name": "Eins zwei eins"
-				}
+				}]
 			},
 			{
 				"-id": "13",

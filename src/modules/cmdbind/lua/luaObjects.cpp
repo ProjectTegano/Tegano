@@ -567,7 +567,7 @@ LUA_FUNCTION_THROWS( "form:fill()", function_form_fill)
 	if (lua_getctx( ls, &ctx) != LUA_YIELD)
 	{
 		types::VariantStruct* substruct = form->get();
-		serialize::Flags::Enum flags = serialize::Flags::None;
+		serialize::ValidationFlags::Enum vflags = serialize::ValidationFlags::None;
 		int ii = 3, nn = lua_gettop( ls);
 		if (nn > 4) throw std::runtime_error( "too many arguments");
 		for (; ii <= nn; ++ii)
@@ -581,15 +581,17 @@ LUA_FUNCTION_THROWS( "form:fill()", function_form_fill)
 				const char* mode = lua_tostring( ls, ii);
 				if (std::strcmp( mode, "strict") == 0)
 				{
-					flags = (serialize::Flags::Enum)((int)serialize::Flags::ValidateAttributes|(int)serialize::Flags::ValidateInitialization);
+					vflags = serialize::ValidationFlags::All;
 				}
 				else if (std::strcmp( mode, "complete") == 0)
 				{
-					flags = serialize::Flags::ValidateInitialization;
+					vflags = serialize::ValidationFlags::All;
+					serialize::ValidationFlags::unset( vflags, serialize::ValidationFlags::ValidateArray);
+					serialize::ValidationFlags::unset( vflags, serialize::ValidationFlags::ValidateAttributes);
 				}
 				else if (std::strcmp( mode, "relaxed") == 0)
 				{
-					flags = serialize::Flags::None;
+					vflags = serialize::ValidationFlags::ValidateCase;
 				}
 				else
 				{
@@ -605,7 +607,7 @@ LUA_FUNCTION_THROWS( "form:fill()", function_form_fill)
 		TypedInputFilterR inp = get_operand_TypedInputFilter( ls, 2);
 		LuaObject<serialize::DDLFormParser>::push_luastack( ls, serialize::DDLFormParser( *form, substruct));
 		closure = LuaObject<serialize::DDLFormParser>::get( ls, -1);
-		closure->init( inp, flags);
+		closure->init( inp, vflags);
 		lua_pushvalue( ls, 2);		//... iterator argument (table, generator function, etc.)
 	}
 	else
@@ -1056,7 +1058,7 @@ LUA_FUNCTION_THROWS( "<formfunction>(..)", function_formfunction_call)
 		else
 		{
 			TypedInputFilterR inp = get_operand_TypedInputFilter( ls, 1);
-			(*closure)->init( getExecContext( ls), inp, serialize::Flags::None);
+			(*closure)->init( getExecContext( ls), inp, serialize::ValidationFlags::All);
 		}
 		lua_pushvalue( ls, 1);		//... iterator argument (table, generator function, etc.)
 	}
@@ -1116,7 +1118,7 @@ LUA_FUNCTION_THROWS( "provider.audit(..)", function_audit)
 			closure.reset( ff->createClosure());
 		}
 		TypedInputFilterR inp = get_operand_TypedInputFilter( ls, 2);
-		closure->init( exc, inp, serialize::Flags::None);
+		closure->init( exc, inp, serialize::ValidationFlags::All);
 	}
 	else
 	{
@@ -1927,7 +1929,7 @@ static lua_CFunction get_input_struct_table_closure( lua_State* ls, Input* input
 					types::FormR form( new types::Form( st));
 	
 					serialize::DDLFormParser* closure;
-					serialize::Flags::Enum flags = serialize::Flags::ValidateAttributes;
+					serialize::ValidationFlags::Enum flags = serialize::ValidationFlags::All;
 					TypedInputFilterR inp( new TypingInputFilter( input->getIterator()));
 					LuaObject<serialize::DDLFormParser>::push_luastack( ls, serialize::DDLFormParser( form));
 					closure = LuaObject<serialize::DDLFormParser>::get( ls, -1);
@@ -1988,7 +1990,7 @@ static lua_CFunction get_input_struct_form_closure( lua_State* ls, Input* input)
 					types::FormR form( new types::Form( st));
 	
 					serialize::DDLFormParser* closure;
-					serialize::Flags::Enum flags = serialize::Flags::ValidateAttributes;
+					serialize::ValidationFlags::Enum flags = serialize::ValidationFlags::All;
 					TypedInputFilterR inp( new TypingInputFilter( input->getIterator()));
 					LuaObject<serialize::DDLFormParser>::push_luastack( ls, serialize::DDLFormParser( form));
 					closure = LuaObject<serialize::DDLFormParser>::get( ls, -1);

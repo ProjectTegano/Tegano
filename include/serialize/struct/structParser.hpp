@@ -58,7 +58,7 @@ public:
 	static std::string getElementPath( const ParseStateStack& stk);
 
 	/// \brief Parser start initialization
-	void init( const langbind::TypedInputFilterR& i, serialize::Flags::Enum flags=serialize::Flags::None);
+	void init( const langbind::TypedInputFilterR& i, ValidationFlags::Enum flags=ValidationFlags::All);
 
 	/// \brief Get a shared reference of the parsed objects base pointer
 	const ObjectReference& object() const					{return m_obj;}
@@ -73,7 +73,7 @@ private:
 	void* m_ptr;
 	ObjectReference m_obj;
 	const StructDescriptionBase* m_descr;
-	Context m_ctx;
+	ValidationFlags::Enum m_validationFlags;
 	langbind::TypedInputFilterR m_inp;
 	ParseStateStack m_stk;
 };

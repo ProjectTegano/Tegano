@@ -59,7 +59,7 @@ public:
 	~Impl();
 	bool call();
 
-	void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f=serialize::Flags::None);
+	void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f=serialize::ValidationFlags::All);
 
 	langbind::TypedInputFilterR result() const;
 
@@ -67,7 +67,7 @@ private:
 	proc::ExecContext* m_context;					//< execution context reference for function called
 	const DotnetFunction* m_func;					//< function to call
 	langbind::TypedInputFilterR m_input;				//< input parameters
-	serialize::Flags::Enum m_flags;					//< flag passed by called to stear validation strictness
+	serialize::ValidationFlags::Enum m_flags;			//< flag passed by called to stear validation strictness
 	VARIANT* m_param;						//< array of function parameters to initialize
 	enum {null_paramidx=0xFFFF};
 	std::size_t m_paramidx;						//< currently selected parameter of the function [0,1,.. n-1]
@@ -434,11 +434,13 @@ const comauto::DotnetFunction::Impl::Parameter* comauto::DotnetFunction::Impl::g
 comauto::DotnetFunctionClosure::Impl::Impl( const DotnetFunction* func_)
 		:m_context(0)
 		,m_func(func_)
-		,m_flags(serialize::Flags::None)
+		,m_flags(serialize::ValidationFlags::All)
 		,m_param(0)
 		,m_paramidx(null_paramidx)
 		,m_providerdispatch(0)
-{}
+{
+	serialize::ValidationFlags::unset( m_flags(serialize::ValidationFlags::ValidateCase);
+}
 
 static void clearArrayParam( std::map<std::size_t,std::vector<VARIANT> >& ap)
 {
@@ -469,8 +471,9 @@ comauto::DotnetFunctionClosure::Impl::~Impl()
 	}
 }
 
-void comauto::DotnetFunctionClosure::Impl::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f)
+void comauto::DotnetFunctionClosure::Impl::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f)
 {
+	serialize::ValidationFlags::unset( f, serialize::ValidationFlags::ValidateCase);
 	m_context = c;
 	m_input = i;
 	m_flags = f;
@@ -604,7 +607,7 @@ AGAIN:
 			m_param[ pi->first] = comauto::createVariantArray( pi->second[0].vt, recinfo, pi->second);
 		}
 		// function signature validation:
-		if ((m_flags & serialize::Flags::ValidateAttributes) != 0)
+		if (serialize::ValidateFlags::match( m_flags, serialize::ValidateFlags::ValidateAttributes))
 		{
 			// ... ignored because XML attributes are unknown in .NET structures ...
 		}
@@ -615,7 +618,7 @@ AGAIN:
 			{
 				const DotnetFunction::Impl::Parameter* param = m_func->m_impl->getParameter( ii);
 
-				if ((m_flags & serialize::Flags::ValidateInitialization) != 0)
+				if (serialize::ValidateFlags::match( m_flags, serialize::ValidateFlags::ValidateInitialization))
 				{
 					throw std::runtime_error( std::string( "missing parameter '") + param->name + "'");
 				}
@@ -707,7 +710,7 @@ bool DotnetFunctionClosure::call()
 	return m_impl->call();
 }
 
-void DotnetFunctionClosure::init( proc::ExecContext* e, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f)
+void DotnetFunctionClosure::init( proc::ExecContext* e, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f)
 {
 	m_impl->init( e, i, f);
 }

@@ -54,12 +54,12 @@ namespace serialize {
 template <typename TYPE>
 struct IntrusiveParser
 {
-	static bool parse( langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk);
+	static bool parse( langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk);
 };
 
-bool parseAtomicElementEndTag( langbind::TypedInputFilter& inp, Context&, ParseStateStack& stk);
+bool parseAtomicElementEndTag( langbind::TypedInputFilter& inp, ValidationFlags::Enum, ParseStateStack& stk);
 
-bool parseObjectStruct( const StructDescriptionBase* descr, langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk);
+bool parseObjectStruct( const StructDescriptionBase* descr, langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk);
 
 typedef bool (*ParseValue)( void* value, const types::VariantConst& element);
 
@@ -78,7 +78,7 @@ bool parseValue_string( std::string*, const types::VariantConst& element);
 bool parseValue_datetime( types::DateTime*, const types::VariantConst& element);
 bool parseValue_bignumber( types::BigNumber*, const types::VariantConst& element);
 
-bool parseObjectAtomic( ParseValue parseVal, langbind::TypedInputFilter& inp, Context&, ParseStateStack& stk);
+bool parseObjectAtomic( ParseValue parseVal, langbind::TypedInputFilter& inp, ValidationFlags::Enum, ParseStateStack& stk);
 
 
 namespace {
@@ -123,13 +123,13 @@ template <> struct Parser<types::BigNumber>
 {static bool parseValue( void* value, const types::VariantConst& element) {return parseValue_bignumber( (types::BigNumber*)value, element);}};
 
 template <typename TYPE>
-bool parseObject_( const traits::struct_&, langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk)
+bool parseObject_( const traits::struct_&, langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk)
 {
-	return parseObjectStruct( TYPE::getStructDescription(), inp, ctx, stk);
+	return parseObjectStruct( TYPE::getStructDescription(), inp, vflags, stk);
 }
 
 template <typename TYPE>
-bool parseObject_( const traits::vector_&, langbind::TypedInputFilter&, Context&, ParseStateStack& stk)
+bool parseObject_( const traits::vector_&, langbind::TypedInputFilter&, ValidationFlags::Enum, ParseStateStack& stk)
 {
 	if (stk.back().state())
 	{
@@ -150,19 +150,19 @@ bool parseObject_( const traits::vector_&, langbind::TypedInputFilter&, Context&
 }
 
 template <typename TYPE>
-static bool parseObject_( const traits::atomic_&, langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk)
+static bool parseObject_( const traits::atomic_&, langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk)
 {
-	return parseObjectAtomic( Parser<TYPE>::parseValue, inp, ctx, stk);
+	return parseObjectAtomic( Parser<TYPE>::parseValue, inp, vflags, stk);
 }
 
 }//anonymous namespace
 
 
 template <typename TYPE>
-bool IntrusiveParser<TYPE>::parse( langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk)
+bool IntrusiveParser<TYPE>::parse( langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk)
 {
 	static TYPE* t = 0;
-	return parseObject_<TYPE>( traits::getCategory(*t), inp, ctx, stk);
+	return parseObject_<TYPE>( traits::getCategory(*t), inp, vflags, stk);
 }
 
 }}//namespace

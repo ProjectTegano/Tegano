@@ -42,7 +42,7 @@
 #include "types/variant.hpp"
 #include "processor/procProviderInterface.hpp"
 #include "processor/execContext.hpp"
-#include "serialize/flags.hpp"
+#include "serialize/validationFlags.hpp"
 #include "logger/logger-v1.hpp"
 #include <string>
 #include <vector>
@@ -295,13 +295,13 @@ void TdlTransactionPreprocStep::call( proc::ExecContext* context, vm::InputStruc
 			{
 				// call form function:
 				langbind::FormFunctionClosureR fc( ff->createClosure());
-				serialize::Flags::Enum f = serialize::Flags::None;
+				serialize::ValidationFlags::Enum vflags = serialize::ValidationFlags::None;
 
-				if (!structure.case_sensitive())
+				if (structure.case_sensitive())
 				{
-					f = (serialize::Flags::Enum)((int)f | (int)serialize::Flags::CaseInsensitiveCompare);
+					serialize::ValidationFlags::set( vflags, serialize::ValidationFlags::ValidateCase);
 				}
-				fc->init( context, argfilter, f);
+				fc->init( context, argfilter, vflags);
 				if (!fc->call())
 				{
 					const char* err = argfilter->getError();

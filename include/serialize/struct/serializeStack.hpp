@@ -35,7 +35,7 @@ Project Wolframe.
 #ifndef _Wolframe_SERIALIZE_STRUCT_SERIALIZE_STACK_HPP_INCLUDED
 #define _Wolframe_SERIALIZE_STRUCT_SERIALIZE_STACK_HPP_INCLUDED
 #include "filter/typedfilter.hpp"
-#include "serialize/mapContext.hpp"
+#include "serialize/elementBuffer.hpp"
 #include <vector>
 #include <cstddef>
 #include <stdexcept>
@@ -48,7 +48,7 @@ namespace serialize {
 class SerializeState
 {
 public:
-	typedef bool (*Fetch)( Context& ctx, std::vector<SerializeState>& stk);
+	typedef bool (*Fetch)( ElementBuffer& elem, std::vector<SerializeState>& stk);
 
 public:
 	/// \brief Copy constructor

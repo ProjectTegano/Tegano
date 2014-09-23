@@ -280,14 +280,14 @@ std::string inputfilter_logtext( const langbind::TypedInputFilterR& inp)
 	return out.str();
 }
 
-void TdlTransactionFunctionClosure::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f)
+void TdlTransactionFunctionClosure::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f)
 {
 	m_context = c;
 	m_inputstructptr = new TdlTransactionFunctionClosure::InputStructure( m_func);
 	m_inputstruct.reset( m_inputstructptr);
 	m_input.init( i, m_inputstruct);
 	m_state = 1;
-	m_flags = f;
+	m_validationFlags = f;
 }
 
 langbind::TypedInputFilterR TdlTransactionFunctionClosure::result() const
@@ -369,7 +369,7 @@ TdlTransactionFunctionClosure::TdlTransactionFunctionClosure( const TdlTransacti
 	,m_state(0)
 	,m_input(false/*doPrintFinalClose*/)
 	,m_inputstructptr(0)
-	,m_flags(serialize::Flags::None)
+	,m_validationFlags(serialize::ValidationFlags::None)
 	{}
 
 TdlTransactionFunctionClosure::TdlTransactionFunctionClosure( const TdlTransactionFunctionClosure& o)
@@ -380,7 +380,7 @@ TdlTransactionFunctionClosure::TdlTransactionFunctionClosure( const TdlTransacti
 	,m_inputstructptr(o.m_inputstructptr)
 	,m_inputstruct(o.m_inputstruct)
 	,m_result(o.m_result)
-	,m_flags(o.m_flags)
+	,m_validationFlags(o.m_validationFlags)
 	{}
 
 bool TdlTransactionFunctionClosure::call()

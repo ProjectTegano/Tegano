@@ -125,7 +125,7 @@ bool serialize::parseValue_bignumber( types::BigNumber* val, const types::Varian
 	return parseValue( *val, element);
 }
 
-bool serialize::parseAtomicElementEndTag( langbind::TypedInputFilter& inp, Context&, ParseStateStack& stk)
+bool serialize::parseAtomicElementEndTag( langbind::TypedInputFilter& inp, ValidationFlags::Enum, ParseStateStack& stk)
 {
 	langbind::InputFilter::ElementType typ;
 	types::VariantConst element;
@@ -149,7 +149,7 @@ bool serialize::parseAtomicElementEndTag( langbind::TypedInputFilter& inp, Conte
 	return true;
 }
 
-bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk)
+bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk)
 {
 	langbind::InputFilter::ElementType typ;
 	types::VariantConst element;
@@ -171,13 +171,13 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 		case langbind::InputFilter::OpenTagArray:
 		{
 			StructDescriptionBase::Map::const_iterator itr;
-			if (ctx.flag( serialize::Flags::CaseInsensitiveCompare))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateCase))
 			{
-				itr = descr->find_cis( element.tostring());
+				itr = descr->find( element.tostring());
 			}
 			else
 			{
-				itr = descr->find( element.tostring());
+				itr = descr->find_cis( element.tostring());
 			}
 			if (itr == descr->end())
 			{
@@ -186,7 +186,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 			std::size_t idx = itr - descr->begin();
 			if (idx < descr->nof_attributes())
 			{
-				if (ctx.flag( serialize::Flags::ValidateAttributes))
+				if (ValidationFlags::match( vflags, ValidationFlags::ValidateAttributes))
 				{
 					throw SerializationErrorException( "attribute element expected", element.tostring(), StructParser::getElementPath( stk));
 				}
@@ -198,7 +198,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 					throw SerializationErrorException( "duplicate definition", element.tostring(), StructParser::getElementPath( stk));
 				}
 			}
-			if (ctx.flag( Flags::ValidateArray))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateArray))
 			{
 				if (typ == langbind::InputFilter::OpenTagArray)
 				{
@@ -228,13 +228,13 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 		case langbind::InputFilter::Attribute:
 		{
 			StructDescriptionBase::Map::const_iterator itr;
-			if (ctx.flag( serialize::Flags::CaseInsensitiveCompare))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateCase))
 			{
-				itr = descr->find_cis( element.tostring());
+				itr = descr->find( element.tostring());
 			}
 			else
 			{
-				itr = descr->find( element.tostring());
+				itr = descr->find_cis( element.tostring());
 			}
 			if (itr == descr->end())
 			{
@@ -243,7 +243,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 			std::size_t idx = itr - descr->begin();
 			if (idx >= descr->nof_attributes())
 			{
-				if (ctx.flag( serialize::Flags::ValidateAttributes))
+				if (ValidationFlags::match( vflags, ValidationFlags::ValidateAttributes))
 				{
 					throw SerializationErrorException( "content element expected", element.tostring(), StructParser::getElementPath( stk));
 				}
@@ -296,7 +296,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 					throw SerializationErrorException( "undefined structure element", itr->first, StructParser::getElementPath( stk));
 				}
 			}
-			if (ctx.flag( serialize::Flags::ValidateInitialization))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateInitialization))
 			{
 				for (;itr != end; ++itr)
 				{
@@ -313,7 +313,7 @@ bool serialize::parseObjectStruct( const StructDescriptionBase* descr, langbind:
 	throw SerializationErrorException( "illegal state in parse structure", StructParser::getElementPath( stk));
 }
 
-bool serialize::parseObjectAtomic( ParseValue parseVal, langbind::TypedInputFilter& inp, Context&, ParseStateStack& stk)
+bool serialize::parseObjectAtomic( ParseValue parseVal, langbind::TypedInputFilter& inp, ValidationFlags::Enum, ParseStateStack& stk)
 {
 	langbind::InputFilter::ElementType typ;
 	types::VariantConst element;

@@ -36,6 +36,7 @@
 #define _DATABASE_LANGUAGE_HPP_INCLUDED
 #include "types/keymap.hpp"
 #include <string>
+#include <vector>
 
 namespace _Wolframe {
 namespace db {

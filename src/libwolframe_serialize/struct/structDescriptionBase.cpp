@@ -176,11 +176,10 @@ bool StructDescriptionBase::setAtomicValue( void* obj, std::size_t idx, const st
 	{
 		throw std::runtime_error( "atomic value expected for call of set atomic value");
 	}
-	Context ctx;
 	ParseStateStack stk;
 	OneElementTypedInputFilter inp( value);
 	stk.push_back( ParseState( itr->first.c_str(), itr->second.parse(), objelemptr));
-	return stk.back().parse()( inp, ctx, stk);
+	return stk.back().parse()( inp, ValidationFlags::All, stk);
 }
 
 const serialize::StructDescriptionBase* EmptyStruct::getStructDescription( )

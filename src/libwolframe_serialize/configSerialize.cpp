@@ -44,7 +44,10 @@ void serialize::parseConfigStructureVP( void* stptr, const serialize::StructDesc
 	langbind::PropertyTreeInputFilter* filter;
 	langbind::TypedInputFilterR inp( filter=new langbind::PropertyTreeInputFilter( pt));
 	serialize::StructParser parser( stptr, descr);
-	parser.init( inp, serialize::Flags::CaseInsensitiveCompare);
+	serialize::ValidationFlags::Enum vflags = serialize::ValidationFlags::All;
+	serialize::ValidationFlags::unset( vflags, serialize::ValidationFlags::ValidateCase);
+	serialize::ValidationFlags::unset( vflags, serialize::ValidationFlags::ValidateArray);
+	parser.init( inp, vflags);
 	try
 	{
 		if (!parser.call()) throw std::runtime_error( "illegal state in structure parser");

@@ -76,7 +76,7 @@ static std::string getElementPath( const DDLParseStateStack& stk)
 }
 
 // forward declarations
-static bool parseObject( langbind::TypedInputFilter& inp, Context& ctx, std::vector<DDLParseState>& stk);
+static bool parseObject( langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, std::vector<DDLParseState>& stk);
 
 enum AtomicValueState
 {
@@ -106,7 +106,7 @@ static void setAtomValue( types::Variant& val, const types::VariantConst& elemen
 	}
 }
 
-static bool parseAtom( types::Variant& val, langbind::TypedInputFilter& inp, Context&, std::vector<DDLParseState>& stk)
+static bool parseAtom( types::Variant& val, langbind::TypedInputFilter& inp, ValidationFlags::Enum, std::vector<DDLParseState>& stk)
 {
 	langbind::InputFilter::ElementType typ;
 	types::VariantConst element;
@@ -158,7 +158,7 @@ static bool parseAtom( types::Variant& val, langbind::TypedInputFilter& inp, Con
 	throw SerializationErrorException( "illegal state in parse DDL form atomic value", getElementPath( stk));
 }
 
-static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& inp, Context& ctx, std::vector<DDLParseState>& stk)
+static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, std::vector<DDLParseState>& stk)
 {
 	langbind::InputFilter::ElementType typ;
 	types::VariantConst element;
@@ -178,13 +178,13 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 		case langbind::InputFilter::OpenTagArray:
 		{
 			int idx;
-			if (ctx.flag( Flags::CaseInsensitiveCompare))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateCase))
 			{
-				idx = descr->findidx_cis( element.tostring());
+				idx = descr->findidx( element.tostring());
 			}
 			else
 			{
-				idx = descr->findidx( element.tostring());
+				idx = descr->findidx_cis( element.tostring());
 			}
 			if (idx < 0)
 			{
@@ -195,7 +195,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 
 			if (ei->attribute())
 			{
-				if (ctx.flag( Flags::ValidateAttributes))
+				if (ValidationFlags::match( vflags, ValidationFlags::ValidateAttributes))
 				{
 					throw SerializationErrorException( "attribute element expected for ", element.tostring(), getElementPath( stk));
 				}
@@ -207,7 +207,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 			{
 				throw SerializationErrorException( "duplicate structure element definition", element.tostring(), getElementPath( stk));
 			}
-			if (ctx.flag( Flags::ValidateArray))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateArray))
 			{
 				if (typ == langbind::InputFilter::OpenTagArray)
 				{
@@ -237,13 +237,13 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 		case langbind::InputFilter::Attribute:
 		{
 			int idx;
-			if (ctx.flag( Flags::CaseInsensitiveCompare))
+			if (ValidationFlags::match( vflags, ValidationFlags::ValidateCase))
 			{
-				idx = descr->findidx_cis( element.tostring());
+				idx = descr->findidx( element.tostring());
 			}
 			else
 			{
-				idx = descr->findidx( element.tostring());
+				idx = descr->findidx_cis( element.tostring());
 			}
 			if (idx < 0)
 			{
@@ -252,7 +252,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 			types::VariantStructDescription::const_iterator ei = descr->begin() + idx;
 			if (!ei->attribute())
 			{
-				if (ctx.flag( Flags::ValidateAttributes))
+				if (ValidationFlags::match( vflags, ValidationFlags::ValidateAttributes))
 				{
 					throw SerializationErrorException( "content element expected", element.tostring(), getElementPath( stk));
 				}
@@ -335,7 +335,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 				{
 					throw SerializationErrorException( "undefined mandatory structure element", di->name, getElementPath( stk));
 				}
-				if (ctx.flag( Flags::ValidateInitialization))
+				if (ValidationFlags::match( vflags, ValidationFlags::ValidateInitialization))
 				{
 					if (!di->optional() && !di->array() && !itr->initialized())
 					{
@@ -351,7 +351,7 @@ static bool parseStruct( types::VariantStruct& st, langbind::TypedInputFilter& i
 }
 
 
-static bool parseObject( langbind::TypedInputFilter& inp, Context& ctx, std::vector<DDLParseState>& stk)
+static bool parseObject( langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, std::vector<DDLParseState>& stk)
 {
 	types::VariantStruct* elem = stk.back().value();
 	switch (elem->type())
@@ -366,11 +366,11 @@ static bool parseObject( langbind::TypedInputFilter& inp, Context& ctx, std::vec
 		case types::VariantStruct::Timestamp:
 		case types::VariantStruct::BigNumber:
 		{
-			return parseAtom( *stk.back().value(), inp, ctx, stk);
+			return parseAtom( *stk.back().value(), inp, vflags, stk);
 		}
 		case types::VariantStruct::Struct:
 		{
-			return parseStruct( *stk.back().value(), inp, ctx, stk);
+			return parseStruct( *stk.back().value(), inp, vflags, stk);
 		}
 		case types::VariantStruct::Unresolved:
 		{
@@ -384,7 +384,7 @@ static bool parseObject( langbind::TypedInputFilter& inp, Context& ctx, std::vec
 			{
 				throw SerializationErrorException( "indirection expanding to indirection", getElementPath( stk));
 			}
-			return parseObject( inp, ctx, stk);
+			return parseObject( inp, vflags, stk);
 		}
 		case types::VariantStruct::Array:
 		{
@@ -408,7 +408,7 @@ DDLStructParser::DDLStructParser( types::VariantStruct* st)
 
 DDLStructParser::DDLStructParser( const DDLStructParser& o)
 	:m_st(o.m_st)
-	,m_ctx(o.m_ctx)
+	,m_validationFlags(o.m_validationFlags)
 	,m_inp(o.m_inp)
 	,m_stk(o.m_stk)
 	{}
@@ -416,28 +416,28 @@ DDLStructParser::DDLStructParser( const DDLStructParser& o)
 DDLStructParser& DDLStructParser::operator=( const DDLStructParser& o)
 {
 	m_st = o.m_st;
-	m_ctx = o.m_ctx;
+	m_validationFlags = o.m_validationFlags;
 	m_inp = o.m_inp;
 	m_stk = o.m_stk;
 	return *this;
 }
 
-void DDLStructParser::init( const langbind::TypedInputFilterR& i, Flags::Enum flags)
+void DDLStructParser::init( const langbind::TypedInputFilterR& i, ValidationFlags::Enum vflags)
 {
 	m_inp = i;
-	m_ctx.clear();
+	m_validationFlags = vflags;
+
 	if (i->flag( langbind::FilterBase::PropagateNoCase))
 	{
-		m_ctx.setFlags( Flags::CaseInsensitiveCompare);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateCase);
 	}
-	m_ctx.setFlags(flags);
 	if (i->flag( langbind::FilterBase::PropagateNoAttr))
 	{
-		m_ctx.unsetFlags( Flags::ValidateAttributes);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateAttributes);
 	}
 	if (i->flag( langbind::FilterBase::PropagateNoArray))
 	{
-		m_ctx.unsetFlags( Flags::ValidateArray);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateArray);
 	}
 	m_stk.clear();
 	m_stk.push_back( DDLParseState( 0, m_st, 0));
@@ -451,7 +451,7 @@ bool DDLStructParser::call()
 
 	while (rt && m_stk.size())
 	{
-		rt = parseObject( *m_inp, m_ctx, m_stk);
+		rt = parseObject( *m_inp, m_validationFlags, m_stk);
 	}
 	if (rt)
 	{

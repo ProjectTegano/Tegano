@@ -92,7 +92,7 @@ public:
 	}
 
 	///\remark Flags ignored because lua has no strict typing does not validate input parameter structure on its own
-	virtual void init( proc::ExecContext* ctx, const TypedInputFilterR& arg, serialize::Flags::Enum)
+	virtual void init( proc::ExecContext* ctx, const TypedInputFilterR& arg, serialize::ValidationFlags::Enum)
 	{
 		m_interp->init( ctx);
 		m_arg = arg;

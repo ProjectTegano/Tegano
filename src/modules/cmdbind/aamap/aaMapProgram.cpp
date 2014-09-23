@@ -145,8 +145,8 @@ public:
 	/// \brief Initialization of call context for a new call
 	/// \param[in] c execution context reference
 	/// \param[in] i call input
-	/// \param[in] f serialization flags for validating form functions depending on caller context (directmap "strict",lua relaxed)
-	virtual void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f);
+	/// \param[in] f flags for validating form functions depending on caller context (directmap "strict",lua relaxed)
+	virtual void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f);
 
 	/// \brief Get the iterator for the function result
 	/// \remark MUST be standalone (alive after destruction of this 'FormFunctionClosure'!)
@@ -212,7 +212,7 @@ private:
 }//anonymous namespace
 
 
-void AuditFunctionClosureImpl::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum f)
+void AuditFunctionClosureImpl::init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum f)
 {
 	m_context = c;
 	langbind::TypedInputFilterR argfilter( new langbind::ExecContextInputFilter( m_auditfunc->params(), *c, ""));

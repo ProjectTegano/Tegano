@@ -36,7 +36,7 @@
 #ifndef _LANGBIND_FORM_FUNCTION_HPP_INCLUDED
 #define _LANGBIND_FORM_FUNCTION_HPP_INCLUDED
 #include "filter/typedfilter.hpp"
-#include "serialize/flags.hpp"
+#include "serialize/validationFlags.hpp"
 #include <string>
 #include <boost/shared_ptr.hpp>
 
@@ -62,8 +62,8 @@ public:
 	/// \brief Initialization of call context for a new call
 	/// \param[in] c execution context reference
 	/// \param[in] i call input
-	/// \param[in] f serialization flags for validating form functions depending on caller context (directmap "strict",lua relaxed)
-	virtual void init( proc::ExecContext* c, const TypedInputFilterR& i, serialize::Flags::Enum f=serialize::Flags::None)=0;
+	/// \param[in] f flags for validating form functions depending on caller context (directmap "strict",lua relaxed)
+	virtual void init( proc::ExecContext* c, const TypedInputFilterR& i, serialize::ValidationFlags::Enum f=serialize::ValidationFlags::All)=0;
 
 	/// \brief Get the iterator for the function result
 	/// \remark MUST be standalone (alive after destruction of this 'FormFunctionClosure'!)

@@ -106,8 +106,7 @@ IOFilterCommandHandler::CallResult DirectmapCommandHandler::call( const char*& e
 				if (m_inputform.get())
 				{
 					m_inputform_parser.reset( new serialize::DDLStructParser( m_inputform.get()));
-					serialize::Flags::Enum flags = (serialize::Flags::Enum)((int)serialize::Flags::ValidateAttributes|(int)serialize::Flags::ValidateInitialization);
-					m_inputform_parser->init( m_inputfilter, flags);
+					m_inputform_parser->init( m_inputfilter, serialize::ValidationFlags::All);
 					m_state = 2;
 					/* no break here ! */;
 				}
@@ -171,7 +170,7 @@ IOFilterCommandHandler::CallResult DirectmapCommandHandler::call( const char*& e
 				{
 					// Validate the output with form -> Fill the output form:
 					serialize::DDLStructParser formparser( m_outputform.get());
-					formparser.init( res, serialize::Flags::ValidateInitialization);
+					formparser.init( res, serialize::ValidationFlags::All);
 					if (!formparser.call())
 					{
 						throw std::runtime_error( "internal: output form serialization is not complete");

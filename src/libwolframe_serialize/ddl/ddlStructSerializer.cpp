@@ -45,9 +45,6 @@ Project Wolframe.
 using namespace _Wolframe;
 using namespace serialize;
 
-// forward declaration
-static bool fetchObject( Context& ctx, std::vector<DDLSerializeState>& stk);
-
 static std::string getElementPath( const DDLSerializeStateStack& stk)
 {
 	std::string rt;
@@ -67,7 +64,7 @@ static std::string getElementPath( const DDLSerializeStateStack& stk)
 	return rt;
 }
 
-static bool fetchAtom( Context& ctx, std::vector<DDLSerializeState>& stk)
+static bool fetchAtom( ElementBuffer& element, std::vector<DDLSerializeState>& stk)
 {
 	bool rt = false;
 	if (stk.back().state())
@@ -78,14 +75,14 @@ static bool fetchAtom( Context& ctx, std::vector<DDLSerializeState>& stk)
 	if (stk.back().value()->initialized())
 	{
 		const types::Variant* val = stk.back().value();
-		ctx.setElem( langbind::FilterBase::Value, *val);
+		element.set( langbind::FilterBase::Value, *val);
 		rt = true;
 	}
 	stk.back().state( 1);
 	return rt;
 }
 
-static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
+static bool fetchStruct( ElementBuffer& element, std::vector<DDLSerializeState>& stk)
 {
 	bool rt = false;
 	const types::VariantStruct* obj = (const types::VariantStruct*)stk.back().value();
@@ -111,7 +108,7 @@ static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
 				throw SerializationErrorException( "named atomic value expected for attribute", getElementPath( stk));
 			}
 			types::VariantConst elem( di->name);
-			ctx.setElem( langbind::FilterBase::Attribute, elem);
+			element.set( langbind::FilterBase::Attribute, elem);
 			rt = true;
 			stk.back().state( ++idx);
 			stk.push_back( DDLSerializeState( &*itr, elem));
@@ -136,7 +133,7 @@ static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
 			else
 			{
 				types::VariantConst elem( di->name);
-				ctx.setElem( langbind::FilterBase::OpenTag, elem);
+				element.set( langbind::FilterBase::OpenTag, elem);
 				rt = true;
 				stk.back().state( ++idx);
 				stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, elem));
@@ -149,14 +146,14 @@ static bool fetchStruct( Context& ctx, std::vector<DDLSerializeState>& stk)
 		stk.pop_back();
 		if (stk.size() == 0)
 		{
-			ctx.setElem( langbind::FilterBase::CloseTag);
+			element.set( langbind::FilterBase::CloseTag);
 			rt = true;
 		}
 	}
 	return rt;
 }
 
-static bool fetchVector( Context& ctx, std::vector<DDLSerializeState>& stk)
+static bool fetchVector( ElementBuffer& element, std::vector<DDLSerializeState>& stk)
 {
 	bool rt = false;
 	const types::VariantStruct* obj = (const types::VariantStruct*)stk.back().value();
@@ -170,7 +167,7 @@ static bool fetchVector( Context& ctx, std::vector<DDLSerializeState>& stk)
 	bool hasTag = stk.back().tag().initialized();
 	if (hasTag)
 	{
-		ctx.setElem( langbind::FilterBase::OpenTagArray, stk.back().tag());
+		element.set( langbind::FilterBase::OpenTagArray, stk.back().tag());
 		rt = true;
 		stk.back().state( idx+1);
 		stk.push_back( DDLSerializeState( langbind::FilterBase::CloseTag, stk.back().tag()));
@@ -184,11 +181,11 @@ static bool fetchVector( Context& ctx, std::vector<DDLSerializeState>& stk)
 	return rt;
 }
 
-static bool fetchObject( Context& ctx, std::vector<DDLSerializeState>& stk)
+static bool fetchObject( ElementBuffer& element, std::vector<DDLSerializeState>& stk)
 {
 	if (!stk.back().value())
 	{
-		ctx.setElem( stk.back().type(), stk.back().tag());
+		element.set( stk.back().type(), stk.back().tag());
 		stk.pop_back();
 		return true;
 	}
@@ -206,11 +203,11 @@ static bool fetchObject( Context& ctx, std::vector<DDLSerializeState>& stk)
 			case types::VariantStruct::Timestamp:
 			case types::VariantStruct::BigNumber:
 			{
-				return fetchAtom( ctx, stk);
+				return fetchAtom( element, stk);
 			}
 			case types::VariantStruct::Struct:
 			{
-				return fetchStruct( ctx, stk);
+				return fetchStruct( element, stk);
 			}
 			case types::VariantStruct::Indirection:
 			{
@@ -222,7 +219,7 @@ static bool fetchObject( Context& ctx, std::vector<DDLSerializeState>& stk)
 			}
 			case types::VariantStruct::Array:
 			{
-				return fetchVector( ctx, stk);
+				return fetchVector( element, stk);
 			}
 		}
 	}
@@ -235,22 +232,21 @@ bool DDLStructSerializer::call()
 	if (!m_out.get()) throw std::runtime_error( "no output for serialize");
 	for (;;)
 	{
-		const Context::ElementBuffer* elem = m_ctx.getElem();
-		if (elem)
+		if (m_element.initialized())
 		{
-			if (!m_out->print( elem->m_type, elem->m_value))
+			if (!m_out->print( m_element.type(), m_element.value()))
 			{
 				if (m_out->getError())
 				{
 					throw SerializationErrorException( m_out->getError(), getElementPath( m_stk));
 				}
-				m_ctx.setElementUnconsumed();
 				return false;
 			}
-			LOG_DATA << "[DDL structure serialization print] element " << langbind::InputFilter::elementTypeName( elem->m_type) << " '" << utils::getLogString( elem->m_value) << "'";
+			LOG_DATA << "[DDL structure serialization print] element " << langbind::InputFilter::elementTypeName( m_element.type()) << " '" << utils::getLogString( m_element.value()) << "'";
+			m_element.markAsConsumed();
 			continue;
 		}
-		fetchObject( m_ctx, m_stk);
+		fetchObject( m_element, m_stk);
 		if (m_stk.empty()) return true;
 		//REMARK: Check for stack empty after the last fetch, because the last close tag is not printed
 	}
@@ -261,17 +257,17 @@ bool DDLStructSerializer::getNext( langbind::FilterBase::ElementType& type, type
 {
 	for (;;)
 	{
-		const Context::ElementBuffer* elem = m_ctx.getElem();
-		if (elem)
+		if (m_element.initialized())
 		{
-			type = elem->m_type;
-			value = elem->m_value;
+			type = m_element.type();
+			value = m_element.value();
 			setState( langbind::InputFilter::Open);
-			LOG_DATA << "[DDL structure serialization get] element " << langbind::InputFilter::elementTypeName( elem->m_type) << " " << utils::getLogString( elem->m_value);
+			LOG_DATA << "[DDL structure serialization get] element " << langbind::InputFilter::elementTypeName( type) << " " << utils::getLogString( value);
+			m_element.markAsConsumed();
 			return true;
 		}
 		if (m_stk.empty()) return false;
-		fetchObject( m_ctx, m_stk);
+		fetchObject( m_element, m_stk);
 		//REMARK: The last close tag is returned (different to DDLStructSerializer::call())
 	}
 }
@@ -287,7 +283,7 @@ DDLStructSerializer::DDLStructSerializer( const types::VariantStruct* st)
 DDLStructSerializer::DDLStructSerializer( const DDLStructSerializer& o)
 	:TypedInputFilter(o)
 	,m_st(o.m_st)
-	,m_ctx(o.m_ctx)
+	,m_element(o.m_element)
 	,m_out(o.m_out)
 	,m_stk(o.m_stk){}
 
@@ -295,7 +291,7 @@ DDLStructSerializer& DDLStructSerializer::operator =( const DDLStructSerializer&
 {
 	TypedInputFilter::operator=(o);
 	m_st = o.m_st;
-	m_ctx = o.m_ctx;
+	m_element = o.m_element;
 	m_out = o.m_out;
 	m_stk = o.m_stk;
 	return *this;
@@ -303,7 +299,7 @@ DDLStructSerializer& DDLStructSerializer::operator =( const DDLStructSerializer&
 
 void DDLStructSerializer::init( const langbind::TypedOutputFilterR& out)
 {
-	m_ctx.clear();
+	m_element.markAsConsumed();
 	m_stk.clear();
 	m_stk.push_back( DDLSerializeState( m_st));
 	m_out = out;

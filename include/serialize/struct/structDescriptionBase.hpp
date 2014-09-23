@@ -35,9 +35,10 @@ Project Wolframe.
 #define _Wolframe_SERIALIZE_STRUCT_DESCRIPTION_BASE_HPP_INCLUDED
 #include "filter/typedfilter.hpp"
 #include "types/variant.hpp"
-#include "serialize/mapContext.hpp"
+#include "serialize/validationFlags.hpp"
 #include "serialize/struct/parseStack.hpp"
 #include "serialize/struct/serializeStack.hpp"
+#include "serialize/elementBuffer.hpp"
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -61,8 +62,8 @@ public:
 	};
 
 	typedef std::vector<std::pair<std::string,StructDescriptionBase> > Map;
-	typedef bool (*Parse)( langbind::TypedInputFilter& flt, Context& ctx, ParseStateStack& stk);
-	typedef bool (*Fetch)( Context& ctx, SerializeStateStack& stk);
+	typedef bool (*Parse)( langbind::TypedInputFilter& flt, ValidationFlags::Enum vflags, ParseStateStack& stk);
+	typedef bool (*Fetch)( ElementBuffer& elem, SerializeStateStack& stk);
 	typedef bool (*Constructor)( void* obj);
 	typedef void (*Destructor)( void* obj);
 
@@ -89,7 +90,7 @@ public:
 	StructDescriptionBase();
 
 	/// \brief Call of parser of the serialization passed to fill an object and validate the serialization sequence
-	bool parse( void* obj, langbind::TypedInputFilter& in, Context& ctx, ParseStateStack& stk) const;
+	bool parse( void* obj, langbind::TypedInputFilter& in, ElementBuffer& elem, ParseStateStack& stk) const;
 
 	/// \brief Initializes an atomic element in a structure
 	/// \remark Not very efficient implementation

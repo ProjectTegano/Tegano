@@ -27,11 +27,11 @@
 			"issuedate": "13.5.2006"
 		},
 		{
-			"task": {
+			"task": [{
 				"title": "job 4",
 				"key": "V789",
 				"customernumber": "890"
-			},
+			}],
 			"employee": {
 				"firstname": "Jakob",
 				"surname": "Stegelin",

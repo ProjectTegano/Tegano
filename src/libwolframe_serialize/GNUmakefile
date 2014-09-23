@@ -31,7 +31,6 @@ DYNAMIC_LIB_PATCH = 0
 CPP_OBJS = \
 	ddl/ddlStructParser.o \
 	ddl/ddlStructSerializer.o \
-	mapContext.o \
 	serializationErrorException.o \
 	cppFormFunction.o \
 	configSerialize.o \

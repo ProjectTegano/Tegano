@@ -59,7 +59,7 @@ public:
 	static std::string getElementPath( const SerializeStateStack& stk);
 
 	/// \brief Serialize start initialization
-	void init( const langbind::TypedOutputFilterR& out, serialize::Flags::Enum flags=serialize::Flags::None);
+	void init( const langbind::TypedOutputFilterR& out);
 	void reset();
 
 	/// \brief Call of one processing step the serializer
@@ -80,7 +80,7 @@ private:
 	const ObjectReference m_obj;
 	const StructDescriptionBase* m_descr;
 	bool m_finalCloseFetched;
-	Context m_ctx;
+	ElementBuffer m_element;
 	langbind::TypedOutputFilterR m_out;
 	SerializeStateStack m_stk;
 };

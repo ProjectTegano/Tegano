@@ -60,7 +60,7 @@ StructParser::StructParser( const StructParser& o)
 	:m_ptr(o.m_ptr)
 	,m_obj(o.m_obj)
 	,m_descr(o.m_descr)
-	,m_ctx(o.m_ctx)
+	,m_validationFlags(o.m_validationFlags)
 	,m_inp(o.m_inp)
 	,m_stk(o.m_stk)
 {}
@@ -80,22 +80,23 @@ std::string StructParser::getElementPath( const ParseStateStack& stk)
 	return rt;
 }
 
-void StructParser::init( const langbind::TypedInputFilterR& i, serialize::Flags::Enum flags)
+void StructParser::init( const langbind::TypedInputFilterR& i, serialize::ValidationFlags::Enum vflags)
 {
 	m_inp = i;
-	m_ctx.clear();
+
+	m_validationFlags = vflags;
+
 	if (i->flag( langbind::FilterBase::PropagateNoCase))
 	{
-		m_ctx.setFlags( serialize::Flags::CaseInsensitiveCompare);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateCase);
 	}
-	m_ctx.setFlags(flags);
 	if (i->flag( langbind::FilterBase::PropagateNoAttr))
 	{
-		m_ctx.unsetFlags( serialize::Flags::ValidateAttributes);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateAttributes);
 	}
 	if (i->flag( langbind::FilterBase::PropagateNoArray))
 	{
-		m_ctx.unsetFlags( serialize::Flags::ValidateArray);
+		ValidationFlags::unset( m_validationFlags, ValidationFlags::ValidateArray);
 	}
 	m_stk.clear();
 	m_stk.push_back( ParseState( 0, m_descr->parse(), m_ptr));
@@ -109,7 +110,7 @@ bool StructParser::call()
 
 	while (rt && m_stk.size())
 	{
-		rt = m_stk.back().parse()( *m_inp, m_ctx, m_stk);
+		rt = m_stk.back().parse()( *m_inp, m_validationFlags, m_stk);
 	}
 	return rt;
 }

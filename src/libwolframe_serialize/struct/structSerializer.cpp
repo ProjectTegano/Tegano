@@ -33,6 +33,7 @@ Project Wolframe.
 ///\brief Implements serialization
 #include "serialize/struct/structSerializer.hpp"
 #include "serialize/struct/serializeStack.hpp"
+#include "serialize/elementBuffer.hpp"
 #include "serializationErrorException.hpp"
 #include "filter/typingfilter.hpp"
 #include "utils/printFormats.hpp"
@@ -49,7 +50,6 @@ StructSerializer::StructSerializer( const ObjectReference& obj, const StructDesc
 	,m_obj(obj)
 	,m_descr(descr_)
 	,m_finalCloseFetched(false)
-	,m_ctx()
 {
 	if (m_descr)
 	{
@@ -62,7 +62,6 @@ StructSerializer::StructSerializer( const void* obj, const StructDescriptionBase
 	,m_ptr(obj)
 	,m_descr(descr_)
 	,m_finalCloseFetched(false)
-	,m_ctx()
 {
 	if (m_descr)
 	{
@@ -76,14 +75,13 @@ StructSerializer::StructSerializer( const StructSerializer& o)
 	,m_obj(o.m_obj)
 	,m_descr(o.m_descr)
 	,m_finalCloseFetched(o.m_finalCloseFetched)
-	,m_ctx(o.m_ctx)
+	,m_element(o.m_element)
 	,m_out(o.m_out)
 	,m_stk(o.m_stk){}
 
-void StructSerializer::init( const langbind::TypedOutputFilterR& out, serialize::Flags::Enum flags_)
+void StructSerializer::init( const langbind::TypedOutputFilterR& out)
 {
-	m_ctx.clear();
-	m_ctx.setFlags(flags_);
+	m_element.markAsConsumed();
 	m_stk.clear();
 	m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
 	m_finalCloseFetched = false;
@@ -92,7 +90,7 @@ void StructSerializer::init( const langbind::TypedOutputFilterR& out, serialize:
 
 void StructSerializer::reset()
 {
-	m_ctx.clear();
+	m_element.markAsConsumed();
 	m_stk.clear();
 	m_stk.push_back( SerializeState( 0, m_descr->fetch(), m_ptr));
 	m_finalCloseFetched = false;
@@ -123,33 +121,40 @@ bool StructSerializer::call()
 	if (!m_out.get()) throw std::runtime_error( "no output for serialize");
 	while (m_stk.size())
 	{
-		const Context::ElementBuffer* elem = m_ctx.getElem();
-		if (elem)
+		if (m_element.initialized())
 		{
-			if (!m_out->print( elem->m_type, elem->m_value))
+			if (!m_out->print( m_element.type(), m_element.value()))
 			{
 				if (m_out->getError())
 				{
 					throw SerializationErrorException( m_out->getError(), getElementPath( m_stk));
 				}
-				m_ctx.setElementUnconsumed();
 				return false;
 			}
-			LOG_DATA << "[C++ structure serialization print] element " << langbind::InputFilter::elementTypeName( elem->m_type) << " '" << utils::getLogString( elem->m_value) << "'";
+			LOG_DATA << "[C++ structure serialization print] element " << langbind::InputFilter::elementTypeName( m_element.type()) << " '" << utils::getLogString( m_element.value()) << "'";
+			m_element.markAsConsumed();
 		}
-		m_stk.back().fetch()( m_ctx, m_stk);
+		m_stk.back().fetch()( m_element, m_stk);
 	}
 	return true;
 }
 
 bool StructSerializer::getNext( langbind::FilterBase::ElementType& type, types::VariantConst& value)
 {
-	const Context::ElementBuffer* elem;
-	while (m_stk.size() && (elem = m_ctx.getElem()) == 0)
+	while (m_stk.size() && !m_element.initialized())
 	{
-		m_stk.back().fetch()( m_ctx, m_stk);
+		m_stk.back().fetch()( m_element, m_stk);
 	}
-	if (!m_stk.size())
+	if (m_element.initialized())
+	{
+		type = m_element.type();
+		value = m_element.value();
+		setState( langbind::InputFilter::Open);
+		LOG_DATA << "[C++ structure serialization get] element " << langbind::InputFilter::elementTypeName( m_element.type()) << " " << utils::getLogString( m_element.value());
+		m_element.markAsConsumed();
+		return true;
+	}
+	else
 	{
 		if (m_finalCloseFetched)
 		{
@@ -161,10 +166,5 @@ bool StructSerializer::getNext( langbind::FilterBase::ElementType& type, types::
 		LOG_DATA << "[C++ structure serialization get] final close";
 		return true;
 	}
-	type = elem->m_type;
-	value = elem->m_value;
-	setState( langbind::InputFilter::Open);
-	LOG_DATA << "[C++ structure serialization get] element " << langbind::InputFilter::elementTypeName( elem->m_type) << " " << utils::getLogString( elem->m_value);
-	return true;
 }
 

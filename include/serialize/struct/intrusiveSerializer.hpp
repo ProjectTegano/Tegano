@@ -36,6 +36,7 @@ Project Wolframe.
 #include "filter/typedfilter.hpp"
 #include "types/bignumber.hpp"
 #include "types/datetime.hpp"
+#include "serialize/elementBuffer.hpp"
 #include "serialize/struct/traits_getCategory.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
 #include "serialize/struct/serializeStack.hpp"
@@ -51,18 +52,18 @@ namespace serialize {
 template <typename TYPE>
 struct IntrusiveSerializer
 {
-	static bool fetch( Context& ctx, SerializeStateStack& stk);
+	static bool fetch( ElementBuffer& elem, SerializeStateStack& stk);
 };
 
-bool fetchCloseTag( Context& ctx, SerializeStateStack& stk);
+bool fetchCloseTag( ElementBuffer& elem, SerializeStateStack& stk);
 
-bool fetchOpenTag( Context& ctx, SerializeStateStack& stk);
+bool fetchOpenTag( ElementBuffer& elem, SerializeStateStack& stk);
 
-bool fetchObjectStruct( const StructDescriptionBase* descr, Context& ctx, SerializeStateStack& stk);
+bool fetchObjectStruct( const StructDescriptionBase* descr, ElementBuffer& elem, SerializeStateStack& stk);
 
 typedef bool (*PrintValue)( const void* ptr, types::VariantConst& value);
 
-bool fetchObjectAtomic( PrintValue prnt, Context& ctx, SerializeStateStack& stk);
+bool fetchObjectAtomic( PrintValue prnt, ElementBuffer& elem, SerializeStateStack& stk);
 
 typedef bool (*PrintValue)( const void* value, types::VariantConst& element);
 
@@ -81,9 +82,9 @@ bool printValue_string( const std::string*, types::VariantConst& element);
 bool printValue_datetime( const types::DateTime*, types::VariantConst& element);
 bool printValue_bignumber( const types::BigNumber*, types::VariantConst& element);
 
-typedef bool (*FetchElement)( Context& ctx, SerializeStateStack& stk);
+typedef bool (*FetchElement)( ElementBuffer& elem, SerializeStateStack& stk);
 
-bool fetchObjectVectorElement( FetchElement fetchElement, const void* ve, Context& ctx, SerializeStateStack& stk);
+bool fetchObjectVectorElement( FetchElement fetchElement, const void* ve, ElementBuffer& elem, SerializeStateStack& stk);
 
 namespace {
 template <typename TYPE> struct Printer {};
@@ -128,20 +129,20 @@ template <> struct Printer<types::BigNumber>
 
 
 template <typename TYPE>
-static bool fetchObject_( const traits::struct_&, Context& ctx, SerializeStateStack& stk)
+static bool fetchObject_( const traits::struct_&, ElementBuffer& elem, SerializeStateStack& stk)
 {
 	static const StructDescriptionBase* descr = TYPE::getStructDescription();
-	return fetchObjectStruct( descr, ctx, stk);
+	return fetchObjectStruct( descr, elem, stk);
 }
 
 template <typename TYPE>
-static bool fetchObject_( const traits::atomic_&, Context& ctx, SerializeStateStack& stk)
+static bool fetchObject_( const traits::atomic_&, ElementBuffer& elem, SerializeStateStack& stk)
 {
-	return fetchObjectAtomic( Printer<TYPE>::printValue, ctx, stk);
+	return fetchObjectAtomic( Printer<TYPE>::printValue, elem, stk);
 }
 
 template <typename TYPE>
-static bool fetchObject_( const traits::vector_&, Context& ctx, SerializeStateStack& stk)
+static bool fetchObject_( const traits::vector_&, ElementBuffer& elem, SerializeStateStack& stk)
 {
 	const std::vector<typename TYPE::value_type>* obj = (const TYPE*)stk.back().value();
 	std::size_t idx = stk.back().state();
@@ -151,15 +152,15 @@ static bool fetchObject_( const traits::vector_&, Context& ctx, SerializeStateSt
 		return false;
 	}
 	const void* ve = &(*obj)[ idx];
-	return fetchObjectVectorElement( &IntrusiveSerializer<typename TYPE::value_type>::fetch, ve, ctx, stk);
+	return fetchObjectVectorElement( &IntrusiveSerializer<typename TYPE::value_type>::fetch, ve, elem, stk);
 }
 }//anonymous namespace
 
 template <typename TYPE>
-bool IntrusiveSerializer<TYPE>::fetch( Context& ctx, SerializeStateStack& stk)
+bool IntrusiveSerializer<TYPE>::fetch( ElementBuffer& elem, SerializeStateStack& stk)
 {
 	static TYPE* t = 0;
-	return fetchObject_<TYPE>( traits::getCategory(*t), ctx, stk);
+	return fetchObject_<TYPE>( traits::getCategory(*t), elem, stk);
 }
 
 }}//namespace

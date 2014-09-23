@@ -34,10 +34,9 @@ Project Wolframe.
 
 #ifndef _Wolframe_SERIALIZE_DDL_STRUCT_SERIALIZER_HPP_INCLUDED
 #define _Wolframe_SERIALIZE_DDL_STRUCT_SERIALIZER_HPP_INCLUDED
-#include "serialize/flags.hpp"
 #include "filter/typedfilter.hpp"
 #include "types/variant.hpp"
-#include "serialize/mapContext.hpp"
+#include "serialize/elementBuffer.hpp"
 #include "serialize/ddl/ddlSerializeStack.hpp"
 #include "types/variantStruct.hpp"
 #include <cstddef>
@@ -83,7 +82,7 @@ public:
 
 private:
 	const types::VariantStruct* m_st;
-	Context m_ctx;
+	ElementBuffer m_element;
 	langbind::TypedOutputFilterR m_out;
 	DDLSerializeStateStack m_stk;
 };

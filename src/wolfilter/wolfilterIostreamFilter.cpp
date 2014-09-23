@@ -442,7 +442,7 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 			TypedInputFilterR inp( new TypingInputFilter( flt.inputfilter()));
 			TypedOutputFilterR outp( new TypingOutputFilter( flt.outputfilter()));
 			FormFunctionClosureR closure( func->createClosure());
-			closure->init( execContext, inp, serialize::Flags::ValidateAttributes);
+			closure->init( execContext, inp);
 
 			while (!closure->call()) processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);
 
@@ -474,7 +474,7 @@ void langbind::iostreamfilter( proc::ExecContext* execContext, const std::string
 			TypedInputFilterR inp( new TypingInputFilter( flt.inputfilter()));
 			TypedOutputFilterR outp( new TypingOutputFilter( flt.outputfilter()));
 			serialize::DDLStructParser closure( &df);
-			closure.init( inp, serialize::Flags::ValidateAttributes);
+			closure.init( inp);
 
 			while (!closure.call()) processIO( buf, flt.inputfilter().get(), flt.outputfilter().get(), is, os);
 

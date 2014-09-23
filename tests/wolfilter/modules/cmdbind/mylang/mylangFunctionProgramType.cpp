@@ -262,7 +262,7 @@ public:
 		return true;
 	}
 
-	virtual void init( proc::ExecContext* ctx, const TypedInputFilterR& arg, serialize::Flags::Enum /*f*/)
+	virtual void init( proc::ExecContext* ctx, const TypedInputFilterR& arg, serialize::ValidationFlags::Enum /*f*/)
 	{
 		m_context = ctx;
 		m_arg = arg;

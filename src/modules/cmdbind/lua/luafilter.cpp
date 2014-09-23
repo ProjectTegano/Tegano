@@ -136,6 +136,8 @@ LuaTableInputFilter::LuaTableInputFilter( lua_State* ls)
 	,m_ls(ls)
 	,m_logtrace(_Wolframe::log::LogBackend::instance().minLogLevel() == _Wolframe::log::LogLevel::LOGLEVEL_DATA2)
 {
+	setFlags( langbind::FilterBase::PropagateNoAttr);
+
 	FetchState fs( FetchState::Init, 0/*name*/, 0/*std::strlen(name)*/);
 	m_stk.push_back( fs);
 }

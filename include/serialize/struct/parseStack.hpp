@@ -36,7 +36,7 @@ Project Wolframe.
 #define _Wolframe_SERIALIZE_STRUCT_PARSE_STACK_HPP_INCLUDED
 #include "filter/typedfilter.hpp"
 #include "types/variant.hpp"
-#include "serialize/mapContext.hpp"
+#include "serialize/validationFlags.hpp"
 #include <vector>
 #include <stdexcept>
 
@@ -51,7 +51,7 @@ class ParseStateStack;
 class ParseState
 {
 public:
-	typedef bool (*Parse)( langbind::TypedInputFilter& inp, Context& ctx, ParseStateStack& stk);
+	typedef bool (*Parse)( langbind::TypedInputFilter& inp, ValidationFlags::Enum vflags, ParseStateStack& stk);
 
 public:
 	ParseState( const ParseState& o);

@@ -24,7 +24,6 @@ LIBRARIES = \
 CPP_OBJS = \
 	ddl\ddlStructParser.obj \
 	ddl\ddlStructSerializer.obj \
-	mapContext.obj \
 	serializationErrorException.obj \
 	cppFormFunction.obj \
 	configSerialize.obj \

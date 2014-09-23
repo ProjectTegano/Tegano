@@ -109,23 +109,23 @@ bool serialize::printValue_bignumber( const types::BigNumber* ptr, types::Varian
 	return printValue( *(const types::BigNumber*)ptr, value);
 }
 
-bool serialize::fetchCloseTag( Context& ctx, SerializeStateStack& stk)
+bool serialize::fetchCloseTag( ElementBuffer& elem, SerializeStateStack& stk)
 {
-	ctx.setElem(langbind::FilterBase::CloseTag);
+	elem.set( langbind::FilterBase::CloseTag);
 	stk.pop_back();
 	return true;
 }
 
-bool serialize::fetchOpenTag( Context& ctx, SerializeStateStack& stk)
+bool serialize::fetchOpenTag( ElementBuffer& elem, SerializeStateStack& stk)
 {
-	ctx.setElem(
+	elem.set(
 		langbind::FilterBase::OpenTag,
 		types::VariantConst( stk.back().name()));
 	stk.pop_back();
 	return true;
 }
 
-bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, Context& ctx, SerializeStateStack& stk)
+bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, ElementBuffer& elem, SerializeStateStack& stk)
 {
 	bool rt = false;
 	const void* obj = stk.back().value();
@@ -140,7 +140,7 @@ bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, Context& 
 			{
 				throw SerializationErrorException( "atomic value expected for attribute", StructSerializer::getElementPath( stk));
 			}
-			ctx.setElem(
+			elem.set(
 				langbind::FilterBase::Attribute,
 				types::VariantConst( itr->first.c_str(), itr->first.size()));
 			rt = true;
@@ -164,7 +164,7 @@ bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, Context& 
 			}
 			else
 			{
-				ctx.setElem(
+				elem.set(
 					langbind::FilterBase::OpenTag,
 					types::VariantConst( itr->first.c_str(), itr->first.size()));
 				rt = true;
@@ -179,27 +179,26 @@ bool serialize::fetchObjectStruct( const StructDescriptionBase* descr, Context& 
 		stk.pop_back();
 		if (stk.size() == 0)
 		{
-			ctx.setElem( langbind::FilterBase::CloseTag, types::VariantConst());
+			elem.set( langbind::FilterBase::CloseTag, types::VariantConst());
 			rt = true;
 		}
 	}
 	return rt;
 }
 
-bool serialize::fetchObjectAtomic( PrintValue prnt, Context& ctx, SerializeStateStack& stk)
+bool serialize::fetchObjectAtomic( PrintValue prnt, ElementBuffer& elem, SerializeStateStack& stk)
 {
-	Context::ElementBuffer elem;
-	elem.m_type = langbind::FilterBase::Value;
-	if (!prnt( stk.back().value(), elem.m_value))
+	types::VariantConst val;
+	if (!prnt( stk.back().value(), val))
 	{
 		throw SerializationErrorException( "atomic value conversion error", StructSerializer::getElementPath( stk));
 	}
-	ctx.setElem( elem);
+	elem.set( langbind::FilterBase::Value, val);
 	stk.pop_back();
 	return true;
 }
 
-bool serialize::fetchObjectVectorElement( FetchElement fetchElement, const void* ve, Context& ctx, SerializeStateStack& stk)
+bool serialize::fetchObjectVectorElement( FetchElement fetchElement, const void* ve, ElementBuffer& elem, SerializeStateStack& stk)
 {
 	bool rt = false;
 	std::size_t idx = stk.back().state();
@@ -207,7 +206,7 @@ bool serialize::fetchObjectVectorElement( FetchElement fetchElement, const void*
 	const char* tagname = stk.back().name();
 	if (tagname)
 	{
-		ctx.setElem( langbind::FilterBase::OpenTagArray, types::VariantConst( tagname));
+		elem.set( langbind::FilterBase::OpenTagArray, types::VariantConst( tagname));
 		rt = true;
 		stk.back().state( idx+1);
 		stk.push_back( SerializeState( tagname, &fetchCloseTag, tagname));

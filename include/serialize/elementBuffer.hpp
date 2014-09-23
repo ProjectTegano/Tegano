@@ -29,30 +29,59 @@ If you have questions regarding the use of this file, please contact
 Project Wolframe.
 
 ************************************************************************/
-/// \file serialize/flags.hpp
-/// \brief Defines the flags for serialization behaviour
+/// \file serialize/elementBuffer.hpp
+/// \brief Defines a buffer for one filter sequence element of serialization 
 
-#ifndef _Wolframe_SERIALIZE_FLAGS_HPP_INCLUDED
-#define _Wolframe_SERIALIZE_FLAGS_HPP_INCLUDED
+#ifndef _Wolframe_SERIALIZE_ELEMENT_BUFFER_HPP_INCLUDED
+#define _Wolframe_SERIALIZE_ELEMENT_BUFFER_HPP_INCLUDED
 
 namespace _Wolframe {
 namespace serialize {
 
-/// \struct Flags
-/// \brief Set of flags to negotiate source behaviour in serialization and sink behaviour in validation
-struct Flags
+/// \class ElementBuffer
+/// \brief Buffer for one element fetched
+class ElementBuffer
 {
-	/// \enum Enum
-	/// \brief the enumeration that can also be interpreted as bit set
-	enum Enum
+public:
+	ElementBuffer()
+		:m_type(langbind::FilterBase::Value)
+		,m_initialized(false)
+		{}
+	ElementBuffer( const ElementBuffer& o)
+		:m_type(o.m_type)
+		,m_value(o.m_value)
+		,m_initialized(o.m_initialized)
+		{}
+
+	void set( langbind::FilterBase::ElementType t)
 	{
-		None=0x00,				///< Empty flag set (no flags set)
-		ValidateAttributes=0x01,		///< Do validate if attribute value pairs are serialized as such in the input filter serialization (and not as open content close) and the input filter does not declare itself as not knowing about attributes (PropagateNoAttr)
-		ValidateInitialization=0x02,		///< Do validate if all declared elements in the structure were initilized by the input stream (if not explicitely declared as optional)
-		ValidateArray=0x04,			///< Do validate if array elements are mapped to arrays and single elements not
-		CaseInsensitiveCompare=0x08		///< Do validate with case insensitive compare
-	};
+		m_type = t;
+		m_value.init();
+		m_initialized = true;
+	}
+
+	void set( langbind::FilterBase::ElementType t, const types::VariantConst& v)
+	{
+		m_type = t;
+		m_value = v;
+		m_initialized = true;
+	}
+
+	void markAsConsumed()
+	{
+		m_initialized = false;
+	}
+
+	langbind::FilterBase::ElementType type() const	{return m_type;}
+	const types::VariantConst& value() const	{return m_value;}
+	bool initialized() const			{return m_initialized;}
+
+private:
+	langbind::FilterBase::ElementType m_type;
+	types::VariantConst m_value;
+	bool m_initialized;
 };
 
 }}//namespace
 #endif
+

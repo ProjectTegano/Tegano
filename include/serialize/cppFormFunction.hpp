@@ -33,7 +33,7 @@ Project Wolframe.
 /// \brief Interface to form functions written in C++
 #ifndef _Wolframe_serialize_CPP_FORM_FUNCTION_HPP_INCLUDED
 #define _Wolframe_serialize_CPP_FORM_FUNCTION_HPP_INCLUDED
-#include "serialize/flags.hpp"
+#include "serialize/validationFlags.hpp"
 #include "serialize/struct/structDescriptionBase.hpp"
 #include "serialize/struct/structSerializer.hpp"
 #include "serialize/struct/structParser.hpp"
@@ -90,8 +90,8 @@ public:
 	/// \brief Initialization of call context for a new call
 	/// \param[in] c execution context reference
 	/// \param[in] i call input
-	/// \param[in] flags serialization flags depending on context (directmap "strict",lua relaxed)
-	void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, serialize::Flags::Enum flags);
+	/// \param[in] flags validation flags depending on context (directmap "strict",lua relaxed)
+	void init( proc::ExecContext* c, const langbind::TypedInputFilterR& i, ValidationFlags::Enum flags);
 
 	/// \brief Get the result iterator reference of the function call
 	virtual langbind::TypedInputFilterR result() const	{return m_result;}
