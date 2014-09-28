@@ -439,7 +439,7 @@ comauto::DotnetFunctionClosure::Impl::Impl( const DotnetFunction* func_)
 		,m_paramidx(null_paramidx)
 		,m_providerdispatch(0)
 {
-	serialize::ValidationFlags::unset( m_flags(serialize::ValidationFlags::ValidateCase);
+	serialize::ValidationFlags::unset( m_flags, serialize::ValidationFlags::ValidateCase);
 }
 
 static void clearArrayParam( std::map<std::size_t,std::vector<VARIANT> >& ap)
@@ -541,7 +541,7 @@ AGAIN:
 			{
 				case langbind::InputFilter::Attribute:
 				case langbind::InputFilter::OpenTag:
-				case langbind::InputFilter::OpenArray:
+				case langbind::InputFilter::OpenTagArray:
 				{
 					if (elemtype == langbind::InputFilter::OpenTagArray)
 					{
@@ -607,7 +607,7 @@ AGAIN:
 			m_param[ pi->first] = comauto::createVariantArray( pi->second[0].vt, recinfo, pi->second);
 		}
 		// function signature validation:
-		if (serialize::ValidateFlags::match( m_flags, serialize::ValidateFlags::ValidateAttributes))
+		if (serialize::ValidationFlags::match( m_flags, serialize::ValidationFlags::ValidateAttributes))
 		{
 			// ... ignored because XML attributes are unknown in .NET structures ...
 		}
@@ -618,7 +618,7 @@ AGAIN:
 			{
 				const DotnetFunction::Impl::Parameter* param = m_func->m_impl->getParameter( ii);
 
-				if (serialize::ValidateFlags::match( m_flags, serialize::ValidateFlags::ValidateInitialization))
+				if (serialize::ValidationFlags::match( m_flags, serialize::ValidationFlags::ValidateInitialization))
 				{
 					throw std::runtime_error( std::string( "missing parameter '") + param->name + "'");
 				}

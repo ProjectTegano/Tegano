@@ -65,8 +65,8 @@ static langbind::TypedInputFilterR callProcProvider( proc::ExecContext* context_
 	{
 		throw std::runtime_error( "creation of function execution context failed (processor provider function call)");
 	}
-	serialize::ValicationFlags::Enum vflags = serialize::Flags::All;
-	serialize::ValicationFlags::unset( vflags, serialize::Flags::ValidateCase);
+	serialize::ValidationFlags::Enum vflags = serialize::ValidationFlags::All;
+	serialize::ValidationFlags::unset( vflags, serialize::ValidationFlags::ValidateCase);
 	funcexec->init( context_, input_, vflags);
 	if (!funcexec->call())
 	{

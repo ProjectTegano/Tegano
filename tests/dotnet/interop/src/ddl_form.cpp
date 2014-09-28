@@ -208,7 +208,7 @@ AGAIN:
 			switch (m_stk.back().type)
 			{
 				case Form::Struct: element = getElement( m_stk.back().sitr->first); break;
-				case Form::Array: element = getElement( m_stk.back().atag); break;
+				case Form::Array: type = FilterBase::OpenTagArray; element = getElement( m_stk.back().atag); break;
 				case Form::Atomic: throw std::logic_error( "illegal state in OpenTagState of FormInputFilter::getNext(..)");
 			}
 			m_stk.back().state = ValueState;

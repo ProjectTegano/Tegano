@@ -58,7 +58,7 @@ public:
 		return true;
 	}
 
-	virtual void init( proc::ExecContext*, const langbind::TypedInputFilterR&, serialize::Flags::Enum)
+	virtual void init( proc::ExecContext*, const langbind::TypedInputFilterR&, serialize::ValidationFlags::Enum)
 	{
 	}
 

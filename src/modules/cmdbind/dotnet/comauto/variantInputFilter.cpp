@@ -39,7 +39,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::comauto;
 
-VariantInputFilter::VariantInputFilter( const comauto::TypeLib* typelib_, const ITypeInfo* typeinfo_, VARIANT data_, serialize::Flags::Enum flags_)
+VariantInputFilter::VariantInputFilter( const comauto::TypeLib* typelib_, const ITypeInfo* typeinfo_, VARIANT data_, serialize::ValidationFlags::Enum flags_)
 	:TypedInputFilter("dotNetVariantInputFilter")
 	,m_typelib(typelib_)
 	,m_flags(flags_)

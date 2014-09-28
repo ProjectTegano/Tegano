@@ -55,14 +55,24 @@ public:
 	ProcessorProvider(){}
 	virtual ~ProcessorProvider(){}
 
-	virtual cmdbind::CommandHandler* cmdhandler( const std::string& /*command*/, const std::string& /*docformat*/) const
+	virtual bool hasProtocol( const std::string& /*protocol*/) const
 	{
-		throw std::logic_error( "Assertion failed: Called undefined function");
+		return false;
 	}
 
-	virtual bool existcmd( const std::string& /*command*/) const
+	virtual bool hasCommand( const std::string& /*command*/) const
 	{
-		throw std::logic_error( "Assertion failed: Called undefined function");
+		return false;
+	}
+
+	virtual cmdbind::ProtocolHandler* protocolHandler( const std::string& /*protocol*/) const
+	{
+		return 0;
+	}
+
+	virtual cmdbind::CommandHandler* cmdhandler( const std::string& /*command*/, const std::string& /*docformat*/) const
+	{
+		return 0;
 	}
 
 	virtual db::Database* transactionDatabase() const
@@ -73,6 +83,21 @@ public:
 	virtual db::Transaction* transaction( const std::string& /*name*/) const
 	{
 		throw std::logic_error( "Assertion failed: Called undefined function");
+	}
+
+	virtual db::Transaction* transaction( const std::string& /*dbname*/, const std::string& /*name*/) const
+	{
+		throw std::logic_error( "Assertion failed: Called undefined function");
+	}
+
+	virtual const langbind::AuthorizationFunction* authorizationFunction( const std::string& /*name*/) const
+	{
+		return 0;
+	}
+
+	virtual const langbind::AuditFunction* auditFunction( const std::string& /*name*/) const
+	{
+		return 0;
 	}
 
 	virtual const types::NormalizeFunction* normalizeFunction( const std::string& /*name*/) const

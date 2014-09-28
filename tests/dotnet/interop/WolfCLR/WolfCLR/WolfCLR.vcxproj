@@ -130,7 +130,6 @@
     <ClCompile Include="..\..\..\..\..\src\libwolframe\types\string.cpp" />
     <ClCompile Include="..\..\..\..\..\src\libwolframe\types\variant.cpp" />
     <ClCompile Include="..\..\..\..\..\src\libwolframe\utils\malloc.cpp" />
-    <ClCompile Include="..\..\..\..\..\src\libwolframe\utils\typeSignature.cpp" />
     <ClCompile Include="..\..\..\..\..\src\modules\cmdbind\dotnet\comauto\clr.cpp" />
     <ClCompile Include="..\..\..\..\..\src\modules\cmdbind\dotnet\comauto\function.cpp" />
     <ClCompile Include="..\..\..\..\..\src\modules\cmdbind\dotnet\comauto\procProviderDispatch.cpp" />
