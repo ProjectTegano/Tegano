@@ -492,7 +492,6 @@ void comauto::DotnetFunctionClosure::Impl::init( proc::ExecContext* c, const lan
 
 bool comauto::DotnetFunctionClosure::Impl::call()
 {
-	unsigned int paramcount = 0;
 	try
 	{
 AGAIN:
@@ -543,11 +542,7 @@ AGAIN:
 				case langbind::InputFilter::OpenTag:
 				case langbind::InputFilter::OpenTagArray:
 				{
-					if (elemtype == langbind::InputFilter::OpenTagArray)
-					{
-						m_paramidx = paramcount++;
-					}
-					else if (elemvalue.type() == types::Variant::String)
+					if (elemvalue.type() == types::Variant::String)
 					{
 						std::string paramname( elemvalue.charptr(), elemvalue.charsize());
 						m_paramidx = m_func->m_impl->getParameterIndex( paramname);
@@ -618,7 +613,8 @@ AGAIN:
 			{
 				const DotnetFunction::Impl::Parameter* param = m_func->m_impl->getParameter( ii);
 
-				if (serialize::ValidationFlags::match( m_flags, serialize::ValidationFlags::ValidateInitialization))
+				if (serialize::ValidationFlags::match( m_flags, serialize::ValidationFlags::ValidateInitialization)
+				&&  param->addrMode != DotnetFunction::Impl::Parameter::ProcProvider)
 				{
 					throw std::runtime_error( std::string( "missing parameter '") + param->name + "'");
 				}

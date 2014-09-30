@@ -64,6 +64,7 @@ private:
 	enum State
 	{
 		VarOpen,
+		VarReopen,
 		VarClose
 	};
 	struct StackElem
@@ -79,6 +80,8 @@ private:
 		StackElem( const StackElem& o);
 		StackElem( const std::string& name_, const IRecordInfo* recinfo_, ITypeInfo* typeinfo_, VARIANT data_);
 		~StackElem();
+
+		std::string tostring() const;
 	};
 	std::vector<StackElem> m_stk;
 	types::Variant m_elembuf;

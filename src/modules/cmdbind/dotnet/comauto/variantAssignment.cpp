@@ -32,6 +32,8 @@ Project Wolframe.
 #include "comauto/variantAssignment.hpp"
 #include "comauto/typelib.hpp"
 #include "comauto/utils.hpp"
+#include <sstream>
+#include <iostream>
 #include <oaidl.h>
 #include <comdef.h>
 #include <atlcom.h>
@@ -67,6 +69,8 @@ private:
 		StackElem( VARTYPE vt_);
 		StackElem( const StackElem& o);
 		~StackElem();
+
+		std::string tostring() const;
 	};
 
 private:
@@ -137,6 +141,14 @@ comauto::AssignmentClosure::Impl::StackElem::~StackElem()
 		if (typeattr) typeinfo->ReleaseTypeAttr( typeattr);
 		typeinfo->Release();
 	}
+}
+
+std::string comauto::AssignmentClosure::Impl::StackElem::tostring() const
+{
+	std::ostringstream rt;
+	rt << "key='" << key << "'";
+	rt << " type=(" << typestr(vt) << ")";
+	return rt.str();
 }
 
 std::string comauto::AssignmentClosure::Impl::variablepath() const

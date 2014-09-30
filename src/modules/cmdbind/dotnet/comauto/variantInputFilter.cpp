@@ -119,6 +119,21 @@ VariantInputFilter::StackElem::~StackElem()
 	}
 }
 
+std::string VariantInputFilter::StackElem::tostring() const
+{
+	std::ostringstream rt;
+	switch (state)
+	{
+		case VarOpen: rt << "[VarOpen]"; break;
+		case VarReopen: rt << "[VarReopen]"; break;
+		case VarClose: rt << "[VarClose]"; break;
+	}
+	rt << " name='" << name << "'";
+	rt << " idx='" << idx << "'";
+	rt << " type=(" << typestr(data.vt) << ")";
+	return rt.str();
+}
+
 bool VariantInputFilter::getNext( ElementType& type, types::VariantConst& element)
 {
 AGAIN:
@@ -143,6 +158,7 @@ AGAIN:
 		switch (cur.state)
 		{
 			case VarOpen:
+			case VarReopen:
 			{
 				if ((cur.data.vt & VT_ARRAY) == VT_ARRAY)
 				{
@@ -152,10 +168,20 @@ AGAIN:
 					}
 					if (cur.idx >= cur.data.parray->rgsabound->cElements)
 					{
-						m_stk.pop_back();
-						goto AGAIN;
+						if (cur.state == VarReopen)
+						{
+							m_stk.pop_back();
+							element = types::VariantConst();
+							type = CloseTag;
+							return true;
+						}
+						else
+						{
+							m_stk.pop_back();
+							goto AGAIN;
+						}
 					}
-					cur.state = VarClose;
+					cur.state = VarReopen;
 					element = types::VariantConst( m_elembuf = cur.name);
 					type = OpenTagArray;
 					LONG idx = cur.idx++;
@@ -165,7 +191,6 @@ AGAIN:
 					{
 						data.vt = elemvt;
 						WRAP( ::SafeArrayGetElement( cur.data.parray, &idx, const_cast<void*>(comauto::arithmeticTypeAddress( &data))));
-						cur.state = VarClose;
 						m_stk.push_back( StackElem( "", 0, 0, data));
 						std::memset( &data, 0, sizeof(data));
 						data.vt = VT_EMPTY;
@@ -188,7 +213,6 @@ AGAIN:
 							default:
 								throw std::logic_error("internal: unknown string type");
 						}
-						cur.state = VarClose;
 						m_stk.push_back( StackElem( "", 0, 0, data));
 						std::memset( &data, 0, sizeof(data));
 						data.vt = VT_EMPTY;
@@ -202,7 +226,6 @@ AGAIN:
 						data.pvRecord = data.pRecInfo->RecordCreate();
 						WRAP( ::SafeArrayGetElement( cur.data.parray, &idx, const_cast<void*>(data.pvRecord)));
 						data.pRecInfo->GetTypeInfo( &reftypeinfo);
-						cur.state = VarClose;
 						m_stk.push_back( StackElem( "", data.pRecInfo, reftypeinfo, data));
 						std::memset( &data, 0, sizeof(data));
 						data.vt = VT_EMPTY;
