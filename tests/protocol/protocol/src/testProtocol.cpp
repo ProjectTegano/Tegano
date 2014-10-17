@@ -301,10 +301,24 @@ struct GlobalContext
 		const config::AaaaProviderConfiguration* acfg = &m_aaaaProviderConfig;
 		m_aaaaProvider = new aaaa::AaaaProviderImpl( &g_randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &m_moduleDirectory);
 		m_databaseProvider = new db::DatabaseProviderImpl( m_dbProviderConfig.config(), &m_moduleDirectory);
-		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.dbLabel(), m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
+		m_processorProvider = new proc::ProcessorProviderImpl( m_procProviderConfig.procConfig(), m_procProviderConfig.programFiles(), m_procProviderConfig.referencePath(), &m_moduleDirectory);
+
+		std::vector<std::string>::const_iterator di = m_procProviderConfig.databaseIds().begin(), de = m_procProviderConfig.databaseIds().end();
+		for (; di != de; ++di)
+		{
+			const db::Database* database = m_databaseProvider->database( *di);
+			if (database)
+			{
+				m_processorProvider->addDatabase( database);
+			}
+			else
+			{
+				throw std::runtime_error( std::string("database with identifier '") + *di + "' configured in processor is not defined in database section of the configuration");
+			}
+		}
+
 		m_execContext = new proc::ExecContext( m_processorProvider, m_aaaaProvider);
 
-		m_processorProvider->resolveDB( *m_databaseProvider);
 		if (!m_processorProvider->loadPrograms())
 		{
 			throw std::runtime_error( "failed to load programs for the processor provider");

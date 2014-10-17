@@ -198,7 +198,7 @@ TEST_P( CompileTDLTest, tests)
 	std::vector<const db::Database*> databases;
 	databases.push_back( &testDatabase);
 
-	TdlTransactionFunctionList tl = loadTransactionProgramFile( tdlfile, databases, &g_dblang);
+	TdlTransactionFunctionList tl = loadTransactionProgramFile( tdlfile, databases);
 	TdlTransactionFunctionList::const_iterator ti = tl.begin(), te = tl.end();
 
 	// [2.2] Print test output to string:
