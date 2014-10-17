@@ -10,7 +10,6 @@
 # - OPENSSL_DIR: location of the OpenSSL library (WITH_SSL=1 only)
 # - PGSQL_DIR: location of Postgres libpq and header files (WITH_PGSQL=1 only)
 # - TCL_DIR: location of the Active Tcl installation (for testing only)
-# - EXPECT: location of the expect interpreter (for testing only)
 
 # please customize
 
@@ -132,13 +131,6 @@ PYTHON_MAJOR_VERSION = 3
 
 PYTHON_LIB_DIR = $(PYTHON_DIR)\libs
 PYTHON_DLL_DIR = $(PYTHON_DIR)\DLLs
-
-# Tcl 8.5 and Expect
-####################
-
-TCL_DIR = C:\develop\Tcl86
-
-EXPECT = $(TCL_DIR)\bin\tclsh.exe
 
 # Windows Installer (WIX)
 # used for deployment only!

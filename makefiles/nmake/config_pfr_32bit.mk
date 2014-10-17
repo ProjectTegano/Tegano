@@ -10,7 +10,6 @@
 # - OPENSSL_DIR: location of the OpenSSL library (WITH_SSL=1 only)
 # - PGSQL_DIR: location of Postgres libpq and header files (WITH_PGSQL=1 only)
 # - TCL_DIR: location of the Active Tcl installation (for testing only)
-# - EXPECT: location of the expect interpreter (for testing only)
 
 # please customize
 

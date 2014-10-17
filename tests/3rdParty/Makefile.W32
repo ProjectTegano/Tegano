@@ -31,11 +31,6 @@ SUBDIRS = \
 	$(SUBDIRS) boost-locale
 !ENDIF
 
-!IFDEF WITH_FREEIMAGE
-SUBDIRS = \
-	$(SUBDIRS) freeimage
-!ENDIF
-
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 local_all:

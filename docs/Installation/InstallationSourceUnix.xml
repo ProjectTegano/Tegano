@@ -127,17 +127,6 @@
 		<itemizedlist>
 			<listitem>
 				<para>
-					Expect 5.40 or newer, for running the Expect tests,
-					<ulink url="http://expect.sourceforge.net/">http://expect.sourceforge.net/</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					A working telnet
-				</para>
-			</listitem>
-			<listitem>
-				<para>
 					A PostgreSQL or Oracle database when you want to run the database tests
 				</para>
 			</listitem>
@@ -242,10 +231,10 @@
 			A complete build may look like this:
 
 		        <programlisting language='shell'>
-	make WITH_SSL=1 WITH_EXPECT=1 WITH_PAM=1 WITH_SASL=1 \
+	make WITH_SSL=1 WITH_PAM=1 WITH_SASL=1 \
 		WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_ORACLE=1 \
 		WITH_LUA=1 WITH_LIBXML2=1 WITH_LIBXSLT=1 \
-		WITH_LOCAL_LIBHPDF=1 WITH_ICU=1 WITH_LOCAL_FREEIMAGE=1 \
+		WITH_LOCAL_LIBHPDF=1 WITH_ICU=1 \
 		WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 \
 		CC=gcc CXX=g++ CCFLAGS='-Werror' CXXFLAGS='-Werror' \
 		clean all test install
@@ -535,10 +524,9 @@ export PATH
 	LD_RUN_PATH=/opt/csw/lib:/opt/csw/postgresql/lib \
 	OPENSSL_DIR=/opt/csw PGSQL_DIR=/opt/csw/postgresql \
 	LIBLT_DIR=/usr BOOST_DIR=/opt/csw/boost-1.55.0 \
-		WITH_EXPECT=1 WITH_SSL=1 WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_LUA=1 \
+		WITH_SSL=1 WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_LUA=1 \
 		WITH_LIBXML2=1 WITH_LIBXSLT=1 WITH_PAM=1 WITH_SASL=1 WITH_LOCAL_LIBHPDF=1 \
 		WITH_ICU=1 ICU_DIR=/opt/csw/icu4c-49.1.2 \
-		WITH_LOCAL_FREEIMAGE=1 \
 		WITH_PYTHON=1 \
 		gmake \
 			CC=gcc CXX=g++ CFLAGS=-mcpu=v9 CXXFLAGS=-mcpu=v9
@@ -2144,200 +2132,6 @@ export PATH
 						
 		</sect2>
 
-<!-- FreeImage -->
-		<sect2>
-			<title>Image processing with FreeImage</title>
-			
-			<para>
-				<application>Wolframe</application> can manipulate
-				various image formats with the help of
-				the FreeImage project (<ulink url="http://freeimage.sourceforge.net">http://freeimage.sourceforge.net</ulink>).
-			</para>
-									
-			<para>
-				You enable the building of a loadable FreeImage processing
-				module with:
-
-		        <programlisting language='shell'>
-	make WITH_SYSTEM_FREEIMAGE=1
-			</programlisting>
-							
-			</para>
-			
-			<para>
-				You can also link against the embedded version of
-				FreeImage in '3rdParty/freeimage' instead of the one of
-				the Linux distribution:
-		        <programlisting language='shell'>
-	make WITH_LOCAL_FREEIMAGE=1
-			</programlisting>
-			</para>
-			
-			<para>
-				The location of the FreeImage package can be overloaded with:
-		        <programlisting language='shell'>
-	make WITH_SYSTEM_FREEIMAGE=1 \
-		FREEIMAGE_DIR=/usr/local/FreeImage-3.15.4
-			</programlisting>				
-			</para>
-
-			<para>
-				You can also override all compilation and linking flags
-				of the FreeImage package separately:
-		        <programlisting language='shell'>
-	make WITH_SYSTEM_FREEIMAGE=1 \
-		FREEIMAGE_INCLUDE_DIR=/usr/local/FreeImage-3.15.4/include \
-		FREEIMAGE_LIB_DIR=/usr/local/FreeImage-3.15.4/lib \
-		FREEIMAGE_LIBS=-lfreeimage \
-		FREEIMAGEPLUS_INCLUDE_DIR=/usr/local/FreeImage-3.15.4/include \
-		FREEIMAGEPLUS_LIB_DIR=/usr/local/FreeImage-3.15.4/lib \
-		FREEIMAGEPLUS_LIBS=-lfreeimageplus
-			</programlisting>				
-			
-			</para>
-			
-			<para>
-				Though there are FreeImage packages on most Linux distributions
-				you may still want to use the locally embedded version.
-			</para>
-						
-			<sect3>
-				<title>RedHat/Centos/Scientific Linux and similar Linux distributions</title>
-				
-				<para>
-					There are FreeImage packages, but they are usually quite old.
-					Better build you own version if FreeImage.
-				</para>
-				
-				<para>
-					You need the 'zlib-devel' and 'libpng-devel' packages to
-					build FreeImage.
-				</para>		
-			</sect3>
-
-			<sect3>
-				<title>Fedora and similar Linux distributions</title>
-				
-				<para>
-					You need the 'zlib-devel' and 'libpng-devel' packages to
-					build FreeImage.
-				</para>		
-
-				<para>
-					You may also try to use 'freeimage-devel' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>Debian, Ubuntu and similar Linux distributions</title>
-				
-				<para>
-					You need the 'zlib1g-dev' and 'libpng12-dev' packages to
-					build FreeImage.
-				</para>				
-
-				<para>
-					You can also try to use the 'libfreeimage-devel' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>openSUSE, SLES and similar Linux distributions</title>		
-				<para>
-					You need the 'zlib-devel' and 'libpng12-devel' or 'libpng15-devel' packages to
-					build FreeImage.
-				</para>
-
-				<para>
-					You can also try to use the 'freeimage-devel' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>ArchLinux</title>
-				<para>
-					You need the 'freeimage' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>Slackware</title>
-				<para>
-					On Slackware you have to build your own version of FreeImage.
-					You need the 'zlib' and 'libpng' packages.
-					Both packages are part of the 'l' package series.
-				</para>
-
-				<para>
-					Alternatively you can of course also build the 'FreeImage'
-					package with the help of SlackBuilds.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>FreeBSD 10</title>
-				
-				<para>
-					You need the 'freeimage' package.
-				</para>
-			</sect3>
-			
-			<sect3>
-				<title>FreeBSD 8 and 9</title>
-				<para>
-					Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-				</para>
-
-				<para>
-					You need the 'png'  package for this.
-				</para>
-				
-				<para>
-					There is a FreeImage port but it doesn't build the libfreeimageplus
-					library we need.
-				</para>
-
-				<para>
-					<emphasis role="bold">Note</emphasis>: FreeImage doesn't build on
-					32-bit currently because gcc doesn't support some 64-bit constants on FreeBSD.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>NetBSD</title>
-				<para>
-					Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-					You need the 'png' and the 'zlib' packages for this.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>OpenIndiana 151a8</title>
-				
-				<para>
-					Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-				</para>
-				<para>
-					You need the 'CSWlibz-dev' package for this.
-				</para>
-			</sect3>			
-
-			<sect3>
-				<title>Solaris 10</title>
-				
-				<para>
-					Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-				</para>
-				<para>
-					You need the 'CSWlibz-dev' package for this.
-				</para>
-				<para>
-					'SUNWzlib' is missing 64-bit support so don't use it!
-				</para>
-			</sect3>			
-						
-		</sect2>
-
 <!-- zlib and libpng -->
 		<sect2>
 			<title>zlib and libpng</title>
@@ -3013,102 +2807,6 @@ export PATH
 			</para>
 		</sect2>
 			
-<!-- Expect -->
-		<sect2>
-			<title>Testing with Expect</title>
-						
-			<para>
-				Some more complex tests are written with Expect
-				(<ulink url="http://expect.sourceforge.net/">http://expect.sourceforge.net/</ulink>).
-			</para>
-						
-			<para>
-				You enable testing with Expect with:
-
-		        <programlisting language='shell'>
-	make WITH_EXPECT=1
-			</programlisting>
-							
-			</para>
-						
-			<para>
-				The location of the Expect interpreter can be overloaded with:
-		        <programlisting language='shell'>
-	make WITH_EXPECT=1 \
-		EXPECT=/usr/local/bin/expect
-			</programlisting>				
-			</para>
-						
-			<sect3>
-				<title>RedHat/Centos/Scientific Linux, Fedora and similar Linux distributions</title>
-				
-				<para>
-					You need the 'expect' and the 'telnet' packages.
-				</para>				
-			</sect3>
-
-			<sect3>
-				<title>Debian, Ubuntu and similar Linux distributions</title>
-				
-				<para>
-					You need the 'expect' and the 'telnet' packages.
-				</para>		
-			</sect3>
-
-			<sect3>
-				<title>openSUSE, SLES and similar Linux distributions</title>		
-				<para>
-					You need the 'expect' and the 'telnet' packages.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>ArchLinux</title>
-				<para>
-					You need the 'expect' and 'inetutils' packages.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>Slackware</title>
-				<para>
-					You need the 'expect' and 'telnet' packages. Those packages
-					are part of the 'tcl' respectively the 'n' package series.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>FreeBSD</title>
-				<para>
-					You need the 'expect' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>NetBSD</title>
-				<para>
-					You need the 'tcl-expect' package.
-				</para>
-			</sect3>
-
-			<sect3>
-				<title>OpenIndiana 151a8</title>
-				
-				<para>
-					You need the 'CSWexpect' package.
-				</para>
-			</sect3>			
-
-			<sect3>
-				<title>Solaris 10</title>
-				
-				<para>
-					You need the 'CSWexpect' package.
-				</para>
-			</sect3>			
-						
-		</sect2>
-
 <!-- Documentation -->
 		<sect2>
 			<title>Building the documentation</title>

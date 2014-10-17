@@ -26,8 +26,4 @@ SUBDIRS += boost-locale
 endif
 endif
 
-ifeq ($(WITH_FREEIMAGE),1)
-SUBDIRS += freeimage
-endif
-
 -include $(TOPDIR)/makefiles/gmake/sub.mk

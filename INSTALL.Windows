@@ -78,14 +78,6 @@ software:
 
 For testing the Wolframe software you need:
 
-  * Expect 5.40 or newer, for running the Expect tests, http://
-    expect.sourceforge.net/
-
-  * Expect needs ActiveTcl 8.5 or newer, for running the Expect tests, http://
-    www.activestate.com/activetcl
-
-  * A working telnet
-
   * A PostgreSQL or Oracle database when you want to run the database tests
 
 For building Windows packages you need:
@@ -149,10 +141,10 @@ for instance:
 
 A complete build may look like this:
 
-        nmake /nologo /f Makefile.W32 WITH_SSL=1 WITH_EXPECT=1 WITH_LUA=1 ^
+        nmake /nologo /f Makefile.W32 WITH_SSL=1 WITH_LUA=1 ^
                 WITH_SQLITE3=1 WITH_PGSQL=1 WITH_ORACLE=1 ^
                 WITH_LIBXML2=1 WITH_LIBXSLT=1 ^
-                WITH_LIBHPDF=1 WITH_EXAMPLES=1 WITH_ICU=1 WITH_FREEIMAGE=1 ^
+                WITH_LIBHPDF=1 WITH_EXAMPLES=1 WITH_ICU=1 ^
                 WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 ^
                 clean all test
 
@@ -718,26 +710,14 @@ You enable the building of a loadable libhpdf printing module with:
         nmake /nologo /f Makefile.W32 WITH_LIBHPDF=1
 
 
-1.15. Image processing with FreeImage
-
-Wolframe can manipulate various image formats with the help of the FreeImage
-project (http://freeimage.sourceforge.net).
-
-The FreeImage package is embedded in the subdirectory 3rdParty/freeimage.
-
-You enable the building of a loadable FreeImage processing module with:
-
-        nmake /nologo /f Makefile.W32 WITH_SYSTEM_FREEIMAGE=1
-
-
-1.16. zlib and libpng
+1.15. zlib and libpng
 
 Libhpdf needs the zlib and libpng libraries.
 
 The libpng and zlib libraries are embedded in the subdirectory 3rdParty/zlib
 and 3rdParty/libpng.
 
-1.17. Support for ICU
+1.16. Support for ICU
 
 Wolframe can use the International Components for Unicode (ICU, http://
 site.icu-project.org) library for text normalization and conversion.
@@ -801,7 +781,7 @@ the pre-compiled version of ICU:
                 install
 
 
-1.18. Testing Wolframe
+1.17. Testing Wolframe
 
 Wolframe has tests written in Google gtest (https://code.google.com/p/
 googletest/).
@@ -817,37 +797,7 @@ per default when calling 'make test', but you have to call:
         nmake /nologo /f Makefile.W32 longtest
 
 
-1.19. Testing with Expect
-
-Some more complex tests are written with Expect (http://expect.sourceforge.net/
-).
-
-You enable testing with Expect with:
-
-        nmake /nologo /f Makefile.W32 WITH_EXPECT=1
-
-
-You can get a Windows version of TCL from http://www.activestate.com/activetcl/
-. Take the 32-bit community version, the the 64-bit version had no Expect
-available (at least at the time of writting).
-
-Install ActiveTcl 8.6.1 to for instance C:\Tcl86.
-
-Install Expect with:
-
-        cd C:\Tcl86
-        teacup install Expect
-
-
-Adapt the following variable in makefiles\nmake\config.mk:
-
-        TCL_DIR = C:\Tcl86
-
-
-Some tests also need 'telnet'. If telnet is not enabled as Windows feature,
-enable it in "Control Panel", "Windows Features" under "Telnet Client".
-
-1.20. Building the documentation
+1.18. Building the documentation
 
 The documentation including the man pages is written using DocBook (http://
 www.docbook.org).
@@ -877,7 +827,7 @@ config.mk:
         DOXYGEN = C:\Doxygen\bin\doxygen.exe
 
 
-1.21. Building the wolfclient
+1.19. Building the wolfclient
 
 The wolfclient is a Qt-based client for the Wolframe server.
 
@@ -908,7 +858,7 @@ respectively for a release version:
 If you want SSL support you have to download or build OpenSSL and rebuild Qt 4
 or Qt 5 with SSL support:
 
-1.21.1. Secure Socket Layer (SSL)
+1.19.1. Secure Socket Layer (SSL)
 
 The Wolframe protocol can be secured with SSL. Currently only OpenSSL (http://
 www.openssl.org) is supported.
@@ -980,7 +930,7 @@ Build and install OpenSSL now with:
 More build information is available in INSTALL.W32 and INSTALL.W64 of the
 OpenSSL package itself.
 
-1.21.2. Qt libraries
+1.19.2. Qt libraries
 
 Use prebuild version of Qt
 

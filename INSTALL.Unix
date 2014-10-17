@@ -91,11 +91,6 @@ software:
 
 For testing the Wolframe software you need:
 
-  * Expect 5.40 or newer, for running the Expect tests, http://
-    expect.sourceforge.net/
-
-  * A working telnet
-
   * A PostgreSQL or Oracle database when you want to run the database tests
 
 For building the documentation and manpages you need:
@@ -158,10 +153,10 @@ explicitly as mentioned above in the example with 'BOOST_DIR'.
 
 A complete build may look like this:
 
-        make WITH_SSL=1 WITH_EXPECT=1 WITH_PAM=1 WITH_SASL=1 \
+        make WITH_SSL=1 WITH_PAM=1 WITH_SASL=1 \
                 WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_ORACLE=1 \
                 WITH_LUA=1 WITH_LIBXML2=1 WITH_LIBXSLT=1 \
-                WITH_LOCAL_LIBHPDF=1 WITH_ICU=1 WITH_LOCAL_FREEIMAGE=1 \
+                WITH_LOCAL_LIBHPDF=1 WITH_ICU=1 \
                 WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 \
                 CC=gcc CXX=g++ CCFLAGS='-Werror' CXXFLAGS='-Werror' \
                 clean all test install
@@ -336,10 +331,9 @@ working example invocation of make:
         LD_RUN_PATH=/opt/csw/lib:/opt/csw/postgresql/lib \
         OPENSSL_DIR=/opt/csw PGSQL_DIR=/opt/csw/postgresql \
         LIBLT_DIR=/usr BOOST_DIR=/opt/csw/boost-1.55.0 \
-                WITH_EXPECT=1 WITH_SSL=1 WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_LUA=1 \
+                WITH_SSL=1 WITH_SYSTEM_SQLITE3=1 WITH_PGSQL=1 WITH_LUA=1 \
                 WITH_LIBXML2=1 WITH_LIBXSLT=1 WITH_PAM=1 WITH_SASL=1 WITH_LOCAL_LIBHPDF=1 \
                 WITH_ICU=1 ICU_DIR=/opt/csw/icu4c-49.1.2 \
-                WITH_LOCAL_FREEIMAGE=1 \
                 WITH_PYTHON=1 \
                 gmake \
                         CC=gcc CXX=g++ CFLAGS=-mcpu=v9 CXXFLAGS=-mcpu=v9
@@ -1256,117 +1250,7 @@ You need the 'CSWlibz-dev' package for this.
 
 'SUNWzlib' is missing 64-bit support so don't use it!
 
-1.19. Image processing with FreeImage
-
-Wolframe can manipulate various image formats with the help of the FreeImage
-project (http://freeimage.sourceforge.net).
-
-You enable the building of a loadable FreeImage processing module with:
-
-        make WITH_SYSTEM_FREEIMAGE=1
-
-
-You can also link against the embedded version of FreeImage in '3rdParty/
-freeimage' instead of the one of the Linux distribution:
-
-        make WITH_LOCAL_FREEIMAGE=1
-
-
-The location of the FreeImage package can be overloaded with:
-
-        make WITH_SYSTEM_FREEIMAGE=1 \
-                FREEIMAGE_DIR=/usr/local/FreeImage-3.15.4
-
-
-You can also override all compilation and linking flags of the FreeImage
-package separately:
-
-        make WITH_SYSTEM_FREEIMAGE=1 \
-                FREEIMAGE_INCLUDE_DIR=/usr/local/FreeImage-3.15.4/include \
-                FREEIMAGE_LIB_DIR=/usr/local/FreeImage-3.15.4/lib \
-                FREEIMAGE_LIBS=-lfreeimage \
-                FREEIMAGEPLUS_INCLUDE_DIR=/usr/local/FreeImage-3.15.4/include \
-                FREEIMAGEPLUS_LIB_DIR=/usr/local/FreeImage-3.15.4/lib \
-                FREEIMAGEPLUS_LIBS=-lfreeimageplus
-
-
-Though there are FreeImage packages on most Linux distributions you may still
-want to use the locally embedded version.
-
-RedHat/Centos/Scientific Linux and similar Linux distributions
-
-There are FreeImage packages, but they are usually quite old. Better build you
-own version if FreeImage.
-
-You need the 'zlib-devel' and 'libpng-devel' packages to build FreeImage.
-
-Fedora and similar Linux distributions
-
-You need the 'zlib-devel' and 'libpng-devel' packages to build FreeImage.
-
-You may also try to use 'freeimage-devel' package.
-
-Debian, Ubuntu and similar Linux distributions
-
-You need the 'zlib1g-dev' and 'libpng12-dev' packages to build FreeImage.
-
-You can also try to use the 'libfreeimage-devel' package.
-
-openSUSE, SLES and similar Linux distributions
-
-You need the 'zlib-devel' and 'libpng12-devel' or 'libpng15-devel' packages to
-build FreeImage.
-
-You can also try to use the 'freeimage-devel' package.
-
-ArchLinux
-
-You need the 'freeimage' package.
-
-Slackware
-
-On Slackware you have to build your own version of FreeImage. You need the
-'zlib' and 'libpng' packages. Both packages are part of the 'l' package series.
-
-Alternatively you can of course also build the 'FreeImage' package with the
-help of SlackBuilds.
-
-FreeBSD 10
-
-You need the 'freeimage' package.
-
-FreeBSD 8 and 9
-
-Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-
-You need the 'png' package for this.
-
-There is a FreeImage port but it doesn't build the libfreeimageplus library we
-need.
-
-Note: FreeImage doesn't build on 32-bit currently because gcc doesn't support
-some 64-bit constants on FreeBSD.
-
-NetBSD
-
-Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'. You need
-the 'png' and the 'zlib' packages for this.
-
-OpenIndiana 151a8
-
-Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-
-You need the 'CSWlibz-dev' package for this.
-
-Solaris 10
-
-Build the embedded version of FreeImage with 'WITH_LOCAL_FREEIMAGE=1'.
-
-You need the 'CSWlibz-dev' package for this.
-
-'SUNWzlib' is missing 64-bit support so don't use it!
-
-1.20. zlib and libpng
+1.19. zlib and libpng
 
 Libhpdf needs the zlib and libpng libraries.
 
@@ -1389,7 +1273,7 @@ packages separately:
                 LIBPNG_LIBS=-lpng
 
 
-1.21. Support for ICU
+1.20. Support for ICU
 
 Wolframe can use the International Components for Unicode (ICU, http://
 site.icu-project.org) library for text normalization and conversion.
@@ -1573,7 +1457,7 @@ of libboost_filesystem to fail!
 Boost 1.50.0 thru 1.54.0 have never been tested with Wolframe, so don't use
 those!
 
-1.22. Internationalization support with gettext
+1.21. Internationalization support with gettext
 
 Wolframe has internationalization support with the help of the gettext
 mechanism.
@@ -1606,7 +1490,7 @@ Solaris 10
 
 You need the 'CSWggettext-dev' package.
 
-1.23. Authentication support with PAM
+1.22. Authentication support with PAM
 
 Wolframe can authenticate users with PAM.
 
@@ -1667,7 +1551,7 @@ Solaris 10
 
 PAM support is available out of the box just specify 'WITH_PAM=1'.
 
-1.24. Authentication support with SASL
+1.23. Authentication support with SASL
 
 Wolframe can authenticate users with the Cyrus SASL library (http://
 cyrusimap.org/).
@@ -1733,7 +1617,7 @@ Solaris 10
 
 You need the 'CSWsasl' and 'CSWsasl-dev' packages.
 
-1.25. Testing Wolframe
+1.24. Testing Wolframe
 
 Wolframe has tests written in Google gtest (https://code.google.com/p/
 googletest/).
@@ -1756,60 +1640,7 @@ follows:
         make test RUN_TESTS=0
 
 
-1.26. Testing with Expect
-
-Some more complex tests are written with Expect (http://expect.sourceforge.net/
-).
-
-You enable testing with Expect with:
-
-        make WITH_EXPECT=1
-
-
-The location of the Expect interpreter can be overloaded with:
-
-        make WITH_EXPECT=1 \
-                EXPECT=/usr/local/bin/expect
-
-
-RedHat/Centos/Scientific Linux, Fedora and similar Linux distributions
-
-You need the 'expect' and the 'telnet' packages.
-
-Debian, Ubuntu and similar Linux distributions
-
-You need the 'expect' and the 'telnet' packages.
-
-openSUSE, SLES and similar Linux distributions
-
-You need the 'expect' and the 'telnet' packages.
-
-ArchLinux
-
-You need the 'expect' and 'inetutils' packages.
-
-Slackware
-
-You need the 'expect' and 'telnet' packages. Those packages are part of the
-'tcl' respectively the 'n' package series.
-
-FreeBSD
-
-You need the 'expect' package.
-
-NetBSD
-
-You need the 'tcl-expect' package.
-
-OpenIndiana 151a8
-
-You need the 'CSWexpect' package.
-
-Solaris 10
-
-You need the 'CSWexpect' package.
-
-1.27. Building the documentation
+1.25. Building the documentation
 
 The documentation including the man pages is written using DocBook (http://
 www.docbook.org).
@@ -1896,7 +1727,7 @@ NetBSD
 
 We never tried to build the documentation on NetBSD so far.
 
-1.28. Installation
+1.26. Installation
 
 The makefiles provide a 'install' and an 'uninstall' target to install and
 uninstall the software.
@@ -1926,7 +1757,7 @@ contain a line like:
         make DEFAULT_MODULE_LOAD_DIR=%{_libdir}/wolframe/modules
 
 
-1.29. Manual dependency generation
+1.27. Manual dependency generation
 
 Usually dependencies are automatically recomputed and stored in files with
 extension '.d'.
@@ -1952,12 +1783,12 @@ to avoid dependency management at all, for instance for one-time builds in
 continuous integration, where the generation of working dependencies can take a
 long time and is of no use.
 
-1.30. Creating source tarballs
+1.28. Creating source tarballs
 
 Wolframe supports the standard targets 'dist', 'dist-Z', 'dist-gz' and
 'dist-bz2' to create a tarball containg all the necessary sources.
 
-1.31. Building the wolfclient
+1.29. Building the wolfclient
 
 The wolfclient is a Qt-based client for the Wolframe server.
 

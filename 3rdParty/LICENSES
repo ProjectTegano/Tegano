@@ -10,7 +10,6 @@ Table of Contents
   zlib
   libpng
   libhpdf
-  FreeImage
   SHA1
   SHA2
   cJSON
@@ -117,11 +116,6 @@ libhpdf
   This software is provided 'as-is', without any express or implied warranty.
 
 See 'libhpdf/README'.
-
-FreeImage
----------
-
-See 'freeimage/license-fi.txt' and 'freeimage/license-gplv3.txt'.
 
 SHA1
 ----

@@ -4,16 +4,6 @@ SUBDIRS = 3rdParty crypto modules moduleloader database authentication simpleFor
 
 -include $(TOPDIR)/makefiles/gmake/platform.mk
 
-ifeq ($(WITH_EXPECT),1)
-ifneq "$(PLATFORM)" "FREEBSD"
-ifneq "$(PLATFORM)" "NETBSD"
-ifneq "$(PLATFORM)" "SUNOS"
-SUBDIRS += expect config
-endif
-endif
-endif
-endif
-
 INCLUDE_CXXFLAGS = \
 
 # note: something draws in libintl support, not sure what..

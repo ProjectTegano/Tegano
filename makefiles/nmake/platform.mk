@@ -4,7 +4,6 @@
 # - BOOST_LIBRARY_TAG: how libraries are auto-tagged, for example
 #   libboost_log-vc90-mt-1_42
 # - OPENSSL_LIBS: libraries to link against for SSL/TLS support
-# - EXPECT: location of the expect binary for automated testing
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\config.mk
 
@@ -39,13 +38,6 @@ ICU_LIBS = icuin.lib icuuc.lib
 ICU_LIBS = icuind.lib icuucd.lib
 !ENDIF
 
-!ENDIF
-
-# Tcl (for testing with Expect)
-###############################
-
-!IFDEF WITH_EXPECT
-EXPECT = $(TCL_DIR)\bin\tclsh.exe
 !ENDIF
 
 # WIX Microsoft Installer (for deployment)

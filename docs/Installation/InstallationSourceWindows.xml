@@ -107,23 +107,6 @@
 		<itemizedlist>
 			<listitem>
 				<para>
-					Expect 5.40 or newer, for running the Expect tests,
-					<ulink url="http://expect.sourceforge.net/">http://expect.sourceforge.net/</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Expect needs ActiveTcl 8.5 or newer, for running the Expect tests,
-					<ulink url="http://www.activestate.com/activetcl">http://www.activestate.com/activetcl</ulink>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					A working telnet
-				</para>
-			</listitem>
-			<listitem>
-				<para>
 					A PostgreSQL or Oracle database when you want to run the database tests
 				</para>
 			</listitem>
@@ -238,10 +221,10 @@
 			A complete build may look like this:
 
 		        <programlisting language='shell'>
-	nmake /nologo /f Makefile.W32 WITH_SSL=1 WITH_EXPECT=1 WITH_LUA=1 ^
+	nmake /nologo /f Makefile.W32 WITH_SSL=1 WITH_LUA=1 ^
 		WITH_SQLITE3=1 WITH_PGSQL=1 WITH_ORACLE=1 ^
 		WITH_LIBXML2=1 WITH_LIBXSLT=1 ^
-		WITH_LIBHPDF=1 WITH_EXAMPLES=1 WITH_ICU=1 WITH_FREEIMAGE=1 ^
+		WITH_LIBHPDF=1 WITH_EXAMPLES=1 WITH_ICU=1 ^
 		WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 ^
 		clean all test
 			</programlisting>
@@ -1232,33 +1215,6 @@
 												
 		</sect2>
 
-<!-- FreeImage -->
-		<sect2>
-			<title>Image processing with FreeImage</title>
-			
-			<para>
-				<application>Wolframe</application> can manipulate
-				various image formats with the help of
-				the FreeImage project (<ulink url="http://freeimage.sourceforge.net">http://freeimage.sourceforge.net</ulink>).
-			</para>
-
-			<para>
-				The FreeImage package is embedded in the subdirectory
-				<filename>3rdParty/freeimage</filename>.
-			</para>
-									
-			<para>
-				You enable the building of a loadable FreeImage processing
-				module with:
-
-		        <programlisting language='shell'>
-	nmake /nologo /f Makefile.W32 WITH_SYSTEM_FREEIMAGE=1
-			</programlisting>
-							
-			</para>
-			
-		</sect2>
-		
 <!-- zlib and libpng -->
 		<sect2>
 			<title>zlib and libpng</title>
@@ -1408,62 +1364,6 @@
 			</programlisting>
 			</para>
 			
-		</sect2>
-
-<!-- Expect -->
-		<sect2>
-			<title>Testing with Expect</title>
-						
-			<para>
-				Some more complex tests are written with Expect
-				(<ulink url="http://expect.sourceforge.net/">http://expect.sourceforge.net/</ulink>).
-			</para>
-						
-			<para>
-				You enable testing with Expect with:
-
-		        <programlisting language='shell'>
-	nmake /nologo /f Makefile.W32 WITH_EXPECT=1
-			</programlisting>
-
-			</para>
-			
-			<para>
-				You can get a Windows version of TCL from
-				<ulink url="http://www.activestate.com/activetcl/">http://www.activestate.com/activetcl/</ulink>.
-				Take the 32-bit community version, the the 64-bit version had no Expect available
-				(at least at the time of writting).
-			</para>
-			
-			<para>
-				Install ActiveTcl 8.6.1 to for instance
-				<filename>C:\Tcl86</filename>.
-			</para>
-			
-			<para>
-				Install Expect with:
-
-				<programlisting language='shell'>
-	cd C:\Tcl86
-	teacup install Expect
-				</programlisting>
-			</para>
-
-			<para>
-				Adapt the following variable in
-				<filename>makefiles\nmake\config.mk</filename>:
-				
-				<programlisting language='shell'>
-	TCL_DIR = C:\Tcl86
-				</programlisting>
-			</para>
-			
-			<para>
-				Some tests also need 'telnet'. If telnet is not
-				enabled as Windows feature, enable it in
-				"Control Panel", "Windows Features" under "Telnet Client".
-			</para>
-
 		</sect2>
 
 <!-- Documentation -->
