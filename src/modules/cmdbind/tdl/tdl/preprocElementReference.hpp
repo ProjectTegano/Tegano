@@ -65,7 +65,7 @@ struct PreProcElementReference
 	PreProcElementReference( const PreProcElementReference& o)
 		:type(o.type),name(o.name),value(o.value){}
 
-	static PreProcElementReference parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
+	static PreProcElementReference parse( std::string::const_iterator& si, const std::string::const_iterator& se);
 };
 
 }}}//namespace

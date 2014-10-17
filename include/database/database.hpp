@@ -53,10 +53,10 @@ public:
 	Database( const::std::string& name_, const::std::string& id_)
 		:m_name(name_),m_id(id_){}
 
-	virtual ~Database()			{}
+	virtual ~Database(){}
 
 	/// \brief Get a database transaction object
-	virtual Transaction* transaction( const std::string& name ) = 0;
+	virtual Transaction* transaction( const std::string& name ) const= 0;
 
 	virtual const LanguageDescription* getLanguageDescription() const=0;
 
@@ -68,19 +68,21 @@ private:
 	std::string m_id;
 };
 
+typedef boost::shared_ptr<Database> DatabaseR;
+
 
 /// \class DatabaseUnit
 /// \brief This is the base class for virtual constructors of databases
 class DatabaseUnit
 {
 public:
-	virtual ~DatabaseUnit()			{}
+	virtual ~DatabaseUnit(){}
 
 	/// \brief The database identifier. This is the configured name.
 	virtual const std::string& id() const = 0;
 
 	/// \brief The actual database object.
-	virtual Database* database() = 0;
+	virtual const Database* database() = 0;
 };
 
 }} // namespace _Wolframe::db

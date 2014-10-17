@@ -30,7 +30,7 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file processor/procProvider.hpp
+/// \file processor/procProviderInterface.hpp
 /// \brief Interface to processor provider for language bindings and database
 #ifndef _PROCESSOR_PROVIDER_INTERFACE_HPP_INCLUDED
 #define _PROCESSOR_PROVIDER_INTERFACE_HPP_INCLUDED
@@ -41,8 +41,6 @@
 namespace _Wolframe {
 namespace db
 {
-/// \brief Forward declaration
-class Transaction;
 /// \brief Forward declaration
 class Database;
 }
@@ -99,19 +97,9 @@ public:
 	/// \param[in] command name of the command
 	/// \return true, if yes
 	virtual bool hasCommand( const std::string& command) const=0;
-	/// \brief Get the database for transactions
+	/// \brief Get a database for transactions
 	/// \return reference to database
-	virtual db::Database* transactionDatabase() const=0;
-	/// \brief Get a database transaction object for the given name
-	/// \param[in] name name of the transaction
-	/// \return allocated transaction object now owned by the caller and to destroy by the caller with delete
-	virtual db::Transaction* transaction( const std::string& name) const=0;
-	/// \brief Get a database transaction object for a transaction identified by name on an alternative database than the default transaction database
-	/// \param[in] dbname name of the alternative database
-	/// \param[in] name name of the transaction
-	/// \return allocated transaction object now owned by the caller and to destroy by the caller with delete
-	virtual db::Transaction* transaction( const std::string& dbname, const std::string& name) const=0;
-
+	virtual const db::Database* database( const std::string& name) const=0;
 	/// \brief Get an authorization function by name
 	/// \param[in] name name of the authorization function
 	/// \return reference to function

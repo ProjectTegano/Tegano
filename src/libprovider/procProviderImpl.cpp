@@ -34,7 +34,6 @@
 
 #include "procProviderImpl.hpp"
 #include "providerUtils.hpp"
-#include "database/databaseProviderInterface.hpp"
 #include "config/configurationObject.hpp"
 #include "logger/logger-v1.hpp"
 #include "utils/fileUtils.hpp"
@@ -158,15 +157,12 @@ private:
 };
 
 
-ProcessorProviderImpl::ProcessorProviderImpl( const std::string& dbLabel_,
-					const std::vector<config::ConfigurationObject*>& procConfig_,
-					const std::vector<std::string>& programFiles_,
-					const std::string& referencePath_,
-					const module::ModuleDirectory* modules_)
-	:m_dbLabel(dbLabel_)
-	,m_db(0)
-	,m_dbProvider(0)
-	,m_programfiles(programFiles_)
+ProcessorProviderImpl::ProcessorProviderImpl(
+		const std::vector<config::ConfigurationObject*>& procConfig_,
+		const std::vector<std::string>& programFiles_,
+		const std::string& referencePath_,
+		const module::ModuleDirectory* modules_)
+	:m_programfiles(programFiles_)
 	,m_referencePath(referencePath_)
 {
 	bool success = true;
@@ -350,7 +346,7 @@ bool ProcessorProviderImpl::loadPrograms()
 	try
 	{
 		// load all globally defined programs:
-		m_programs.loadPrograms( m_db, m_programfiles);
+		m_programs.loadPrograms( m_programfiles);
 
 		// load command handler programs and register commands 
 		std::vector<CommandHandlerDef>::const_iterator di = m_cmd.begin(), de = m_cmd.end();
@@ -387,21 +383,9 @@ bool ProcessorProviderImpl::loadPrograms()
 	}
 }
 
-bool ProcessorProviderImpl::resolveDB( const db::DatabaseProviderInterface& db )
+void ProcessorProviderImpl::addDatabase( const db::Database* db_)
 {
-	bool rt = true;
-	if ( m_db == NULL && ! m_dbLabel.empty() )	{
-		m_db = db.database( m_dbLabel );
-		if ( m_db )	{
-			LOG_DEBUG << "Processor database: database reference '" << m_dbLabel << "' resolved";
-		}
-		else	{
-			LOG_ALERT << "Processor database: database labeled '" << m_dbLabel << "' not found !";
-			return false;
-		}
-	}
-	m_dbProvider = &db;
-	return rt;
+	m_programs.defineDatabase( db_);
 }
 
 const langbind::AuthorizationFunction* ProcessorProviderImpl::authorizationFunction( const std::string& name) const
@@ -481,37 +465,9 @@ bool ProcessorProviderImpl::hasProtocol( const std::string& protocol) const
 	return m_protocols.find( protocol) != m_protocols.end();
 }
 
-
-db::Database* ProcessorProviderImpl::transactionDatabase() const
+const db::Database* ProcessorProviderImpl::database( const std::string& name) const
 {
-	if ( ! m_db )	{
-		LOG_ALERT << "No database defined for the processor provider";
-	}
-	return m_db;
-}
-
-db::Transaction* ProcessorProviderImpl::transaction( const std::string& name ) const
-{
-	if ( m_db )
-	{
-		LOG_TRACE << "[provider] get transaction '" << name << "'";
-		return m_db->transaction( name );
-	} else	{
-		LOG_ALERT << "No database defined for the processor provider";
-		return NULL;
-	}
-}
-
-db::Transaction* ProcessorProviderImpl::transaction( const std::string& dbname, const std::string& name) const
-{
-	db::Database* altdb = m_dbProvider->database( dbname);
-	if (!altdb)
-	{
-		LOG_ERROR << "No database defined with name '" << dbname << "'";
-		return 0;
-	}
-	LOG_TRACE << "[provider] get transaction '" << name << "' on database '" << dbname << "'";
-	return altdb->transaction( name);
+	return m_programs.database( name);
 }
 
 const std::string& ProcessorProviderImpl::referencePath() const

@@ -63,9 +63,23 @@ ServerHandler::ServerHandler( const config::ProcProviderConfiguration* pconf,
 	:m_banner( bconf->toString() )
 	,m_db( dconf->config(), modules )
 	,m_aaaa( randomGenerator_, aconf->authConfig(), aconf->authzConfig(), aconf->authzDefault(), aconf->auditConfig(), modules )
-	,m_proc( pconf->dbLabel(), pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules)
+	,m_proc( pconf->procConfig(), pconf->programFiles(), pconf->referencePath(), modules)
 	,m_randomGenerator(randomGenerator_)
-	{}
+	{
+		std::vector<std::string>::const_iterator di = pconf->databaseIds().begin(), de = pconf->databaseIds().end();
+		for (; di != de; ++di)
+		{
+			const db::Database* database = m_db.database( *di);
+			if (database)
+			{
+				m_proc.addDatabase( database);
+			}
+			else
+			{
+				LOG_ERROR << "database with identifier '" << *di << "' configured in processor is not defined in database section of the configuration";
+			}
+		}
+	}
 
 ServerHandler::~ServerHandler()	{}
 

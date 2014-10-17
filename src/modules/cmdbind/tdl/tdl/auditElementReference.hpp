@@ -54,7 +54,7 @@ struct AuditElementReference
 	AuditElementReference( const AuditElementReference& o)
 		:ElementReference(o),name(o.name){}
 
-	static AuditElementReference parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
+	static AuditElementReference parse( std::string::const_iterator& si, const std::string::const_iterator& se);
 };
 
 }}}//namespace

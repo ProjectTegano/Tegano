@@ -55,7 +55,7 @@ struct TransactionExecStatemachine_sqlite3
 	:public TransactionExecStatemachine
 {
 	///\brief Constructor
-	explicit TransactionExecStatemachine_sqlite3( SQLiteDatabase* database_);
+	explicit TransactionExecStatemachine_sqlite3( const SQLiteDatabase* database_);
 
 	///\brief Destructor
 	virtual ~TransactionExecStatemachine_sqlite3();
@@ -123,7 +123,7 @@ private:
 	bool m_hasRow;						//< last command executed result set has at least one result row
 	boost::shared_ptr<db::DatabaseError> m_lasterror;	//< last error occurred
 	sqlite3_stmt* m_stm;					//< current statement
-	SQLiteDatabase* m_database;				//< database
+	const SQLiteDatabase* m_database;			//< database
 	SQLiteDatabase::Connection m_conn;			//< database connection
 	Statement *m_statement;					//< the statement parser
 };

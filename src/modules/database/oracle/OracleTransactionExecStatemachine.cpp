@@ -50,7 +50,7 @@
 using namespace _Wolframe;
 using namespace _Wolframe::db;
 
-TransactionExecStatemachine_oracle::TransactionExecStatemachine_oracle( OracleEnvirenment *env_, OracleDatabase *database_)
+TransactionExecStatemachine_oracle::TransactionExecStatemachine_oracle( OracleEnvirenment *env_, const OracleDatabase *database_)
 	:m_state(Init)
 	,m_env(env_)
 	,m_lastresult(0)

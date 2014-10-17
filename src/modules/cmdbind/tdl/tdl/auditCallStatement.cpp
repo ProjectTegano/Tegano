@@ -45,12 +45,12 @@ void AuditCallStatement::clear()
 	params.clear();
 }
 
-AuditCallStatement AuditCallStatement::parse( const LanguageDescription* langdescr, std::string::const_iterator& ci, std::string::const_iterator ce)
+AuditCallStatement AuditCallStatement::parse( std::string::const_iterator& ci, std::string::const_iterator ce)
 {
 	AuditCallStatement rt;
-	rt.name = parseFunctionName( langdescr, ci, ce);
+	rt.name = parseFunctionName( ci, ce);
 
-	char ch = gotoNextToken( langdescr, ci, ce);
+	char ch = gotoNextToken( ci, ce);
 	if (ch != '(')
 	{
 		throw std::runtime_error( "'(' expected after function name");
@@ -63,7 +63,7 @@ AuditCallStatement AuditCallStatement::parse( const LanguageDescription* langdes
 	{
 		for (;;)
 		{
-			rt.params.push_back( AuditElementReference::parse( langdescr, ci, ce));
+			rt.params.push_back( AuditElementReference::parse( ci, ce));
 			ch = utils::gotoNextToken( ci, ce);
 			if (ch == ',')
 			{

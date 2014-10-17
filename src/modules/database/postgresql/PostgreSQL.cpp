@@ -325,7 +325,7 @@ PostgreSQLDatabase::~PostgreSQLDatabase()
 	LOG_TRACE << "PostgreSQL database '" << m_id << "' destructor called";
 }
 
-Transaction* PostgreSQLDatabase::transaction( const std::string& name_)
+Transaction* PostgreSQLDatabase::transaction( const std::string& name_) const
 {
 	TransactionExecStatemachineR stm( new TransactionExecStatemachine_postgres( this));
 	return new Transaction( name_, stm);

@@ -49,7 +49,7 @@ bool SimplePdfPrintProgram::is_mine( const std::string& filename) const
 	return false;
 }
 
-void SimplePdfPrintProgram::loadProgram( proc::ProgramLibrary& library, db::Database*, const std::string& filename)
+void SimplePdfPrintProgram::loadProgram( proc::ProgramLibrary& library, const std::string& filename)
 {
 	std::string src( utils::readSourceFileContent( filename));
 	HaruPdfPrintFunction* prntfunc = new HaruPdfPrintFunction( src, m_createDocument);

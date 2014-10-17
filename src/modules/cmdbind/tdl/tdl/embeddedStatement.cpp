@@ -50,8 +50,8 @@ EmbeddedStatement EmbeddedStatement::parse( const LanguageDescription* langdescr
 	std::string::const_iterator start = dbstm.begin(), ci = dbstm.begin(), ce = dbstm.end();
 	std::string tok;
 
-	char ch = parseNextToken( langdescr, tok, ci, ce);
-	for (; ci != ce && ch; ch = parseNextToken( langdescr, tok, ci, ce))
+	char ch = parseNextToken( tok, ci, ce);
+	for (; ci != ce && ch; ch = parseNextToken( tok, ci, ce))
 	{
 		if (ch == '$' && ci != ce)
 		{
@@ -60,7 +60,7 @@ EmbeddedStatement EmbeddedStatement::parse( const LanguageDescription* langdescr
 				
 				rt.stmstring.append( start, ci - 1);
 
-				rt.params.push_back( ElementReference::parseEmbeddedReference( langdescr, ci, ce));
+				rt.params.push_back( ElementReference::parseEmbeddedReference( ci, ce));
 				rt.stmstring.append( langdescr->stm_argument_reference( rt.params.size()));
 				start = ci;
 			}

@@ -33,24 +33,13 @@
 /// \file execContext.cpp
 /// \brief Implementation execution context
 #include "processor/execContext.hpp"
+#include "database/database.hpp"
 #include "filter/typedfilter.hpp"
 #include "langbind/authorizationFunction.hpp"
 #include <boost/algorithm/string.hpp>
 
 using namespace _Wolframe;
 using namespace _Wolframe::proc;
-
-db::Transaction* ExecContext::transaction( const std::string& name)
-{
-	if (m_dbstack.empty())
-	{
-		return m_provider->transaction( name);
-	}
-	else
-	{
-		return m_provider->transaction( m_dbstack.back(), name);
-	}
-}
 
 bool ExecContext::checkAuthorization( const std::string& funcname, const std::string& resource, std::string& errmsg, bool allowIfNotExists)
 {

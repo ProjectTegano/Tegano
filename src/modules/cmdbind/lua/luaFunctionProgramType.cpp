@@ -144,7 +144,7 @@ bool LuaProgramType::is_mine( const std::string& filename) const
 	return p.extension().string() == ".lua";
 }
 
-void LuaProgramType::loadProgram( proc::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename)
+void LuaProgramType::loadProgram( proc::ProgramLibrary& library, const std::string& filename)
 {
 	std::vector<std::string> funcs = m_context.loadProgram( filename);
 	std::vector<std::string>::const_iterator fi = funcs.begin(), fe = funcs.end();

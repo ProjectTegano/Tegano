@@ -60,7 +60,7 @@ DatabaseProviderImpl::~DatabaseProviderImpl()
 		delete *it;
 }
 
-Database* DatabaseProviderImpl::database( const std::string& id ) const
+const Database* DatabaseProviderImpl::database( const std::string& id ) const
 {
 	for ( std::vector<db::DatabaseUnit* >::const_iterator it = m_db.begin();
 							it != m_db.end(); it++ )	{

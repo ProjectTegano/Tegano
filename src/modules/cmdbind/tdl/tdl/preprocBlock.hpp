@@ -70,7 +70,7 @@ struct PreProcBlock
 	explicit PreProcBlock( const std::vector<PreProcStep>& steps_)
 		:steps(steps_){}
 
-	static PreProcBlock parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
+	static PreProcBlock parse( std::string::const_iterator& si, const std::string::const_iterator& se);
 
 	std::vector<TdlTransactionPreprocStep> build( vm::Program* prg) const;
 };

@@ -36,6 +36,7 @@
 #include "types/customDataNormalizer.hpp"
 #include "processor/programLibrary.hpp"
 #include "processor/program.hpp"
+#include "database/database.hpp"
 #include "programLibraryImpl.hpp"
 #include "ddlProgram.hpp"
 #include "normalizeProgram.hpp"
@@ -70,6 +71,7 @@ ProgramLibraryImpl::ProgramLibraryImpl( const ProgramLibraryImpl& o)
 	,m_privateFormList(o.m_privateFormList)
 	,m_programTypes(o.m_programTypes)
 	,m_curfile(o.m_curfile)
+	,m_databases(o.m_databases)
 	{}
 
 void ProgramLibraryImpl::defineAuthorizationFunction( const std::string& name, const langbind::AuthorizationFunctionR& f)
@@ -196,12 +198,35 @@ const langbind::FilterType* ProgramLibraryImpl::getFilterType( const std::string
 	return (fi == m_filterTypeMap.end())?0:fi->second.get();
 }
 
+void ProgramLibraryImpl::defineDatabase( const db::Database* database_)
+{
+	m_databases.push_back( database_);
+}
+
+const db::Database* ProgramLibraryImpl::database( const std::string& id) const
+{
+	std::vector<const db::Database*>::const_iterator di = m_databases.begin(), de = m_databases.end();
+	for (; di != de; ++di)
+	{
+		if (boost::algorithm::iequals( id, (*di)->id()))
+		{
+			return *di;
+		}
+	}
+	return 0;
+}
+
+std::vector<const db::Database*> ProgramLibraryImpl::databaseList() const
+{
+	return m_databases;
+}
+
 static bool programOrderAsc( std::pair<Program*, std::string> const& a, std::pair<Program*, std::string> const& b)
 {
 	return ((int)a.first->category()) < ((int)b.first->category());
 }
 
-void ProgramLibraryImpl::loadPrograms( db::Database* transactionDB, const std::vector<std::string>& filenames)
+void ProgramLibraryImpl::loadPrograms( const std::vector<std::string>& filenames)
 {
 	LOG_DEBUG << "Loading programs";
 
@@ -245,7 +270,7 @@ void ProgramLibraryImpl::loadPrograms( db::Database* transactionDB, const std::v
 	for (; ti != te; ++ti)
 	{
 		LOG_DEBUG << "Loading program '" << ti->second << "'";
-		ti->first->loadProgram( *this, transactionDB, m_curfile=ti->second);
+		ti->first->loadProgram( *this, m_curfile=ti->second);
 	}
 
 	// Initialize context of form functions:

@@ -324,7 +324,7 @@ bool MylangProgramType::is_mine( const std::string& filename) const
 	return p.extension().string() == ".mlg";
 }
 
-void MylangProgramType::loadProgram( proc::ProgramLibrary& library, db::Database* /*transactionDB*/, const std::string& filename)
+void MylangProgramType::loadProgram( proc::ProgramLibrary& library, const std::string& filename)
 {
 	std::vector<std::string> funcs = m_interpreter.loadProgram( filename);
 	std::vector<std::string>::const_iterator fi = funcs.begin(), fe = funcs.end();

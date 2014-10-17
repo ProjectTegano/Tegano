@@ -60,7 +60,7 @@ public:
 	/// \param[in,out] library program library to feed
 	/// \param[in,out] transactionDB transaction database
 	/// \param[in] filename path of program file to load
-	virtual void loadProgram( ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	virtual void loadProgram( ProgramLibrary& library, const std::string& filename);
 };
 
 }}//namespace

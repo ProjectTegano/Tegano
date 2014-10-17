@@ -413,7 +413,7 @@ public:
 		// ... return true, if the file filename is of my type here
 	}
 
-	virtual void loadProgram( _Wolframe::proc::ProgramLibrary& library, _Wolframe::db::Database* transactionDB, const std::string& filename)
+	virtual void loadProgram( _Wolframe::proc::ProgramLibrary& library, const std::string& filename)
 	{
 		// ... load the program in the file filename and store its declared items in the program library or in the database
 	}

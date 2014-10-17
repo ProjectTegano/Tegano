@@ -88,9 +88,10 @@ std::string tdl::errorTokenString( char ch, const std::string& tok)
 	return tok;
 }
 
-char tdl::gotoNextToken( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator se)
+char tdl::gotoNextToken( std::string::const_iterator& si, const std::string::const_iterator se)
 {
-	const char* commentopr = langdescr->eoln_commentopr();
+	const char* commentopr = "--";
+
 	char ch;
 	while ((ch = utils::gotoNextToken( si, se)) != 0)
 	{
@@ -116,26 +117,26 @@ char tdl::gotoNextToken( const LanguageDescription* langdescr, std::string::cons
 	return ch;
 }
 
-char tdl::parseNextToken( const LanguageDescription* langdescr, std::string& tok, std::string::const_iterator& si, std::string::const_iterator se)
+char tdl::parseNextToken( std::string& tok, std::string::const_iterator& si, std::string::const_iterator se)
 {
-	char ch = gotoNextToken( langdescr, si, se);
+	char ch = gotoNextToken( si, se);
 	if (!ch) return 0;
 	return utils::parseNextToken( tok, si, se, g_tdl_optab);
 }
 
-std::vector<std::string> tdl::parse_INTO_path( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::vector<std::string> tdl::parse_INTO_path( std::string::const_iterator& si, std::string::const_iterator se)
 {
 	std::vector<std::string> rt;
 	for (;;)
 	{
 		std::string output;
-		char ch = parseNextToken( langdescr, output, si, se);
+		char ch = parseNextToken( output, si, se);
 		if (!ch) throw std::runtime_error( "unexpected end of description. result tag path expected after INTO");
 		if (ch == '.' && output.empty()) output.push_back(ch);
 		if (output.empty()) throw std::runtime_error( "identifier or '.' expected after INTO");
 		if (!rt.empty() && rt.back() == ".") rt.pop_back();
 		rt.push_back( output);
-		ch = gotoNextToken( langdescr, si, se);
+		ch = gotoNextToken( si, se);
 		if (ch == '.') throw std::runtime_error( "unexpected dot '.' in INPUT PATH only single dot allowed");
 		if (ch != '/') break;
 		++si;
@@ -143,22 +144,22 @@ std::vector<std::string> tdl::parse_INTO_path( const LanguageDescription* langde
 	return rt;
 }
 
-static std::vector<std::string> parseArguments( const LanguageDescription* langdescr, const char* stmname, char sb, char eb, std::string::const_iterator& si, const std::string::const_iterator& se)
+static std::vector<std::string> parseArguments( const char* stmname, char sb, char eb, std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	std::vector<std::string> rt;
 	std::string tok;
-	if (gotoNextToken( langdescr, si, se) == sb)
+	if (gotoNextToken( si, se) == sb)
 	{
 		++si;
 		for (;;)
 		{
-			char ch = parseNextToken( langdescr, tok, si, se);
+			char ch = parseNextToken( tok, si, se);
 			if (!ch) throw std::runtime_error( std::string("unexpected end of ") + stmname + " argument list");
 			if (ch == ',') std::runtime_error( std::string("expected ") + stmname + " argument identifier before comma ','");
 			if (ch == eb) break;
 			if (!isAlpha(ch)) throw std::runtime_error( std::string( "argument is not an identifier: '") + errorTokenString( ch, tok) + "'");
 			rt.push_back( tok);
-			ch = parseNextToken( langdescr, tok, si, se);
+			ch = parseNextToken( tok, si, se);
 			if (ch == eb) break;
 			if (ch == ',') continue;
 			if (ch == ',') std::runtime_error( std::string( "expected comma ',' or end of ") + stmname + " identifier list '" + eb + "'");
@@ -167,14 +168,14 @@ static std::vector<std::string> parseArguments( const LanguageDescription* langd
 	return rt;
 }
 
-std::vector<std::string> tdl::parseTemplateArguments( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+std::vector<std::string> tdl::parseTemplateArguments( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
-	return parseArguments( langdescr, "template", '<', '>', si, se);
+	return parseArguments( "template", '<', '>', si, se);
 }
 
-std::vector<std::string> tdl::parseCallArguments( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+std::vector<std::string> tdl::parseCallArguments( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
-	return parseArguments( langdescr, "call", '(', ')', si, se);
+	return parseArguments( "call", '(', ')', si, se);
 }
 
 void tdl::checkUniqOccurrence( int id, unsigned int& mask, const utils::IdentifierTable& idtab)
@@ -190,10 +191,10 @@ void tdl::checkUniqOccurrence( int id, unsigned int& mask, const utils::Identifi
 static const utils::CharTable g_function_optab( ",)(");
 static const utils::CharTable g_function_idtab( "a..zA..Z0..9_.");
 
-std::string tdl::parseFunctionName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseFunctionName( std::string::const_iterator& si, std::string::const_iterator se)
 {
 	std::string rt;
-	char ch = gotoNextToken( langdescr, si, se);
+	char ch = gotoNextToken( si, se);
 	if (!ch)
 	{
 		throw std::runtime_error( "unexpected end of transaction (function name expected)");
@@ -206,30 +207,30 @@ std::string tdl::parseFunctionName( const LanguageDescription* langdescr, std::s
 	return rt;
 }
 
-std::string tdl::parseResourceName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseResourceName( std::string::const_iterator& si, std::string::const_iterator se)
 {
-	return parseFunctionName( langdescr, si, se);
+	return parseFunctionName( si, se);
 }
 
 
 static const utils::CharTable g_path_optab( ";,)(", false);
 static const utils::CharTable g_path_idtab( ";,)(", true);
 
-std::string tdl::parseSelectorPath( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseSelectorPath( std::string::const_iterator& si, std::string::const_iterator se)
 {
 	std::string rt;
-	(void)gotoNextToken( langdescr, si, se);
+	(void)gotoNextToken( si, se);
 	char ch = utils::parseNextToken( rt, si, se, g_path_optab, g_path_idtab);
 	if (!ch) throw std::runtime_error("unexpected end of file (selector path expression expected)");
 	if (ch == '\"' || ch == '\'') throw std::runtime_error("unexpected string token (selector path expression expected)");
 	return rt;
 }
 
-bool tdl::parseKeyword( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se, const char* keyword)
+bool tdl::parseKeyword( std::string::const_iterator& si, std::string::const_iterator se, const char* keyword)
 {
 	std::string::const_iterator start = si;
 	std::string tok;
-	char ch = parseNextToken( langdescr, tok, si, se);
+	char ch = parseNextToken( tok, si, se);
 	if (isAlpha(ch) && boost::algorithm::iequals( tok, keyword))
 	{
 		return true;
@@ -238,39 +239,39 @@ bool tdl::parseKeyword( const LanguageDescription* langdescr, std::string::const
 	return false;
 }
 
-std::string tdl::parseFilename( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseFilename( std::string::const_iterator& si, std::string::const_iterator se)
 {
 	std::string rt;
-	(void)gotoNextToken( langdescr, si, se);
+	(void)gotoNextToken( si, se);
 	char ch = utils::parseNextToken( rt, si, se, utils::emptyCharTable(), utils::anyCharTable());
 	if (!ch) throw std::runtime_error("unexpected end of file (filename expected)");
 	return rt;
 }
 
-std::string tdl::parseSubroutineName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseSubroutineName( std::string::const_iterator& si, std::string::const_iterator se)
 {
-	std::string rt = parseFunctionName( langdescr, si, se);
+	std::string rt = parseFunctionName( si, se);
 	if (!isIdentifier( rt)) throw std::runtime_error( "identifier expected for transaction function or subroutine name");
 	return rt;
 }
 
-std::string tdl::parseResultName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se)
+std::string tdl::parseResultName( std::string::const_iterator& si, std::string::const_iterator se)
 {
-	return parseSubroutineName( langdescr, si, se);
+	return parseSubroutineName( si, se);
 }
 
-bool tdl::parseNameAssignment( const LanguageDescription* langdescr, std::string& name, std::string::const_iterator& si, std::string::const_iterator se)
+bool tdl::parseNameAssignment( std::string& name, std::string::const_iterator& si, std::string::const_iterator se)
 {
 	std::string::const_iterator start = si;
 	std::string tok;
 	bool nameDefined = false;
 
-	char ch = gotoNextToken( langdescr, si, se);
+	char ch = gotoNextToken( si, se);
 	if (isAlphaNumeric( ch) || ch == '.')
 	{
 		//... try to parse assignment first
-		parseNextToken( langdescr, tok, si, se);
-		ch = gotoNextToken( langdescr, si, se);
+		parseNextToken( tok, si, se);
+		ch = gotoNextToken( si, se);
 		if (ch == '=')
 		{
 			if (tok != ".")
@@ -279,7 +280,7 @@ bool tdl::parseNameAssignment( const LanguageDescription* langdescr, std::string
 			}
 			nameDefined = true;
 			++si;
-			ch = gotoNextToken( langdescr, si, se);
+			ch = gotoNextToken( si, se);
 		}
 		else
 		{

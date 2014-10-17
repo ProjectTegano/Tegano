@@ -275,7 +275,7 @@ bool NormalizeProgram::is_mine( const std::string& filename) const
 	return false;
 }
 
-void NormalizeProgram::loadProgram( ProgramLibrary& library, db::Database*, const std::string& filename)
+void NormalizeProgram::loadProgram( ProgramLibrary& library, const std::string& filename)
 {
 	try
 	{

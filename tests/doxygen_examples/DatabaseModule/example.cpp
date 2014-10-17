@@ -37,7 +37,7 @@ class MyTransactionExecStatemachine
 	:public _Wolframe::db::TransactionExecStatemachine
 {
 public:
-	MyTransactionExecStatemachine( MyDatabase* database)
+	MyTransactionExecStatemachine( const MyDatabase* database)
 	{
 		// ... create a statemachine for one transaction on a database of 'unit' that will start with the next call of begin()
 	}
@@ -124,7 +124,7 @@ public:
 		// ... define your database from configuration here
 	}
 
-	virtual _Wolframe::db::Transaction* transaction( const std::string& name_)
+	virtual _Wolframe::db::Transaction* transaction( const std::string& name_) const
 	{
 		_Wolframe::db::TransactionExecStatemachineR stm( new MyTransactionExecStatemachine( this));
 		return new _Wolframe::db::Transaction( name_, stm);

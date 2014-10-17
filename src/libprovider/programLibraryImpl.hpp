@@ -36,7 +36,6 @@
 #ifndef _Wolframe_proc_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
 #define _Wolframe_proc_PROGRAM_LIBRARY_IMPLEMENTATION_HPP_INCLUDED
 #include "filter/filter.hpp"
-#include "database/database.hpp"
 #include "serialize/cppFormFunction.hpp"
 #include "langbind/ddlCompilerInterface.hpp"
 #include "langbind/formFunction.hpp"
@@ -52,6 +51,9 @@
 #include <vector>
 
 namespace _Wolframe {
+namespace db {
+	class Database;
+}
 namespace proc {
 
 /// \class ProgramLibraryImpl
@@ -116,8 +118,15 @@ public:
 	/// \brief Get a filter type by name
 	virtual const langbind::FilterType* getFilterType( const std::string& name) const;
 
+	/// \brief Define a database
+	virtual void defineDatabase( const db::Database* database_);
+	/// \brief Get a database by name
+	virtual const db::Database* database( const std::string& id) const;
+	/// \brief Get the list of databases (first=id, second=type)
+	virtual std::vector<const db::Database*> databaseList() const;
+
 	/// \brief Load all programs passed in 'filenames'
-	virtual void loadPrograms( db::Database* transactionDB, const std::vector<std::string>& filenames);
+	virtual void loadPrograms( const std::vector<std::string>& filenames);
 
 private:
 	class NormalizeFunctionMap
@@ -152,6 +161,7 @@ private:
 	std::vector<types::FormDescriptionR> m_privateFormList;
 	std::vector<ProgramR> m_programTypes;
 	std::string m_curfile;
+	std::vector<const db::Database*> m_databases;
 };
 
 }} //namespace

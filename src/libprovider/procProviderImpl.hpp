@@ -50,7 +50,7 @@
 namespace _Wolframe {
 namespace db {
 /// \brief Forward declaration
-class DatabaseProviderInterface;
+class Database;
 }
 namespace proc {
 
@@ -62,16 +62,17 @@ class ProcessorProviderImpl
 {
 public:
 	/// \brief Constructor
-	ProcessorProviderImpl( const std::string& dbLabel_,
-				const std::vector<config::ConfigurationObject*>& procConfig_,
+	ProcessorProviderImpl( const std::vector<config::ConfigurationObject*>& procConfig_,
 				const std::vector<std::string>& programFiles_,
 				const std::string& referencePath_,
 				const module::ModuleDirectory* modules_);
 	/// \brief Destructor
 	virtual ~ProcessorProviderImpl();
 
-	/// \brief Pass the references to the built database interfaces and let the provider find its transaction database
-	bool resolveDB( const db::DatabaseProviderInterface& db );
+	/// \brief Define a database to be used for transactions
+	/// \note The order of definition defines the priority
+	void addDatabase( const db::Database* database);
+
 	/// \brief Load all configured programs
 	bool loadPrograms();
 
@@ -85,14 +86,8 @@ public:
 	/// \brief Find out if a command with a specific name exists
 	virtual bool hasCommand( const std::string& command) const;
 
-	/// \brief Get a reference to the transaction database
-	virtual db::Database* transactionDatabase() const;
-
-	/// \brief Return a database transaction object for a transaction identified by name
-	virtual db::Transaction* transaction( const std::string& name) const;
-
-	/// \brief Return a database transaction object for a transaction identified by name on an alternative database than the default transaction database
-	virtual db::Transaction* transaction( const std::string& dbname, const std::string& name) const;
+	/// \brief Get a database for transactions
+	virtual const db::Database* database( const std::string& name) const;
 
 	/// \brief Get a reference to an authorization function identified by name
 	virtual const langbind::AuthorizationFunction* authorizationFunction( const std::string& name) const;
@@ -126,10 +121,6 @@ public:
 	virtual const std::string& referencePath() const;
 
 private:
-	std::string m_dbLabel;					///< idenfifier of the transaction database
-	db::Database* m_db;					///< reference to the transaction database
-	const db::DatabaseProviderInterface* m_dbProvider;	///< provider for alternative database
-
 	/// \class CommandHandlerDef
 	/// \brief Definition of a command handler with its configuration
 	class CommandHandlerDef

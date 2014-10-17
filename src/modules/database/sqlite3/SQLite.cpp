@@ -187,7 +187,7 @@ SQLiteDatabase::~SQLiteDatabase()
 	LOG_TRACE << "SQLite database '" << m_id << "' destructor called";
 }
 
-Transaction* SQLiteDatabase::transaction( const std::string& name_)
+Transaction* SQLiteDatabase::transaction( const std::string& name_) const
 {
 	TransactionExecStatemachineR stm( new TransactionExecStatemachine_sqlite3( this));
 	return new Transaction( name_, stm);

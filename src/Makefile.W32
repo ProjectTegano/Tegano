@@ -10,8 +10,7 @@ SUBDIRS = \
 	libprovider \
 	modules \
 	wolframed \
-	wolfilter \
-	wolfwizard
+	wolfilter
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
 

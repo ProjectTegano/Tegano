@@ -34,7 +34,6 @@
 ///\file tdl/elementReference.hpp
 #ifndef _DATABASE_TDL_PARSE_UTILS_HPP_INCLUDED
 #define _DATABASE_TDL_PARSE_UTILS_HPP_INCLUDED
-#include "database/databaseLanguage.hpp"
 #include "utils/parseUtils.hpp"
 #include <string>
 #include <vector>
@@ -70,22 +69,22 @@ static inline bool isStringQuote( char ch)
 
 bool isIdentifier( const std::string& str);
 std::string errorTokenString( char ch, const std::string& tok);
-char gotoNextToken( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator se);
-char parseNextToken( const LanguageDescription* langdescr, std::string& tok, std::string::const_iterator& si, std::string::const_iterator se);
-bool parseKeyword( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se, const char* keyword);
+char gotoNextToken( std::string::const_iterator& si, const std::string::const_iterator se);
+char parseNextToken( std::string& tok, std::string::const_iterator& si, std::string::const_iterator se);
+bool parseKeyword( std::string::const_iterator& si, std::string::const_iterator se, const char* keyword);
 std::string extractImplicitNameFromSelector( const std::string& selector);
 
-std::vector<std::string> parse_INTO_path( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::vector<std::string> parseTemplateArguments( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
-std::vector<std::string> parseCallArguments( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
+std::vector<std::string> parse_INTO_path( std::string::const_iterator& si, std::string::const_iterator se);
+std::vector<std::string> parseTemplateArguments( std::string::const_iterator& si, const std::string::const_iterator& se);
+std::vector<std::string> parseCallArguments( std::string::const_iterator& si, const std::string::const_iterator& se);
 
-std::string parseFunctionName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::string parseResourceName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::string parseSelectorPath( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::string parseFilename( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::string parseSubroutineName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-std::string parseResultName( const LanguageDescription* langdescr, std::string::const_iterator& si, std::string::const_iterator se);
-bool parseNameAssignment( const LanguageDescription* langdescr, std::string& name, std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseFunctionName( std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseResourceName( std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseSelectorPath( std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseFilename( std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseSubroutineName( std::string::const_iterator& si, std::string::const_iterator se);
+std::string parseResultName( std::string::const_iterator& si, std::string::const_iterator se);
+bool parseNameAssignment( std::string& name, std::string::const_iterator& si, std::string::const_iterator se);
 
 void checkUniqOccurrence( int id, unsigned int& mask, const utils::IdentifierTable& idtab);
 

@@ -55,7 +55,7 @@ struct SubroutineCallStatement
 	SubroutineCallStatement( const std::string& name_, const std::vector<std::string>& templateparams_, const std::vector<ElementReference>& params_)
 		:name(name_),templateparams(templateparams_),params(params_){}
 
-	static SubroutineCallStatement parse( const LanguageDescription* langdescr, std::string::const_iterator& ci, std::string::const_iterator ce);
+	static SubroutineCallStatement parse( std::string::const_iterator& ci, std::string::const_iterator ce);
 };
 
 }}}//namespace

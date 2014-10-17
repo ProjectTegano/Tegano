@@ -52,41 +52,41 @@ CommandDefinition CommandDefinition::parse( const LanguageDescription* langdescr
 	unsigned int mask = 0;
 	char ch = 0;
 
-	while ((ch = gotoNextToken( langdescr, si, se)) != 0)
+	while ((ch = gotoNextToken( si, se)) != 0)
 	{
 		switch ((MainBlockKeyword)utils::parseNextIdentifier( si, se, g_commanddef_idtab))
 		{
 			case m_NONE:
-				ch = parseNextToken( langdescr, tok, si, se);
+				ch = parseNextToken( tok, si, se);
 				if (ch == ';')
 				{
 					if (mask)
 					{
-						while (parseKeyword( langdescr, si, se, "ON"))
+						while (parseKeyword( si, se, "ON"))
 						{
 							if (!rt.embedded)
 							{
 								throw std::runtime_error( "hints only allowed after commands with embedded database statements");
 							}
-							if (parseKeyword( langdescr, si, se, "ERROR"))
+							if (parseKeyword( si, se, "ERROR"))
 							{
 								Hint hint;
-								ch = parseNextToken( langdescr, hint.errorclass, si, se);
+								ch = parseNextToken( hint.errorclass, si, se);
 								if (!isStringQuote( ch) && !isAlphaNumeric( ch))
 								{
 									throw std::runtime_error( "error class expected after ON ERROR");
 								}
-								if (!parseKeyword( langdescr, si, se, "HINT"))
+								if (!parseKeyword( si, se, "HINT"))
 								{
 									throw std::runtime_error( "keyword HINT expected after ON ERROR <errorclass>");
 								}
-								if (!isStringQuote( parseNextToken( langdescr, hint.message, si, se)))
+								if (!isStringQuote( parseNextToken( hint.message, si, se)))
 								{
 									throw std::runtime_error( "hint message string expected after ON ERROR <errorclass> HINT");
 								}
 								rt.hints.push_back( hint);
 						
-								if (';' != gotoNextToken( langdescr, si, se))
+								if (';' != gotoNextToken( si, se))
 								{
 									throw std::runtime_error( "';' expected after ON ERROR <class> HINT <message> declaration");
 								}
@@ -116,23 +116,23 @@ CommandDefinition CommandDefinition::parse( const LanguageDescription* langdescr
 			case m_FOREACH:
 				checkUniqOccurrence( m_FOREACH, mask, g_commanddef_idtab);
 
-				rt.selector = parseSelectorPath( langdescr, si, se);
+				rt.selector = parseSelectorPath( si, se);
 				break;
 			case m_INTO:
 				checkUniqOccurrence( m_INTO, mask, g_commanddef_idtab);
 	
-				rt.resultpath = parse_INTO_path( langdescr, si, se);
+				rt.resultpath = parse_INTO_path( si, se);
 				break;
 			case m_DO:
 				checkUniqOccurrence( m_DO, mask, g_commanddef_idtab);
 	
 				for (;;)
 				{
-					if (parseKeyword( langdescr, si, se, "NONEMPTY"))
+					if (parseKeyword( si, se, "NONEMPTY"))
 					{
 						rt.nonempty = true;
 					}
-					else if (parseKeyword( langdescr, si, se, "UNIQUE"))
+					else if (parseKeyword( si, se, "UNIQUE"))
 					{
 						rt.unique = true;
 					}
@@ -142,7 +142,7 @@ CommandDefinition CommandDefinition::parse( const LanguageDescription* langdescr
 					}
 						
 				}
-				if (!gotoNextToken( langdescr, si, se))
+				if (!gotoNextToken( si, se))
 				{
 					throw std::runtime_error( "unexpected end of transaction description after DO");
 				}
@@ -154,7 +154,7 @@ CommandDefinition CommandDefinition::parse( const LanguageDescription* langdescr
 				else
 				{
 					rt.embedded = false;
-					rt.call = SubroutineCallStatement::parse( langdescr, si, se);
+					rt.call = SubroutineCallStatement::parse( si, se);
 				}
 				break;
 		}

@@ -35,6 +35,7 @@
 #include "tdlTransactionFunction.hpp"
 #include "tdlTransactionInput.hpp"
 #include "database/transaction.hpp"
+#include "database/database.hpp"
 #include "vm/inputStructure.hpp"
 #include "filter/envelopefilter.hpp"
 #include "langbind/formFunction.hpp"
@@ -417,7 +418,9 @@ bool TdlTransactionFunctionClosure::call()
 			db::TdlTransactionInput inp( *m_func->program(), m_inputstructptr->structure());
 			db::VmTransactionOutput res;
 			{
-				boost::scoped_ptr<db::Transaction> trsr( m_context->provider()->transaction( m_func->name()));
+				const db::Database* tdb = m_context->provider()->database( m_func->dbname());
+				if (!tdb) throw std::runtime_error( std::string( "transaction database not defined '") + m_func->dbname() + "'");
+				boost::scoped_ptr<db::Transaction> trsr( tdb->transaction( m_func->name()));
 				if (!trsr.get()) throw std::runtime_error( "failed to allocate transaction object");
 				trsr->begin();
 

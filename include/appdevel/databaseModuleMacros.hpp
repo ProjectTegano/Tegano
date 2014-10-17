@@ -50,7 +50,7 @@
 		{\
 			return m_id;\
 		}\
-		virtual DBCLASS* database()\
+		virtual const DBCLASS* database()\
 		{\
 			return &m_db;\
 		}\
@@ -107,7 +107,7 @@
 		{\
 			return m_id;\
 		}\
-		virtual DBCLASS* database()\
+		virtual const DBCLASS* database()\
 		{\
 			return &m_db;\
 		}\

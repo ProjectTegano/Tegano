@@ -73,7 +73,7 @@ public:
 	SQLiteDatabase( const SQLiteConfig* config);
 	 ~SQLiteDatabase();
 
-	Transaction* transaction( const std::string& name_);
+	Transaction* transaction( const std::string& name_) const;
 
 	virtual const LanguageDescription* getLanguageDescription() const
 	{
@@ -82,7 +82,7 @@ public:
 	}
 
 	typedef types::ObjectPool<sqlite3>::ObjectRef Connection;
-	Connection newConnection()
+	Connection newConnection() const
 	{
 		return m_connPool.get();
 	}
@@ -93,7 +93,7 @@ private:
 private:
 	const std::string	m_id;
 	const std::string	m_filename;
-	types::ObjectPool<sqlite3> m_connPool;		///< pool of connections
+	mutable types::ObjectPool<sqlite3> m_connPool;	///< pool of connections
 	std::vector<std::string> m_extensionFiles;	///< Sqlite extensions
 };
 

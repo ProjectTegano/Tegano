@@ -10,8 +10,7 @@ SUBDIRS = \
 	libprovider \
 	modules \
 	wolframed \
-	wolfilter \
-	wolfwizard
+	wolfilter
 
 -include $(TOPDIR)/makefiles/gmake/platform.mk
 
@@ -24,7 +23,6 @@ libwolframe_langbind: libwolframe libwolframe_serialize libwolframe_database
 libwolframe_database: libwfsingleton libwolframe
 wolframed: libwfsingleton libwolframe libwolframe_serialize libwolframe_database libwolframe_langbind libconfig libprovider
 wolfilter: libwfsingleton libwolframe libwolframe_serialize libwolframe_database libwolframe_langbind libconfig libprovider
-wolfwizard: libwfsingleton libwolframe libwolframe_serialize libwolframe_database libwolframe_langbind libconfig libprovider
 
 local_all:
 

@@ -47,7 +47,7 @@ class DatabaseProviderInterface
 {
 public:
 	virtual ~DatabaseProviderInterface(){}
-	virtual Database* database( const std::string& ID ) const=0;
+	virtual const Database* database( const std::string& ID ) const=0;
 };
 
 }}//namespace

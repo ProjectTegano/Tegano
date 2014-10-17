@@ -53,31 +53,6 @@ using namespace _Wolframe::proc;
 
 namespace
 {
-struct DatabaseScope
-{
-	const std::string* dbname;
-	proc::ExecContext* ctx;
-
-	DatabaseScope( const std::string* dbname_, proc::ExecContext* ctx_)
-		:dbname(dbname_),ctx(ctx_)
-	{
-		if (!dbname->empty())
-		{
-			ctx->push_database( *dbname);
-		}
-	}
-	~DatabaseScope()
-	{
-		if (!dbname->empty())
-		{
-			ctx->pop_database();
-		}
-	}
-};
-
-typedef boost::shared_ptr<DatabaseScope> DatabaseScopeR;
-
-
 
 /// \class AuthorizationFunctionImpl
 /// \brief Description of a an authorization function
@@ -86,16 +61,16 @@ class AuthorizationFunctionImpl
 {
 public:
 	/// \brief Constructor
-	AuthorizationFunctionImpl( const langbind::FormFunction* function_, const std::vector<langbind::ExecContextElement>& params_, const std::string& database_)
+	AuthorizationFunctionImpl( const langbind::FormFunction* function_, const std::vector<langbind::ExecContextElement>& params_)
 		:m_function(function_)
 		,m_params(params_)
-		,m_database(database_){}
+	{}
 
 	/// \brief Copy constructor
 	AuthorizationFunctionImpl( const AuthorizationFunctionImpl& o)
 		:m_function(o.m_function)
 		,m_params(o.m_params)
-		,m_database(o.m_database){}
+	{}
 
 	/// \brief Default constructor
 	AuthorizationFunctionImpl(){}
@@ -117,7 +92,6 @@ public:
 private:
 	const langbind::FormFunction* m_function;		///< form function to call
 	std::vector<langbind::ExecContextElement> m_params;	///< parameter description
-	std::string m_database;					///< database used for authorization functions
 };
 
 
@@ -160,7 +134,6 @@ private:
 	langbind::FormFunctionClosureR m_formFunctionClosure;
 	langbind::TypedInputFilterR m_result;
 	proc::ExecContext* m_context;
-	DatabaseScopeR m_dbscope;
 };
 
 /// \class AuditFunctionImpl
@@ -170,16 +143,14 @@ class AuditFunctionImpl
 {
 public:
 	/// \brief Constructor
-	AuditFunctionImpl( const langbind::FormFunction* function_, const std::vector<langbind::ExecContextElement>& params_, const std::string& database_)
+	AuditFunctionImpl( const langbind::FormFunction* function_, const std::vector<langbind::ExecContextElement>& params_)
 		:m_function(function_)
-		,m_params(params_)
-		,m_database(database_){}
+		,m_params(params_){}
 
 	/// \brief Copy constructor
 	AuditFunctionImpl( const AuditFunctionImpl& o)
 		:m_function(o.m_function)
-		,m_params(o.m_params)
-		,m_database(o.m_database){}
+		,m_params(o.m_params){}
 
 	/// \brief Default constructor
 	AuditFunctionImpl(){}
@@ -198,15 +169,9 @@ public:
 		return m_params;
 	}
 
-	const std::string& database() const
-	{
-		return m_database;
-	}
-
 private:
 	const langbind::FormFunction* m_function;		///< form function to call
 	std::vector<langbind::ExecContextElement> m_params;	///< parameter description
-	std::string m_database;					///< database used for authorization functions
 };
 
 }//anonymous namespace
@@ -226,10 +191,6 @@ bool AuditFunctionClosureImpl::call()
 	{
 		throw std::runtime_error( "execution context not initialized");
 	}
-	if (!m_dbscope.get())
-	{
-		m_dbscope.reset( new DatabaseScope( &m_auditfunc->database(), m_context));
-	}
 	if (m_formFunctionClosure->call())
 	{
 		// Because we return the result of a function we called with a different context
@@ -237,8 +198,6 @@ bool AuditFunctionClosureImpl::call()
 		// our own result. We use the langbind::EnvelopeInputFilter template for that:
 		typedef langbind::EnvelopeInputFilter<langbind::FormFunctionClosure> ResultWithContext;
 		m_result = langbind::TypedInputFilterR( new ResultWithContext( m_formFunctionClosure->result(), m_formFunctionClosure));
-
-		m_dbscope.reset();
 		return true;
 	}
 	else
@@ -252,8 +211,6 @@ bool AuthorizationFunctionImpl::call( proc::ExecContext* ctx, const std::string&
 {
 	try
 	{
-		DatabaseScope databaseScope( &m_database, ctx);
-
 		langbind::FormFunctionClosureR clos( m_function->createClosure());
 		langbind::TypedInputFilterR input( new langbind::ExecContextInputFilter( params(), *ctx, resource));
 		clos->init( ctx, input);
@@ -472,9 +429,8 @@ struct AaMapProgramDescription
 {
 	AaMapProgramDescription(){}
 	AaMapProgramDescription( const AaMapProgramDescription& o)
-		:database(o.database),expressions(o.expressions){}
+		:expressions(o.expressions){}
 
-	std::string database;
 	std::vector<AaMapExpression> expressions;
 };
 
@@ -563,7 +519,7 @@ static AaMapProgramDescription parseProgram( const ProgramLibrary& library, std:
 	return rt;
 }
 
-void AaMapProgram::loadProgram( ProgramLibrary& library, db::Database*, const std::string& filename)
+void AaMapProgram::loadProgram( ProgramLibrary& library, const std::string& filename)
 {
 	std::string source;
 	try
@@ -589,13 +545,13 @@ void AaMapProgram::loadProgram( ProgramLibrary& library, db::Database*, const st
 			{
 				case AaMapExpression::AuditFunc:
 				{
-					langbind::AuditFunctionR aaf( new AuditFunctionImpl( xi->formfunc, xi->params, prg.database));
+					langbind::AuditFunctionR aaf( new AuditFunctionImpl( xi->formfunc, xi->params));
 					library.defineAuditFunction( xi->aafunc, aaf);
 					break;
 				}
 				case AaMapExpression::AuthorizeFunc:
 				{
-					langbind::AuthorizationFunctionR aaf( new AuthorizationFunctionImpl( xi->formfunc, xi->params, prg.database));
+					langbind::AuthorizationFunctionR aaf( new AuthorizationFunctionImpl( xi->formfunc, xi->params));
 					library.defineAuthorizationFunction( xi->aafunc, aaf);
 					break;
 				}

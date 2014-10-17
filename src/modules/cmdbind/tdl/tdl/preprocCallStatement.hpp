@@ -56,7 +56,7 @@ struct PreProcCallStatement
 
 	void clear();
 
-	static PreProcCallStatement parse( const LanguageDescription* langdescr, std::string::const_iterator& ci, std::string::const_iterator ce);
+	static PreProcCallStatement parse( std::string::const_iterator& ci, std::string::const_iterator ce);
 };
 
 }}}//namespace

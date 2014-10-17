@@ -51,7 +51,7 @@ public:
 	DatabaseProviderImpl( const std::vector<config::ConfigurationObject*>& config,
 				const module::ModuleDirectory* modules );
 	virtual ~DatabaseProviderImpl();
-	virtual Database* database( const std::string& ID ) const;
+	virtual const Database* database( const std::string& ID ) const;
 
 private:
 	std::vector< DatabaseUnit* > m_db;

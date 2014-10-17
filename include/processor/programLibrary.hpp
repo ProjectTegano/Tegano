@@ -51,6 +51,9 @@
 #include <vector>
 
 namespace _Wolframe {
+namespace db {
+	class Database;
+}
 namespace proc {
 
 /// \class ProgramLibrary
@@ -85,6 +88,12 @@ public:
 	virtual void defineFilterType( const std::string& name, const langbind::FilterTypeR& f)=0;
 	/// \brief Define a program type
 	virtual void defineProgramType( const ProgramR& prg)=0;
+	/// \brief Define a database
+	virtual void defineDatabase( const db::Database* database_)=0;
+	/// \brief Get a database by name
+	virtual const db::Database* database( const std::string& id) const=0;
+	/// \brief Get the list of databases (first=id, second=type)
+	virtual std::vector<const db::Database*> databaseList() const=0;
 
 	/// \brief Get the map for DDLs to map types to normalizer call sequences
 	virtual const types::NormalizeFunctionMap* formtypemap() const=0;
@@ -110,7 +119,7 @@ public:
 	virtual const langbind::FilterType* getFilterType( const std::string& name) const=0;
 
 	/// \brief Load all programs passed in 'filenames'
-	virtual void loadPrograms( db::Database* transactionDB, const std::vector<std::string>& filenames)=0;
+	virtual void loadPrograms( const std::vector<std::string>& filenames)=0;
 };
 
 }} //namespace

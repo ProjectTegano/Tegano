@@ -53,7 +53,7 @@ namespace db {
 struct TransactionExecStatemachine_postgres :public TransactionExecStatemachine
 {
 	///\brief Constructor
-	explicit TransactionExecStatemachine_postgres( PostgreSQLDatabase* database_);
+	explicit TransactionExecStatemachine_postgres( const PostgreSQLDatabase* database_);
 
 	///\brief Destructor
 	virtual ~TransactionExecStatemachine_postgres();
@@ -119,7 +119,7 @@ private:
 	std::size_t m_nof_rows;
 	std::size_t m_idx_row;
 	bool m_hasResult;
-	PostgreSQLDatabase* m_database;
+	const PostgreSQLDatabase* m_database;
 	PostgreSQLDatabase::Connection m_conn;	//< DB connection
 };
 

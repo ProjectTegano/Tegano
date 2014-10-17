@@ -56,7 +56,7 @@ bool DDLProgram::is_mine( const std::string& filename) const
 	return false;
 }
 
-void DDLProgram::loadProgram( ProgramLibrary& library, db::Database*, const std::string& filename)
+void DDLProgram::loadProgram( ProgramLibrary& library, const std::string& filename)
 {
 	const types::NormalizeFunctionMap* typemap = library.formtypemap();
 	std::vector<types::FormDescriptionR> forms = m_constructor->compile( filename, typemap);

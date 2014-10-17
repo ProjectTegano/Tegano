@@ -49,24 +49,13 @@ bool TransactionDefinitionProgram::is_mine( const std::string& filename) const
 	return boost::algorithm::to_lower_copy( utils::getFileExtension( filename)) == ".tdl";
 }
 
-void TransactionDefinitionProgram::loadProgram( ProgramLibrary& library, db::Database* transactionDB, const std::string& filename)
+void TransactionDefinitionProgram::loadProgram( ProgramLibrary& library, const std::string& filename)
 {
-	static const db::LanguageDescriptionSQL defaultLanguageDescr;
-	const db::LanguageDescription* languageDescr = (transactionDB)?transactionDB->getLanguageDescription():&defaultLanguageDescr;
-
 	LOG_DEBUG << "Loading transaction program '" << filename << "':";
-
 	try
 	{
-		std::string databaseID;
-		std::string databaseName;
-		if (transactionDB)
-		{
-			databaseID = transactionDB->id();
-			databaseName = transactionDB->name();
-		}
 		db::TdlTransactionFunctionList funclist
-			= db::loadTransactionProgramFile( filename, databaseID, databaseName, languageDescr);
+				= db::loadTransactionProgramFile( filename, library.databaseList());
 
 		db::TdlTransactionFunctionList::const_iterator fi = funclist.begin(), fe = funclist.end();
 		for (; fi != fe; ++fi)

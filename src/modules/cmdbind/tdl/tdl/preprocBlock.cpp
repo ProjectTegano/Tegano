@@ -57,7 +57,7 @@ void PreProcStep::clear()
 	statement.clear();
 }
 
-PreProcBlock PreProcBlock::parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+PreProcBlock PreProcBlock::parse( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	PreProcBlock rt;
 	PreProcStep step;
@@ -65,12 +65,12 @@ PreProcBlock PreProcBlock::parse( const LanguageDescription* langdescr, std::str
 	char ch = 0;
 	unsigned int mask = 0;
 
-	while ((ch = gotoNextToken( langdescr, si, se)) != 0)
+	while ((ch = gotoNextToken( si, se)) != 0)
 	{
 		switch ((PreProcKeyword)utils::parseNextIdentifier( si, se, g_preproc_idtab))
 		{
 			case p_NONE:
-				ch = parseNextToken( langdescr, tok, si, se);
+				ch = parseNextToken( tok, si, se);
 				if (ch == ';')
 				{
 					if (mask)
@@ -94,15 +94,15 @@ PreProcBlock PreProcBlock::parse( const LanguageDescription* langdescr, std::str
 				return rt;
 			case p_FOREACH:
 				checkUniqOccurrence( p_FOREACH, mask, g_preproc_idtab);
-				step.selector = parseSelectorPath( langdescr, si, se);
+				step.selector = parseSelectorPath( si, se);
 				break;
 			case p_INTO:
 				checkUniqOccurrence( p_INTO, mask, g_preproc_idtab);
-				step.resultpath = parse_INTO_path( langdescr, si, se);
+				step.resultpath = parse_INTO_path( si, se);
 				break;
 			case p_DO:
 				checkUniqOccurrence( p_DO, mask, g_preproc_idtab);
-				step.statement = PreProcCallStatement::parse( langdescr, si, se);
+				step.statement = PreProcCallStatement::parse( si, se);
 				break;
 		}
 	}

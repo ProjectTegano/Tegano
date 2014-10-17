@@ -56,7 +56,7 @@ struct AuditCallStatement
 
 	void clear();
 
-	static AuditCallStatement parse( const LanguageDescription* langdescr, std::string::const_iterator& ci, std::string::const_iterator ce);
+	static AuditCallStatement parse( std::string::const_iterator& ci, std::string::const_iterator ce);
 };
 
 }}}//namespace

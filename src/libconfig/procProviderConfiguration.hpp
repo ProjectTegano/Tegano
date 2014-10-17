@@ -61,15 +61,15 @@ public:
 	void print( std::ostream& os, size_t indent ) const;
 	void setCanonicalPathes( const std::string& referencePath );
 
-	const std::string& dbLabel() const					{return m_dbLabel;}
+	const std::vector<std::string>& databaseIds() const			{return m_databaseIds;}
 	const std::vector<config::ConfigurationObject*>& procConfig() const	{return m_procConfig;}
 	const std::vector<std::string> programFiles() const			{return m_programFiles;}
 	const std::string& referencePath() const				{return m_referencePath;}
 
 private:
-	std::string					m_dbLabel;
-	std::vector< config::ConfigurationObject* >	m_procConfig;
-	std::vector< std::string >			m_programFiles;
+	std::vector<std::string>			m_databaseIds;
+	std::vector<config::ConfigurationObject*>	m_procConfig;
+	std::vector<std::string>			m_programFiles;
 	std::string					m_referencePath;
 };
 

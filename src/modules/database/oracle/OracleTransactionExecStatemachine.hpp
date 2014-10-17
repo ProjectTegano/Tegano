@@ -91,7 +91,7 @@ class OracleConnection;
 struct TransactionExecStatemachine_oracle :public TransactionExecStatemachine
 {
 	///\brief Constructor
-	TransactionExecStatemachine_oracle( OracleEnvirenment *env_, OracleDatabase *database_);
+	TransactionExecStatemachine_oracle( OracleEnvirenment *env_, const OracleDatabase *database_);
 
 	///\brief Destructor
 	virtual ~TransactionExecStatemachine_oracle();
@@ -160,7 +160,7 @@ private:
 	Statement *m_statement;
 	bool m_hasResult;
 	bool m_hasRow;
-	OracleDatabase* m_database;
+	const OracleDatabase* m_database;
 	OracleDatabase::Connection m_conn;	//< DB connection
 };
 

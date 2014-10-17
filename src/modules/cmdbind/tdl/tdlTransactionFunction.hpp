@@ -112,14 +112,28 @@ public:
 
 	TdlTransactionFunction(){}
 	TdlTransactionFunction( const TdlTransactionFunction& o)
-		:m_resultfilter(o.m_resultfilter),m_authorizations(o.m_authorizations),m_preproc(o.m_preproc),m_audit(o.m_audit),m_program(o.m_program){}
-	TdlTransactionFunction( const std::string& name_, const std::string& rf, const std::vector<Authorization>& az, const std::vector<TdlTransactionPreprocStep>& pp, const std::vector<TdlAuditStep>& au, const vm::ProgramR& prg)
-		:m_name(name_),m_resultfilter(rf),m_authorizations(az),m_preproc(pp),m_audit(au),m_program(prg){}
+		:m_name(o.m_name)
+		,m_dbname(o.m_dbname)
+		,m_resultfilter(o.m_resultfilter)
+		,m_authorizations(o.m_authorizations)
+		,m_preproc(o.m_preproc)
+		,m_audit(o.m_audit)
+		,m_program(o.m_program){}
+
+	TdlTransactionFunction( const std::string& name_, const std::string& dbname_, const std::string& rf, const std::vector<Authorization>& az, const std::vector<TdlTransactionPreprocStep>& pp, const std::vector<TdlAuditStep>& au, const vm::ProgramR& prg)
+		:m_name(name_)
+		,m_dbname(dbname_)
+		,m_resultfilter(rf)
+		,m_authorizations(az)
+		,m_preproc(pp)
+		,m_audit(au)
+		,m_program(prg){}
 
 	void print( std::ostream& out) const;
 	std::string tostring() const;
 
 	const std::string& name() const					{return m_name;}
+	const std::string& dbname() const				{return m_dbname;}
 	const std::string& resultfilter() const				{return m_resultfilter;}
 	const std::vector<Authorization>& authorizations() const	{return m_authorizations;}
 	const std::vector<TdlTransactionPreprocStep>& preproc() const	{return m_preproc;}
@@ -133,6 +147,7 @@ public:
 
 private:
 	std::string m_name;		 			///< function name
+	std::string m_dbname;		 			///< database name
 	std::string m_resultfilter;				///< name of result filter function to call with the transaction result
 	std::vector<Authorization> m_authorizations;		///< authorization functions to call
 	std::vector<TdlTransactionPreprocStep> m_preproc;	///< preprocessing steps to perform on input before transaction execution

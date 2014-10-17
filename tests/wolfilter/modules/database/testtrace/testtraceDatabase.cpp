@@ -135,7 +135,7 @@ TesttraceDatabase::TesttraceDatabase( const TesttraceDatabase& o)
 	,m_outfilename(o.m_outfilename)
 	,m_result(o.m_result){}
 
-Transaction* TesttraceDatabase::transaction(const std::string& /*name*/ )
+Transaction* TesttraceDatabase::transaction(const std::string& /*name*/ ) const
 {
 	return new TesttraceTransaction( this, m_result);
 }

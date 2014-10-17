@@ -61,17 +61,28 @@ bool ProcProviderConfiguration::parse( const config::ConfigurationNode& pt, cons
 	bool retVal = true;
 
 	for ( config::ConfigurationNode::const_iterator L1it = pt.begin(); L1it != pt.end(); L1it++ )	{
-		if ( boost::algorithm::iequals( "database", L1it->first ))	{
-			bool isDefined = ( ! m_dbLabel.empty());
-			if ( ! Parser::getValue( logPrefix().c_str(), *L1it, m_dbLabel, &isDefined ))
+		if ( boost::algorithm::iequals( "database", L1it->first ))
+		{
+			std::string databaseId;
+			if ( ! Parser::getValue( logPrefix().c_str(), *L1it, databaseId))
+			{
 				retVal = false;
+			}
+			else
+			{
+				m_databaseIds.push_back( databaseId);
+			}
 		}
 		else if ( boost::algorithm::iequals( "program", L1it->first ) )	{
 			std::string programFile;
 			if ( !Parser::getValue( logPrefix().c_str(), *L1it, programFile ))
+			{
 				retVal = false;
+			}
 			else
+			{
 				m_programFiles.push_back( programFile );
+			}
 		}
 		else if ( boost::algorithm::iequals( "cmdhandler", L1it->first )
 			|| boost::algorithm::iequals( "runtimeenv", L1it->first ) )	{
@@ -101,7 +112,11 @@ ProcProviderConfiguration::~ProcProviderConfiguration()
 void ProcProviderConfiguration::print( std::ostream& os, size_t indent ) const
 {
 	os << configSection() << std::endl;
-	os << "   Database: " << (m_dbLabel.empty() ? "(none)" : m_dbLabel) << std::endl;
+	std::vector<std::string>::const_iterator di = m_databaseIds.begin(), de = m_databaseIds.end();
+	for (; di != de; ++di)
+	{
+		os << "   Database: " << *di << std::endl;
+	}
 	if ( m_procConfig.size() > 0 )	{
 		for ( std::vector< config::ConfigurationObject* >::const_iterator it = m_procConfig.begin();
 								it != m_procConfig.end(); it++ )	{

@@ -87,7 +87,7 @@ public:
 
 	virtual const std::string& id() const		{ return m_id; }
 
-	virtual Transaction* transaction( const std::string& name_);
+	virtual Transaction* transaction( const std::string& name_) const;
 
 	virtual const LanguageDescription* getLanguageDescription( ) const
 	{
@@ -96,7 +96,7 @@ public:
 	}
 
 	typedef types::ObjectPool<PGconn>::ObjectRef Connection;
-	Connection newConnection()
+	Connection newConnection() const
 	{
 		return m_connPool.get();
 	}
@@ -117,7 +117,7 @@ private:
 	std::string		m_connStr;		//< connection string
 	unsigned short		m_connections;		//< number of connections
 	PostgreSQLServerSettings m_serverSettings;	//< data like protocol settings, OIDs, etc. loaded at initialization from server
-	types::ObjectPool<PGconn> m_connPool;		//< pool of connections
+	mutable types::ObjectPool<PGconn> m_connPool;	//< pool of connections
 };
 
 }} // _Wolframe::db

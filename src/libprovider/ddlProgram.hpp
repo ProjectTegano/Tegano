@@ -58,8 +58,8 @@ public:
 
 	/// \brief Implementation of Program::is_mine( const std::string&) const;
 	virtual bool is_mine( const std::string& filename) const;
-	/// \brief Implementation of Program::loadProgram( ProgramLibrary&, db::Database*, const std::string&);
-	virtual void loadProgram( ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	/// \brief Implementation of Program::loadProgram( ProgramLibrary&, const std::string&);
+	virtual void loadProgram( ProgramLibrary& library, const std::string& filename);
 
 private:
 	langbind::DDLCompilerR m_constructor;

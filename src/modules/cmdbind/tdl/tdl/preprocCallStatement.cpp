@@ -45,12 +45,12 @@ void PreProcCallStatement::clear()
 	params.clear();
 }
 
-PreProcCallStatement PreProcCallStatement::parse( const LanguageDescription* langdescr, std::string::const_iterator& ci, std::string::const_iterator ce)
+PreProcCallStatement PreProcCallStatement::parse( std::string::const_iterator& ci, std::string::const_iterator ce)
 {
 	PreProcCallStatement rt;
-	rt.name = parseFunctionName( langdescr, ci, ce);
+	rt.name = parseFunctionName( ci, ce);
 
-	char ch = gotoNextToken( langdescr, ci, ce);
+	char ch = gotoNextToken( ci, ce);
 	if (ch != '(')
 	{
 		throw std::runtime_error( "'(' expected after function name");
@@ -63,7 +63,7 @@ PreProcCallStatement PreProcCallStatement::parse( const LanguageDescription* lan
 	{
 		for (;;)
 		{
-			rt.params.push_back( PreProcElementReference::parse( langdescr, ci, ce));
+			rt.params.push_back( PreProcElementReference::parse( ci, ce));
 			ch = utils::gotoNextToken( ci, ce);
 			if (ch == ',')
 			{

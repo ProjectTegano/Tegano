@@ -71,8 +71,8 @@ struct ElementReference
 	ElementReference( const ElementReference& o)
 		:type(o.type),selector(o.selector),name(o.name),index(o.index){}
 
-	static ElementReference parseEmbeddedReference( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
-	static ElementReference parsePlainReference( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se);
+	static ElementReference parseEmbeddedReference( std::string::const_iterator& si, const std::string::const_iterator& se);
+	static ElementReference parsePlainReference( std::string::const_iterator& si, const std::string::const_iterator& se);
 };
 
 }}}//namespace

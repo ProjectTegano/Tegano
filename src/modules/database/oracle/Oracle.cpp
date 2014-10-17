@@ -298,7 +298,7 @@ OracleDatabase::~OracleDatabase()
 	(void)OCIHandleFree( (dvoid *)m_env.envhp, OCI_HTYPE_ENV );
 }
 
-Transaction* OracleDatabase::transaction( const std::string& name_)
+Transaction* OracleDatabase::transaction( const std::string& name_) const
 {
 	TransactionExecStatemachineR stm( new TransactionExecStatemachine_oracle( &m_env, this));
 	return new Transaction( name_, stm);

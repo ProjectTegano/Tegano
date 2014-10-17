@@ -49,6 +49,7 @@
 
 #ifdef WITH_SSL
 #include <boost/asio/ssl/error.hpp>
+#include <openssl/err.h>
 #endif // WITH_SSL
 
 #include "system/connectionHandler.hpp"

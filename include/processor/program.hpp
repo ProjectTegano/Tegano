@@ -70,7 +70,9 @@ struct Program
 	virtual ~Program(){}
 
 	virtual bool is_mine( const std::string& filename) const=0;
-	virtual void loadProgram( ProgramLibrary& library, db::Database* transactionDB, const std::string& filename)=0;
+
+	typedef std::pair<std::string,db::Database*> DatabaseDef;
+	virtual void loadProgram( ProgramLibrary& library, const std::string& filename)=0;
 
 	Category category() const		{return m_category;}
 

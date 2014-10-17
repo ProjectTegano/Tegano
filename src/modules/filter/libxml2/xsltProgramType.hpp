@@ -47,7 +47,7 @@ public:
 
 	virtual ~XsltProgramType();
 	virtual bool is_mine( const std::string& filename) const;
-	virtual void loadProgram( proc::ProgramLibrary& library, db::Database* transactionDB, const std::string& filename);
+	virtual void loadProgram( proc::ProgramLibrary& library, const std::string& filename);
 };
 
 }} //namespace

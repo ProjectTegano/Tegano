@@ -130,14 +130,6 @@ public:
 		return checkAuthorization( basicAuthorizationFunctionName(f), "", errmsg, true);
 	}
 
-	/// \brief Create a new transaction object
-	db::Transaction* transaction( const std::string& name);
-
-	/// \brief Declare the database 'dbname' as the current transaction database
-	void push_database( const std::string& dbname)			{m_dbstack.push_back( dbname);}
-	/// \brief Restore the previous current transaction database
-	void pop_database()						{m_dbstack.pop_back();}
-
 private:
 	ExecContext( const ExecContext&);			//... non copyable
 	void operator=( const ExecContext&);			//... non copyable
@@ -150,7 +142,6 @@ private:
 	unsigned int m_default_timeout;				///< default timeout
 	net::RemoteEndpointR m_remoteEndpoint;			///< remote end point of the connection
 	net::LocalEndpointR m_localEndpoint;			///< local end point of the connection
-	std::vector<std::string> m_dbstack;			///< stack for implementing current database as scope
 };
 
 }} //namespace

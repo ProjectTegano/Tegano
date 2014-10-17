@@ -105,7 +105,7 @@ public:
 		return TESTTRACE_DATABASE_CLASSNAME;
 	}
 
-	virtual Transaction* transaction( const std::string& /*name*/ );
+	virtual Transaction* transaction( const std::string& /*name*/ ) const;
 
 	virtual const _Wolframe::db::LanguageDescription* getLanguageDescription() const
 	{

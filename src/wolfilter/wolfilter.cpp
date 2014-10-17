@@ -84,13 +84,22 @@ int main( int argc, char **argv )
 		const config::AaaaProviderConfiguration* acfg = &cmdline.aaaaProviderConfig();
 		aaaa::AaaaProviderImpl aaaaProvider( &randomGenerator, acfg->authConfig(), acfg->authzConfig(), acfg->authzDefault(), acfg->auditConfig(), &cmdline.moduleDirectory());
 		const config::ProcProviderConfiguration* pcfg = &cmdline.procProviderConfig();
-		proc::ProcessorProviderImpl processorProvider( pcfg->dbLabel(), pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
+		proc::ProcessorProviderImpl processorProvider( pcfg->procConfig(), pcfg->programFiles(), pcfg->referencePath(), &cmdline.moduleDirectory());
+		std::vector<std::string>::const_iterator di = pcfg->databaseIds().begin(), de = pcfg->databaseIds().end();
+		for (; di != de; ++di)
+		{
+			const db::Database* database = databaseProvider.database( *di);
+			if (database)
+			{
+				processorProvider.addDatabase( database);
+			}
+			else
+			{
+				throw std::runtime_error( std::string("database with identifier '") + *di + "' configured in processor is not defined in database section of the configuration");
+			}
+		}
 		proc::ExecContext execContext( &processorProvider, &aaaaProvider);
 
-		if (!processorProvider.resolveDB( databaseProvider))
-		{
-			throw std::runtime_error( "Transaction database could not be resolved. See log." );
-		}
 		if (!processorProvider.loadPrograms())
 		{
 			throw std::runtime_error( "Not all programs could be loaded. See log." );

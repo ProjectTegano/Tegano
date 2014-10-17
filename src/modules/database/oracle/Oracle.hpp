@@ -93,7 +93,7 @@ public:
 
 	const std::string& id() const		{ return m_id; }
 
-	Transaction* transaction( const std::string& name_);
+	Transaction* transaction( const std::string& name_) const;
 	
 	virtual const LanguageDescription* getLanguageDescription( ) const
 	{
@@ -102,7 +102,7 @@ public:
 	}
 
 	typedef types::ObjectPool<OracleConnection>::ObjectRef Connection;
-	Connection newConnection()
+	Connection newConnection() const
 	{
 		return m_connPool.get();
 	}
@@ -111,10 +111,10 @@ private:
 	void init( const OracleConfig& config);
 
 private:
-	const std::string	m_id;			//< database ID
-	std::string		m_connStr;		//< connection string
-	unsigned short		m_connections;		//< number of connections
-	types::ObjectPool<OracleConnection> m_connPool;	//< pool of connections
+	const std::string	m_id;				//< database ID
+	std::string		m_connStr;			//< connection string
+	unsigned short		m_connections;			//< number of connections
+	mutable types::ObjectPool<OracleConnection> m_connPool;	//< pool of connections
 
 public:
 	OracleEnvirenment m_env;	//< Oracle environment

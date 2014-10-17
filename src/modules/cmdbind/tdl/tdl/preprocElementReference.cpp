@@ -44,11 +44,11 @@ using namespace _Wolframe;
 using namespace _Wolframe::db;
 using namespace _Wolframe::db::tdl;
 
-PreProcElementReference PreProcElementReference::parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+PreProcElementReference PreProcElementReference::parse( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	PreProcElementReference rt;
-	bool nameDefined = parseNameAssignment( langdescr, rt.name, si, se);
-	ElementReference elem = ElementReference::parsePlainReference( langdescr, si, se);
+	bool nameDefined = parseNameAssignment( rt.name, si, se);
+	ElementReference elem = ElementReference::parsePlainReference( si, se);
 
 	switch (elem.type)
 	{

@@ -41,7 +41,7 @@ using namespace _Wolframe;
 using namespace _Wolframe::db;
 using namespace _Wolframe::db::tdl;
 
-ElementReference ElementReference::parseEmbeddedReference( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+ElementReference ElementReference::parseEmbeddedReference( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	char ch = utils::gotoNextToken( si, se);
 	if (ch == '(' || ch == '{')
@@ -51,8 +51,8 @@ ElementReference ElementReference::parseEmbeddedReference( const LanguageDescrip
 		++si;
 		std::string::const_iterator argstart = si;
 		std::string tok;
-		ch = parseNextToken( langdescr, tok, si, se);
-		for (; ch && ch != sb && ch != eb; ch=parseNextToken( langdescr, tok, si, se));
+		ch = parseNextToken( tok, si, se);
+		for (; ch && ch != sb && ch != eb; ch=parseNextToken( tok, si, se));
 		if (ch == eb)
 		{
 			std::string selector = boost::algorithm::trim_copy( std::string( argstart, si-1));
@@ -116,24 +116,24 @@ ElementReference ElementReference::parseEmbeddedReference( const LanguageDescrip
 	}
 }
 
-ElementReference ElementReference::parsePlainReference( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+ElementReference ElementReference::parsePlainReference( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	std::string pp;
 	std::string tok;
-	char ch = gotoNextToken( langdescr, si, se);
+	char ch = gotoNextToken( si, se);
 	if (ch == '"' || ch == '\'' || isDigit( ch))
 	{
-		(void)parseNextToken( langdescr, tok, si, se);
+		(void)parseNextToken( tok, si, se);
 		return ElementReference( ElementReference::Constant, tok);
 	}
 	else if (ch == '$')
 	{
 		++si;
-		return parseEmbeddedReference( langdescr, si, se);
+		return parseEmbeddedReference( si, se);
 	}
 	else
 	{
-		tok = parseSelectorPath( langdescr, si, se);
+		tok = parseSelectorPath( si, se);
 		return ElementReference( ElementReference::SelectorPath, tok);
 	}
 }

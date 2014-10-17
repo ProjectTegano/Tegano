@@ -43,12 +43,12 @@ using namespace _Wolframe;
 using namespace _Wolframe::db;
 using namespace _Wolframe::db::tdl;
 
-AuditElementReference AuditElementReference::parse( const LanguageDescription* langdescr, std::string::const_iterator& si, const std::string::const_iterator& se)
+AuditElementReference AuditElementReference::parse( std::string::const_iterator& si, const std::string::const_iterator& se)
 {
 	std::string name;
 
-	bool nameDefined = parseNameAssignment( langdescr, name, si, se);
-	ElementReference elem = ElementReference::parsePlainReference( langdescr, si, se);
+	bool nameDefined = parseNameAssignment( name, si, se);
+	ElementReference elem = ElementReference::parsePlainReference( si, se);
 
 	if (!nameDefined)
 	{

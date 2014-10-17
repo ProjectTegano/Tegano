@@ -155,6 +155,32 @@ static std::string normalizeOutputCRLF( const std::string& output, const std::st
 }
 
 
+class TestDatabase
+	:public db::Database
+{
+public:
+	TestDatabase( const::std::string& name_, const::std::string& id_)
+		:db::Database(name_,id_){}
+
+	virtual Transaction* transaction( const std::string&) const
+	{
+		return 0;
+	}
+
+	virtual const LanguageDescription* getLanguageDescription() const
+	{
+		static const LanguageDescriptionSQL sql;
+		return &sql;
+	}
+
+	const std::string& name() const	{return m_name;}
+	const std::string& id() const	{return m_id;}
+
+private:
+	std::string m_name;
+	std::string m_id;
+};
+
 TEST_P( CompileTDLTest, tests)
 {
 	std::string filename = GetParam();
@@ -168,7 +194,11 @@ TEST_P( CompileTDLTest, tests)
 	// [2.1] Process test:
 	std::cerr << "processing test '" << testname << "'" << std::endl;
 
-	TdlTransactionFunctionList tl = loadTransactionProgramFile( tdlfile, "testdb", "test", &g_dblang);
+	TestDatabase testDatabase( "testdb", "test");
+	std::vector<const db::Database*> databases;
+	databases.push_back( &testDatabase);
+
+	TdlTransactionFunctionList tl = loadTransactionProgramFile( tdlfile, databases, &g_dblang);
 	TdlTransactionFunctionList::const_iterator ti = tl.begin(), te = tl.end();
 
 	// [2.2] Print test output to string:
