@@ -8,11 +8,9 @@ INCLUDE_CXXFLAGS = \
 	/D_WIN32_WINNT=0x504
 
 INCLUDE_DIRS = \
-	/I. \
-	/I$(TOPDIR) \
+	/Iinclude \
 	/I$(TOPDIR)\include \
-	/I"$(BOOST_INCLUDE_DIR)" \
-	/Iinclude
+	/I"$(BOOST_INCLUDE_DIR)"
 
 INCLUDE_LDFLAGS = \
 	$(BOOST_LDFLAGS)
