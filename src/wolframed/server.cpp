@@ -41,8 +41,8 @@
 #include "server.hpp"
 #include "acceptor.hpp"
 #include "logger/logger-v1.hpp"
-#include "system/serverEndpoint.hpp"
 #include "system/connectionHandler.hpp"
+#include "libconfig/serverEndpoint.hpp"
 #include "libconfig/serverConfiguration.hpp"
 
 namespace _Wolframe {

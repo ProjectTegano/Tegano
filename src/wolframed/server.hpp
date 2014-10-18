@@ -42,7 +42,7 @@
 
 #include <list>
 
-#include "system/serverEndpoint.hpp"
+#include "libconfig/serverEndpoint.hpp"
 #include "acceptor.hpp"
 #include "system/connectionHandler.hpp"	// for server handler
 #include "config/configurationObject.hpp"

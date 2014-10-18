@@ -40,6 +40,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	loggerConfiguration.o \
 	bannerConfiguration.o \
 	serverConfiguration.o \
+	serverEndpoint.o \
 	cmdLineConfiguration.o \
 	procProviderConfiguration.o \
 	aaaaProviderConfiguration.o \

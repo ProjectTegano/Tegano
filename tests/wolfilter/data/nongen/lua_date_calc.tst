@@ -69,6 +69,7 @@ function run()
 	dtval_ss = datetime("19681118045601")
 	dtval_ll = datetime("20060513160018987")
 	dtval_cc = datetime("18760707235961934123")
+
 	output:print( "DTVAL_DD " .. dtval_dd:__tostring() .. " Y" .. dtval_dd:year() .. " M" .. dtval_dd:month() .. " D" .. dtval_dd:day());
 	output:print( "DTVAL_SS " .. dtval_ss:__tostring() .. " Y" .. dtval_ss:year() .. " M" .. dtval_ss:month() .. " D" .. dtval_ss:day() .. " h" .. dtval_ss:hour() .. " m" .. dtval_ss:minute() .. " s" .. dtval_ss:second());
 	output:print( "DTVAL_LL " .. dtval_ll:__tostring() .. " Y" .. dtval_ll:year() .. " M" .. dtval_ll:month() .. " D" .. dtval_ll:day() .. " h" .. dtval_ll:hour() .. " m" .. dtval_ll:minute() .. " s" .. dtval_ll:second() .. " l" .. dtval_ll:millisecond()); 

@@ -38,6 +38,7 @@ LOCAL_STATIC_LIB_OBJS = \
 	serviceConfiguration.obj \
 	loggerConfiguration.obj \
 	bannerConfiguration.obj \
+	serverEndpoint.obj \
 	serverConfiguration.obj \
 	cmdLineConfiguration.obj \
 	procProviderConfiguration.obj \

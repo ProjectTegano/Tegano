@@ -35,7 +35,7 @@
 //
 
 #include <string>
-#include "system/serverEndpoint.hpp"
+#include "serverEndpoint.hpp"
 #include "utils/fileUtils.hpp"
 #include "logger/logger-v1.hpp"
 

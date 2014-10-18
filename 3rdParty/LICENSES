@@ -6,6 +6,7 @@ Table of Contents
 
   Boost
   Lua
+  debugger.lua
   SQlite3
   zlib
   libpng
@@ -78,6 +79,16 @@ Lua
   THE SOFTWARE.
 
 See 'lua/COPYRIGHT'.
+
+
+debugger.lua
+-------------
+
+  debugger.lua is licensed as Lua under the terms of the MIT license
+
+See github.com/slembcke/debugger.lua
+
+
 
 SQlite3
 -------

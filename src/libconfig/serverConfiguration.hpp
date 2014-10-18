@@ -38,7 +38,7 @@
 
 #include "config/configurationObject.hpp"
 #include "config/configurationTree.hpp"
-#include "system/serverEndpoint.hpp"
+#include "serverEndpoint.hpp"
 #include <list>
 
 

@@ -57,7 +57,6 @@ CPP_OBJS = \
 	mainConnectionHandler.o \
 	serverConnectionHandler.o \
 	server.o \
-	serverEndpoint.o \
 	serverHandler.o \
 	posixMain.o \
 	wolframedCommandLine.o
