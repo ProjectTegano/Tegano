@@ -137,7 +137,6 @@ WOLFBOOK_SOURCE_FILES = \
 	AppDevelopment/ConfigDatabaseSslModeTable.xml \
 	AppDevelopment/ConfigDatabaseSqlite.xml \
 	AppDevelopment/ConfigDatabasePostgreSQL.xml \
-	AppDevelopment/ConfigDatabaseOracle.xml \
 	AppDevelopment/ConfigGlobalSettings.xml \
 	AppDevelopment/ConfigListener.xml \
 	AppDevelopment/ConfigLogging.xml \
