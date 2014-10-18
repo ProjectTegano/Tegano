@@ -38,9 +38,6 @@
 		}]
 }**config
 --input-filter cjson --output-filter cjson --module ../../src/modules/filter/cjson/mod_filter_cjson --module ../../src/modules/doctype/json/mod_doctype_json - 
-
-**requires:DISABLED NETBSD
-
 **output
 {
 	"assignment":	[{

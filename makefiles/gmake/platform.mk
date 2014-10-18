@@ -66,19 +66,6 @@ LIBDIR=lib
 endif
 endif
 
-ifeq "$(PLATFORM)" "FREEBSD"
-LIBDIR=lib
-endif
-
-ifeq "$(PLATFORM)" "NETBSD"
-LIBDIR=lib
-endif
-
-# Sparc or Intel, always 'lib'
-ifeq "$(PLATFORM)" "SUNOS"
-LIBDIR=lib
-endif
-
 # platform specific flags
 #########################
 
@@ -115,11 +102,7 @@ endif
 
 # name if the installation program
 ifndef INSTALL
-ifeq "$(PLATFORM)" "SUNOS"
-INSTALL = /usr/ucb/install
-else
 INSTALL = install
-endif
 endif
 
 # dynamic linker
@@ -128,27 +111,12 @@ endif
 # the linker library for dynamically loadable modules
 ifeq "$(PLATFORM)" "LINUX"
 LIBS_DL = -ldl
-else
-ifeq "$(PLATFORM)" "SUNOS"
-LIBS_DL = -ldl
-else
-LIBS_DL =
-endif
 endif
 
 # Note for dlopen to work (at least on FreeBSD) with rtti information we have to export all symbols
 # in the binary and in the modules (see http://stackoverflow.com/questions/2351786/dynamic-cast-fails-when-used-with-dlopen-dlsym)
 ifeq "$(PLATFORM)" "LINUX"
 LDFLAGS_EXPORT_ALL_SYMBOLS = -Wl,-E
-endif
-ifeq "$(PLATFORM)" "FREEBSD"
-LDFLAGS_EXPORT_ALL_SYMBOLS = -Wl,-E
-endif
-ifeq "$(PLATFORM)" "NETBSD"
-LDFLAGS_EXPORT_ALL_SYMBOLS = -Wl,-E
-endif
-ifeq "$(PLATFORM)" "SUNOS"
-LDFLAGS_EXPORT_ALL_SYMBOLS =
 endif
 
 # i18n, gettext/libintl
@@ -170,27 +138,6 @@ LDFLAGS_LT =
 LIBS_LT =
 endif
 
-ifeq "$(PLATFORM)" "SUNOS"
-LIBLT_DIR ?= /opt/csw
-INCLUDE_FLAGS_LT = -I$(LIBLT_DIR)/include
-LDFLAGS_LT = -L$(LIBLT_DIR)/lib
-LIBS_LT = -lintl
-endif
-
-ifeq "$(PLATFORM)" "FREEBSD"
-LIBLT_DIR ?= /usr/local
-INCLUDE_FLAGS_LT = -I$(LIBLT_DIR)/include
-LDFLAGS_LT = -L$(LIBLT_DIR)/lib
-LIBS_LT = -lintl
-endif
-
-ifeq "$(PLATFORM)" "NETBSD"
-LIBLT_DIR ?= /usr
-INCLUDE_FLAGS_LT = -I$(LIBLT_DIR)/include
-LDFLAGS_LT = -L$(LIBLT_DIR)/lib
-LIBS_LT = -lintl
-endif
-
 endif
 
 PLATFORM_COMPILE_FLAGS += \
@@ -201,18 +148,6 @@ PLATFORM_COMPILE_FLAGS += \
 
 ifeq "$(PLATFORM)" "LINUX"
 LIBS_NET =
-endif
-
-ifeq "$(PLATFORM)" "FREEBSD"
-LIBS_NET =
-endif
-
-ifeq "$(PLATFORM)" "NETBSD"
-LIBS_NET =
-endif
-
-ifeq "$(PLATFORM)" "SUNOS"
-LIBS_NET = -lsocket -lnsl
 endif
 
 # XSLT processor
@@ -484,53 +419,6 @@ BOOST_LIBRARY_TAG ?=
 endif
 endif
 
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-BOOST_DIR ?= /usr/local
-BOOST_LIB_DIR ?= $(BOOST_DIR)/lib
-BOOST_INCLUDE_DIR ?= $(BOOST_DIR)/include
-BOOST_LIBRARY_TAG ?=
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-BOOST_DIR ?= /usr/local
-BOOST_LIB_DIR ?= $(BOOST_DIR)/lib
-BOOST_INCLUDE_DIR ?= $(BOOST_DIR)/include
-BOOST_LIBRARY_TAG ?=
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-BOOST_DIR ?= /usr/local
-BOOST_LIB_DIR ?= $(BOOST_DIR)/lib
-BOOST_INCLUDE_DIR ?= $(BOOST_DIR)/include
-BOOST_LIBRARY_TAG ?=
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-BOOST_DIR ?= /usr/pkg
-BOOST_LIB_DIR ?= $(BOOST_DIR)/lib
-BOOST_INCLUDE_DIR ?= $(BOOST_DIR)/include
-BOOST_LIBRARY_TAG ?=
-endif
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifdef BOOST_DIR
-BOOST_LIB_DIR ?= $(BOOST_DIR)/lib
-BOOST_INCLUDE_DIR ?= $(BOOST_DIR)/include
-BOOST_LIBRARY_TAG ?=
-endif
-ifndef BOOST_DIR
-$(warning no recent enough boost package on Solaris, compile your own version and set BOOST_DIR accordingly)
-endif
-endif
-
 # OpenSSL
 #########
 
@@ -696,71 +584,6 @@ endif
 
 endif
 
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-OPENSSL_DIR ?=
-OPENSSL_INCLUDE_DIR ?=
-OPENSSL_INCLUDE_DIRS ?=
-OPENSSL_LIB_DIR ?=
-OPENSSL_LIB_DIRS ?=
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-OPENSSL_DIR ?=
-OPENSSL_INCLUDE_DIR ?=
-OPENSSL_INCLUDE_DIRS ?=
-OPENSSL_LIB_DIR ?=
-OPENSSL_LIB_DIRS ?=
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-OPENSSL_DIR ?=
-OPENSSL_INCLUDE_DIR ?=
-OPENSSL_INCLUDE_DIRS ?=
-OPENSSL_LIB_DIR ?=
-OPENSSL_LIB_DIRS ?=
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-OPENSSL_DIR ?=
-OPENSSL_INCLUDE_DIR ?=
-OPENSSL_INCLUDE_DIRS ?=
-OPENSSL_LIB_DIR ?=
-OPENSSL_LIB_DIRS ?=
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-OPENSSL_DIR ?= /opt/csw
-OPENSSL_INCLUDE_DIR ?= $(OPENSSL_DIR)/include
-OPENSSL_INCLUDE_DIRS ?= -I$(OPENSSL_INCLUDE_DIR)
-OPENSSL_LIB_DIR ?= $(OPENSSL_DIR)/lib
-OPENSSL_LIB_DIRS ?= -L$(OPENSSL_LIB_DIR)
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-OPENSSL_DIR ?= /opt/csw
-OPENSSL_INCLUDE_DIR ?= $(OPENSSL_DIR)/include
-OPENSSL_INCLUDE_DIRS ?= -I$(OPENSSL_INCLUDE_DIR)
-OPENSSL_LIB_DIR ?= $(OPENSSL_DIR)/lib
-OPENSSL_LIB_DIRS ?= -L$(OPENSSL_LIB_DIR)
-OPENSSL_LIBS ?= -lssl -lcrypto
-endif
-endif
-endif
-
 endif
 
 # Lua 5.2
@@ -771,24 +594,6 @@ ifeq ($(WITH_LUA),1)
 ifeq "$(PLATFORM)" "LINUX"
 LUA_PLATFORM_CFLAGS = -DLUA_USE_POSIX -DLUA_USE_DLOPEN
 LUA_PLATFORM_LDFLAGS =
-LUA_PLATFORM_LIBS = $(LIBS_DL) -lm
-endif
-
-ifeq "$(PLATFORM)" "SUNOS"
-LUA_PLATFORM_CFLAGS = -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-LUA_PLATFORM_LDFLAGS =
-LUA_PLATFORM_LIBS = $(LIBS_DL) -lm
-endif
-
-ifeq "$(PLATFORM)" "FREEBSD"
-LUA_PLATFORM_CFLAGS = -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-LUA_PLATFORM_LDFLAGS =
-LUA_PLATFORM_LIBS = $(LIBS_DL) -lm
-endif
-
-ifeq "$(PLATFORM)" "NETBSD"
-LUA_PLATFORM_CFLAGS = -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-LUA_PLATFORM_LDFLAGS = 
 LUA_PLATFORM_LIBS = $(LIBS_DL) -lm
 endif
 
@@ -942,58 +747,6 @@ SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
 SQLITE3_LIBS ?= -lsqlite3
 endif
 
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-SQLITE3_DIR ?= /opt/csw
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-SQLITE3_DIR ?= /opt/csw
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-SQLITE3_DIR ?= /usr/local
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-SQLITE3_DIR ?= /usr/local
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-SQLITE3_DIR ?= /usr/local
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
-endif
-
-# NetBSD
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-SQLITE3_DIR ?= /usr/pkg
-SQLITE3_INCLUDE_DIR ?= $(SQLITE3_DIR)/include
-SQLITE3_LIB_DIR ?= $(SQLITE3_DIR)/lib
-SQLITE3_LIBS ?= -lsqlite3
-endif
 endif
 
 # helpers for easier final Makefiles (local/system switch)
@@ -1180,71 +933,6 @@ endif
 
 endif
 
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-PGSQL_DIR ?= /usr/local/pgsql
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-PGSQL_DIR ?= /opt/csw
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-PGSQL_DIR ?= /usr/local
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-PGSQL_DIR ?= /usr/local
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-PGSQL_DIR ?= /usr/local
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-PGSQL_DIR ?= /usr/pkg
-PGSQL_INCLUDE_DIR ?= $(PGSQL_DIR)/include/postgresql
-PGSQL_INCLUDE_DIRS = -I$(PGSQL_INCLUDE_DIR)
-PGSQL_LIB_DIR ?= $(PGSQL_DIR)/lib
-PGSQL_LIB_DIRS = -L$(PGSQL_LIB_DIR)
-PGSQL_LIBS ?= -lpq
-endif
-endif
-
 endif
 
 # libxml2
@@ -1412,71 +1100,6 @@ LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
 LIBXML2_LIBS ?= -lxml2
 endif
 
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-LIBXML2_DIR ?= /opt/csw
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR)
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-LIBXML2_DIR ?= /opt/csw
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR)
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-LIBXML2_DIR ?= /usr/local
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR) -I/usr/local/include
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-LIBXML2_DIR ?= /usr/local
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR) -I/usr/local/include
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-LIBXML2_DIR ?= /usr/local
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR)
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-LIBXML2_DIR ?= /usr/pkg
-LIBXML2_INCLUDE_DIR ?= $(LIBXML2_DIR)/include/libxml2
-LIBXML2_INCLUDE_DIRS = -I$(LIBXML2_INCLUDE_DIR)
-LIBXML2_LIB_DIR ?= $(LIBXML2_DIR)/lib
-LIBXML2_LIB_DIRS = -L$(LIBXML2_LIB_DIR)
-LIBXML2_LIBS ?= -lxml2
-endif
 endif
 
 endif
@@ -1652,71 +1275,6 @@ endif
 
 endif
 
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-LIBXSLT_DIR ?= /opt/csw
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-LIBXSLT_DIR ?= /opt/csw
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-LIBXSLT_DIR ?= /usr/local
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-LIBXSLT_DIR ?= /usr/local
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-LIBXSLT_DIR ?= /usr/local
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-LIBXSLT_DIR ?= /usr/pkg
-LIBXSLT_INCLUDE_DIR ?= $(LIBXSLT_DIR)/include
-LIBXSLT_INCLUDE_DIRS = -I$(LIBXSLT_INCLUDE_DIR)
-LIBXSLT_LIB_DIR ?= $(LIBXSLT_DIR)/lib
-LIBXSLT_LIB_DIRS = -L$(LIBXSLT_LIB_DIR)
-LIBXSLT_LIBS ?= -lxslt
-endif
-endif
-
 endif
 
 
@@ -1826,41 +1384,6 @@ ifeq "$(LINUX_DIST)" "suse"
 $(warning no recent enough libhpdf package on OpenSuSE, use WITH_LOCAL_LIBHPDF=1 instead)
 endif
 
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-$(warning no recent enough libhpdf package on Solaris, use WITH_LOCAL_LIBHPDF=1 instead)
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-$(warning no recent enough libhpdf package on FreeBSD 8, use WITH_LOCAL_LIBHPDF=1 instead)endif
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-$(warning no recent enough libhpdf package on FreeBSD 9, use WITH_LOCAL_LIBHPDF=1 instead)endif
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-LIBHPDF_DIR ?= /usr/local
-LIBHPDF_INCLUDE_DIR ?= $(LIBHPDF_DIR)/include
-LIBHPDF_INCLUDE_DIRS = -I$(LIBHPDF_INCLUDE_DIR)
-LIBHPDF_LIB_DIR ?= $(LIBHPDF_DIR)/lib
-LIBHPDF_LIB_DIRS = -L$(LIBHPDF_LIB_DIR)
-LIBHPDF_LIBS ?= -lhpdf
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-$(warning no recent enough libhpdf package on NetBSD 6, use WITH_LOCAL_LIBHPDF=1 instead)endif
-endif
 endif
 
 endif
@@ -2063,71 +1586,6 @@ endif
 
 endif
 
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-LIBPNG_DIR ?= /opt/csw
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-LIBPNG_DIR ?= /opt/csw
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-LIBPNG_DIR ?= /usr/local
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-LIBPNG_DIR ?= /usr/local
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-LIBPNG_DIR ?= /usr/local
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-LIBPNG_DIR ?= /usr/pkg
-LIBPNG_INCLUDE_DIR ?= $(LIBPNG_DIR)/include
-LIBPNG_INCLUDE_DIRS = -I$(LIBPNG_INCLUDE_DIR)
-LIBPNG_LIB_DIR ?= $(LIBPNG_DIR)/lib
-LIBPNG_LIB_DIRS = -L$(LIBPNG_LIB_DIR)
-LIBPNG_LIBS ?= -lpng16
-endif
-endif
-
 endif
 
 ifeq ($(WITH_LOCAL_LIBHPDF),1)
@@ -2299,71 +1757,6 @@ LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
 LIBZ_LIBS ?= -lz
 endif
 
-endif
-
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-LIBZ_DIR ?= /opt/csw
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-LIBZ_DIR ?= /opt/csw
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-LIBZ_DIR ?= /usr/local
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-LIBZ_DIR ?= /usr/local
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-LIBZ_DIR ?= /usr/local
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
-endif
-
-# NetBSD
-
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-LIBZ_DIR ?= /usr
-LIBZ_INCLUDE_DIR ?= $(LIBZ_DIR)/include
-LIBZ_INCLUDE_DIRS = -I$(LIBZ_INCLUDE_DIR)
-LIBZ_LIB_DIR ?= $(LIBZ_DIR)/lib
-LIBZ_LIB_DIRS = -L$(LIBZ_LIB_DIR)
-LIBZ_LIBS ?= -lz
-endif
 endif
 
 endif
@@ -2539,83 +1932,6 @@ endif
 
 endif
 
-# SunOS
-
-ifeq "$(PLATFORM)" "SUNOS"
-ifeq "$(OS_MAJOR_VERSION)" "5"
-ifeq "$(OS_MINOR_VERSION)" "10"
-ifdef ICU_DIR
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?= -licuuc -licudata -licui18n
-endif
-ifndef ICU_DIR
-$(warning no usable ICU package for SPARC Solaris, compile your own version and set ICU_DIR accordingly)
-endif
-endif
-ifeq "$(OS_MINOR_VERSION)" "11"
-ifdef ICU_DIR
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?= -licuuc -licudata -licui18n
-endif
-ifndef ICU_DIR
-ICU_DIR ?= /opt/csw
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?=
-endif
-endif
-endif
-endif
-
-# FreeBSD
-
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq "$(OS_MAJOR_VERSION)" "8"
-ICU_DIR ?= /usr/local
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?=
-endif
-ifeq "$(OS_MAJOR_VERSION)" "9"
-ICU_DIR ?= /usr/local
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?=
-endif
-ifeq "$(OS_MAJOR_VERSION)" "10"
-ICU_DIR ?= /usr/local
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?=
-endif
-endif
-
-# NetBSD
-ifeq "$(PLATFORM)" "NETBSD"
-ifeq "$(OS_MAJOR_VERSION)" "6"
-ICU_DIR ?= /usr/pkg
-ICU_INCLUDE_DIR ?= $(ICU_DIR)/include
-ICU_INCLUDE_DIRS = -I$(ICU_INCLUDE_DIR)
-ICU_LIB_DIR ?= $(ICU_DIR)/lib
-ICU_LIB_DIRS = -L$(ICU_LIB_DIR)
-ICU_LIBS ?=
-endif
-endif
-
 endif
 
 # cJSON 0.11
@@ -2628,28 +1944,4 @@ CJSON_INCLUDE_DIRS = -I$(CJSON_INCLUDE_DIR)
 CJSON_LIB_DIR =
 CJSON_LIB_DIRS =
 CJSON_LIBS = $(CJSON_DIR)/libcjson.a
-endif
-
-
-# Expect (for testing)
-######################
-
-ifeq ($(WITH_EXPECT),1)
-
-ifeq "$(PLATFORM)" "LINUX"
-EXPECT ?= /usr/bin/expect
-endif
-
-ifeq "$(PLATFORM)" "FREEBSD"
-EXPECT ?= /usr/local/bin/expect
-endif
-
-ifeq "$(PLATFORM)" "NETBSD"
-EXPECT ?= /usr/pkg/bin/expect
-endif
-
-ifeq "$(PLATFORM)" "SUNOS"
-EXPECT ?= expect
-endif
-
 endif

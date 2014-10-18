@@ -137,19 +137,10 @@ if (boost::starts_with( flag, "DISABLED "))
 		if (boost::iequals( *ii, "UBUNTU_LINUX")) return "DISABLED ON LINUX DISTRIBUTION Ubuntu";
 #endif
 #endif
-#ifdef SUNOS
-		if (boost::iequals( *ii, "SUNOS")) return "DISABLED ON PLATFORM SUNOS ";
-#endif
-#ifdef FREEBSD
-		if (boost::iequals( *ii, "FREEBSD")) return "DISABLED ON PLATFORM FREEBSD ";
-#endif
-#ifdef NETBSD
-		if (boost::iequals( *ii, "NETBSD")) return "DISABLED ON PLATFORM NETBSD ";
-#endif
 	}
 	if (nargs == 0) return "DISABLED ";
 }
-	enum Platform {p_UNKNOWN,p_WIN32,p_LINUX,p_SUNOS,p_FREEBSD,p_NETBSD};
+	enum Platform {p_UNKNOWN,p_WIN32,p_LINUX};
 	enum LinuxDistro {d_UNKNOWN,d_ARCH,d_DEBIAN,d_REDHAT,d_SLACKWARE,d_SLES,d_SUSE,d_UBUNTU};
 
 	Platform platform = p_UNKNOWN;
@@ -181,15 +172,6 @@ if (boost::starts_with( flag, "DISABLED "))
 	distro = d_UBUNTU;
 #endif
 #endif
-#ifdef SUNOS
-	platform = p_SUNOS;
-#endif
-#ifdef FREEBSD
-	platform = p_FREEBSD;
-#endif
-#ifdef NETBSD
-	platform = p_NETBSD;
-#endif
 	if (platform != p_WIN32 && boost::iequals( flag, "WIN32")) return "only on platform WINDOWS";
 	if (platform != p_LINUX && boost::iequals( flag, "LINUX")) return "only on platform LINUX";
 #ifdef LINUX
@@ -201,9 +183,6 @@ if (boost::starts_with( flag, "DISABLED "))
 	if (distro != d_SUSE && boost::iequals( flag, "SUSE_LINUX")) return "only on Linux distribution OpenSuSE";
 	if (distro != d_UBUNTU && boost::iequals( flag, "UBUNTU_LINUX")) return "only on Linux distribution Ubuntu";
 #endif
-	if (platform != p_SUNOS && boost::iequals( flag, "SUNOS")) return "only on platform SUNOS";
-	if (platform != p_FREEBSD && boost::iequals( flag, "FREEBSD")) return "only on platform FREEBSD";
-	if (platform != p_NETBSD && boost::iequals( flag, "NETBSD")) return "only on platform NETBSD";
 
 #if !(WITH_LUA)
 	if (boost::iequals( flag, "LUA")) return "WITH_LUA=1 ";

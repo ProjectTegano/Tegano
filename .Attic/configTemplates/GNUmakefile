@@ -269,33 +269,6 @@ slackware/wolframe.conf:
 		../expand_template.sh wolframe-monolythic.tmpl \
 		../slackware/wolframe.conf
 
-freebsd/wolframe.conf:
-	cd templates; VARIANT=monolythic \
-		PLATFORM=FREEBSD \
-		WITH_SSL=1 WITH_SASL=1 WITH_SQLITE3=1 WITH_PGSQL=1 \
-		WITH_LUA=1 WITH_LIBXML2=1 WITH_LIBXSLT=1 WITH_LIBHPDF=1 WITH_ICU=1 \
-		WITH_FREEIMAGE=1 WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 \
-		../expand_template.sh wolframe-monolythic.tmpl \
-		../freebsd/wolframe.conf
-
-netbsd/wolframe.conf:
-	cd templates; VARIANT=monolythic \
-		PLATFORM=NETBSD \
-		WITH_SSL=1 WITH_SASL=1 WITH_SQLITE3=1 WITH_PGSQL=1 \
-		WITH_LUA=1 WITH_LIBXML2=1 WITH_LIBXSLT=1 WITH_LIBHPDF=1 WITH_ICU=1 \
-		WITH_FREEIMAGE=1 WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 \
-		../expand_template.sh wolframe-monolythic.tmpl \
-		../netbsd/wolframe.conf
-
-solaris/wolframe.conf:
-	cd templates; VARIANT=monolythic \
-		PLATFORM=SUNOS \
-		WITH_SSL=1 WITH_PAM=1 WITH_SASL=1 WITH_SQLITE3=1 WITH_PGSQL=1 \
-		WITH_LUA=1 WITH_LIBXML2=1 WITH_LIBXSLT=1 WITH_LIBHPDF=1 WITH_ICU=1 \
-		WITH_FREEIMAGE=1 WITH_PYTHON=1 WITH_CJSON=1 WITH_TEXTWOLF=1 \
-		../expand_template.sh wolframe-monolythic.tmpl \
-		../solaris/wolframe.conf
-
 # layout to install per platform
 
 ifeq "$(PLATFORM)" "LINUX"
@@ -322,30 +295,8 @@ ifeq "$(LINUX_DIST)" "slackware"
 local_install: install_common
 endif
 endif
-ifeq "$(PLATFORM)" "FREEBSD"
-SOURCEDIR = freebsd
-local_install: install_common
-endif
-ifeq "$(PLATFORM)" "NETBSD"
-SOURCEDIR = netbsd
-local_install: install_common
-endif
-ifeq "$(PLATFORM)" "SUNOS"
-SOURCEDIR = solaris
-local_install: install_common
-endif
 
 # install only configuration files for things which are actually built
-
-ifeq ($(WITH_PAM),1)  
-MODCONF += $(SOURCEDIR)/conf.d/mod_auth_pam.conf
-LOADCONF += $(SOURCEDIR)/modules.d/mod_auth_pam.conf
-endif
-
-ifeq ($(WITH_SASL),1)
-MODCONF += $(SOURCEDIR)/conf.d/mod_auth_sasl.conf
-LOADCONF += $(SOURCEDIR)/modules.d/mod_auth_sasl.conf
-endif
 
 ifeq ($(WITH_SQLITE3),1)
 MODCONF += $(SOURCEDIR)/conf.d/mod_db_sqlite3.conf
@@ -355,11 +306,6 @@ endif
 ifeq ($(WITH_PGSQL),1)
 MODCONF += $(SOURCEDIR)/conf.d/mod_db_postgresql.conf
 LOADCONF += $(SOURCEDIR)/modules.d/mod_db_postgresql.conf
-endif
-
-ifeq ($(WITH_ORACLE),1)
-MODCONF += $(SOURCEDIR)/conf.d/mod_db_oracle.conf
-LOADCONF += $(SOURCEDIR)/modules.d/mod_db_oracle.conf
 endif
 
 ifeq ($(WITH_TEXTWOLF),1)
@@ -378,16 +324,8 @@ ifeq ($(WITH_LUA),1)
 LOADCONF += $(SOURCEDIR)/modules.d/mod_command_lua.conf
 endif
 
-ifeq ($(WITH_PYTHON),1)
-LOADCONF += $(SOURCEDIR)/modules.d/mod_command_python.conf
-endif
-
 ifeq ($(WITH_LIBHPDF),1)
 LOADCONF += $(SOURCEDIR)/modules.d/mod_print_harupdf.conf
-endif
-
-ifeq ($(WITH_FREEIMAGE),1)
-LOADCONF += $(SOURCEDIR)/modules.d/mod_graphix.conf
 endif
 
 .PHONY: install_common install_modularized

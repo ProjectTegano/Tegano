@@ -16,10 +16,4 @@ ifeq ($(WITH_LIBHPDF),1)
 SUBDIRS += libhpdf
 endif
 
-ifeq ($(WITH_ICU),1)
-ifneq "$(PLATFORM)" "NETBSD"
-SUBDIRS += boost-locale
-endif
-endif
-
 -include $(TOPDIR)/makefiles/gmake/sub.mk

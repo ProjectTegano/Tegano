@@ -46,19 +46,6 @@ LD_LIBRARY_PATH = "$(BOOST_LIB_DIR):$(ICU_LIB_DIR)"
 ifeq "$(PLATFORM)" "LINUX"
 TEST_LOCALE=$(shell locale -a | grep en_US.utf8)
 endif
-ifeq "$(PLATFORM)" "FREEBSD"
-TEST_LOCALE=$(shell locale -a | grep en_US.UTF-8)
-endif
-ifeq "$(PLATFORM)" "NETBSD"
-# disabled, breaks, see #59 and #127
-TEST_LOCALE=
-#TEST_LOCALE=$(shell locale -a | grep en_US.UTF-8)
-endif
-ifeq "$(PLATFORM)" "SUNOS"
-# disabled, breaks, see #127
-TEST_LOCALE=
-#TEST_LOCALE=$(shell locale -a | grep en_US.UTF-8)
-endif
 
 local_test: $(TEST_CPP_BINS)
 ifeq ($(RUN_TESTS),1)

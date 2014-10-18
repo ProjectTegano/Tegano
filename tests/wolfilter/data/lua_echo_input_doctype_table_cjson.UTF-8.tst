@@ -138,8 +138,6 @@ function run()
 	output:as( provider.filter(), doctype)
 	printTable( input:table())
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"-doctype":	"employee_assignment_print",

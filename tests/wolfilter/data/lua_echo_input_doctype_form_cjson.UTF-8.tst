@@ -98,8 +98,6 @@ function run()
 	output:as( provider.filter(), f:name())
 	output:print( f:get())
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"-doctype":	"employee_assignment_print",

@@ -62,8 +62,6 @@ function run()
 	output:as( provider.filter(), input:metadata(), input:doctype())
 	output:print( input:get())
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"-doctype":	"employee_assignment_print",

@@ -97,26 +97,6 @@ else
 				fi
 				;;
 
-		FreeBSD*)	PLATFORM=FREEBSD
-				OS_MAJOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 1`
-				OS_MINOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 2 | cut -d - -f 1`
-				;;
-				
-		NetBSD*)	PLATFORM=NETBSD
-				OS_MAJOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 1`
-				OS_MINOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 2`
-				;;
-				
-		SunOS*)		PLATFORM=SUNOS
-				OS_MAJOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 1`
-				OS_MINOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f 2`
-				;;
-
-		Darwin*)	PLATFORM=MACOS
-				OS_MAJOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f1`
-				OS_MINOR_VERSION=`echo $UNAME_RELEASE | cut -d . -f2`
-				;;
-
 		*)
 				PLATFORM=UNKNOWN
 				echo "Unknown platform '$UNAME_SYSTEM $UNAME_RELEASE'"
@@ -130,25 +110,12 @@ else
 				;;
 		x86_64|amd64)	ARCH=x86_64
 				;;
-		sun4u)		ARCH=sun4u
-				;;
-		armv6l)		ARCH=armv6l
-				;;
 
 		*)		ARCH=UNKNOWN
 				echo "Unknown architecture '$UNAME_MACHINE'"
 				exit 1
 				
 	esac
-
-	# get last line, old 'tail' syntax and POSIX syntax, both exist out there
-	if test "x${PLATFORM}" = "xSUNOS"; then
-		TAIL1='tail -1'
-		HEAD1='head -1'
-	else
-		TAIL1='tail -n 1'
-		HEAD1='head -n 1'
-	fi
 
 	# the compiler and version
 
@@ -157,21 +124,11 @@ else
 	CC=`echo $CC | sed 's/distcc//g' | sed 's/ccache//g'`
 
 	# what compiler do we have (we can't relly on it's name as it may be a cc link to the binary!)
-	(( $CC --version 2>&1 | $HEAD1 ) 2>&1 | grep -i ICC ) 2>/dev/null 1>/dev/null
+	(( $CC -v 2>&1 | tail -n 1 ) 2>&1 | grep -i GCC ) 2>/dev/null 1>/dev/null
 	if test $? = 0; then
-		COMPILER='icc'
+		COMPILER='gcc'
 	else
-		( $CC --version 2>&1 | $HEAD1 | grep 'clang' ) >/dev/null
-		if test $? = 0; then
-			 COMPILER='clang'
-		else
-			(( $CC -v 2>&1 | $TAIL1 ) 2>&1 | grep -i GCC ) 2>/dev/null 1>/dev/null
-			if test $? = 0; then
-				COMPILER='gcc'
-			else
-				COMPILER='unknown'
-			fi
-		fi
+		COMPILER='unknown'
 	fi
 	
 	# version of gcc (GNU C compiler)
@@ -180,22 +137,6 @@ else
 		GCC_VERSION=`gcc -dumpversion`
 		GCC_MAJOR_VERSION=`echo $GCC_VERSION | cut -d . -f 1`
 		GCC_MINOR_VERSION=`echo $GCC_VERSION | cut -d . -f 2`
-	fi
-
-	# version of clang (LLVM C frontend)
-
-	if test $COMPILER = "clang"; then
-		CLANG_VERSION=`$CC --version | head -n 1 | cut -d ' ' -f 3`
-		CLANG_MAJOR_VERSION=`echo $CLANG_VERSION | cut -d . -f 1`
-		CLANG_MINOR_VERSION=`echo $CLANG_VERSION | cut -d . -f 2`
-	fi
-
-	# version of icc (Intel C compiler)
-
-	if test $COMPILER = "icc"; then
-		ICC_VERSION=`$CC -dumpversion`
-		ICC_MAJOR_VERSION=`echo $ICC_VERSION | cut -d . -f 1`
-		ICC_MINOR_VERSION=`echo $ICC_VERSION | cut -d . -f 2`
 	fi
 
 	# generate the makefile snippet with conditional variables
@@ -262,18 +203,6 @@ case "$1" in
 				;;
 
 	--gcc-minor-version)	echo $GCC_MINOR_VERSION
-				;;
-
-	--clang-major-version)	echo $CLANG_MAJOR_VERSION
-				;;
-
-	--clang-minor-version)	echo $CLANG_MINOR_VERSION
-				;;
-
-	--icc-major-version)	echo $ICC_MAJOR_VERSION
-				;;
-
-	--icc-minor-version)	echo $ICC_MINOR_VERSION
 				;;
 
 	*)			echo "unkown flag '$1' requested!"
