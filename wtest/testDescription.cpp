@@ -144,45 +144,14 @@ if (boost::starts_with( flag, "DISABLED "))
 	enum LinuxDistro {d_UNKNOWN,d_ARCH,d_DEBIAN,d_REDHAT,d_SLACKWARE,d_SLES,d_SUSE,d_UBUNTU};
 
 	Platform platform = p_UNKNOWN;
-	LinuxDistro distro = d_UNKNOWN;
 #ifdef _WIN32
 	platform = p_WIN32;
 #endif
 #ifdef LINUX
 	platform = p_LINUX;
-#ifdef LINUX_DIST_ARCH
-	distro = d_ARCH;
-#endif
-#ifdef LINUX_DIST_DEBIAN
-	distro = d_DEBIAN;
-#endif
-#ifdef LINUX_DIST_REDHAT
-	distro = d_REDHAT;
-#endif
-#ifdef LINUX_DIST_SLACKWARE
-	distro = d_SLACKWARE;
-#endif
-#ifdef LINUX_DIST_SLES
-	distro = d_SLES;
-#endif
-#ifdef LINUX_DIST_SUSE
-	distro = d_SUSE;
-#endif
-#ifdef LINUX_DIST_UBUNTU
-	distro = d_UBUNTU;
-#endif
 #endif
 	if (platform != p_WIN32 && boost::iequals( flag, "WIN32")) return "only on platform WINDOWS";
 	if (platform != p_LINUX && boost::iequals( flag, "LINUX")) return "only on platform LINUX";
-#ifdef LINUX
-	if (distro != d_ARCH && boost::iequals( flag, "ARCH_LINUX")) return "only on Linux distribution ArchLinux";
-	if (distro != d_DEBIAN && boost::iequals( flag, "DEBIAN_LINUX")) return "only on Linux distribution Debian";
-	if (distro != d_REDHAT && boost::iequals( flag, "REDHAT_LINUX")) return "only on Linux distribution Redhat";
-	if (distro != d_SLACKWARE && boost::iequals( flag, "SLACKWARE_LINUX")) return "only on Linux distribution Slackware";
-	if (distro != d_SLES && boost::iequals( flag, "SLES_LINUX")) return "only on Linux distribution SuSE Enterprise";
-	if (distro != d_SUSE && boost::iequals( flag, "SUSE_LINUX")) return "only on Linux distribution OpenSuSE";
-	if (distro != d_UBUNTU && boost::iequals( flag, "UBUNTU_LINUX")) return "only on Linux distribution Ubuntu";
-#endif
 
 #if !(WITH_LUA)
 	if (boost::iequals( flag, "LUA")) return "WITH_LUA=1 ";

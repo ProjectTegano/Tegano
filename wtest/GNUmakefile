@@ -10,9 +10,8 @@ INCLUDE_LDFLAGS = \
 	-L$(BOOST_LIB_DIR)
 
 INCLUDE_DIRS = \
-	-I. -I$(TOPDIR) -I$(TOPDIR)/include \
-	-I$(BOOST_INCLUDE_DIR) \
-	-Iinclude
+	-Iinclude -I$(TOPDIR)/include \
+	-I$(BOOST_INCLUDE_DIR)
 
 INCLUDE_LIBS = \
 	-lboost_filesystem -lboost_system
