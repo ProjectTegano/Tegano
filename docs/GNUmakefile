@@ -83,8 +83,6 @@ doc-doxygen-webpage:
 
 doc-html: WolfBook.html Tutorial.html
 
-doc-txt: InstallationUnix.txt
-
 doc-html-chunked: html/index.html html-tutorial/index.html
 
 doc-html-webpage: html-webpage/index.html html-tutorial-webpage/index.html
@@ -119,49 +117,6 @@ doc-towordml: WolfBook.docx
 	w3m -O ASCII -dump $< > $@
 	@sed 's/Copyright ?/Copyright (C)/g' $@ > _tmp
 	@mv -f _tmp $@ 
-
-# Installation files 'INSTALL.Unix' and 'Install.Windows' are generated
-# from the corresponding source sections of the Wolfbook, both for the
-# Wolframe and the wolfclient project. Keep that in mind when you change
-# things in the Installation sections of Wolfbook!
-
-INSTALLATION_UNIX_FILES = \
-	InstallationUnix.xml \
-	WolfBookVersion.txt \
-	WolfBookDate.txt \
-	Installation/InstallationSourceUnix.xml \
-	WolframeVersion.txt \
-	WolfclientVersion.txt
-
-INSTALLATION_WINDOWS_FILES = \
-	InstallationWindows.xml \
-	WolfBookVersion.txt \
-	WolfBookDate.txt \
-	Installation/InstallationSourceWindows.xml \
-	WolframeVersion.txt \
-	WolfclientVersion.txt
-
-INSTALLATION_UNIX_CLIENT_FILES = \
-	InstallationUnixClient.xml \
-	WolfBookVersion.txt \
-	WolfBookDate.txt \
-	Installation/InstallationSourceUnixClient.xml \
-	WolframeVersion.txt \
-	WolfclientVersion.txt
-
-INSTALLATION_WINDOWS_CLIENT_FILES = \
-	InstallationWindowsClient.xml \
-	WolfBookVersion.txt \
-	WolfBookDate.txt \
-	Installation/InstallationSourceWindowsClient.xml \
-	WolframeVersion.txt \
-	WolfclientVersion.txt
-	
-InstallationUnix.html: $(INSTALLATION_UNIX_FILES)
-InstallationWindows.html: $(INSTALLATION_WINDOWS_FILES)
-
-InstallationUnixClient.html: $(INSTALLATION_UNIX_CLIENT_FILES)
-InstallationWindowsClient.html: $(INSTALLATION_WINDOWS_CLIENT_FILES)
 
 # WolfBook
 
@@ -237,12 +192,6 @@ WOLFBOOK_SOURCE_FILES = \
 	ExtDevelopment/Introduction.xml \
 	ExtDevelopment/NormalizerModules.xml \
 	ExtDevelopment/Preface.xml \
-	Installation/InstallationBinary.xml \
-	Installation/InstallationSource.xml \
-	Installation/InstallationSourceUnix.xml \
-	Installation/InstallationSourceUnixClient.xml \
-	Installation/InstallationSourceWindows.xml \
-	Installation/InstallationSourceWindowsClient.xml \
 	examples/AppDevelop/cfg_command_dotnet.conf \
 	examples/AppDevelop/cfg_command_lua.conf \
 	examples/AppDevelop/cfg_filter_JSON.conf \
@@ -327,7 +276,6 @@ local_clean:
 	-rm -rf doxygen/html/* doxygen/man/*  doxygen/perlmod/*
 	-rm -f WolfBook.html WolfBook.fop WolfBook.pdf WolfBook.epub WolfBook.docx
 	-rm -f Tutorial.html Tutorial.pdf
-	-rm -f InstallationUnix.html InstallationUnix.txt InstallationWindows.html InstallationWindows.txt
 	-rm -rf html/*.html
 	-rm -rf html-webpage/*.html
 	-rm -rf html-tutorial/*.html
@@ -335,8 +283,6 @@ local_clean:
 	-rm -rf html-tutorial-webpage/*.html
 	-rm -rf html-tutorial-webpage-chunked/*.html
 	-rm -rf doxygen/html-webpage/*
-	-rm -rf InstallationUnixClient.html InstallationUnixClient.txt
-	-rm -rf InstallationWindowsClient.html InstallationWindowsClient.txt
 	
 local_distclean:
 
@@ -394,10 +340,6 @@ endif
 check:
 	xmllint --noout --xinclude --postvalid WolfBook.xml
 	xmllint --noout --xinclude --postvalid Tutorial.xml
-	xmllint --noout --xinclude --postvalid InstallationUnix.xml
-	xmllint --noout --xinclude --postvalid InstallationWindows.xml
-	xmllint --noout --xinclude --postvalid InstallationUnixClient.xml
-	xmllint --noout --xinclude --postvalid InstallationWindowsClient.xml
 	xmllint --noout --xinclude --postvalid wolframe.conf-man.xml
 	xmllint --noout --xinclude --postvalid wolframe-mod_db_sqlite3-man.xml
 	xmllint --noout --xinclude --postvalid wolframe-mod_db_postgresql-man.xml
