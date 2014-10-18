@@ -23,11 +23,6 @@ INCLUDE_LIBS = \
 	-lboost_thread$(BOOST_LIBRARY_TAG) \
 	$(ICU_LIBS)
 
-ifeq "$(PLATFORM)" "SUNOS"
-INCLUDE_LIBS += \
-	-lboost_chrono$(BOOST_LIBRARY_TAG)
-endif
-	
 DYNAMIC_MODULE = mod_normalize_locale.so
 
 CPP_OBJS = \

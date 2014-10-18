@@ -67,11 +67,6 @@ MAN_PAGES = \
 	wolframe-mod_db_sqlite3.5 \
 	wolframe-mod_db_postgresql.5 \
 
-ifeq ($(WITH_ORACLE),1)
-MAN_PAGES += \
-	wolframe-mod_db_oracle.5
-endif
-	
 man: $(MAN_PAGES)
 
 doc-doxygen:
@@ -293,31 +288,10 @@ local_install:
 	$(INSTALL) -d -m 0755 $(DESTDIR)$(mandir)/man8
 	$(INSTALL) -d -m 0755 $(DESTDIR)$(mandir)/man1
 	$(INSTALL) -m 0644 wolframe.conf.5 $(DESTDIR)$(mandir)/man5
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man5/wolframe.conf.5
-endif
 	$(INSTALL) -m 0644 wolframe-mod_db_sqlite3.5 $(DESTDIR)$(mandir)/man5
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man5/wolframe-mod_db_sqlite3.5
-endif
 	$(INSTALL) -m 0644 wolframe-mod_db_postgresql.5 $(DESTDIR)$(mandir)/man5
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man5/wolframe-mod_db_postgresql.5
-endif
-ifeq ($(WITH_ORACLE),1)
-	$(INSTALL) -m 0644 wolframe-mod_db_oracle.5 $(DESTDIR)$(mandir)/man5
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man5/wolframe-mod_db_oracle.5
-endif
-endif
 	$(INSTALL) -m 0644 wolframed.8 $(DESTDIR)$(mandir)/man8
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man8/wolframed.8
-endif
 	$(INSTALL) -m 0644 wolfpasswd.1 $(DESTDIR)$(mandir)/man1
-ifneq "$(PLATFORM)" "SUNOS"
-	gzip -f $(DESTDIR)$(mandir)/man1/wolfpasswd.1
-endif
 
 local_uninstall:
 	@-rm -rf $(DESTDIR)$(datadir)/doc/wolframe/html
@@ -331,9 +305,6 @@ local_uninstall:
 	@-rm $(DESTDIR)$(mandir)/man5/wolframe.conf.5*
 	@-rm $(DESTDIR)$(mandir)/man5/wolframe-mod_db_sqlite3.5*
 	@-rm $(DESTDIR)$(mandir)/man5/wolframe-mod_db_postgresql.5*
-ifeq ($(WITH_ORACLE),1)
-	@-rm $(DESTDIR)$(mandir)/man5/wolframe-mod_db_oracle.5*
-endif
 	@-rmdir $(DESTDIR)$(mandir)/man5
 	@-rmdir $(DESTDIR)$(mandir)
 
@@ -343,8 +314,5 @@ check:
 	xmllint --noout --xinclude --postvalid wolframe.conf-man.xml
 	xmllint --noout --xinclude --postvalid wolframe-mod_db_sqlite3-man.xml
 	xmllint --noout --xinclude --postvalid wolframe-mod_db_postgresql-man.xml
-ifeq ($(WITH_ORACLE),1)
-	xmllint --noout --xinclude --postvalid wolframe-mod_db_oracle-man.xml
-endif
 	xmllint --noout --xinclude --postvalid wolframed-man.xml
 	xmllint --noout --xinclude --postvalid wolfpasswd-man.xml

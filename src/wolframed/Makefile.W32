@@ -104,9 +104,6 @@ copy_prereq:
 	@-copy "$(PGSQL_DIR)\bin\libiconv*.dll" . >NUL
 !ENDIF
 !ENDIF
-!IFDEF WITH_ORACLE
-	@-copy "$(ORACLE_DIR)\*.dll" .  >NUL
-!ENDIF
 !IFDEF WITH_LIBXML2
 	@-copy "$(ZLIB_DIR)\bin\zlib1.dll" . >NUL
 	@-copy "$(ICONV_DIR)\bin\iconv.dll" . >NUL

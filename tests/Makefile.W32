@@ -39,13 +39,6 @@ INCLUDE_LIBS = \
 
 !ENDIF
 
-# Oracle
-!IFDEF WITH_ORACLE
-
-INCLUDE_LIBS = \
-	$(INCLUDE_LIBS) "$(ORACLE_DIR)\sdk\lib\msvc\oci.lib"
-!ENDIF
-
 TEST_CPP_BINS = \
 	testNamedRetVal.exe \
 	testVirtualInheritance.exe \
@@ -141,9 +134,6 @@ local_test:
 	@-copy "$(PGSQL_DIR)\bin\libintl*.dll" . >NUL 
 	@-copy "$(PGSQL_DIR)\bin\libiconv*.dll" . >NUL 
 !ENDIF
-!ENDIF
-!IFDEF WITH_ORACLE
-	@-copy "$(ORACLE_DIR)\*.dll" . >NUL 
 !ENDIF
 	@-echo testNamedRetVal 
 	@-testVirtualInheritance 
