@@ -38,7 +38,6 @@
 #include "config/valueParser.hpp"
 #include "logger/logger-v1.hpp"
 #include "applicationInfo.hpp"
-#include "system/platform.hpp"
 
 #include <string>
 #include <stdexcept>
@@ -60,8 +59,6 @@ static BannerConfiguration::SignatureTokens strToToken( std::string& str )
 		return BannerConfiguration::VERSION_REVISION;
 	else if ( boost::algorithm::iequals( str, "Build" ))
 		return BannerConfiguration::VERSION_BUILD;
-	else if ( boost::algorithm::iequals( str, "OS" ))
-		return BannerConfiguration::PRODUCT_OS;
 	else if ( boost::algorithm::iequals( str, "None" ))
 		return BannerConfiguration::NONE;
 	return BannerConfiguration::UNDEFINED;
@@ -108,7 +105,6 @@ bool BannerConfiguration::check() const
 	case VERSION_MINOR:
 	case VERSION_REVISION:
 	case VERSION_BUILD:
-	case PRODUCT_OS:
 	case NONE:
 	case UNDEFINED:
 		return true;
@@ -130,7 +126,6 @@ void BannerConfiguration::print( std::ostream& os, size_t /* indent */ ) const
 	case VERSION_MINOR:	os << "product name and minor version"; break;
 	case VERSION_REVISION:	os << "product name and revision"; break;
 	case VERSION_BUILD:	os << "product name and build"; break;
-	case PRODUCT_OS:	os << "product name, revision and OS"; break;
 	case NONE:		os << "none"; break;
 	case UNDEFINED:
 	default:		os << "NOT DEFINED !"; break;
@@ -163,11 +158,6 @@ std::string BannerConfiguration::toString() const
 			break;
 		case VERSION_BUILD:
 			banner = "Wolframe " + _Wolframe::ApplicationInfo::instance().version().toString( "version %M.%m.%r.%b" );
-			break;
-		case PRODUCT_OS: {
-			system::Platform p = system::Platform::makePlatform( );
-			banner = "Wolframe " + _Wolframe::ApplicationInfo::instance().version().toString( "version %M.%m.%r.%b" ) + " " + p.toString( );
-			}
 			break;
 		case NONE:
 			break;

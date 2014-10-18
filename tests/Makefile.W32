@@ -50,7 +50,6 @@ TEST_CPP_BINS = \
 	testNamedRetVal.exe \
 	testVirtualInheritance.exe \
 	versionTest.exe \
-	platformTest.exe \
 	testMethodMemberPointerTemplate.exe \
 	resolvePathTest.exe \
 	testAddressRestriction.exe \
@@ -87,7 +86,6 @@ testNamedRetVal.exe: testNamedRetVal.obj
 testVirtualInheritance.exe: testVirtualInheritance.obj
 testMethodMemberPointerTemplate.exe: testMethodMemberPointerTemplate.obj
 versionTest.exe: versionTest.obj
-platformTest.exe: platformTest.obj
 resolvePathTest.exe: resolvePathTest.obj
 testAddressRestriction.exe :testAddressRestriction.obj
 testBoostPath.exe: testBoostPath.obj
@@ -153,7 +151,6 @@ local_test:
 # DISABLED (only for memory corruption checks):	@-testTestAllocator 
 	@-logTest 
 	@-versionTest 
-	@-platformTest
 	@-counterTest 
 	@-resolvePathTest 
 	@-testAddressRestriction

@@ -10,10 +10,6 @@ ifeq ($(WITH_LUA),1)
 SUBDIRS += lua
 endif
 
-ifeq ($(WITH_PYTHON),1)
-SUBDIRS += python
-endif
-
 -include $(TOPDIR)/makefiles/gmake/sub.mk
 
 local_all:

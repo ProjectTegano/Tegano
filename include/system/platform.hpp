@@ -36,66 +36,16 @@
 #ifndef _PLATFORM_HPP_INCLUDED
 #define _PLATFORM_HPP_INCLUDED
 
-#include <string>
-
 namespace _Wolframe {
 namespace system {
 
 /// \brief Platform properties
 class Platform {
-private:
-	std::string	m_os;			///< Operating system
-	bool		m_hasOsVersion;		///< OS has a version?
-	unsigned short	m_os_major;		///< Operating system major version.
-	unsigned short	m_os_minor;		///< Operating system minor version.
-	bool		m_hasDisto;		///< Is it a Linux distribution?
-	std::string	m_distro;		///< Name of the Linux distribution
-	bool		m_hasDistroVersion;	///< Distribution has a version?
-	unsigned short	m_distro_major;		///< Linux distribution major version.
-	unsigned short	m_distro_minor;		///< Linux distribution minor version.
-
 public:
 	struct Properties
 	{
 		static bool username_default_casesensitive();
 	};
-
-public:
-	/// \brief Empty Version constructor.
-	/// This will contruct an empty Platform object having version
-	/// numbers set to 0 and string be empty
-	Platform()
-		: m_os( "" ), m_hasOsVersion( false ),
-		  m_os_major( 0 ), m_os_minor( 0 ),
-		  m_hasDisto( false ),
-		  m_distro( "" ), 
-		  m_hasDistroVersion( false ),
-		  m_distro_major( 0 ), m_distro_minor( 0 )
-	{}
-	Platform( const Platform& o)
-		: m_os( o.m_os), m_hasOsVersion( o.m_hasOsVersion ),
-		  m_os_major( o.m_os_major ), m_os_minor( o.m_os_minor ),
-		  m_hasDisto( o.m_hasDisto ),
-		  m_distro( o.m_distro ),
-		  m_hasDistroVersion( o.m_hasDistroVersion ),
-		  m_distro_major( o.m_distro_major ), m_distro_minor( o.m_distro_minor )
-	{}
-
-	/// \brief	Print the plaform in human readable format.
-	std::string toString() const;
-	
-	/// \brief	Create platform from makefile system.
-	///		This is the platform set for building the software
-	///		not where the software was build on nor the where it
-	///		is run on (think cross-compilation and compatible
-	///		distributions)
-	static Platform makePlatform( );
-	
-	/// \brief	Create plaform as seen at runtime.
-	///		This function uses functions to determine the runtime
-	///		platform we are running on, not the platform we built
-	///		the software for.
-	static Platform runtimePlatform( );
 };
 
 }}// namespace

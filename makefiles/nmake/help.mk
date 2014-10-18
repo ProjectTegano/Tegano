@@ -14,10 +14,8 @@ Available optional features:
 
 WITH_SSL=1             use OpenSSL additionally for communication encryption
 WITH_LUA=1             build code depending on Lua
-WITH_PYTHON=1          build bindings and modules for Python
 WITH_SQLITE3=1         build AAAA and DB connectors for Sqlite3
 WITH_PGSQL=1           build AAAA and DB connectors for PostgreSql
-WITH_ORACLE=1          build AAAA and DB connectors for Oracle
 WITH_TEXTWOLF=1        build code using textwolf
 WITH_LIBXML2=1         build code using libxml2
 WITH_LIBXSLT=1         build code using libxslt (requires also libxml2)
@@ -34,6 +32,5 @@ Example:
 nmake /nologo /f Makefile.W32 WITH_SSL=1 WITH_LUA=1
                               WITH_SQLITE3=1 WITH_PGSQL=1 WITH_LIBXML2=1
                               WITH_LIBXSLT=1 WITH_LIBHPDF=1 WITH_EXAMPLES=1
-                              WITH_ICU=1 WITH_PYTHON=1
-                              WITH_CJSON=1 WITH_TEXTWOLF=1
+                              WITH_ICU=1 WITH_CJSON=1 WITH_TEXTWOLF=1
                               

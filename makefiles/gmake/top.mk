@@ -33,8 +33,6 @@ clean:
 	  (set -e; $(MAKE) -r -C $$d clean || exit 1); done)
 	@-test ! -f $(TOPDIR)/makefiles/gmake/platform.mk.vars || rm $(TOPDIR)/makefiles/gmake/platform.mk.vars
 	@-test ! -f $(TOPDIR)/makefiles/gmake/platform.vars || rm $(TOPDIR)/makefiles/gmake/platform.vars
-	@-test ! -f $(TOPDIR)/makefiles/gmake/python.mk.vars || rm $(TOPDIR)/makefiles/gmake/python.mk.vars
-	@-test ! -f $(TOPDIR)/makefiles/gmake/python.vars || rm $(TOPDIR)/makefiles/gmake/python.vars
 
 .PHONY: distclean
 distclean:
@@ -42,8 +40,6 @@ distclean:
 	  (set -e; $(MAKE) -r -C $$d distclean || exit 1); done)
 	@-test ! -f $(TOPDIR)/makefiles/gmake/platform.mk.vars || rm $(TOPDIR)/makefiles/gmake/platform.mk.vars
 	@-test ! -f $(TOPDIR)/makefiles/gmake/platform.vars || rm $(TOPDIR)/makefiles/gmake/platform.vars
-	@-test ! -f $(TOPDIR)/makefiles/gmake/python.mk.vars || rm $(TOPDIR)/makefiles/gmake/python.mk.vars
-	@-test ! -f $(TOPDIR)/makefiles/gmake/python.vars || rm $(TOPDIR)/makefiles/gmake/python.vars
 
 .PHONY: install
 install:
@@ -129,20 +125,6 @@ ifeq ($(WITH_LUA),1)
 	@echo "LUA_PLATFORM_LDFLAGS: $(LUA_PLATFORM_LDFLAGS)"
 	@echo "LUA_PLATFORM_LIBS: $(LUA_PLATFORM_LIBS)"
 endif
-ifeq ($(WITH_PAM),1)
-	@echo
-	@echo "PAM_DIR: $(PAM_DIR)"
-	@echo "PAM_INCLUDE_DIR: $(PAM_INCLUDE_DIR)"
-	@echo "PAM_LIB_DIR: $(PAM_LIB_DIR)"
-	@echo "PAM_LIBS: $(PAM_LIBS)"
-endif
-ifeq ($(WITH_SASL),1)
-	@echo
-	@echo "SASL_DIR: $(SASL_DIR)"
-	@echo "SASL_INCLUDE_DIR: $(SASL_INCLUDE_DIR)"
-	@echo "SASL_LIB_DIR: $(SASL_LIB_DIR)"
-	@echo "SASL_LIBS: $(SASL_LIBS)"
-endif
 ifeq ($(WITH_SQLITE3),1)
 ifeq ($(WITH_SYSTEM_SQLITE3),1)
 	@echo
@@ -162,13 +144,6 @@ ifeq ($(WITH_PGSQL),1)
 	@echo "PGSQL_INCLUDE_DIRS: $(PGSQL_INCLUDE_DIRS)"
 	@echo "PGSQL_LIB_DIRS: $(PGSQL_LIB_DIRS)"
 	@echo "PGSQL_LIBS: $(PGSQL_LIBS)"
-endif
-ifeq ($(WITH_ORACLE),1)
-	@echo
-	@echo "ORACLE_DIR: $(ORACLE_DIR)"
-	@echo "ORACLE_INCLUDE_DIRS: $(ORACLE_INCLUDE_DIRS)"
-	@echo "ORACLE_LIB_DIRS: $(ORACLE_LIB_DIRS)"
-	@echo "ORACLE_LIBS: $(ORACLE_LIBS)"
 endif
 ifeq ($(WITH_TEXTWOLF),1)
 	@echo
@@ -219,14 +194,6 @@ ifeq ($(WITH_ICU),1)
 	@echo "ICU_INCLUDE_DIRS: $(ICU_INCLUDE_DIRS)"
 	@echo "ICU_LIB_DIRS: $(ICU_LIB_DIRS)"
 	@echo "ICU_LIBS: $(ICU_LIBS)"
-endif
-ifeq ($(WITH_PYTHON),1)
-	@echo
-	@echo "enabled Python bindings"
-	@echo
-	@echo "PYTHON_CFLAGS: $(PYTHON_CFLAGS)"
-	@echo "PYTHON_LDFLAGS: $(PYTHON_LDFLAGS)"
-	@echo "PYTHON_LIBS: $(PYTHON_LIBS)"
 endif
 ifeq ($(WITH_CJSON),1)
 	@echo

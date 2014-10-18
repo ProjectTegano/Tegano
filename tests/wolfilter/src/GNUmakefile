@@ -115,10 +115,6 @@ ifeq ($(WITH_LIBHPDF),1)
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(LIBHPDF_LIB_DIR)"
 endif
 
-ifeq ($(WITH_PYTHON),1)
-LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(PYTHON_LIB_DIR)"
-endif
-
 local_test: $(CPP_BINS)
 ifeq ($(RUN_TESTS),1)
 	@mkdir -p temp
