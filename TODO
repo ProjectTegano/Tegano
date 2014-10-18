@@ -1,7 +1,12 @@
-Cleanup include/aaaa: Preferably onyl interfaces there
-Cleanup include/system
-Go through filter,langbind,filter,types and do renamings
-Rename library libwfsingleton to libwflogger
-Check name (Luca helps)
+OPEN SOURCE PRODUCT MUSTS:
+Core:
+	- Authorization
+	- Client UI files from server with protocol support as ordinary wolframe function call (PF & MBa)
+	- For different type of transactions (get UI files, process request, etc..) chose DB in context
 
+Processors:
+	- CSV Filter
+	- Python (ABa, with support PF)
 
+Fixes:
+	- Start SDK and splitting of graphix module and others

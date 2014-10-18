@@ -120,8 +120,6 @@ function checkAuthenticator( struct )
 	st = struct:value()
 	return (st[ 'auth' ] == "WolfilterAuth")
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"-doctype":	"Person"

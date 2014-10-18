@@ -15,11 +15,8 @@
 <!ENTITY AppConfigDatabases		SYSTEM "ConfigDatabases.xml">
 <!ENTITY AppConfigDatabasePostgreSQL	SYSTEM "ConfigDatabasePostgreSQL.xml">
 <!ENTITY AppConfigDatabaseSqlite	SYSTEM "ConfigDatabaseSqlite.xml">
-<!ENTITY AppConfigDatabaseOracle	SYSTEM "ConfigDatabaseOracle.xml">
 <!ENTITY AppConfigDatabasePostgresSslOptionTable	SYSTEM "ConfigDatabaseSslOptionTable.xml">
 <!ENTITY AppConfigDatabasePostgresSslModeTable		SYSTEM "ConfigDatabaseSslModeTable.xml">
-<!ENTITY AppConfigDatabaseOracleSslOptionTable		SYSTEM "ConfigDatabaseSslOptionTable.xml">
-<!ENTITY AppConfigDatabaseOracleSslModeTable		SYSTEM "ConfigDatabaseSslModeTable.xml">
 
 <!ENTITY AppAAAA			SYSTEM "AAAA.xml">
 <!ENTITY AppAAAAConfig			SYSTEM "AAAAConfig.xml">

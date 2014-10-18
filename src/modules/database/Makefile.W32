@@ -16,12 +16,6 @@ SUBDIRS = \
 	$(SUBDIRS) sqlite3
 !ENDIF
 
-# Oracle
-!IFDEF WITH_ORACLE
-SUBDIRS = \
-	$(SUBDIRS) Oracle
-!ENDIF
-
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 local_all:

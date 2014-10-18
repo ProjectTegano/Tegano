@@ -117,8 +117,6 @@ function run()
 	res = provider.formfunction( "toupper_formfunc")( input:table())
 	printTable( res:table())
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"assignment":	[{

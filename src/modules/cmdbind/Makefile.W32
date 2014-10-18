@@ -17,11 +17,6 @@ SUBDIRS = \
 	$(SUBDIRS) dotnet
 !ENDIF
 
-!IFDEF WITH_PYTHON
-SUBDIRS = \
-	$(SUBDIRS) python
-!ENDIF
-
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 local_all:

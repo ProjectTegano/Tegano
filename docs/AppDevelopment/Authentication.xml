@@ -85,12 +85,5 @@ AAAA
 	client see the chapter "Clients".
 	</para>
 </sect2>
-<sect2>
-	<title>Development status</title>
-	<para>We are currently developing other authentication methods
-	like <code>PAM</code>, <code>SASL</code> and database based
-	authentication implementing <code>WOLFRAME-CRAM</code></para>.
-	They will be subject of the next release.
-</sect2>
 </sect1>
 

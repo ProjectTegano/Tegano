@@ -48,12 +48,6 @@ fi
 
 for cset in $csetselect
 do
-	if test "x$cset" = "xUCS-4BE"; then
-		# Aba: because UCS-4BE is broken in libxml2 on NetBSD
-		testdata="$testdata
-**requires:DISABLED NETBSD
-"
-	fi
 	if test x"$inputfilter" = "x"; then
 		inputfilter="$filter"
 	fi

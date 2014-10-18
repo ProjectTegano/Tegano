@@ -8,10 +8,6 @@ SUBDIRS = gtest
 SUBDIRS = zlib libpng libhpdf $(SUBDIRS)
 !ENDIF
 
-!IFDEF WITH_FREEIMAGE
-SUBDIRS = freeimage $(SUBDIRS)
-!ENDIF
-
 !IFDEF WITH_CJSON
 SUBDIRS = libcjson $(SUBDIRS)
 !ENDIF

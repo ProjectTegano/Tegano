@@ -56,18 +56,6 @@ INCLUDE_LIBS += \
 	$(PGSQL_LIBS)
 endif
 
-# Oracle
-ifeq ($(WITH_ORACLE),1)
-INCLUDE_CXXFLAGS += \
-	-DWITH_ORACLE
-INCLUDE_DIRS += \
-	$(ORACLE_INCLUDE_DIRS)
-INCLUDE_LDFLAGS += \
-	$(ORACLE_LIB_DIRS)
-INCLUDE_LIBS += \
-	$(ORACLE_LIBS)
-endif
-
 
 CPP_OBJS = \
 	testWolfilterFiles.o
@@ -106,17 +94,8 @@ ifeq ($(WITH_PGSQL),1)
 LD_LIBRARY_PATH:= "$(LD_LIBRARY_PATH):$(PGSQL_LIB_DIR)"
 endif
 
-ifeq ($(WITH_ORACLE),1)
-LD_LIBRARY_PATH:= "$(LD_LIBRARY_PATH):$(ORACLE_LIB_DIR)"
-endif
-
-
 ifeq ($(WITH_LIBHPDF),1)
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(LIBHPDF_LIB_DIR)"
-endif
-
-ifeq ($(WITH_PYTHON),1)
-LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(PYTHON_LIB_DIR)"
 endif
 
 local_test: $(CPP_BINS)

@@ -100,8 +100,6 @@ function run()
 		output:print( v,t)
 	end
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"assignment":	[{

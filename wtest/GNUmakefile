@@ -29,12 +29,6 @@ INCLUDE_CXXFLAGS += \
 	-DWITH_LUA
 endif
 
-# Python
-ifeq ($(WITH_PYTHON),1)
-INCLUDE_CXXFLAGS += \
-	-DWITH_PYTHON
-endif
-
 # libhpdf
 ifeq ($(WITH_LIBHPDF),1)
 INCLUDE_CXXFLAGS += \
@@ -88,19 +82,6 @@ INCLUDE_LDFLAGS += \
 INCLUDE_LIBS += \
 	$(PGSQL_LIBS)
 endif
-
-# Oracle
-ifeq ($(WITH_ORACLE),1)
-INCLUDE_CXXFLAGS += \
-	-DWITH_ORACLE
-INCLUDE_DIRS += \
-	$(ORACLE_INCLUDE_DIRS)
-INCLUDE_LDFLAGS += \
-	$(ORACLE_LIB_DIRS)
-INCLUDE_LIBS += \
-	$(ORACLE_LIBS)
-endif
-
 
 NOINST_STATIC_LIB = libwolftest.a
 

@@ -1,6 +1,6 @@
 TOPDIR = ..\..\..\..
 
-SUBDIRS = fakegraphix audit
+SUBDIRS = audit
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
 

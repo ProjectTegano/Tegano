@@ -86,8 +86,6 @@ TRANSACTION test_transaction
 BEGIN
 	INTO task FOREACH //task DO SELECT run( title);
 END
-**requires:DISABLED NETBSD
-
 **output
 {
 	"task":	[{

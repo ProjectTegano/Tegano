@@ -50,10 +50,6 @@
 #ifdef WITH_PGSQL
 #include <libpq-fe.h>
 #endif
-#ifdef WITH_ORACLE
-#include <oci.h>
-#include <sstream>
-#endif
 #include <boost/lexical_cast.hpp>
 #define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
@@ -101,95 +97,6 @@ static bool check_PGSQL_RUNNING()
 }
 #endif
 
-#ifdef WITH_ORACLE
-static bool check_ORACLE_RUNNING()
-{
-	static bool rt = false;
-
-	char user[10] = "wolfusr";
-	char password[10] = "wolfpwd";
-
-	std::ostringstream ss;
-	ss << "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)"
-		<< "(HOST=andreasbaumann.dyndns.org" << ")"
-		<< "(PORT=1521" << "))"
-		<< "(CONNECT_DATA=(SID=orcl" << ")"
-		<< "))";
-	std::string connStr = ss.str( );
-
-	OCIEnv *envhp = 0;
-	OCIError *errhp = 0;
-	OCIServer *srvhp = 0;
-	OCISvcCtx *svchp = 0;
-	OCISession *authp = 0;
-
-	sword status;
-
-	// create an Oracle OCI environment (global per process), what
-	// options do we really need (charset, mutex, threading, pooling)?
-	status = OCIEnvCreate( &envhp, OCI_DEFAULT, (dvoid *)0,
-		0, 0, 0, 0, (dvoid **)0 );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIHandleAlloc( envhp, (dvoid **)&srvhp, OCI_HTYPE_SERVER, (size_t)0, (dvoid **)0 );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIHandleAlloc( envhp, (dvoid **)&errhp, OCI_HTYPE_ERROR, (size_t)0, (dvoid **)0 );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIHandleAlloc( envhp, (dvoid **)&svchp, OCI_HTYPE_SVCCTX, (size_t)0, (dvoid **)0 );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIServerAttach( srvhp, errhp,
-		connStr.empty( ) ? NULL : (CONST text *)( connStr.c_str( ) ),
-		connStr.empty( ) ? (sb4)0 : (sb4)( connStr.length( ) ),
-		OCI_DEFAULT );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIAttrSet( svchp, OCI_HTYPE_SVCCTX,
-		srvhp, (ub4)0, OCI_ATTR_SERVER,
-		(OCIError *)errhp );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIHandleAlloc( envhp, (dvoid **)&authp,
-		OCI_HTYPE_SESSION, (size_t)0, (dvoid **)0 );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIAttrSet( authp, OCI_HTYPE_SESSION,
-		(dvoid *)user, (ub4)strlen( user ),
-		OCI_ATTR_USERNAME, errhp );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIAttrSet( authp, OCI_HTYPE_SESSION,
-		(dvoid *)password, (ub4)strlen( password ),
-		OCI_ATTR_PASSWORD, errhp );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCISessionBegin( svchp, errhp, authp,
-		OCI_CRED_RDBMS, OCI_DEFAULT );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	status = OCIAttrSet( svchp, OCI_HTYPE_SVCCTX,
-		authp, (ub4)0, OCI_ATTR_SESSION, errhp );
-	if( status != OCI_SUCCESS ) goto cleanup;
-
-	// success
-	rt = true;
-
-cleanup:
-
-	if( srvhp && errhp && authp ) (void)OCISessionEnd( svchp, errhp, authp, OCI_DEFAULT );
-	if( srvhp && errhp ) (void)OCIServerDetach( srvhp, errhp, OCI_DEFAULT );
-	if( authp ) (void)OCIHandleFree( authp, OCI_HTYPE_SESSION );
-	if( svchp ) (void)OCIHandleFree( svchp, OCI_HTYPE_SVCCTX );
-	if( errhp ) (void)OCIHandleFree( errhp, OCI_HTYPE_ERROR );
-	if( srvhp ) (void)OCIHandleFree( srvhp, OCI_HTYPE_SERVER );
-	if( envhp ) (void)OCIHandleFree( envhp, OCI_HTYPE_ENV );
-
-	return rt;
-}
-#endif
-
 static const char* check_flag( const std::string& flag)
 {
 if (boost::iequals( flag, "DISABLED")) return "DISABLED ";
@@ -230,19 +137,10 @@ if (boost::starts_with( flag, "DISABLED "))
 		if (boost::iequals( *ii, "UBUNTU_LINUX")) return "DISABLED ON LINUX DISTRIBUTION Ubuntu";
 #endif
 #endif
-#ifdef SUNOS
-		if (boost::iequals( *ii, "SUNOS")) return "DISABLED ON PLATFORM SUNOS ";
-#endif
-#ifdef FREEBSD
-		if (boost::iequals( *ii, "FREEBSD")) return "DISABLED ON PLATFORM FREEBSD ";
-#endif
-#ifdef NETBSD
-		if (boost::iequals( *ii, "NETBSD")) return "DISABLED ON PLATFORM NETBSD ";
-#endif
 	}
 	if (nargs == 0) return "DISABLED ";
 }
-	enum Platform {p_UNKNOWN,p_WIN32,p_LINUX,p_SUNOS,p_FREEBSD,p_NETBSD};
+	enum Platform {p_UNKNOWN,p_WIN32,p_LINUX};
 	enum LinuxDistro {d_UNKNOWN,d_ARCH,d_DEBIAN,d_REDHAT,d_SLACKWARE,d_SLES,d_SUSE,d_UBUNTU};
 
 	Platform platform = p_UNKNOWN;
@@ -274,15 +172,6 @@ if (boost::starts_with( flag, "DISABLED "))
 	distro = d_UBUNTU;
 #endif
 #endif
-#ifdef SUNOS
-	platform = p_SUNOS;
-#endif
-#ifdef FREEBSD
-	platform = p_FREEBSD;
-#endif
-#ifdef NETBSD
-	platform = p_NETBSD;
-#endif
 	if (platform != p_WIN32 && boost::iequals( flag, "WIN32")) return "only on platform WINDOWS";
 	if (platform != p_LINUX && boost::iequals( flag, "LINUX")) return "only on platform LINUX";
 #ifdef LINUX
@@ -294,27 +183,15 @@ if (boost::starts_with( flag, "DISABLED "))
 	if (distro != d_SUSE && boost::iequals( flag, "SUSE_LINUX")) return "only on Linux distribution OpenSuSE";
 	if (distro != d_UBUNTU && boost::iequals( flag, "UBUNTU_LINUX")) return "only on Linux distribution Ubuntu";
 #endif
-	if (platform != p_SUNOS && boost::iequals( flag, "SUNOS")) return "only on platform SUNOS";
-	if (platform != p_FREEBSD && boost::iequals( flag, "FREEBSD")) return "only on platform FREEBSD";
-	if (platform != p_NETBSD && boost::iequals( flag, "NETBSD")) return "only on platform NETBSD";
 
 #if !(WITH_LUA)
 	if (boost::iequals( flag, "LUA")) return "WITH_LUA=1 ";
-#endif
-#if !(WITH_PYTHON)
-	if (boost::iequals( flag, "PYTHON")) return "WITH_PYTHON=1 ";
 #endif
 #if !(WITH_LIBHPDF)
 	if (boost::iequals( flag, "LIBHPDF")) return "WITH_LIBHPDF=1 ";
 #endif
 #if !(WITH_SSL)
 	if (boost::iequals( flag, "SSL")) return "WITH_SSL=1 ";
-#endif
-#if !(WITH_PAM)
-	if (boost::iequals( flag, "PAM")) return "WITH_PAM=1 ";
-#endif
-#if !(WITH_SASL)
-	if (boost::iequals( flag, "SASL")) return "WITH_SASL=1 ";
 #endif
 #if !(WITH_SQLITE3)
 	if (boost::iequals( flag, "SQLITE3")) return "WITH_SQLITE3=1 ";
@@ -326,11 +203,6 @@ if (boost::starts_with( flag, "DISABLED "))
 	if (boost::iequals( flag, "PGSQL")) return "WITH_PGSQL=1 ";
 #else
 	if (boost::iequals( flag, "PGSQL") && !check_PGSQL_RUNNING()) return "RUNNING Postgresql Database ";
-#endif
-#if !(WITH_ORACLE)
-	if (boost::iequals( flag, "ORACLE")) return "WITH_ORACLE=1 ";
-#else
-	if (boost::iequals( flag, "ORACLE") && !check_ORACLE_RUNNING()) return "RUNNING Oracle Database ";
 #endif
 #if !(WITH_LIBXML2)
 	if (boost::iequals( flag, "LIBXML2")) return "WITH_LIBXML2=1 ";

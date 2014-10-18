@@ -88,7 +88,7 @@
 			into the server. Nevertheless there is no unified database language
 			involved and transactions can use proprietary language constructs 
 			of the underlying database. Wolframe supports many databases like 
-			for example PostgreSQL, Sqlite and Oracle and others can be added 
+			for example PostgreSQL and Sqlite and others can be added 
 			by just implementing the database interface as a loadable module.
 			</para>
 		</sect2>

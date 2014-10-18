@@ -101,8 +101,6 @@ function run()
 	r = provider.formfunction("employee_assignment_convert")( t)
 	printTable( r:table())
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"assignment":	[{

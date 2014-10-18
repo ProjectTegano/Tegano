@@ -4,11 +4,6 @@ TOPDIR = ..\..
 
 SUBDIRS =
 
-!IFDEF WITH_PYTHON
-SUBDIRS = \
-	$(SUBDIRS) python
-!ENDIF
-
 !IFDEF WITH_LIBXML2
 SUBDIRS = \
 	$(SUBDIRS) libxml2
@@ -29,11 +24,6 @@ SUBDIRS = \
 !IFDEF WITH_ICU
 SUBDIRS = \
 	$(SUBDIRS) boost-locale
-!ENDIF
-
-!IFDEF WITH_FREEIMAGE
-SUBDIRS = \
-	$(SUBDIRS) freeimage
 !ENDIF
 
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk

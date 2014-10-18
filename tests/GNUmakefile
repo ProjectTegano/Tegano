@@ -4,16 +4,6 @@ SUBDIRS = 3rdParty crypto modules moduleloader database authentication simpleFor
 
 -include $(TOPDIR)/makefiles/gmake/platform.mk
 
-ifeq ($(WITH_EXPECT),1)
-ifneq "$(PLATFORM)" "FREEBSD"
-ifneq "$(PLATFORM)" "NETBSD"
-ifneq "$(PLATFORM)" "SUNOS"
-SUBDIRS += expect config
-endif
-endif
-endif
-endif
-
 INCLUDE_CXXFLAGS = \
 
 # note: something draws in libintl support, not sure what..
@@ -85,33 +75,6 @@ INCLUDE_LIBS += \
 	$(PGSQL_LIBS)
 endif
 
-# Oracle
-ifeq ($(WITH_ORACLE),1)
-INCLUDE_CXXFLAGS += \
-	-DWITH_ORACLE
-INCLUDE_DIRS += \
-	$(ORACLE_INCLUDE_DIRS)
-INCLUDE_LDFLAGS += \
-	$(ORACLE_LIB_DIRS)
-INCLUDE_LIBS += \
-	$(ORACLE_LIBS)
-endif
-
-# Python (missing symbols on FreeBSD only, should
-# be investigated as we want to keep all python
-# dependencies strictly to the modules), otherwise
-# we also have to link 'wolframed' against -lpython
-# which is not acceptable. Keep the hackaround for
-# now to make FreeBSD happy..
-ifeq "$(PLATFORM)" "FREEBSD"
-ifeq ($(WITH_PYTHON),1)
-INCLUDE_LDFLAGS += \
-	$(PYTHON_LDFLAGS)
-INCLUDE_LIBS += \
-	$(PYTHON_LIBS)
-endif
-endif
-
 TEST_OBJS =
 
 TEST_CPP_BINS = \
@@ -120,7 +83,6 @@ TEST_CPP_BINS = \
 	testVirtualInheritance$(EXE) \
 	testArrayDoublingAllocator$(EXE) \
 	versionTest$(EXE) \
-	platformTest$(EXE) \
 	resolvePathTest$(EXE) \
 	testAddressRestriction$(EXE) \
 	testBoostPath$(EXE) \
@@ -184,16 +146,8 @@ ifeq ($(WITH_PGSQL),1)
 LD_LIBRARY_PATH:= "$(LD_LIBRARY_PATH):$(PGSQL_LIB_DIR)"
 endif
 
-ifeq ($(WITH_ORACLE),1)
-LD_LIBRARY_PATH:= "$(LD_LIBRARY_PATH):$(ORACLE_LIB_DIR)"
-endif
-
 ifeq ($(WITH_LIBHPDF),1)
 LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(LIBHPDF_LIB_DIR)"
-endif
-
-ifeq ($(WITH_PYTHON),1)
-LD_LIBRARY_PATH := "$(LD_LIBRARY_PATH):$(PYTHON_LIB_DIR)"
 endif
 
 local_test: $(TEST_CPP_BINS)
@@ -208,8 +162,6 @@ ifeq ($(RUN_TESTS),1)
 	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./logTest
 	@echo
 	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./versionTest
-	@echo
-	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./platformTest
 	@echo
 	@LD_LIBRARY_PATH=$(LD_LIBRARY_PATH) ./resolvePathTest
 	@echo

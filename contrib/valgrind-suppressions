@@ -23,19 +23,6 @@
    ...
 }
 
-# PAM modules call shared library object, those leak in
-# libdl, which is normal
-{
-   dynamically loaded PAM modules leak in libdl
-   Memcheck:Leak
-   fun:calloc
-   ...
-   fun:dlopen
-   ...
-   fun:pam_start
-   ...
-}
-
 # SSL init
 {
    SSL_library_init_1

@@ -2,12 +2,6 @@ TOPDIR = ..
 
 SUBDIRS = 3rdParty crypto modules moduleloader database authentication wolfilter simpleFormCompiler compileTDL protocol doxygen_examples
 
-# all broken on windows due to working telnet
-#!IFDEF WITH_EXPECT
-#SUBDIRS = \
-#	$(SUBDIRS) expect
-#!ENDIF
-
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
 
 INCLUDE_CXXFLAGS = \
@@ -45,18 +39,10 @@ INCLUDE_LIBS = \
 
 !ENDIF
 
-# Oracle
-!IFDEF WITH_ORACLE
-
-INCLUDE_LIBS = \
-	$(INCLUDE_LIBS) "$(ORACLE_DIR)\sdk\lib\msvc\oci.lib"
-!ENDIF
-
 TEST_CPP_BINS = \
 	testNamedRetVal.exe \
 	testVirtualInheritance.exe \
 	versionTest.exe \
-	platformTest.exe \
 	testMethodMemberPointerTemplate.exe \
 	resolvePathTest.exe \
 	testAddressRestriction.exe \
@@ -93,7 +79,6 @@ testNamedRetVal.exe: testNamedRetVal.obj
 testVirtualInheritance.exe: testVirtualInheritance.obj
 testMethodMemberPointerTemplate.exe: testMethodMemberPointerTemplate.obj
 versionTest.exe: versionTest.obj
-platformTest.exe: platformTest.obj
 resolvePathTest.exe: resolvePathTest.obj
 testAddressRestriction.exe :testAddressRestriction.obj
 testBoostPath.exe: testBoostPath.obj
@@ -150,16 +135,12 @@ local_test:
 	@-copy "$(PGSQL_DIR)\bin\libiconv*.dll" . >NUL 
 !ENDIF
 !ENDIF
-!IFDEF WITH_ORACLE
-	@-copy "$(ORACLE_DIR)\*.dll" . >NUL 
-!ENDIF
 	@-echo testNamedRetVal 
 	@-testVirtualInheritance 
 	@-testFiletypeRecognition 
 # DISABLED (only for memory corruption checks):	@-testTestAllocator 
 	@-logTest 
 	@-versionTest 
-	@-platformTest
 	@-counterTest 
 	@-resolvePathTest 
 	@-testAddressRestriction

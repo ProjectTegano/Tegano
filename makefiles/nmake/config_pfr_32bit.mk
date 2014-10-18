@@ -10,7 +10,6 @@
 # - OPENSSL_DIR: location of the OpenSSL library (WITH_SSL=1 only)
 # - PGSQL_DIR: location of Postgres libpq and header files (WITH_PGSQL=1 only)
 # - TCL_DIR: location of the Active Tcl installation (for testing only)
-# - EXPECT: location of the expect interpreter (for testing only)
 
 # please customize
 
@@ -53,7 +52,3 @@ WIN_ICONV_DIR = C:\Iconv\iconv-1.9.2
 # libxml2
 #########
 LIBXML2_DIR = C:\LibXML2\libxml2-2.7.8
-
-# Oracle
-########
-ORACLE_DIR = C:\Oracle\sdk-nt-12.1.0.1.0\instantclient_12_1

@@ -170,8 +170,6 @@ function run()
 		end
 	end
 end
-**requires:DISABLED NETBSD
-
 **output
 {
 	"assignment":	[{
