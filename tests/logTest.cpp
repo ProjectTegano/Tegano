@@ -24,9 +24,9 @@ public:
 	void setLevel( const LogLevel::Level level )	{
 		// in order not to spoil the output of gtest :-)
 		logBack.setConsoleLevel( LogLevel::LOGLEVEL_UNDEFINED );
+		logBack.setSyslogLevel( LogLevel::LOGLEVEL_UNDEFINED );
 
 		logBack.setLogfileLevel( level );
-		logBack.setSyslogLevel( level );
 #if defined( _WIN32 )
 		logBack.setWinDebugLevel( level );
 		logBack.setEventlogLevel( level );
