@@ -13,3 +13,5 @@ set(mod_cmdbind_echo_source_files
 add_library(mod_cmdbind_echo MODULE ${mod_cmdbind_echo_source_files})
 
 set_target_properties(mod_cmdbind_echo PROPERTIES PREFIX "")
+
+target_link_libraries(mod_cmdbind_echo wolframe_serialize wolframe_langbind)

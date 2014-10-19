@@ -12,3 +12,5 @@ include_directories(
 add_library(mod_auth_test MODULE ${mod_auth_test_source_files})
 
 set_target_properties(mod_auth_test PROPERTIES PREFIX "")
+
+target_link_libraries(mod_auth_test wolframe_serialize wolframe_langbind)
