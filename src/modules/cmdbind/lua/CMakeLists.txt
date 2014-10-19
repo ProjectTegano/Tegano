@@ -30,6 +30,7 @@ set(mod_command_lua_source_files
 include_directories(
   "${Boost_INCLUDE_DIRS}"
   "${PROJECT_SOURCE_DIR}/include"
+  "${PROJECT_SOURCE_DIR}/3rdParty/lua/src"
 )
 
 add_definitions("-DWITH_LUA")

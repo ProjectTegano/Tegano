@@ -25,3 +25,5 @@ include_directories(
 )
 
 add_library(wolframe_serialize SHARED ${libwolframe_serialize_source_files})
+
+target_link_libraries(wolframe_serialize wfsingleton wolframe_langbind)

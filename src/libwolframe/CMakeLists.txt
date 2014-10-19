@@ -61,3 +61,7 @@ include_directories(
 )
 
 add_library(wolframe SHARED ${libwolframe_source_files})
+
+target_link_libraries(wolframe
+  ${Boost_LIBRARIES}
+)

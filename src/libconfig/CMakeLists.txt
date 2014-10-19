@@ -44,3 +44,5 @@ include_directories(
 )
 
 add_library(config SHARED ${libconfig_source_files} ${OPENSSL_LIBRARIES})
+
+target_link_libraries(config ${CMAKE_DL_LIBS})
