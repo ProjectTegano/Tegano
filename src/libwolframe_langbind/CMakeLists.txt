@@ -21,3 +21,5 @@ include_directories(
 )
 
 add_library(wolframe_langbind SHARED ${libwolframe_langbind_source_files})
+
+target_link_libraries(wolframe_langbind wolframe)

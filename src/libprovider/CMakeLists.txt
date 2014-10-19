@@ -36,3 +36,5 @@ include_directories(
 )
 
 add_library(provider SHARED ${libprovider_source_files})
+
+target_link_libraries(provider wfsingleton)
