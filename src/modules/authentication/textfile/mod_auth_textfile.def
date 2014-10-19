@@ -1,4 +1,0 @@
-LIBRARY mod_auth_textfile
-
-EXPORTS
-entryPoint	@1

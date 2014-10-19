@@ -1,5 +1,0 @@
-LIBRARY mod_db_oracletest
-
-EXPORTS
-entryPoint	@1
-

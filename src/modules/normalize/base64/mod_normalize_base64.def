@@ -1,4 +1,0 @@
-LIBRARY mod_normalize_base64
-
-EXPORTS
-entryPoint	@1

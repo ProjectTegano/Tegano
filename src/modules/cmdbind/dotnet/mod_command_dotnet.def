@@ -1,4 +1,0 @@
-LIBRARY mod_command_dotnet
-
-EXPORTS
-entryPoint      @1

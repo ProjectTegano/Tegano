@@ -1,4 +1,0 @@
-LIBRARY mod_datatype_datetime
-
-EXPORTS
-entryPoint	@1

@@ -1,4 +1,0 @@
-LIBRARY mod_test_containers
-
-EXPORTS
-entryPoint	@1

@@ -65,7 +65,13 @@ public:
 	}
 };
 
-extern "C" ModuleEntryPoint entryPoint;
+#ifndef _WIN32
+#define DLLEXPORT 
+#else
+#define DLLEXPORT __declspec( dllexport )
+#endif
+
+extern "C" DLLEXPORT ModuleEntryPoint entryPoint;
 
 }}//namespace
 #endif

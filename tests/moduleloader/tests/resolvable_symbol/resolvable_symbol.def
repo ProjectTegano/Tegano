@@ -1,4 +1,0 @@
-LIBRARY resolvable_symbol
-
-EXPORTS
-entryPoint	@1

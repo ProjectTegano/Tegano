@@ -1,4 +1,0 @@
-LIBRARY mod_doctype_json
-
-EXPORTS
-entryPoint	@1

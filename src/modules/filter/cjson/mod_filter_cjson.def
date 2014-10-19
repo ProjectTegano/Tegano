@@ -1,4 +1,0 @@
-LIBRARY mod_filter_cjson
-
-EXPORTS
-entryPoint	@1

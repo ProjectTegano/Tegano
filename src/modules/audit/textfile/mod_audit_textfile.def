@@ -1,4 +1,0 @@
-LIBRARY mod_audit_textfile
-
-EXPORTS
-entryPoint	@1

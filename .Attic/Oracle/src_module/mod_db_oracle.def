@@ -1,4 +1,0 @@
-LIBRARY mod_db_oracle
-
-EXPORTS
-entryPoint	@1

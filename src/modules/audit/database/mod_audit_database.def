@@ -1,4 +1,0 @@
-LIBRARY mod_audit_database
-
-EXPORTS
-entryPoint	@1

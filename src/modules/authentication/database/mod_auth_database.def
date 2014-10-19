@@ -1,4 +1,0 @@
-LIBRARY mod_auth_database
-
-EXPORTS
-entryPoint	@1
