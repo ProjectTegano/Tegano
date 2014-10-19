@@ -51,7 +51,7 @@
 
 //#define _BASE64_WRITE_OUTPUT
 #define _BASE64_LOOP_TEST
-#define _BASE64_NOF_LOOPS	4096
+#define _BASE64_NOF_LOOPS	256
 //#define _BASE64_PRINT_TEST_PARAMETRS
 
 using namespace _Wolframe;
