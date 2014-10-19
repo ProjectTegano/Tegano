@@ -224,7 +224,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 					cmdbind::ProtocolHandlerUnitR unit( obj);
 					std::string name( unit->protocol());
 					m_protocols.insert( name, unit);
-					LOG_TRACE << "ProcessorProvider: registered protocol handler '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered protocol handler '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -235,7 +235,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<cmdbind::DoctypeDetectorType> objref( obj);
 					m_doctypes.push_back( objref);
-					LOG_TRACE << "ProcessorProvider: registered document type/format detection '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered document type/format detection '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -246,7 +246,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<langbind::FilterType> objref( obj);
 					m_programs.defineFilterType( obj->name(), objref);
-					LOG_TRACE << "ProcessorProvider: registered filter type '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered filter type '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -258,7 +258,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<langbind::DDLCompiler> objref( obj);
 					m_programs.defineFormDDL( objref);
-					LOG_TRACE << "ProcessorProvider: registered DDL compiler '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered DDL compiler '" << constructor->className() << "i";
 				}
 				break;
 			}
@@ -270,7 +270,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<proc::Program> objref( obj);
 					m_programs.defineProgramType( objref);
-					LOG_TRACE << "ProcessorProvider: registered program type '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered program type '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -282,7 +282,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<serialize::CppFormFunction> objref( obj);
 					m_programs.defineFormFunction( obj->name(), objref);
-					LOG_TRACE << "ProcessorProvider: registered C++ form function '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered C++ form function '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -294,7 +294,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<types::NormalizeFunctionType> objref( obj);
 					m_programs.defineNormalizeFunctionType( obj->name(), objref);
-					LOG_TRACE << "ProcessorProvider: registered normalize function type '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered normalize function type '" << constructor->className() << "'";
 				}
 				break;
 			}
@@ -306,7 +306,7 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 				{
 					boost::shared_ptr<types::CustomDataType> objref( obj);
 					m_programs.defineCustomDataType( obj->name(), objref);
-					LOG_TRACE << "ProcessorProvider: registered custom data type '" << constructor->className() << ")";
+					LOG_TRACE << "ProcessorProvider: registered custom data type '" << constructor->className() << "'";
 				}
 				break;
 			}
