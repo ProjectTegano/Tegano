@@ -21,3 +21,5 @@ Local changes to cJSON in Wolframe:
    doing some error handling and returning an int to indicate the error
 
  * print_number: added error handling after malloc, return 0 if malloc fails
+
+ * added cmake support

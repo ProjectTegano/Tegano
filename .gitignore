@@ -245,3 +245,10 @@ tests/dotnet/csharp/WolframeClient/obj/
 tests/dotnet/interop/WolfCLR/WolfCLR/ipch/
 tests/AAAA/pamTest
 tests/platformTest
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+Makefile
+wtest/cleaninput

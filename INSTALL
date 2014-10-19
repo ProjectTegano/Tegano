@@ -1,3 +1,28 @@
 cmake .
 make
 make install
+
+To have a more verbose build:
+
+make -f Makefile VERBOSE=1
+
+cmake . -DCMAKE_BUILD_TYPE=Release
+cmake . -DCMAKE_BUILD_TYPE=Debug
+make VERBOSE=1
+
+choose versions of the build
+
+cmake . -DCMAKE_BUILD_TYPE=Release
+cmake . -DCMAKE_BUILD_TYPE=Debug
+
+use ccache:
+
+cmake . -DCMAKE_CXX_COMPILER=/usr/lib/ccache/bin/g++ -DCMAKE_C_COMPILER=/usr/lib/ccache/bin/gcc
+
+check for errors in:
+
+CMakeFiles/CMakeOutput.log
+
+execute tests:
+
+make test

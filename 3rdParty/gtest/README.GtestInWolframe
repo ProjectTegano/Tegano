@@ -9,4 +9,4 @@ Local Changes to the Code:
    around a mutex initialization (added a pthread_t())
 
  * autoconf/automake build system has been removed in favour of
-   the Wolframe makefiles
+   the cmake build system

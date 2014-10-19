@@ -2,5 +2,4 @@ various development tools:
 
 valgrind-suppressions       - known problems when testing
                               with valgrind memcheck/leakcheck
-bildWin.bat                 - convenience build script for Windows
 

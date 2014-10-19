@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+
+add_subdirectory(libwolframe)
+add_subdirectory(libwfsingleton)
+add_subdirectory(libwolframe_serialize)
+add_subdirectory(libwolframe_database)
+add_subdirectory(libwolframe_langbind)
+add_subdirectory(libconfig)
+add_subdirectory(libprovider)
+add_subdirectory(modules)
+add_subdirectory(wolframed)
+add_subdirectory(wolfilter)

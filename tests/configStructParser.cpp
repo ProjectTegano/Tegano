@@ -423,12 +423,7 @@ int main( int argc, const char** argv)
 {
 	Configuration cfg;
 
-	if (argc <= 1)
-	{
-		std::cerr << "missing argument configuration file" << std::endl;
-		return 1;
-	}
-	std::string filename( argv[1]);
+	std::string filename( "config/structparser.conf");
 
 	std::string configfile = boost::filesystem::absolute( filename).string();
 	if (!utils::fileExists( configfile))
