@@ -39,7 +39,7 @@ all: $(DYNAMIC_MODULE)
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) mod_command_directmap.obj
-	$(LINK) /dll /def:mod_command_directmap.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:
 

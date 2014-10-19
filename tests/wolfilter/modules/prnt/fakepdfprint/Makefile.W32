@@ -35,7 +35,7 @@ all: $(DYNAMIC_MODULE)
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) mod_print_testpdf.obj
-	$(LINK) /dll /def:mod_print_testpdf.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:
 

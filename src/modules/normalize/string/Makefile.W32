@@ -34,7 +34,7 @@ all: $(DYNAMIC_MODULE)
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) mod_normalize_string.obj
-	$(LINK) /dll /def:mod_normalize_string.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:
 

@@ -44,7 +44,7 @@ all: $(DYNAMIC_MODULE) $(STATIC_LIB)
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) mod_print_harupdf.obj
-	$(LINK) /dll /def:mod_print_harupdf.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 $(STATIC_LIB): $(CPP_OBJS)
 	$(LINK) /lib /out:$@ $(STATIC_LDFLAGS) $?

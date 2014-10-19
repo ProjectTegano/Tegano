@@ -27,7 +27,7 @@ DYNAMIC_MODULE = \
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) missing_symbol.obj
-	$(LINK) /dll /def:missing_symbol.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:
 

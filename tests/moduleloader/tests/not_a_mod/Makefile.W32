@@ -19,7 +19,7 @@ DYNAMIC_MODULE = \
 !INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
 
 $(DYNAMIC_MODULE): $(CPP_OBJS) not_a_mod.obj
-	$(LINK) /dll /def:not_a_mod.def /out:$@ $(LDFLAGS) $(LIBS) $?
+	$(LINK) /dll /out:$@ $(LDFLAGS) $(LIBS) $?
 
 local_all:
 
