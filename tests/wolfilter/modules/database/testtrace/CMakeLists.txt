@@ -11,3 +11,5 @@ set(mod_db_testtrace_source_files
 add_library(mod_db_testtrace MODULE ${mod_db_testtrace_source_files})
 
 set_target_properties(mod_db_testtrace PROPERTIES PREFIX "")
+
+target_link_libraries(mod_db_testtrace wolframe_database)

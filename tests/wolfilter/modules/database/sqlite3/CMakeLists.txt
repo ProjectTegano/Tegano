@@ -17,3 +17,5 @@ add_library(mod_db_sqlite3test MODULE ${mod_db_sqlite3test_source_files})
 set_target_properties(mod_db_sqlite3test PROPERTIES PREFIX "")
 
 target_link_libraries(mod_db_sqlite3test db_sqlite3_static sqlite3)
+
+target_link_libraries(mod_db_sqlite3test wolframe_database)

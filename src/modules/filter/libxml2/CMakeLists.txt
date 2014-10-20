@@ -25,6 +25,10 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+if(WITH_LIBXSLT)
+  add_definitions("-DWITH_LIBXSLT")
+endif()
+
 add_library(mod_filter_libxml2 MODULE ${mod_filter_libxml2_source_files})
 
 set_target_properties(mod_filter_libxml2 PROPERTIES PREFIX "")
