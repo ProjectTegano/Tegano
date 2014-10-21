@@ -44,9 +44,22 @@ set(WITH_ICU 1)
 set(LONG_TESTS 0)
 
 find_package(Boost 1.48.0 COMPONENTS thread filesystem system program_options date_time)
+
+if(WITH_SSL)
 find_package(OpenSSL)
+endif()
+
+if(WITH_LIBXML2)
 find_package(LibXml2)
+endif()
+
+if(WITH_LIBXSLT)
 find_package(LibXslt)
+endif()
+
+if(WITH_PGSQL)
+find_package(PostgreSQL)
+endif()
 
 enable_testing()
 
@@ -76,31 +89,55 @@ MESSAGE("  C++ compilation flags: ${CMAKE_CXX_FLAGS}")
 MESSAGE("  C compilation flags: ${CMAKE_C_FLAGS}")
 
 MESSAGE("Options:")
+
 if(WITH_SSL)
+if(OPENSSL_FOUND)
   MESSAGE("  SSL: yes")
+else()
+  MESSAGE("  SSL: not found")
 endif()
+endif()
+
 if(WITH_TEXTWOLF)
   MESSAGE("  Textwolf: yes")
 endif()
+
 if(WITH_LUA)
   MESSAGE("  LUA: yes")
 endif()
+
 if(WITH_DOTNET)
   MESSAGE("  .NET: yes")
 endif()
+
 if(WITH_CJSON)
   MESSAGE("  CJSON: yes")
 endif()
+
 if(WITH_LIBXML2)
 if(LIBXML2_FOUND)
   MESSAGE("  libxml2: yes")
 else()
-  MESSAGE("  libxml2: no")
+  MESSAGE("  libxml2: not found")
 endif()
 endif()
+
 if(WITH_LIBXSLT)
+if(LIBXSLT_FOUND)
   MESSAGE("  libxslt: yes")
+else()
+  MESSAGE("  libxslt: not found")
 endif()
+endif()
+
 if(WITH_SQLITE3)
   MESSAGE("  Sqlite3: yes")
+endif()
+
+if(WITH_PGSQL)
+if(PostgreSQL_FOUND)
+  MESSAGE("  PostgreSQL: yes")
+else()
+  MESSAGE("  PostgreSQL: not found")
+endif()
 endif()

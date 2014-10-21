@@ -26,7 +26,7 @@ add_library(mod_db_sqlite3 MODULE ${mod_db_sqlite3_source_files})
 
 set_target_properties(mod_db_sqlite3 PROPERTIES PREFIX "")
 
-target_link_libraries(mod_db_sqlite3 sqlite3)
+target_link_libraries(mod_db_sqlite3 sqlite3 wolframe_database wolframe_serialize)
 
 add_definitions("-fPIC")
 
