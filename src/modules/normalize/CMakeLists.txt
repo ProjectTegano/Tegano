@@ -4,9 +4,9 @@ add_subdirectory(number)
 add_subdirectory(base64)
 
 if(WITH_TEXTWOLF)
-add_subdirectory(string)
+  add_subdirectory(string)
 endif()
 
 if(WITH_ICU)
-#add_subdirectory(locale)
+  add_subdirectory(locale)
 endif()

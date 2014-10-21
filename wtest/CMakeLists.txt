@@ -49,7 +49,7 @@ if(WITH_LIBXSLT)
 endif()
 
 if(WITH_ICU)
-#  add_definitions("-DWITH_ICU")
+  add_definitions("-DWITH_ICU")
 endif()
 
 if(WITH_CJSON)

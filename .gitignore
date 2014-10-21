@@ -252,3 +252,4 @@ CTestTestfile.cmake
 Testing/
 Makefile
 wtest/cleaninput
+boostLocalTest

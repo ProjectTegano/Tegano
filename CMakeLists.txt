@@ -45,7 +45,11 @@ set(WITH_CJSON 1)
 set(WITH_ICU 1)
 set(LONG_TESTS 0)
 
-find_package(Boost 1.48.0 COMPONENTS thread filesystem system program_options date_time)
+if(WITH_ICU)
+  set(optional_boost_packages locale)
+endif()
+
+find_package(Boost 1.48.0 COMPONENTS thread filesystem system program_options date_time ${optional_boost_packages})
 
 if(WITH_SSL)
 find_package(OpenSSL)
@@ -101,6 +105,9 @@ MESSAGE("  C compilation flags: ${CMAKE_C_FLAGS}")
 
 MESSAGE("Options:")
 
+MESSAGE("  Boost: yes")
+MESSAGE("    Libraries: ${Boost_LIBRARIES}")
+
 if(WITH_SSL)
 if(OPENSSL_FOUND)
   MESSAGE("  SSL: yes")
@@ -154,4 +161,8 @@ if(PostgreSQL_FOUND)
 else()
   MESSAGE("  PostgreSQL: not found")
 endif()
+endif()
+
+if(WITH_ICU)
+  MESSAGE("  ICU: yes")
 endif()
