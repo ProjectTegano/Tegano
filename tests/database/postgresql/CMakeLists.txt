@@ -9,6 +9,7 @@ set(postgresUnit_source_files
 )
 
 include_directories(
+  ${PostgreSQL_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/src/modules/database/postgresql"
 )
 
@@ -32,7 +33,3 @@ target_link_libraries(postgresUnit gtest ${CMAKE_DL_LIBS}
   db_postgresql_static
   ${PostgreSQL_LIBRARIES}
 )
-
-
-
-

@@ -6,6 +6,8 @@ set(TEGANO_MINOR_VERSION 0)
 set(TEGANO_PATCH_VERSION 3)
 set(TEGANO_VERSION ${TEGANO_MAJOR_VERSION}.${TEGANO_MINOR_VERSION}.${TEGANO_PATCH_VERSION})
 
+include(cmake/LinuxDistribution.cmake)
+
 # TODO: needed for packaging only
 
 # ifdef DEFAULT_MODULE_LOAD_DIR
@@ -57,8 +59,15 @@ if(WITH_LIBXSLT)
 find_package(LibXslt)
 endif()
 
+set(CMAKE_MODULE_PATH cmake)
+
 if(WITH_PGSQL)
+# broken on Ubuntu 12.04!
+if(${INSTALLER_PLATFORM} STREQUAL "Ubuntu-12.04")
+find_package(PostgreSQLFixed)
+else()
 find_package(PostgreSQL)
+endif()
 endif()
 
 enable_testing()
@@ -75,6 +84,7 @@ add_subdirectory(examples)
   
 MESSAGE("Platform:")
 MESSAGE("  Host: ${CMAKE_HOST_SYSTEM_NAME} ${CMAKE_HOST_SYSTEM_VERSION} ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+MESSAGE("  Canonical: ${INSTALLER_PLATFORM}")
 MESSAGE("  CMake: ${CMAKE_VERSION}")
 MESSAGE("  CMake generator: ${CMAKE_GENERATOR}")
 MESSAGE("  CMake build tool: ${CMAKE_BUILD_TOOL}")
@@ -138,6 +148,9 @@ endif()
 if(WITH_PGSQL)
 if(PostgreSQL_FOUND)
   MESSAGE("  PostgreSQL: yes")
+  MESSAGE("    Includes: ${PostgreSQL_INCLUDE_DIRS}")
+  MESSAGE("    Libpath: ${PostgreSQL_LIBRARY_DIRS}")
+  MESSAGE("    Libraries: ${PostgreSQL_LIBRARIES}")
 else()
   MESSAGE("  PostgreSQL: not found")
 endif()
