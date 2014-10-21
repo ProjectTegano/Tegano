@@ -70,7 +70,7 @@ add_subdirectory(tests)
 #add_subdirectory(clients)
 #add_subdirectory(include)
 #add_subdirectory(docs)
-#add_subdirectory(examples)
+add_subdirectory(examples)
   
 MESSAGE("Platform:")
 MESSAGE("  Host: ${CMAKE_HOST_SYSTEM_NAME} ${CMAKE_HOST_SYSTEM_VERSION} ${CMAKE_HOST_SYSTEM_PROCESSOR}")
