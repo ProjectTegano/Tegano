@@ -1,11 +1,8 @@
 The Wolframe directory layout
 -----------------------------
 
+CMakeLists.txt ....... top-level CMake file
 3rdParty/ ............ 3rd party libraries used to build Wolframe
-INSTALL.Unix ......... Installation instructions for Unix type systems
-INSTALL.Windows ...... Installation instructions for Windows
-GNUmakefile .......... Unix top-level GNU makefile
-Makefile.W32 ......... Windows top-level NMAKE makefile
 src/ ................. core implementation
 src/modules .......... loadable modules
 include/ ............. public header files
@@ -13,8 +10,6 @@ clients/ ............. client library and command line interface,
                        bindings for clients
 docs/ ................ documentation (Doxygen, Docbook)
 examples/ ............ programming examples
-XML/ ................. DTDs, Scheams, Relax-NG
-database/ ............ initialization schemas and data for database
 wtest/ ............... Wolframe test library (wolfilter tests)
 tests/ ............... tests, not distributed in released source tarball
 cmake/ ............... helper modules for CMake
