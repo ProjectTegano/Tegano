@@ -1,5 +1,6 @@
 # from http://thomasfischer.biz/find-out-the-linux-distribution-and-version-in-cmake/
 
+if(NOT WIN32)
 # use the LSB stuff if possible :)
 EXECUTE_PROCESS(
   COMMAND cat /etc/lsb-release
@@ -28,3 +29,7 @@ if(NOT ${LSB_ID} STREQUAL "")
 else(NOT ${LSB_ID} STREQUAL "")
   set(INSTALLER_PLATFORM "linux-generic" CACHE PATH "Installer chosen platform")
 endif(NOT ${LSB_ID} STREQUAL "")
+
+else(NOT WIN32)
+set(INSTALLER_PLATFORM "windows-generic" CACHE PATH "Installer chosen platform")
+endif(NOT WIN32)
