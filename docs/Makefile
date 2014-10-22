@@ -253,7 +253,7 @@ Tutorial.epub: $(TUTORIAL_SOURCE_FILES)
 %.1: %-man.xml
 	$(XSLT_MAN) $<
 
-local_clean:
+clean:
 	-rm -rf doxygen/html/* doxygen/man/*  doxygen/perlmod/*
 	-rm -f WolfBook.html WolfBook.fop WolfBook.pdf WolfBook.epub WolfBook.docx
 	-rm -f Tutorial.html Tutorial.pdf
@@ -265,35 +265,6 @@ local_clean:
 	-rm -rf html-tutorial-webpage-chunked/*.html
 	-rm -rf doxygen/html-webpage/*
 	
-local_distclean:
-
-local_install:
-	$(INSTALL) -d -m 0755 $(DESTDIR)$(datadir)/doc/wolframe
-	-test -d doxygen/html && cp -R doxygen/html/ $(DESTDIR)$(datadir)/doc/wolframe
-	$(INSTALL) -d -m 0755 $(DESTDIR)$(mandir)/man5
-	$(INSTALL) -d -m 0755 $(DESTDIR)$(mandir)/man8
-	$(INSTALL) -d -m 0755 $(DESTDIR)$(mandir)/man1
-	$(INSTALL) -m 0644 wolframe.conf.5 $(DESTDIR)$(mandir)/man5
-	$(INSTALL) -m 0644 wolframe-mod_db_sqlite3.5 $(DESTDIR)$(mandir)/man5
-	$(INSTALL) -m 0644 wolframe-mod_db_postgresql.5 $(DESTDIR)$(mandir)/man5
-	$(INSTALL) -m 0644 wolframed.8 $(DESTDIR)$(mandir)/man8
-	$(INSTALL) -m 0644 wolfpasswd.1 $(DESTDIR)$(mandir)/man1
-
-local_uninstall:
-	@-rm -rf $(DESTDIR)$(datadir)/doc/wolframe/html
-	@-rmdir $(DESTDIR)$(datadir)/doc/wolframe
-	@-rmdir $(DESTDIR)$(datadir)/doc
-	@-rmdir $(DESTDIR)$(datadir)
-	@-rm $(DESTDIR)$(mandir)/man1/wolfpasswd.1*
-	@-rmdir $(DESTDIR)$(mandir)/man1
-	@-rm $(DESTDIR)$(mandir)/man8/wolframed.8*
-	@-rmdir $(DESTDIR)$(mandir)/man8
-	@-rm $(DESTDIR)$(mandir)/man5/wolframe.conf.5*
-	@-rm $(DESTDIR)$(mandir)/man5/wolframe-mod_db_sqlite3.5*
-	@-rm $(DESTDIR)$(mandir)/man5/wolframe-mod_db_postgresql.5*
-	@-rmdir $(DESTDIR)$(mandir)/man5
-	@-rmdir $(DESTDIR)$(mandir)
-
 check:
 	xmllint --noout --xinclude --postvalid WolfBook.xml
 	xmllint --noout --xinclude --postvalid Tutorial.xml
