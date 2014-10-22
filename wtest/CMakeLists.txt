@@ -37,7 +37,7 @@ if(WITH_SQLITE3)
 endif()
 
 if(WITH_LIBHPDF)
-#  add_definitions("-DWITH_LIBHPDF")
+  add_definitions("-DWITH_LIBHPDF")
 endif()
 
 if(WITH_LIBXML2)

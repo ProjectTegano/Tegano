@@ -13,5 +13,5 @@ if(WITH_ICU)
 endif()
 
 if(WITH_LIBHPDF)
-#add_subdirectory(libhpdf)
+  add_subdirectory(libhpdf)
 endif()

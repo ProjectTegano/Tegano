@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 add_subdirectory(gtest)
-#add_subdirectory(libhpdf)
 
 if(WITH_CJSON)
   add_subdirectory(libcjson)
@@ -14,5 +13,9 @@ endif()
 endif()
 
 if(WITH_LUA)
-add_subdirectory(lua)
+  add_subdirectory(lua)
+endif()
+
+if(WITH_LIBHPDF)
+#  add_subdirectory(libhpdf)
 endif()
