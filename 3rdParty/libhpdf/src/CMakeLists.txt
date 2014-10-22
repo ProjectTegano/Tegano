@@ -61,6 +61,4 @@ set(libhpdf_source_files
   hpdf_encoder_cnt.c
 )
 
-add_definitions("-fPIC")
-
 add_library(hpdf STATIC ${libhpdf_source_files})

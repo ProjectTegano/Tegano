@@ -18,6 +18,8 @@ endif()
 
 if(WIN32)
 if(WITH_LIBHPDF)
+  add_subdirectory(zlib)
+  add_subdirectory(libpng)
   add_subdirectory(libhpdf)
 endif()
 endif()
