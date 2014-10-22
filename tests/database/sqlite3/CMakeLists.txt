@@ -27,4 +27,4 @@ target_link_libraries(sqliteUnit gtest ${CMAKE_DL_LIBS}
 )
 
 add_custom_command(OUTPUT garbage.db COMMAND createRandom 4096 garbage.db)
-add_custom_command(OUTPUT test.db COMMAND sqlite3 test.db < testDB.sql)
+add_custom_command(OUTPUT test.db COMMAND sqlite3 test.db < ${PROJECT_SOURCE_DIR}/tests/database/sqlite3/testDB.sql)

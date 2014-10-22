@@ -26,3 +26,10 @@ CMakeFiles/CMakeOutput.log
 execute tests:
 
 make test
+
+out of source build:
+
+mkdir build
+cd build
+cmake .. <options>
+
