@@ -74,6 +74,12 @@ find_package(PostgreSQL)
 endif()
 endif()
 
+if(WITH_SQLITE3)
+if(NOT WIN32)
+find_package(Sqlite3)
+endif()
+endif()
+
 enable_testing()
 
 add_subdirectory(3rdParty)
@@ -150,6 +156,8 @@ endif()
 
 if(WITH_SQLITE3)
   MESSAGE("  Sqlite3: yes")
+  MESSAGE("    Includes: ${SQLITE3_INCLUDE_DIR}")
+  MESSAGE("    Libraries: ${SQLITE3_LIBRARIES}")
 endif()
 
 if(WITH_PGSQL)

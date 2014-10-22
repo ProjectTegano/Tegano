@@ -23,7 +23,7 @@ target_link_libraries(sqliteUnit gtest ${CMAKE_DL_LIBS}
   wfsingleton wolframe
   wolframe_database wolframe_serialize
   db_sqlite3_static
-  sqlite3
+  ${SQLITE3_LIBRARIES}
 )
 
 add_custom_command(OUTPUT garbage.db COMMAND createRandom 4096 garbage.db)

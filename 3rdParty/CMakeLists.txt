@@ -7,8 +7,10 @@ if(WITH_CJSON)
   add_subdirectory(libcjson)
 endif()
 
+if(WIN32)
 if(WITH_SQLITE3)
   add_subdirectory(sqlite3)
+endif()
 endif()
 
 if(WITH_LUA)
