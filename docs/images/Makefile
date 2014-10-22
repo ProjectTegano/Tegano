@@ -1,9 +1,3 @@
-TOPDIR = ../..
-
-SUBDIRS =
-
--include $(TOPDIR)/makefiles/gmake/sub.mk
-
 IMAGES = \
 	overview.svg \
 	procProvider.svg \
@@ -17,10 +11,4 @@ IMAGES = \
 	dia --export=$@ --filter=svg $<
 
 
-local_all: $(IMAGES)
-
-local_clean:
-
-local_distclean:
-
-local_test:
+all: $(IMAGES)

@@ -1,62 +1,52 @@
-TOPDIR = ..
-
-SUBDIRS =
-
--include $(TOPDIR)/makefiles/gmake/doc.mk
+XSLT_MAN_STYLESHEET = \
+	/usr/share/xml/docbook/stylesheet/nwalsh/manpages/docbook.xsl
 
 XSLT_MAN = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--param man.charmap.use.subset "0" \
 	--param make.year.ranges "1" \
 	--param make.single.year.ranges "1" \
 	$(XSLT_MAN_STYLESHEET)
 
 XSLT_HTML = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode yes \
 	--stringparam toc.section.depth 4 \
 	output-html.xsl
 
 XSLT_HTML_CHUNKED = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode yes \
 	--stringparam toc.section.depth 4 \
 	-o $@ output-html-chunked.xsl
 
 XSLT_WEBPAGE_HTML = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode no \
 	--stringparam toc.section.depth 4 \
 	--stringparam base.dir $(@D) \
 	output-html-webpage.xsl
 
 XSLT_WEBPAGE_HTML_CHUNKED = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode no \
 	--stringparam toc.section.depth 4 \
 	-o $@ output-html-webpage-chunked.xsl
 
 XSLT_PDF = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode yes \
 	--stringparam toc.section.depth 4 \
 	--stringparam fop1.extensions 1 \
 	output-pdf.xsl
 
 XSLT_EPUB = \
-	$(XSLTPROC) --nonet --xinclude \
+	xsltproc --nonet --xinclude \
 	--stringparam draft.mode yes \
 	--stringparam toc.section.depth 4 \
 	output-epub.xsl
 
-XSLT_TOWORDML = \
-	$(XSLTPROC) --nonet --xinclude \
-	--stringparam draft.mode yes \
-	--stringparam toc.section.depth 4 \
-	-stringparam wordml.template $(XSLT_TOWORDML_TEMPLATE) \
-	$(XSLT_TOWORDML_STYLESHEET)
-	
-local_all:
+all: doc man
 
 doc: doc-doxygen doc-html doc-html-chunked doc-pdf doc-txt
 
@@ -70,11 +60,11 @@ MAN_PAGES = \
 man: $(MAN_PAGES)
 
 doc-doxygen:
-	cd $(TOPDIR); doxygen docs/doxygen.conf
+	cd ..; doxygen docs/doxygen.conf
 
 doc-doxygen-webpage:
 	@-mkdir doxygen/html-webpage
-	cd $(TOPDIR); doxygen docs/doxygen-webpage.conf
+	cd ..; doxygen docs/doxygen-webpage.conf
 
 doc-html: WolfBook.html Tutorial.html
 
@@ -104,9 +94,6 @@ doc-towordml: WolfBook.docx
 
 %.epub: %.xml
 	$(XSLT_EPUB) $<
-
-%.docx: %.xml
-	$(XSLT_TOWORDML) $< > $@
 
 %.txt: %.html
 	w3m -O ASCII -dump $< > $@
@@ -315,3 +302,6 @@ check:
 	xmllint --noout --xinclude --postvalid wolframe-mod_db_postgresql-man.xml
 	xmllint --noout --xinclude --postvalid wolframed-man.xml
 	xmllint --noout --xinclude --postvalid wolfpasswd-man.xml
+
+help:
+	@cat help.mk

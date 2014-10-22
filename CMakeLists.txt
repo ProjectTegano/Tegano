@@ -95,7 +95,6 @@ add_subdirectory(tests)
 add_subdirectory(clients)
 # TODO: later, deploy public header files for development package
 #add_subdirectory(include)
-#add_subdirectory(docs)
 add_subdirectory(examples)
   
 MESSAGE("Platform:")
