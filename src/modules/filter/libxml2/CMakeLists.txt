@@ -21,7 +21,7 @@ set(mod_filter_libxml2_source_files
 include_directories(
   "${LIBXML2_INCLUDE_DIR}"
   "${LIBXSLT_INCLUDE_DIR}"
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
 )
 

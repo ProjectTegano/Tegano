@@ -57,7 +57,7 @@ if(WITH_CJSON)
 endif()
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   ${PostgreSQL_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/wtest/include"
 )

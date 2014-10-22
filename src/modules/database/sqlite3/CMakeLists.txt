@@ -18,7 +18,7 @@ set(mod_db_sqlite3_source_files
 
 include_directories(
   ${SQLITE3_INCLUDE_DIR}
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_SOURCE_DIR}/3rdParty/textwolf/include"
 )

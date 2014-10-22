@@ -13,7 +13,7 @@ set(mod_datatype_bcdnumber_source_files
 )
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
 )
 
