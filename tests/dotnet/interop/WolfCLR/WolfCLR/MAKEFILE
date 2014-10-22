@@ -1,21 +1,5 @@
-TOPDIR = ..\..\..\..\..
-
-SUBDIRS =
-
 !INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
 
-INCLUDE_CXXFLAGS = \
-	/D_WIN32_WINNT=0x504
-
-INCLUDE_DIRS = \
-	/I.
-
-# Note: libraries are picked automatically on Windows!
-INCLUDE_LDFLAGS = \
-
-# Note: broken auto-linking in boost-locale!
-INCLUDE_LIBS = \
-	
 DYNAMIC_LIB = \
 	Functions.dll
 
@@ -30,8 +14,6 @@ CIS = \
 	src\Functions.cs \
 	Properties\AssemblyInfo.cs
 	
-!INCLUDE $(TOPDIR)\makefiles\nmake\sub.mk
-
 .SUFFIXES: .tlb .cs .dll
 
 .dll.tlb:
@@ -42,11 +24,7 @@ Functions.dll: $(CIS)
 
 Functions.tlb: Functions.dll
 
-local_all: $(LIBRARIES)
+all: $(LIBRARIES)
 
-local_clean:
+clean:
 	@-erase $(TYPE_LIB) 2>NUL
-
-local_distclean:
-
-local_test:
