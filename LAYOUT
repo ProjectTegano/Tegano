@@ -17,7 +17,7 @@ XML/ ................. DTDs, Scheams, Relax-NG
 database/ ............ initialization schemas and data for database
 wtest/ ............... Wolframe test library (wolfilter tests)
 tests/ ............... tests, not distributed in released source tarball
-makefiles/ ........... GNU makefile and NMAKEfile system
+cmake/ ............... helper modules for CMake
 po/ .................. translations (i18n)
 contrib/ ............. various things coming from other people (little helpers)
 config/ .............. configuration templates for example configurations and
