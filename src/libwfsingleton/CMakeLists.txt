@@ -11,6 +11,7 @@ set(libwfsingleton_source_files
   logger/logBackendSyslog.hpp
   logger/logLevel.cpp
   logger/logSyslogFacility.cpp
+  logger/logError.cpp
 )
 
 if(win32)

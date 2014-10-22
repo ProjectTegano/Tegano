@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set(libwolframe_source_files
   processor/execContext.cpp
   system/platform.cpp
-  logger/logError.cpp
   utils/sourceLineInfo.cpp
   utils/printFormats.cpp
   utils/fileLineInfo.cpp
