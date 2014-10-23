@@ -15,6 +15,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_normalize_number MODULE ${mod_normalize_number_source_files})
 
 set_target_properties(mod_normalize_number PROPERTIES PREFIX "")
+
+target_link_libraries(mod_normalize_number
+  wolframe
+)

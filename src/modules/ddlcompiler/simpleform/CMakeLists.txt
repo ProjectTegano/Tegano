@@ -13,6 +13,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_ddlcompiler_simpleform MODULE ${mod_ddlcompiler_simpleform_source_files})
 
 set_target_properties(mod_ddlcompiler_simpleform PROPERTIES PREFIX "")
+
+target_link_libraries(mod_ddlcompiler_simpleform
+  wolframe
+)

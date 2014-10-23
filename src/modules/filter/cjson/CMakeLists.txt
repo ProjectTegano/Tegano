@@ -16,8 +16,13 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/3rdParty/libcjson"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_filter_cjson MODULE ${mod_filter_cjson_source_files})
 
 set_target_properties(mod_filter_cjson PROPERTIES PREFIX "")
 
-target_link_libraries(mod_filter_cjson cjson)
+target_link_libraries(mod_filter_cjson
+  wfsingleton
+  cjson
+)

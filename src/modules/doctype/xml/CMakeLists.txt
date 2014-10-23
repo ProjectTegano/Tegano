@@ -11,6 +11,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_doctype_xml MODULE ${mod_doctype_xml_source_files})
 
 set_target_properties(mod_doctype_xml PROPERTIES PREFIX "")
+
+target_link_libraries(mod_doctype_xml
+  wfsingleton
+)
