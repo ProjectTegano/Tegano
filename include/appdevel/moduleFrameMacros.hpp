@@ -67,20 +67,12 @@
 		CreateBuilderArrayImpl()\
 		{
 
-#ifndef _WIN32
-#define DLLEXPORT
-#else
-#define DLLEXPORT __declspec( dllexport )
-#endif
-
 #define WF_MODULE_END\
 		}\
 	};\
 	}\
 	static CreateBuilderArrayImpl createBuilderArray;\
-	namespace _Wolframe {\
-		namespace module {\
-			extern "C" DLLEXPORT ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
-		}\
+	extern "C" { \
+		_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
 	}
 
