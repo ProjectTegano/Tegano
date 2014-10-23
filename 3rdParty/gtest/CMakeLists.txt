@@ -8,4 +8,4 @@ include_directories(include .)
 
 add_library(gtest STATIC ${libgtest_source_files})
 
-target_link_libraries(gtest pthread)
+target_link_libraries(gtest ${CMAKE_THREAD_LIBS_INIT})

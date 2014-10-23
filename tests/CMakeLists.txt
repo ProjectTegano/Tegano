@@ -46,7 +46,7 @@ endif()
 foreach(test ${TESTS})
   add_executable(${test} ${test}.cpp)
   target_link_libraries(${test}
-    gtest pthread
+    gtest ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}
     config wfsingleton wolframe provider
     wolframe_langbind wolframe_serialize

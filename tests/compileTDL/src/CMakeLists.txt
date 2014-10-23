@@ -11,7 +11,7 @@ set(testCompileTDL_source_files
 
 add_executable(testCompileTDL ${testCompileTDL_source_files})
 
-target_link_libraries(testCompileTDL gtest pthread
+target_link_libraries(testCompileTDL gtest ${CMAKE_THREAD_LIBS_INIT}
   ${Boost_LIBRARIES}
   wfsingleton wolframe
   wolframe_langbind wolframe_database

@@ -18,7 +18,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 foreach(test ${TESTS})
   add_executable(${test} ${test}.cpp)
-  target_link_libraries(${test} gtest pthread
+  target_link_libraries(${test} gtest ${CMAKE_THREAD_LIBS_INIT}
      ${Boost_LIBRARIES}
      wfsingleton wolframe provider
      wolframe_langbind
