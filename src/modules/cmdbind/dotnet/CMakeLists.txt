@@ -27,10 +27,15 @@ set(mod_command_dotnet_source_files
 include_directories(
   ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
+  .
 )
+
+link_directories(${Boost_LIBRARY_DIRS})
 
 add_library(mod_command_dotnet MODULE ${mod_command_dotnet_source_files})
 
 set_target_properties(mod_command_dotnet PROPERTIES PREFIX "")
 
-target_link_libraries(mod_command_dotnet dotnet wolframe_serialize)
+target_link_libraries(mod_command_dotnet
+  wolframe_serialize
+)

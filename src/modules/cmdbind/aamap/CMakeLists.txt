@@ -12,6 +12,13 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/3rdParty/textwolf/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_command_aamap MODULE ${mod_command_aamap_source_files})
 
 set_target_properties(mod_command_aamap PROPERTIES PREFIX "")
+
+target_link_libraries(mod_command_aamap
+  wolframe
+  wolframe_langbind
+)

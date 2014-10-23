@@ -33,10 +33,15 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/3rdParty/lua/src"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_definitions("-DWITH_LUA")
 
 add_library(mod_command_lua MODULE ${mod_command_lua_source_files})
 
 set_target_properties(mod_command_lua PROPERTIES PREFIX "")
 
-target_link_libraries(mod_command_lua lua wolframe_serialize)
+target_link_libraries(mod_command_lua
+  lua
+  wolframe_serialize
+)
