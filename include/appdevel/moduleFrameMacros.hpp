@@ -72,14 +72,4 @@
 	};\
 	}\
 	static CreateBuilderArrayImpl createBuilderArray;\
-<<<<<<< HEAD
-	extern "C" { \
-		_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
-=======
-	namespace _Wolframe {\
-		namespace module {\
-			DLLEXPORT ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
-		}\
->>>>>>> a387b6117430be2720c0aec4cf1fb931cc430a40
-	}
-
+	_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar);
