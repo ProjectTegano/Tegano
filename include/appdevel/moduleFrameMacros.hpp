@@ -80,7 +80,7 @@
 	static CreateBuilderArrayImpl createBuilderArray;\
 	namespace _Wolframe {\
 		namespace module {\
-			extern "C" DLLEXPORT ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
+			DLLEXPORT ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
 		}\
 	}
 
