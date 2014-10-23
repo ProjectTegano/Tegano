@@ -72,7 +72,7 @@ set(CMAKE_MODULE_PATH cmake)
 
 if(WITH_PGSQL)
 # broken on Ubuntu 12.04!
-if(${INSTALLER_PLATFORM} STREQUAL "Ubuntu-12.04")
+if(${INSTALLER_PLATFORM} STREQUAL "ubuntu-12.04")
 find_package(PostgreSQLFixed)
 else()
 find_package(PostgreSQL)

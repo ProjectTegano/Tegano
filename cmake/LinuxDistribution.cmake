@@ -5,19 +5,23 @@ if(NOT WIN32)
 # use newer systemd stuff for platforms already supporting it
 EXECUTE_PROCESS(
   COMMAND cat /etc/os-release
-  COMMAND grep ID=
+  COMMAND grep ^ID=
   COMMAND awk -F= "{ print $2 }"
   COMMAND tr "\n" " "
   COMMAND sed "s/ //"
+  COMMAND sed "s/^\"//"
+  COMMAND sed "s/\"$//"
   OUTPUT_VARIABLE SYSTEMD_ID
   RESULT_VARIABLE SYSTEMD_ID_RESULT
 )
 EXECUTE_PROCESS(
   COMMAND cat /etc/os-release
-  COMMAND grep VERSION_ID=
+  COMMAND grep ^VERSION_ID=
   COMMAND awk -F= "{ print $2 }"
   COMMAND tr "\n" " "
   COMMAND sed "s/ //"
+  COMMAND sed "s/^\"//"
+  COMMAND sed "s/\"$//"
   OUTPUT_VARIABLE SYSTEMD_VER
   RESULT_VARIABLE SYSTEMD_VER_RESULT
 )
