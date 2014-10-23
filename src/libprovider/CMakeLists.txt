@@ -35,6 +35,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
-add_library(provider SHARED ${libprovider_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(provider STATIC ${libprovider_source_files})
+else()
+  add_library(provider SHARED ${libprovider_source_files})
+endif()
 
 target_link_libraries(provider wfsingleton)

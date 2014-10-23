@@ -33,3 +33,9 @@ mkdir build
 cd build
 cmake .. <options>
 
+Windows
+
+cmake.exe -G "NMake Makefiles" 
+  -DBOOST_ROOT=C:\develop\boost_1_55_0-win32-debug 
+  -DBoost_USE_STATIC_LIBS=ON
+  -DCMAKE_BUILD_TYPE=Debug

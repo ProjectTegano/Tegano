@@ -64,7 +64,7 @@ public:
 	}
 
 	template<typename T> friend Logger& operator<< ( Logger& logger, T thing );
-	friend Logger& operator<< ( Logger& logger, LogError e );
+	WFSINGLETON_DLL_VISIBLE friend Logger& operator<< ( Logger& logger, LogError e );
 
 protected:
 	std::ostringstream m_os;

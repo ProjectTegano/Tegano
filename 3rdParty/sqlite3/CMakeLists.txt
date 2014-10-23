@@ -6,7 +6,9 @@ set(libsqlite3_source_files
   sqlite3ext.h
 )
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(sqlite3 STATIC ${libsqlite3_source_files})
   

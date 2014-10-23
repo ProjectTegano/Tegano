@@ -24,6 +24,12 @@ include_directories(
   .
 )
 
-add_library(wolframe_serialize SHARED ${libwolframe_serialize_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(wolframe_serialize STATIC ${libwolframe_serialize_source_files})
+else()
+  add_library(wolframe_serialize SHARED ${libwolframe_serialize_source_files})
+endif()
 
 target_link_libraries(wolframe_serialize wfsingleton wolframe_langbind)

@@ -45,9 +45,13 @@ include_directories(
   .
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(wolframed ${wolframed_source_files})
 
-target_link_libraries(wolframed ${Boost_LIBRARIES} pthread ${CMAKE_DL_LIBS} ${ssl_libraries}
+target_link_libraries(wolframed
+  ${Boost_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${ssl_libraries}
   config wfsingleton wolframe provider
   wolframe_langbind
 )

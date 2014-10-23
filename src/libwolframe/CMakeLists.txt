@@ -59,7 +59,13 @@ include_directories(
   ${textwolf_includes}
 )
 
-add_library(wolframe SHARED ${libwolframe_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(wolframe STATIC ${libwolframe_source_files})
+else()
+  add_library(wolframe SHARED ${libwolframe_source_files})
+endif()
 
 target_link_libraries(wolframe
   ${Boost_LIBRARIES}

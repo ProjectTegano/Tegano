@@ -32,7 +32,9 @@ target_link_libraries(mod_db_sqlite3
   ${SQLITE3_LIBRARIES}
 )
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(db_sqlite3_static STATIC ${db_sqlite3_source_files})
 

@@ -38,7 +38,9 @@ target_link_libraries(mod_db_postgresql
   ${PostgreSQL_LIBRARIES}
 )
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(db_postgresql_static STATIC ${db_postgresql_source_files})
 

@@ -60,7 +60,9 @@ set(liblua_source_files
   linit.c
 )
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(lua STATIC ${liblua_source_files})
   

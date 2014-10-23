@@ -26,4 +26,10 @@ set(libpng_source_files
   pngread.c
 )
 
+include_directories(
+  "${PROJECT_SOURCE_DIR}/3rdParty/zlib"
+)
+
 add_library(png STATIC ${libpng_source_files})
+
+target_link_libraries(png zlib)

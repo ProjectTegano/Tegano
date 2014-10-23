@@ -34,17 +34,9 @@ set_target_properties(mod_print_harupdf PROPERTIES PREFIX "")
 
 target_link_libraries(mod_print_harupdf
 )
-#  wolframe_database wolframe_serialize
-#  ${SQLITE3_LIBRARIES}
-#)
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(print_harupdf_static STATIC ${print_harupdf_source_files})
-
-target_link_libraries(print_harupdf_static
-)
-# ${CMAKE_DL_LIBS}
-#  sqlite3
-#  wolframe_database wolframe_serialize
-#)

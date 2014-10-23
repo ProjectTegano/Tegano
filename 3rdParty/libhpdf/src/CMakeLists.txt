@@ -61,4 +61,10 @@ set(libhpdf_source_files
   hpdf_encoder_cnt.c
 )
 
+include_directories(
+  "${PROJECT_SOURCE_DIR}/3rdParty/zlib"
+  "${PROJECT_SOURCE_DIR}/3rdParty/libpng"
+  "${PROJECT_SOURCE_DIR}/3rdParty/libhpdf/include"
+)
+
 add_library(hpdf STATIC ${libhpdf_source_files})
