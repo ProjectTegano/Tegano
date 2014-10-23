@@ -49,7 +49,21 @@ class BaseObject
 {
 public:
 	virtual ~BaseObject(){}
+
+	virtual void* rttiUpcast()=0;
 };
 
+/// \class BaseObjectInstance
+/// \brief Implementation of the RTTI upcast method to get the real object instead of the base class
+/// \note the idea is to implement the RTTI upcast in the module itself
+template<class TYPE>
+class BaseObjectInstance
+	:public BaseObject
+{
+	virtual void* rttiUpcast()
+	{
+		return (void*)dynamic_cast<TYPE*>( this);
+	}
+};
 }} // namespace
 #endif

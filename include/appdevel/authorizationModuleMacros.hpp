@@ -43,7 +43,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public UNITCLASS \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::aaaa::AuthorizationUnit>\
 	{\
 	public:\
 		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :UNITCLASS(cfg){}\

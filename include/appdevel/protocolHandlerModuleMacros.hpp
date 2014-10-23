@@ -41,7 +41,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public CLASSDEF \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::cmdbind::ProtocolHandlerUnit>\
 	{\
 	public:\
 		ModuleObjectEnvelope(){}\

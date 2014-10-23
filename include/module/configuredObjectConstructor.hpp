@@ -54,6 +54,15 @@ public:
 	virtual ~ConfiguredObjectConstructor()	{}
 	virtual BaseObject* object( const config::ConfigurationObject& conf) const = 0;
 	virtual config::ConfigurationObject* configuration() const = 0;
+
+	virtual ObjectType objectType() const
+	{
+		return ConfiguredObjectType;
+	}
+	virtual const void* rttiUpcast() const
+	{
+		return (const void*)this;
+	}
 };
 
 }}// namespac

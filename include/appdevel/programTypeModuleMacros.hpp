@@ -41,7 +41,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public PROGRAMCLASS \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::proc::Program>\
 	{\
 	public:\
 		ModuleObjectEnvelope(){}\

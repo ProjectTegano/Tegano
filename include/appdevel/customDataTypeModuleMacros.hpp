@@ -44,7 +44,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public DATATYPECLASS \
-		,public _Wolframe::module::BaseObject \
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::types::CustomDataType>\
 	{\
 	public:\
 		ModuleObjectEnvelope()\

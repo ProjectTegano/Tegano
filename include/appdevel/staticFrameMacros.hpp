@@ -30,30 +30,27 @@
  Project Wolframe.
 
 ************************************************************************/
-/// \file appdevel/moduleFrameMacros.hpp
+/// \file appdevel/staticFrameMacros.hpp
 /// \brief Macros for defining the frame of a Wolframe application extension module
 #include "module/moduleEntryPoint.hpp"
 #include "module/baseObject.hpp"
 #include "module/objectConstructor.hpp"
+#include <stdexcept>
 
-/// \brief Marks the start of the Wolframe C++ module after the includes section.
-#define WF_MODULE_BEGIN(NAME,DESCRIPTION)\
-	static const char* _Wolframe__moduleName()\
-	{\
-		return NAME;\
-	}\
+/// \brief Defines a static object as container of objects declared as in a module
+#define WF_STATIC_FRAME_BEGIN(NAME)\
 	namespace {\
-	struct CreateBuilderArray\
+	struct Type ## NAME\
 	{\
 		enum {MaxNofBuilders=64};\
 		_Wolframe::module::GetObjectConstructorFunc ar[ MaxNofBuilders];\
 		std::size_t size;\
-		CreateBuilderArray()\
+		Type ## NAME()\
 			:size(0)\
 		{\
 			ar[0] = 0;\
 		}\
-		CreateBuilderArray operator()( _Wolframe::module::GetObjectConstructorFunc func)\
+		Type ## NAME operator()( _Wolframe::module::GetObjectConstructorFunc func)\
 		{\
 			if (size +1 >= MaxNofBuilders) throw std::logic_error("too many builder objects defined in module '" #NAME "' (maximum of 64 objects)");\
 			ar[ size] = func;\
@@ -61,18 +58,20 @@
 			size += 1;\
 			return *this;\
 		}\
-	};\
-	struct CreateBuilderArrayImpl :public CreateBuilderArray\
-	{\
-		CreateBuilderArrayImpl()\
-		{
-
-#define WF_MODULE_END\
+		const _Wolframe::module::ObjectConstructor& operator[]( std::size_t idx) const\
+		{\
+			if (idx >= size) throw std::logic_error("array bound read");\
+			return *ar[ idx]();\
 		}\
 	};\
-	}\
-	static CreateBuilderArrayImpl createBuilderArray;\
-	extern "C" { \
-		_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
+	struct NAME :public Type ## NAME\
+	{\
+		NAME()\
+		{
+
+#define WF_STATIC_FRAME_END\
+		}\
+	};\
 	}
+
 

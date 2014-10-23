@@ -41,7 +41,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public FILTERTYPECLASS\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::langbind::FilterType>\
 	{\
 	public:\
 		ModuleObjectEnvelope(){}\

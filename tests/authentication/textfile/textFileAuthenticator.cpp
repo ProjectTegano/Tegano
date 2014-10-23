@@ -37,12 +37,12 @@
 #include "logger/logger-v1.hpp"
 #include "gtest/gtest.h"
 
-#include "module/configuredObjectConstructorTemplate.hpp"
 #include "libconfig/moduleDirectoryImpl.hpp"
 #include "libconfig/aaaaProviderConfiguration.hpp"
 #include "libprovider/randomGeneratorImpl.hpp"
 #include "libprovider/aaaaProviderImpl.hpp"
-
+#include "appdevel/staticFrameMacros.hpp"
+#include "appdevel/authenticationModuleMacros.hpp"
 #include "TextFileAuth.hpp"
 #include "types/base64.hpp"
 #include "crypto/HMAC.hpp"
@@ -63,6 +63,10 @@ using namespace _Wolframe::module;
 using namespace _Wolframe;
 using namespace std;
 
+WF_STATIC_FRAME_BEGIN( TextFileAuthentication);
+WF_AUTHENTICATOR( "TextFileAuthenticator", aaaa::TextFileAuthUnit, aaaa::TextFileAuthConfig)
+WF_STATIC_FRAME_END
+
 // The fixture for testing class _Wolframe::module
 class AuthenticatorFixture : public ::testing::Test
 {
@@ -77,12 +81,9 @@ protected:
 
 		// Build the modules directory
 		ModuleDirectoryImpl modDir( g_execdir);
-		typedef ConfiguredObjectEnvelopeTemplate<aaaa::TextFileAuthUnit,aaaa::TextFileAuthConfig> Unit;
-		static module::ConfiguredObjectConstructorTemplate<
-			module::ObjectDescription::AUTHENTICATION_OBJECT,
-			Unit, aaaa::TextFileAuthConfig
-		> constructor( "TextFileAuthentication", "Authentication", "TextFile");
-		modDir.addObjectConstructor( &constructor );
+		TextFileAuthentication mod;
+		const ConfiguredObjectConstructor* auth = dynamic_cast<const ConfiguredObjectConstructor*>(&mod[0]);
+		modDir.addObjectConstructor( auth);
 		config::AaaaProviderConfiguration cfg;
 		aaaa::AaaaProviderImpl aaaaProvider( &g_randomGenerator, cfg.authConfig(), cfg.authzConfig(), cfg.authzDefault(), cfg.auditConfig(), &modDir);
 	}

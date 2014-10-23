@@ -42,7 +42,7 @@
 {\
 	class DetectorType\
 		:public _Wolframe::cmdbind::DoctypeDetectorType\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::cmdbind::DoctypeDetectorType>\
 	{\
 	public:\
 		DetectorType()\

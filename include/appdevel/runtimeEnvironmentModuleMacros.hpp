@@ -44,7 +44,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public CLASSDEF \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::langbind::RuntimeEnvironment>\
 	{\
 	public:\
 		ModuleObjectEnvelope( const CONFIGDEF* cfg) :CLASSDEF(cfg){}\

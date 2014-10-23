@@ -36,6 +36,8 @@
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 
+#error DEPRECATED 
+
 #ifndef _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
 #define _Wolframe_SIMPLE_OBJECT_CONSTRUCTOR_TEMPLATE_HPP_INCLUDED
 

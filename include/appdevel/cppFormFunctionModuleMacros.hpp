@@ -42,7 +42,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public _Wolframe::appdevel::CppFormFunctionTemplate<OUTPUT,INPUT,FUNCTION>\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::serialize::CppFormFunction>\
 	{\
 	public:\
 		ModuleObjectEnvelope()\
@@ -73,7 +73,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public _Wolframe::appdevel::CppFormFunctionTemplate<_Wolframe::serialize::EmptyStruct,INPUT,PROCEDURE>\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::serialize::CppFormFunction>\
 	{\
 	public:\
 		ModuleObjectEnvelope()\

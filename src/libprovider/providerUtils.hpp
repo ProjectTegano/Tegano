@@ -51,7 +51,7 @@ static OBJECT* createSimpleProviderObject( const std::string& logPrefix, const _
 {
 	using namespace _Wolframe;
 	module::BaseObject* baseobj = constructor->object();
-	OBJECT* obj = dynamic_cast<OBJECT*>( baseobj);
+	OBJECT* obj = reinterpret_cast<OBJECT*>( baseobj->rttiUpcast());
 	if (!baseobj)
 	{
 		LOG_ERROR << logPrefix << "failed to create object '" << constructor->className() << "' (without configuration)";
@@ -74,7 +74,7 @@ static OBJECT* createConfiguredProviderObject( const std::string& logPrefix, con
 {
 	using namespace _Wolframe;
 	module::BaseObject* baseobj = constructor->object( *configuration);
-	OBJECT* obj = dynamic_cast<OBJECT*>( baseobj);
+	OBJECT* obj = reinterpret_cast<OBJECT*>( baseobj->rttiUpcast());
 	if (!baseobj)
 	{
 		LOG_ERROR << logPrefix << "failed to create object '" << constructor->className() << "' (from configuration " << configuration->configSection() << "/" << configuration->configKeyword() << ")";

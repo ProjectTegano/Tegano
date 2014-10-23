@@ -57,7 +57,6 @@ public:
 		AUTHORIZATION_OBJECT		=0x0020,
 		AUDIT_OBJECT			=0x0110,
 		DATABASE_OBJECT			=0x0210,
-		JOB_SCHEDULE_OBJECT		=0x0220,
 		FILTER_OBJECT			=0x0310,
 		FORM_FUNCTION_OBJECT		=0x0410,
 		NORMALIZE_FUNCTION_OBJECT	=0x0420,
@@ -79,7 +78,6 @@ public:
 			case AUTHORIZATION_OBJECT: return "Authorization";
 			case AUDIT_OBJECT: return "Audit";
 			case DATABASE_OBJECT: return "Database";
-			case JOB_SCHEDULE_OBJECT: return "Job Schedule Object";
 			case FILTER_OBJECT: return "Filter";
 			case FORM_FUNCTION_OBJECT: return "Form Function";
 			case NORMALIZE_FUNCTION_OBJECT: return "Normalize Function";

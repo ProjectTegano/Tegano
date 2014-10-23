@@ -60,7 +60,7 @@
 	};\
 	class ModuleObjectEnvelope \
 		:public Unit \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::db::DatabaseUnit>\
 	{\
 	public:\
 		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :Unit(cfg){}\
@@ -118,7 +118,7 @@
 	};\
 	class ModuleObjectEnvelope \
 		:public Unit \
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::db::DatabaseUnit>\
 	{\
 	public:\
 		ModuleObjectEnvelope( const CONFIGCLASS* cfg) :Unit(cfg){}\

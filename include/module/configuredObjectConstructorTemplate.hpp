@@ -44,6 +44,8 @@
 namespace _Wolframe {
 namespace module {
 
+#error DEPRECATED 
+
 /// \brief Template to define a constructor of a configured object by type
 /// \remark OBJECT has to be derived from module::BaseObject
 /// \remark OBJECT has to constructable as OBJECT( const CONFIG*)

@@ -42,7 +42,7 @@
 {\
 	class ModuleObjectEnvelope \
 		:public COMPILERCLASS\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::langbind::DDLCompiler>\
 	{\
 	public:\
 		ModuleObjectEnvelope(){}\

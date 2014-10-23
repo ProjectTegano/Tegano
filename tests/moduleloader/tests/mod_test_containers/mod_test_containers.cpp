@@ -33,12 +33,13 @@
 //
 // a test module
 //
-#include "module/configuredObjectConstructorTemplate.hpp"
 #include "config/configurationObject.hpp"
 #include "module/moduleEntryPoint.hpp"
 #include "module/objectConstructor.hpp"
 #include "logger/logger-v1.hpp"
 #include "mod_test_containers.hpp"
+
+#error DEPREACATED
 
 namespace _Wolframe {
 namespace module {

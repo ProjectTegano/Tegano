@@ -56,6 +56,15 @@ public:
 	{}
 
 	virtual ~ObjectConstructor(){}
+
+	enum ObjectType
+	{
+		SimpleObjectType,
+		ConfiguredObjectType
+	};
+
+	virtual ObjectType objectType() const=0;
+	virtual const void* rttiUpcast() const=0;
 };
 
 }} // namespace

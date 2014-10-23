@@ -179,19 +179,14 @@ bool module::ModuleDirectoryImpl::loadModules( const std::vector< std::string >&
 		for ( unsigned short i = 0; entry->constructors[ i ]; i++ )
 		{
 			const ObjectConstructor* constructor = entry->constructors[ i ]();
-			const SimpleObjectConstructor* simpleObjectConstructor = dynamic_cast<const SimpleObjectConstructor*>(constructor);
-			const ConfiguredObjectConstructor* configuredObjectConstructor = dynamic_cast<const ConfiguredObjectConstructor*>(constructor);
-			if (configuredObjectConstructor)
+			switch (constructor->objectType())
 			{
-				addObjectConstructor( configuredObjectConstructor);
-			}
-			else if (simpleObjectConstructor)
-			{
-				addObjectConstructor( simpleObjectConstructor);
-			}
-			else
-			{
-				LOG_ERROR << "Unknown type of constructor in module '" << entry->name << "'";
+				case ObjectConstructor::SimpleObjectType:
+					addObjectConstructor( reinterpret_cast<const SimpleObjectConstructor*>(constructor->rttiUpcast()));
+					break;
+				case ObjectConstructor::ConfiguredObjectType:
+					addObjectConstructor( reinterpret_cast<const ConfiguredObjectConstructor*>(constructor->rttiUpcast()));
+					break;
 			}
 		}
 		LOG_DEBUG << "Module '" << entry->name << "' loaded";

@@ -314,7 +314,6 @@ ProcessorProviderImpl::ProcessorProviderImpl(
 			case module::ObjectDescription::AUDIT_OBJECT:
 			case module::ObjectDescription::AUTHENTICATION_OBJECT:
 			case module::ObjectDescription::AUTHORIZATION_OBJECT:
-			case module::ObjectDescription::JOB_SCHEDULE_OBJECT:
 			case module::ObjectDescription::DATABASE_OBJECT:
 			case module::ObjectDescription::CMD_HANDLER_OBJECT:
 			case module::ObjectDescription::RUNTIME_ENVIRONMENT_OBJECT:

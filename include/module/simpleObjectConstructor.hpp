@@ -53,6 +53,15 @@ public:
 	virtual ~SimpleObjectConstructor(){}
 
 	virtual BaseObject* object() const = 0;
+
+	virtual ObjectType objectType() const
+	{
+		return SimpleObjectType;
+	}
+	virtual const void* rttiUpcast() const
+	{
+		return (const void*)this;
+	}
 };
 
 }}// namespac
