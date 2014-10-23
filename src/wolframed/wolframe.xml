@@ -51,7 +51,9 @@
         <Module>modules\filter\textwolf\mod_filter_textwolf</Module>
 
         <!-- XML processing using libxml2 -->
+<!--
         <Module>modules\filter\libxml2\mod_filter_libxml2</Module>
+-->
 
         <!-- modules for JSON processing -->
 
@@ -61,7 +63,9 @@
         <!-- data normalization modules -->
         <Module>modules\normalize\base64\mod_normalize_base64</Module>
         <Module>modules\normalize\number\mod_normalize_number</Module>
+<!--
         <Module>modules\normalize\locale\mod_normalize_locale</Module>
+-->
 
         <!-- data types modules	-->
         <Module>modules\datatype\datetime\mod_datatype_datetime</Module>
