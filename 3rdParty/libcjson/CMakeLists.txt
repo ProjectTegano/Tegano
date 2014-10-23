@@ -5,7 +5,9 @@ set(libcjson_source_files
   cJSON.c
 )
 
-add_definitions("-fPIC")
+if(NOT WIN32)
+  add_definitions("-fPIC")
+endif()
 
 add_library(cjson STATIC ${libcjson_source_files})
   

@@ -29,7 +29,7 @@ endif()
 endif()
 
 if(WITH_PGSQL)
-#  add_definitions("-DWITH_PGSQL")
+  add_definitions("-DWITH_PGSQL")
 endif()
 
 if(WITH_SQLITE3)
@@ -37,7 +37,7 @@ if(WITH_SQLITE3)
 endif()
 
 if(WITH_LIBHPDF)
-#  add_definitions("-DWITH_LIBHPDF")
+  add_definitions("-DWITH_LIBHPDF")
 endif()
 
 if(WITH_LIBXML2)
@@ -49,7 +49,7 @@ if(WITH_LIBXSLT)
 endif()
 
 if(WITH_ICU)
-#  add_definitions("-DWITH_ICU")
+  add_definitions("-DWITH_ICU")
 endif()
 
 if(WITH_CJSON)
@@ -57,14 +57,17 @@ if(WITH_CJSON)
 endif()
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
+  ${PostgreSQL_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/wtest/include"
 )
 
 add_library(wtest STATIC ${libwtest_source_files})
 
+target_link_libraries(wtest ${PostgreSQL_LIBRARIES})
+
 add_executable(cleaninput cleanInput.cpp)
 
 add_executable(wtestcheck wtestcheck.cpp)
 
-target_link_libraries(wtestcheck wtest ${Boost_LIBRARIES})
+target_link_libraries(wtestcheck wtest ${Boost_LIBRARIES} ${PostgreSQL_LIBRARIES})

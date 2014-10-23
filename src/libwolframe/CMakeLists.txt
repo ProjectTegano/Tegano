@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set(libwolframe_source_files
   processor/execContext.cpp
   system/platform.cpp
-  logger/logError.cpp
   utils/sourceLineInfo.cpp
   utils/printFormats.cpp
   utils/fileLineInfo.cpp
@@ -54,13 +53,19 @@ if(WITH_TEXTWOLF)
 endif()
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
   .
   ${textwolf_includes}
 )
 
-add_library(wolframe SHARED ${libwolframe_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(wolframe STATIC ${libwolframe_source_files})
+else()
+  add_library(wolframe SHARED ${libwolframe_source_files})
+endif()
 
 target_link_libraries(wolframe
   ${Boost_LIBRARIES}

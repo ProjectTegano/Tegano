@@ -17,9 +17,6 @@
 	<!ENTITY % CommonEntities	SYSTEM	"Common/Common.ent">
 	%CommonEntities;
 	
-	<!ENTITY % InstallationEntities	SYSTEM	"Installation/Installation.ent">
-	%InstallationEntities;
-
 <!-- book set data -->
 	<!ENTITY BookSetVersion		SYSTEM "WolfBookVersion.txt">
 	<!ENTITY BookSetPublicationDate	SYSTEM "WolfBookDate.txt">
@@ -60,8 +57,6 @@
 		&AppPreface;
 		&AppIntroduction;
 		
-		&InstallationBinary;
-		
 		&AppServerConfiguration;
 		&AppAAAA;
 		&AppDataProcessing;
@@ -100,25 +95,7 @@
 			<title>Index</title>
 		</index>
 	</book>
-	
-	<book id="book_InstallationFromSource" lang="en">
-		<title>Wolframe Installation from Source</title>
-		<bookinfo>
-			<date>&BookSetPublicationDate;</date>
-			<issuenum>Version &BookSetVersion;</issuenum>
-			<authorblurb><para>[ C O N F I D E N T I A L ]</para></authorblurb>
-			<pubdate>&BookSetPublicationDate; version &BookSetVersion;</pubdate>
-
-			<copyright>
-				<year>2010 - 2014</year>
-				<holder>Project Wolframe</holder>
-			</copyright>
-			&WolframeLegalNotice;
-		</bookinfo>
-
-		&InstallationSource;
-	</book>
-	
+		
 	<book id="book_ExtDevelopment" lang="en">
 		<title>Wolframe Server Extension Modules</title>
 		<subtitle>Write your own modules in C++</subtitle>

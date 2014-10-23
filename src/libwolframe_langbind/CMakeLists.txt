@@ -15,11 +15,17 @@ set(libwolframe_langbind_source_files
 )
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include" 
   .
 )
 
-add_library(wolframe_langbind SHARED ${libwolframe_langbind_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
 
-target_link_libraries(wolframe_langbind wolframe)
+if(WIN32)
+  add_library(wolframe_langbind STATIC ${libwolframe_langbind_source_files})
+else()
+  add_library(wolframe_langbind SHARED ${libwolframe_langbind_source_files})
+endif()
+
+target_link_libraries(wolframe_langbind wolframe wfsingleton)

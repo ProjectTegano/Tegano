@@ -38,12 +38,18 @@ if(WITH_SSL)
 endif()
 
 include_directories(
-  "${Boost_INCLUDE_DIRS})"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
   ${OPENSSL_INCLUDE_DIR}
 )
 
-add_library(config SHARED ${libconfig_source_files} ${OPENSSL_LIBRARIES})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(config STATIC ${libconfig_source_files} ${OPENSSL_LIBRARIES})
+else()
+  add_library(config SHARED ${libconfig_source_files} ${OPENSSL_LIBRARIES})
+endif()
 
 target_link_libraries(config ${CMAKE_DL_LIBS}
   wolframe

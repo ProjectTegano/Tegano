@@ -1,0 +1,30 @@
+!INCLUDE $(TOPDIR)\makefiles\nmake\platform.mk
+
+DYNAMIC_LIB = \
+	Functions.dll
+
+TYPE_LIB = \
+	Functions.tlb
+	
+LIBRARIES = \
+	$(DYNAMIC_LIB) \
+	$(TYPE_LIB)
+
+CIS = \
+	src\Functions.cs \
+	Properties\AssemblyInfo.cs
+	
+.SUFFIXES: .tlb .cs .dll
+
+.dll.tlb:
+	tlbexp /nologo /out:$@ $**
+
+Functions.dll: $(CIS)
+	csc /nologo /optimize /warn:4 /target:library /out:$@ $?
+
+Functions.tlb: Functions.dll
+
+all: $(LIBRARIES)
+
+clean:
+	@-erase $(TYPE_LIB) 2>NUL

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/3rdParty/gtest/include"
   "${PROJECT_SOURCE_DIR}/wtest/include"
   "${PROJECT_SOURCE_DIR}/include"
@@ -64,4 +64,4 @@ add_subdirectory(simpleFormCompiler)
 add_subdirectory(wolfilter)
 add_subdirectory(compileTDL)
 add_subdirectory(protocol)
-#add_subdirectory(doxygen_examples)
+add_subdirectory(doxygen_examples)

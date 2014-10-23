@@ -38,8 +38,12 @@
 #ifndef _LOG_ERROR_HPP_INCLUDED
 #define _LOG_ERROR_HPP_INCLUDED
 
+#include "LoggerExportable.hpp"
+
 namespace _Wolframe {
 namespace log {
+
+class Logger;
 
 /// Logger error
 class LogError {
@@ -68,12 +72,14 @@ public:
 
 	/// output stream marker for logging the strerror of the last
 	/// POSIX system call in human readable format
-	static const LogError LogStrerror;
+	WFSINGLETON_DLL_VISIBLE static const LogError LogStrerror;
 
 	/// output stream marker for logging the Windows error of the last
 	/// Windows API call in human readable format
-	static const LogError LogWinerror;
+	WFSINGLETON_DLL_VISIBLE static const LogError LogWinerror;	
 };
+
+WFSINGLETON_DLL_VISIBLE Logger& operator<< ( Logger& logger, LogError e );
 
 }} // namespace _Wolframe::log
 

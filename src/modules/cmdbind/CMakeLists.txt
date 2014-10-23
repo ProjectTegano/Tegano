@@ -5,9 +5,11 @@ add_subdirectory(tdl)
 add_subdirectory(aamap)
 
 if(WITH_LUA)
-add_subdirectory(lua)
+  add_subdirectory(lua)
 endif()
 
+if(WIN32)
 if(WITH_DOTNET)
-#add_subdirectory(dotnet)
+  add_subdirectory(dotnet)
+endif()
 endif()

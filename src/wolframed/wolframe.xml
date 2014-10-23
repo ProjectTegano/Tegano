@@ -28,9 +28,6 @@
 <!--
         <Module>modules\database\sqlite3\mod_db_sqlite3</Module>
 -->
-<!--
-        <Module>modules\database\oracle\mod_db_oracle</Module>
--->
 
         <!-- authentication modules -->        
         <Module>modules\authentication\textfile\mod_auth_textfile</Module>
@@ -77,9 +74,6 @@
 
         <!-- scripting language modules -->
         <Module>modules\cmdbind\lua\mod_command_lua</Module>
-<!--
-        <Module>modules\cmdbind\python\mod_command_python</Module>
--->
 
         <!-- various filtering modules -->
         <Module>modules\filter\char\mod_filter_char</Module>

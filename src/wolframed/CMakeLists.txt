@@ -39,15 +39,19 @@ if(WITH_SSL)
 endif()
 
 include_directories(
-  "${Boost_INCLUDE_DIRS}"
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_SOURCE_DIR}/src"
   .
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(wolframed ${wolframed_source_files})
 
-target_link_libraries(wolframed ${Boost_LIBRARIES} pthread ${CMAKE_DL_LIBS} ${ssl_libraries}
+target_link_libraries(wolframed
+  ${Boost_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${ssl_libraries}
   config wfsingleton wolframe provider
   wolframe_langbind
 )

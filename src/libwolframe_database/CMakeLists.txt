@@ -11,6 +11,16 @@ set(libwolframe_database_source_files
   vmTransactionInput.cpp
 )
 
-include_directories("${PROJECT_SOURCE_DIR}/include" .)
+include_directories(
+  ${Boost_INCLUDE_DIRS}
+  "${PROJECT_SOURCE_DIR}/include"
+  .
+)
 
-add_library(wolframe_database SHARED ${libwolframe_database_source_files})
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(wolframe_database STATIC ${libwolframe_database_source_files})
+else()
+  add_library(wolframe_database SHARED ${libwolframe_database_source_files})
+endif()
