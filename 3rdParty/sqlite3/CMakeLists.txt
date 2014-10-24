@@ -11,4 +11,11 @@ if(NOT WIN32)
 endif()
 
 add_library(sqlite3 STATIC ${libsqlite3_source_files})
-  
+
+if(WIN32)
+add_executable(sqlite3shell shell.c)
+
+target_link_libraries(sqlite3shell
+  sqlite3
+)
+endif()  

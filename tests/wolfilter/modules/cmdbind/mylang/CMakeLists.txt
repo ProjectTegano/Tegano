@@ -22,3 +22,7 @@ include_directories(
 add_library(mod_command_mylang MODULE ${mod_command_mylang_source_files})
 
 set_target_properties(mod_command_mylang PROPERTIES PREFIX "")
+
+target_link_libraries(mod_command_mylang
+  wolframe wfsingleton
+)
