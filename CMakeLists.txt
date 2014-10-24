@@ -23,9 +23,6 @@ set_property(GLOBAL PROPERTY rule_launch_link ccache)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
 set(CMAKE_CXX_FLAGS "-std=c++98 -Wall")
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX)
 set(CMAKE_C_FLAGS "-std=c99 -Wall -pedantic")
 endif()
 
