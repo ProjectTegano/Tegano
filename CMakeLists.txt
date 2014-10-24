@@ -30,7 +30,8 @@ set(CMAKE_C_FLAGS "-std=c99 -Wall -pedantic")
 endif()
 
 if(WIN32)
-add_definitions("-D_WIN32_WINNT=0x0501")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} /D_WIN32_WINNT=0x0504")
+set(CMAKE_C_FLAGS " ${CMAKE_C_FLAGS} /D_WIN32_WINNT=0x0504")
 endif()
 
 # TODO: configurable

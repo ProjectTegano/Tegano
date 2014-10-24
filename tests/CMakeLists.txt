@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-include_directories(
-  ${Boost_INCLUDE_DIRS}
-  "${PROJECT_SOURCE_DIR}/3rdParty/gtest/include"
-  "${PROJECT_SOURCE_DIR}/wtest/include"
-  "${PROJECT_SOURCE_DIR}/include"
-  "${PROJECT_SOURCE_DIR}/src"
-)
-
 set(TESTS
   versionTest
   logTest 
@@ -42,6 +34,16 @@ endif()
 
 # only for memory corruption checks, doesn't compile currently): testTestAllocator
 # not a test, should maybe go to the library: base64Utility
+
+include_directories(
+  ${Boost_INCLUDE_DIRS}
+  "${PROJECT_SOURCE_DIR}/3rdParty/gtest/include"
+  "${PROJECT_SOURCE_DIR}/wtest/include"
+  "${PROJECT_SOURCE_DIR}/include"
+  "${PROJECT_SOURCE_DIR}/src"
+)
+
+link_directories(${Boost_LIBRARY_DIRS})
 
 foreach(test ${TESTS})
   add_executable(${test} ${test}.cpp)
