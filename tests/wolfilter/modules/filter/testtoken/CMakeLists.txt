@@ -9,3 +9,7 @@ set(mod_filter_testtoken_source_files
 add_library(mod_filter_testtoken MODULE ${mod_filter_testtoken_source_files})
 
 set_target_properties(mod_filter_testtoken PROPERTIES PREFIX "")
+
+target_link_libraries(mod_filter_testtoken
+  wolframe
+)
