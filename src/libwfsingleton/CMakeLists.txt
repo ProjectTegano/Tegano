@@ -41,6 +41,8 @@ add_library(wfsingleton SHARED ${libwfsingleton_source_files})
 
 if(WIN32)
   target_link_libraries(wfsingleton wolframe kernel32.lib ws2_32.lib)
+else()
+  target_link_libraries(wfsingleton wolframe)
 endif()
 
 add_custom_command(
