@@ -91,7 +91,7 @@ struct macro__WF_NORMALIZER_RESOURCE__ ## RESOURCECLASS\
 {\
 	class ModuleObjectEnvelope \
 		:public _Wolframe::types::NormalizeFunctionType\
-		,public _Wolframe::module::BaseObject\
+		,public _Wolframe::module::BaseObjectInstance<_Wolframe::types::NormalizeFunctionType>\
 	{\
 	public:\
 		ModuleObjectEnvelope() \
