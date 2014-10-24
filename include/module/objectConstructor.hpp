@@ -67,5 +67,8 @@ public:
 	virtual const void* rttiUpcast() const=0;
 };
 
+/// \brief Function type to get an object constructor.
+typedef const ObjectConstructor* (*GetObjectConstructorFunc)();
+
 }} // namespace
 #endif

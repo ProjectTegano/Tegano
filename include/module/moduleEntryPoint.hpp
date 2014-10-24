@@ -40,9 +40,6 @@
 namespace _Wolframe {
 namespace module {
 
-/// \brief Function type to get an object constructor.
-typedef const ObjectConstructor* (*GetObjectConstructorFunc)();
-
 /// \class ModuleEntryPoint
 /// \brief The module entry point structure. Only one entry point per module.
 struct ModuleEntryPoint
