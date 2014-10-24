@@ -10,10 +10,12 @@ target_link_libraries(moduleTest gtest ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS
   wolframe_langbind
 )
 
+if(WIN32)
 add_custom_command(TARGET moduleTest POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
     $<TARGET_FILE_DIR:moduleTest>
 )
+endif()
 
 add_test(NAME moduleTest COMMAND moduleTest)
