@@ -149,7 +149,7 @@ bool ServiceConfiguration::parse( const config::ConfigurationNode& pt, const std
 #if !defined(_WIN32)	// Unix daemon
 ServiceConfiguration::ServiceConfiguration() : ConfigurationObject( "Daemon", "Daemon", "" ){}
 #else
-ServiceConfiguration::ServiceConfiguration() : ConfigurationObject( "Service", "Service", "Service configuration" )	{}
+ServiceConfiguration::ServiceConfiguration() : ConfigurationObject( "Service", "Service", "" )	{}
 #endif
 
 
