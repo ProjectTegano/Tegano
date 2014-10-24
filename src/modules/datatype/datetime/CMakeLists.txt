@@ -13,6 +13,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_datatype_datetime MODULE ${mod_datatype_datetime_source_files})
 
 set_target_properties(mod_datatype_datetime PROPERTIES PREFIX "")
+
+target_link_libraries(mod_datatype_datetime
+  wolframe
+)

@@ -30,6 +30,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_protocol_wolframe MODULE ${mod_protocol_wolframe_source_files})
 
 set_target_properties(mod_protocol_wolframe PROPERTIES PREFIX "")
+
+target_link_libraries(mod_protocol_wolframe
+  wfsingleton
+)

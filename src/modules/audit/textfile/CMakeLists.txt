@@ -12,6 +12,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_audit_textfile MODULE ${mod_audit_textfile_source_files})
 
 set_target_properties(mod_audit_textfile PROPERTIES PREFIX "")
+
+target_link_libraries(mod_audit_textfile
+  wfsingleton provider
+)

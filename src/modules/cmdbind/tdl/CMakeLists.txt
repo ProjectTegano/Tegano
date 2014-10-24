@@ -58,10 +58,14 @@ include_directories(
   .
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_command_tdl MODULE ${mod_command_tdl_source_files})
 
 set_target_properties(mod_command_tdl PROPERTIES PREFIX "")
 
 target_link_libraries(mod_command_tdl
+  wolframe
+  wolframe_serialize
   wolframe_database
 )

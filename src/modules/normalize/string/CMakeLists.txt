@@ -14,6 +14,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/3rdParty/textwolf/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_normalize_string MODULE ${mod_normalize_string_source_files})
 
 set_target_properties(mod_normalize_string PROPERTIES PREFIX "")
+
+target_link_libraries(mod_normalize_string
+  wolframe
+)

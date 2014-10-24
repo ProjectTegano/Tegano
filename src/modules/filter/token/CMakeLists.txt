@@ -12,6 +12,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/3rdParty/textwolf/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_filter_token MODULE ${mod_filter_token_source_files})
 
 set_target_properties(mod_filter_token PROPERTIES PREFIX "")
+
+target_link_libraries(mod_filter_token
+  wolframe
+)

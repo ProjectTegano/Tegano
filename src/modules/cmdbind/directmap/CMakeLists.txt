@@ -19,6 +19,8 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_command_directmap MODULE ${mod_command_directmap_source_files})
 
 set_target_properties(mod_command_directmap PROPERTIES PREFIX "")

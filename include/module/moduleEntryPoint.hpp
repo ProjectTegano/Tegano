@@ -65,13 +65,14 @@ public:
 	}
 };
 
+}}//namespace
+
 #ifndef _WIN32
 #define DLLEXPORT 
 #else
 #define DLLEXPORT __declspec( dllexport )
 #endif
 
-extern "C" DLLEXPORT ModuleEntryPoint entryPoint;
+extern "C" DLLEXPORT _Wolframe::module::ModuleEntryPoint entryPoint;
 
-}}//namespace
 #endif

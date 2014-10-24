@@ -10,3 +10,6 @@ add_library(mod_test_containers MODULE ${mod_test_containers_source_files})
 
 set_target_properties(mod_test_containers PROPERTIES PREFIX "")
 
+target_link_libraries(mod_test_containers
+  wfsingleton
+)

@@ -20,6 +20,6 @@ include_directories(
 
 add_executable(wolframec ${wolframec_source_files})
 
-target_link_libraries(wolframec ${Boost_LIBRARIES} pthread ${ssl_libraries}
+target_link_libraries(wolframec ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${ssl_libraries}
   wolframe_client
 )

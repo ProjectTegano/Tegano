@@ -12,6 +12,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_auth_database MODULE ${mod_auth_database_source_files})
 
 set_target_properties(mod_auth_database PROPERTIES PREFIX "")
+
+target_link_libraries(mod_auth_database
+  wfsingleton wolframe
+)

@@ -11,7 +11,7 @@ set(protocolLFdotEscaping_source_files
 
 add_executable(protocolLFdotEscaping ${protocolLFdotEscaping_source_files})
 
-target_link_libraries(protocolLFdotEscaping gtest pthread
+target_link_libraries(protocolLFdotEscaping gtest ${CMAKE_THREAD_LIBS_INIT}
   ${Boost_LIBRARIES}
   wfsingleton
 )

@@ -11,7 +11,7 @@ set(protocolArgumentParsing_source_files
 
 add_executable(protocolArgumentParsing ${protocolArgumentParsing_source_files})
 
-target_link_libraries(protocolArgumentParsing gtest pthread
+target_link_libraries(protocolArgumentParsing gtest ${CMAKE_THREAD_LIBS_INIT}
   ${Boost_LIBRARIES}
   wfsingleton
 )

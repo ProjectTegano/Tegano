@@ -18,21 +18,38 @@ set(print_harupdf_source_files
 
 set(mod_print_harupdf_source_files
   mod_print_harupdf.cpp
-  ${mod_print_harupdf_source_files}
+  ${print_harupdf_source_files}
 )
 
+if(WIN32)
+  set(hpdf_includes "${PROJECT_SOURCE_DIR}/3rdParty/libhpdf/include")
+else()
+  set(hpdf_includes ${LIBHPDF_INCLUDE_DIRS})
+endif()
+
 include_directories(
-  ${LIBHPDF_INCLUDE_DIRS}
+  ${hpdf_includes}
   ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_SOURCE_DIR}/3rdParty/textwolf/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_print_harupdf MODULE ${mod_print_harupdf_source_files})
 
 set_target_properties(mod_print_harupdf PROPERTIES PREFIX "")
 
+if(WIN32)
+  set(hpdf_libraries hpdf zlib png)
+else()
+  set(hpdf_libraries ${LIBHPDF_LIBRARIES})
+endif()
+
 target_link_libraries(mod_print_harupdf
+  wfsingleton
+  wolframe
+  ${hpdf_libraries}
 )
 
 if(NOT WIN32)
@@ -40,3 +57,9 @@ if(NOT WIN32)
 endif()
 
 add_library(print_harupdf_static STATIC ${print_harupdf_source_files})
+
+target_link_libraries(print_harupdf_static
+  wfsingleton
+  wolframe
+  ${hpdf_libraries}
+)

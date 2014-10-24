@@ -7,3 +7,9 @@ set(missing_symbol_source_files
 add_library(missing_symbol MODULE ${missing_symbol_source_files})
 
 set_target_properties(missing_symbol PROPERTIES PREFIX "")
+
+if(WIN32)
+target_link_libraries(missing_symbol
+  bla
+)
+endif()

@@ -10,3 +10,6 @@ add_library(mod_test MODULE ${mod_test_source_files})
 
 set_target_properties(mod_test PROPERTIES PREFIX "")
 
+target_link_libraries(mod_test
+  wfsingleton
+)

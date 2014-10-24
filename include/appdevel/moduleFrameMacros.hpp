@@ -72,7 +72,4 @@
 	};\
 	}\
 	static CreateBuilderArrayImpl createBuilderArray;\
-	extern "C" { \
-		_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar); \
-	}
-
+	_Wolframe::module::ModuleEntryPoint entryPoint( 0, _Wolframe__moduleName(), createBuilderArray.ar);

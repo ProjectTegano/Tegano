@@ -10,6 +10,8 @@ set(mod_cmdbind_echo_source_files
   mod_cmdbind_echo.cpp
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_cmdbind_echo MODULE ${mod_cmdbind_echo_source_files})
 
 set_target_properties(mod_cmdbind_echo PROPERTIES PREFIX "")

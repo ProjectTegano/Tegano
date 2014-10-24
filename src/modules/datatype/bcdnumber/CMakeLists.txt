@@ -17,6 +17,12 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
 )
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_library(mod_datatype_bcdnumber MODULE ${mod_datatype_bcdnumber_source_files})
 
 set_target_properties(mod_datatype_bcdnumber PROPERTIES PREFIX "")
+
+target_link_libraries(mod_datatype_bcdnumber
+  wolframe
+)
