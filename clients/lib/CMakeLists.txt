@@ -10,4 +10,14 @@ set(libwolframe_client_source_files
   connection.hpp
 )
 
-add_library(wolframe_client SHARED ${libwolframe_client_source_files})
+include_directories(
+  ${Boost_INCLUDE_DIRS}
+)
+
+link_directories(${Boost_LIBRARY_DIRS})
+
+if(WIN32)
+  add_library(wolframe_client STATIC ${libwolframe_client_source_files})
+else()
+  add_library(wolframe_client SHARED ${libwolframe_client_source_files})
+endif()
