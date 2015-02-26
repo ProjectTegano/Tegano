@@ -47,6 +47,13 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 foreach(test ${TESTS})
   add_executable(${test} ${test}.cpp)
+  if(WIN32)
+  add_custom_command(TARGET ${test} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
+    $<TARGET_FILE_DIR:${test}>
+  )
+  endif()
   target_link_libraries(${test}
     gtest ${CMAKE_THREAD_LIBS_INIT}
     ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}

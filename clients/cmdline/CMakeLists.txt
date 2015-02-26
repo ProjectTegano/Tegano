@@ -15,8 +15,11 @@ if(WITH_SSL)
 endif()
 
 include_directories(
+  ${Boost_INCLUDE_DIRS}
   "${PROJECT_SOURCE_DIR}/clients/lib"
 )
+
+link_directories(${Boost_LIBRARY_DIRS})
 
 add_executable(wolframec ${wolframec_source_files})
 

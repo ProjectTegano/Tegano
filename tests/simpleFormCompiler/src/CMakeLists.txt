@@ -16,4 +16,12 @@ target_link_libraries(testSimpleFormCompiler gtest
   wolframe
 )
 
+if(WIN32)
+add_custom_command(TARGET testSimpleFormCompiler POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
+    $<TARGET_FILE_DIR:testSimpleFormCompiler>
+)
+endif()
+
 add_test(NAME testSimpleFormCompiler COMMAND testSimpleFormCompiler)

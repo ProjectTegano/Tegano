@@ -15,4 +15,12 @@ target_link_libraries(testProtocol gtest ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LI
   wolframe_langbind wolframe_serialize
 )
 
+if(WIN32)
+add_custom_command(TARGET testProtocol POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
+    $<TARGET_FILE_DIR:testProtocol>
+)
+endif()
+
 add_test(NAME testProtocol COMMAND testProtocol)

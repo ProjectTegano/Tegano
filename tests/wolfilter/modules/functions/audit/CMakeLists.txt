@@ -14,3 +14,7 @@ include_directories(
 add_library(mod_audit MODULE ${mod_audit_source_files})
 
 set_target_properties(mod_audit PROPERTIES PREFIX "")
+
+target_link_libraries(mod_audit
+  wolframe_serialize wolframe_langbind
+)

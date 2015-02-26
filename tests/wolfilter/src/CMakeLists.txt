@@ -20,4 +20,12 @@ target_link_libraries(testWolfilter
    wolframe_langbind wolframe_serialize wolframe_database
 )
 
+if(WIN32)
+add_custom_command(TARGET testWolfilter POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
+    $<TARGET_FILE_DIR:testWolfilter>
+)
+endif()
+
 add_test(NAME testWolfilter COMMAND testWolfilter)

@@ -11,3 +11,8 @@ include_directories(
 add_library(mod_authenticator_module_test MODULE ${mod_authenticator_module_test_source_files})
 
 set_target_properties(mod_authenticator_module_test PROPERTIES PREFIX "")
+
+target_link_libraries(mod_authenticator_module_test
+  wfsingleton
+  wolframe_serialize
+)

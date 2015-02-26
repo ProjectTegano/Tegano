@@ -11,3 +11,7 @@ include_directories(
 add_library(mod_normalizer_module MODULE ${mod_normalizer_module_source_files})
 
 set_target_properties(mod_normalizer_module PROPERTIES PREFIX "")
+
+target_link_libraries(mod_normalizer_module
+  wolframe
+)

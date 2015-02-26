@@ -11,3 +11,8 @@ include_directories(
 add_library(mod_command_handler_module_test MODULE ${mod_command_handler_module_test_source_files})
 
 set_target_properties(mod_command_handler_module_test PROPERTIES PREFIX "")
+
+target_link_libraries(mod_command_handler_module_test
+  wfsingleton wolframe
+  wolframe_serialize
+)

@@ -24,5 +24,12 @@ foreach(test ${TESTS})
     wolframe_langbind
     auth_textfile_static
   )
+  if(WIN32)
+  add_custom_command(TARGET ${test} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${PROJECT_SOURCE_DIR}/src/libwfsingleton/wfsingleton.dll"
+      $<TARGET_FILE_DIR:${test}>
+  )
+  endif()
   add_test(NAME ${test} COMMAND ${test})
 endforeach(test)
