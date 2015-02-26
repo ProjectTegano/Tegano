@@ -33,6 +33,7 @@ Project Wolframe.
 ///\brief Interface for custom date type
 #include "datatypeDate.hpp"
 #include "types/datetime.hpp"
+#include <stdint.h>
 
 using namespace _Wolframe;
 using namespace _Wolframe::types;

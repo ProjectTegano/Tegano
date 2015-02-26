@@ -21,6 +21,10 @@ link_directories(${Boost_LIBRARY_DIRS})
 add_executable(wolfilter ${wolfilter_source_files})
 
 target_link_libraries(wolfilter ${Boost_LIBRARIES} ${CMAKE_DL_LIBS}
-  config wfsingleton wolframe provider
-  wolframe_serialize wolframe_langbind
+  config
+  wfsingleton
+  provider
+  wolframe_serialize
+  wolframe_langbind
+  wolframe
 )

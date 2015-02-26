@@ -33,6 +33,7 @@
 ///\file datatypeBigfxp.cpp
 #include "datatypeBigfxp.hpp"
 #include <limits>
+#include <stdint.h>
 
 using namespace _Wolframe;
 using namespace _Wolframe::types;

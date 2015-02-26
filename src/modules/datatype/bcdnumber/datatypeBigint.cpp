@@ -32,6 +32,7 @@
 ************************************************************************/
 ///\file datatypeBigint.cpp
 #include "datatypeBigint.hpp"
+#include <stdint.h>
 
 using namespace _Wolframe;
 using namespace _Wolframe::types;

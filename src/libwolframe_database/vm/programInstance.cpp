@@ -113,7 +113,7 @@ types::Variant ProgramInstance::loopcntArgument() const
 	}
 	else
 	{
-		return types::Variant( top.m_valueIter->index()+1);
+		return types::Variant( (unsigned int)(top.m_valueIter->index()+1));
 	}
 }
 
